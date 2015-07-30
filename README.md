@@ -4,6 +4,8 @@ A Python implementation of LightFM, a hybrid recommendation algorithm.
 
 The LightFM model incorporates both item and user metadata into the traditional matrix factorization algorithm. It represents each user and item as the sum of the latent representations of their features, thus allowing recommendations to generalise to new items (via item features) and to new users (via user features).
 
+The details of the approach are described in the LightFM paper, available on [arXiv](http://arxiv.org/abs/1507.08439).
+
 The model can be trained using three methods:
 
 - logistic loss: useful when both positive (1) and negative (-1) interactions
@@ -17,8 +19,12 @@ The model can be trained using three methods:
         examples until rank violating one is found. Useful when only
         positive interactions are present and optimising the top of
         the recommendation list (precision@k) is desired.
+- k-OS WARP: k-th order statistic loss [3]. A modification of WARP that uses the k-th
+             positive example for any given user as a basis for pairwise updates.
 
-The details of the approach are described in the LightFM paper, available on [arXiv](http://arxiv.org/abs/1507.08439).
+Two learning rate schedules are implemented:
+- adagrad: [4]
+- adadelta: [5]
 
 ## Installation
 Install from pypi using pip: `pip install lightfm`.
@@ -88,3 +94,13 @@ Intelligence. AUAI Press, 2009.
 
 [2] Weston, Jason, Samy Bengio, and Nicolas Usunier. "Wsabie: Scaling up to large
 vocabulary image annotation." IJCAI. Vol. 11. 2011.
+
+[3] Weston, Jason, Hector Yee, and Ron J. Weiss. "Learning to rank recommendations with
+the k-order statistic loss." Proceedings of the 7th ACM conference on Recommender systems. ACM, 2013.
+
+[4] Duchi, John, Elad Hazan, and Yoram Singer. "Adaptive subgradient methods
+for online learning and stochastic optimization."
+
+The Journal of Machine Learning Research 12 (2011): 2121-2159.
+[5] Zeiler, Matthew D. "ADADELTA: An adaptive learning rate method."
+arXiv preprint arXiv:1212.5701 (2012).

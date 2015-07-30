@@ -87,7 +87,7 @@ In this case, we set the latent dimensionality of the model to 30. Fitting is st
 
 
 
-    <lightfm.lightfm.LightFM at 0x7f7e30054510>
+    <lightfm.lightfm.LightFM at 0x7f035fac4a10>
 
 
 
@@ -105,8 +105,8 @@ Let's try to get a handle on the model accuracy using the ROC AUC score.
 
 
 
-    array([ 1.86904553, -2.60198906,  1.7206847 , ..., -0.64748412,
-           -3.50834665, -2.6182965 ])
+    array([ 1.16739023, -1.81594849,  0.33082035, ..., -0.84471774,
+           -3.59646535, -2.3761344 ])
 
 
 
@@ -116,7 +116,7 @@ Let's try to get a handle on the model accuracy using the ROC AUC score.
 
 
 
-    0.98822444246531116
+    0.98794140543734321
 
 
 
@@ -131,7 +131,7 @@ We've got very high accuracy on the train dataset; let's check the test set.
 
 
 
-    0.72556470199548917
+    0.72314175941707015
 
 
 
@@ -145,7 +145,7 @@ The accuracy is much lower on the test data, suggesting a high degree of overfit
 
 
 
-    0.76144594842685653
+    0.76055575505353468
 
 
 
@@ -178,7 +178,7 @@ We need to pass these to the `fit` method in order to use them.
 
 
 
-    0.67207762427127649
+    0.67300181616251231
 
 
 
@@ -196,7 +196,7 @@ If we add item-specific features back, we should get the original accuracy back.
 
 
 
-    0.7545881265357901
+    0.75583737010915852
 
 
 
@@ -297,11 +297,10 @@ Before using them, let's first load the data and define some evaluation function
 Now let's train a BPR model and look at its accuracy.
 
 
-        model = LightFM(learning_rate=0.05)
+        model = LightFM(learning_rate=0.05, loss='bpr')
     
         model.fit_partial(train,
-                          epochs=10,
-                          loss='bpr')
+                          epochs=10)
     
         train_precision = precision_at_k(model,
                                          train,
@@ -316,18 +315,17 @@ Now let's train a BPR model and look at its accuracy.
         print('Precision: %s, %s' % (train_precision, test_precision))
         print('AUC: %s, %s' % (train_auc, test_auc))
 
-    Precision: 0.421208907741, 0.0623541887593
-    AUC: 0.8420236438, 0.822428641787
+    Precision: 0.421208907741, 0.0622481442206
+    AUC: 0.838544064431, 0.819069444911
 
 
 The WARP model, on the other hand, optimises for precision@k---we should expect its performance to be better on precision.
 
 
-        model = LightFM(learning_rate=0.05)
+        model = LightFM(learning_rate=0.05, loss='warp')
     
         model.fit_partial(train,
-                          epochs=10,
-                          loss='warp')
+                          epochs=10)
     
         train_precision = precision_at_k(model,
                                          train,
@@ -342,8 +340,8 @@ The WARP model, on the other hand, optimises for precision@k---we should expect 
         print('Precision: %s, %s' % (train_precision, test_precision))
         print('AUC: %s, %s' % (train_auc, test_auc))
 
-    Precision: 0.616118769883, 0.106468716861
-    AUC: 0.941491185886, 0.903792882909
+    Precision: 0.624708377519, 0.110816542948
+    AUC: 0.941236748837, 0.904416726513
 
 
 And that is exactly what we see: we get much higher precision@10 (but the AUC metric is also improved).
