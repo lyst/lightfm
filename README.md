@@ -14,14 +14,14 @@ Model fitting is very straightforward.
 
 Create a model instance with the desired latent dimensionality
 ```python
-    from lightfm import LightFM
+from lightfm import LightFM
 
-    model = LightFM(no_components=30)
+model = LightFM(no_components=30)
 ```
 
 Assuming `train` is a (no_users, no_items) sparse matrix (with 1s denoting positive, and -1s negative interactions), you can fit a traditional matrix factorization model by calling
 ```python
-    model = fit(train, epochs=20)
+model = fit(train, epochs=20)
 ```
 This will assume that each item and each user is described by their own specific feature.
 
@@ -45,8 +45,8 @@ to train the model and obtain predictions.
 
 Both training and prediction can employ multiple cores for speed:
 ```python
-    model = fit(train, epochs=20, num_threads=4)
-    predictions = model.predict(test.row, test_col, num_threads=4)
+model = fit(train, epochs=20, num_threads=4)
+predictions = model.predict(test.row, test_col, num_threads=4)
 ```
 
 Check the `examples` directory for more examples. The Movielens example shows how to use `lightfm` on the Movielens dataset, both with and without using movie metadata.
