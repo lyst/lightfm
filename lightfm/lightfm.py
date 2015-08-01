@@ -1,7 +1,5 @@
 from __future__ import print_function
 
-import cPickle as pickle
-
 import numpy as np
 
 import scipy.sparse as sp
@@ -46,11 +44,6 @@ class LightFM(object):
         self.user_embedding_gradients = None
         self.user_biases = None
         self.user_bias_gradients = None
-
-        self.item_embedding_dictionary = None
-        self.inverse_item_feature_dictionary = None
-        self.user_embedding_dictionary = None
-        self.inverse_user_feature_dictionary = None
 
     def _initialize(self, no_components, no_item_features, no_user_features):
         """
@@ -259,51 +252,3 @@ class LightFM(object):
                         num_threads)
 
         return predictions
-
-    def add_item_feature_dictionary(self, dct, check=True):
-
-        if len(dct) != self.item_embeddings.shape[0]:
-            raise Exception('Number of features different than the number of '
-                            'entries in the dictioanry')
-
-        self.item_embedding_dictionary = dct
-        self.inverse_item_feature_dictionary = {v: k for k, v in dct.items()}
-
-    def add_user_feature_dictionary(self, dct, check=True):
-
-        if len(dct) != self.user_embeddings.shape[0]:
-            raise Exception('Number of features different than the number of '
-                            'entries in the dictioanry')
-
-        self.user_embedding_dictionary = dct
-        self.inverse_user_feature_dictionary = {v: k for k, v in dct.users()}
-
-    def most_similar(self, feature_name, feature_type, number=5):
-
-        if feature_type == 'item':
-            feature_idx = self.item_embedding_dictionary[feature_name]
-            features = self.item_embeddings
-            inverse_dict = self.inverse_item_feature_dictionary
-            feature_vec = features[feature_idx]
-        elif feature_type == 'user':
-            feature_idx = self.user_embedding_dictionary[feature_name]
-            features = self.user_embeddings
-            inverse_dict = self.inverse_user_feature_dictionary
-            feature_vec = features[feature_idx]
-        else:
-            raise Exception("Feature_type must be one of ('item', 'user').")
-
-        similar_idx, similarity = self._most_similar(feature_vec, features, number)
-
-        return [(inverse_dict[x], s) for (x, s) in zip(similar_idx, similarity)]
-
-    def _most_similar(self, feature_vec, features, number):
-
-        dst = (np.dot(features, feature_vec)
-               / np.linalg.norm(features, axis=1) / np.linalg.norm(feature_vec))
-        feature_ids = np.argsort(-dst)[:number]
-
-        return feature_ids, [dst[x] for x in feature_ids]
-
-        return [(self.inverse_feature_dictionary[x], dst[x]) for x in feature_ids[:number]
-                if x in self.inverse_feature_dictionary]
