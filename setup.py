@@ -39,8 +39,6 @@ class Cythonize(Command):
         import Cython
         from Cython.Build import cythonize
 
-        assert float(Cython.__version__) >= 0.22
-
         cythonize(define_extensions('.pyx'))
 
 
