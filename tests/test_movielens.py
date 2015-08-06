@@ -1,4 +1,4 @@
-import cPickle as pickle
+import pickle
 import imp
 import os
 
@@ -7,6 +7,8 @@ import numpy as np
 import scipy.sparse as sp
 
 from sklearn.metrics import roc_auc_score
+
+from tests.utils import precision_at_k, full_auc
 
 from lightfm import LightFM
 
@@ -53,6 +55,79 @@ def test_movielens_accuracy():
 
     assert roc_auc_score(train.data, train_predictions) > 0.84
     assert roc_auc_score(test.data, test_predictions) > 0.76
+
+
+def test_logistic_precision():
+
+    model = LightFM()
+    model.fit_partial(train,
+                      epochs=10)
+
+    train_precision = precision_at_k(model,
+                                     train,
+                                     10)
+    test_precision = precision_at_k(model,
+                                    test,
+                                    10)
+
+    full_train_auc = full_auc(model, train)
+    full_test_auc = full_auc(model, test)
+
+    assert train_precision > 0.3
+    assert test_precision > 0.03
+
+    assert full_train_auc > 0.89
+    assert full_test_auc > 0.89
+
+
+def test_bpr_precision():
+
+    model = LightFM(learning_rate=0.05)
+
+    model.fit_partial(train,
+                      epochs=10,
+                      loss='bpr')
+
+    train_precision = precision_at_k(model,
+                                     train,
+                                     10)
+    test_precision = precision_at_k(model,
+                                    test,
+                                    10)
+
+    full_train_auc = full_auc(model, train)
+    full_test_auc = full_auc(model, test)
+
+    assert train_precision > 0.31
+    assert test_precision > 0.04
+
+    assert full_train_auc > 0.99
+    assert full_test_auc > 0.99
+
+
+def test_warp_precision():
+
+    model = LightFM(learning_rate=0.05)
+
+    model.fit_partial(train,
+                      epochs=10,
+                      loss='warp')
+
+    train_precision = precision_at_k(model,
+                                     train,
+                                     10)
+    test_precision = precision_at_k(model,
+                                    test,
+                                    10)
+
+    full_train_auc = full_auc(model, train)
+    full_test_auc = full_auc(model, test)
+
+    assert train_precision > 0.45
+    assert test_precision > 0.07
+
+    assert full_train_auc > 0.97
+    assert full_test_auc > 0.97
 
 
 def test_movielens_genre_accuracy():

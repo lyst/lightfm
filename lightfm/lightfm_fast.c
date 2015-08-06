@@ -258,10 +258,10 @@ class __Pyx_FakeReference {
 #include <math.h>
 #define __PYX_HAVE__lightfm__lightfm_fast
 #define __PYX_HAVE_API__lightfm__lightfm_fast
-#include "math.h"
-#include "pythread.h"
 #include "string.h"
 #include "stdlib.h"
+#include "math.h"
+#include "pythread.h"
 #include "stdio.h"
 #include "pystate.h"
 #ifdef _OPENMP
@@ -549,7 +549,7 @@ struct __pyx_MemviewEnum_obj;
 struct __pyx_memoryview_obj;
 struct __pyx_memoryviewslice_obj;
 
-/* "lightfm/lightfm_fast.pyx":12
+/* "lightfm/lightfm_fast.pyx":15
  * 
  * 
  * cdef class CSRMatrix:             # <<<<<<<<<<<<<<
@@ -568,7 +568,7 @@ struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix {
 };
 
 
-/* "lightfm/lightfm_fast.pyx":52
+/* "lightfm/lightfm_fast.pyx":55
  * 
  * 
  * cdef class FastLightFM:             # <<<<<<<<<<<<<<
@@ -668,7 +668,7 @@ struct __pyx_memoryviewslice_obj {
 
 
 
-/* "lightfm/lightfm_fast.pyx":12
+/* "lightfm/lightfm_fast.pyx":15
  * 
  * 
  * cdef class CSRMatrix:             # <<<<<<<<<<<<<<
@@ -1090,6 +1090,10 @@ static PyObject *__pyx_memoryview_assign_item_from_object(struct __pyx_memoryvie
 static PyObject *__pyx_memoryviewslice_convert_item_to_object(struct __pyx_memoryviewslice_obj *__pyx_v_self, char *__pyx_v_itemp); /* proto*/
 static PyObject *__pyx_memoryviewslice_assign_item_from_object(struct __pyx_memoryviewslice_obj *__pyx_v_self, char *__pyx_v_itemp, PyObject *__pyx_v_value); /* proto*/
 
+/* Module declarations from 'libc.string' */
+
+/* Module declarations from 'libc.stdlib' */
+
 /* Module declarations from 'lightfm.lightfm_fast' */
 static PyTypeObject *__pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix = 0;
 static PyTypeObject *__pyx_ptype_7lightfm_12lightfm_fast_FastLightFM = 0;
@@ -1109,6 +1113,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
 static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *, int, int, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double); /*proto*/
 static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *, __Pyx_memviewslice, __Pyx_memviewslice, int, int, int, double, double, double); /*proto*/
 static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *, int, int, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *, double, double, double); /*proto*/
+static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_warp_update(double, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *, int, int, int, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *, double, double, double); /*proto*/
 static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *, double, double); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static void *__pyx_align_pointer(void *, size_t); /*proto*/
@@ -1158,8 +1163,10 @@ static PyObject *__pyx_builtin_id;
 static PyObject *__pyx_builtin_IndexError;
 static int __pyx_pf_7lightfm_12lightfm_fast_9CSRMatrix___init__(struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_self, PyObject *__pyx_v_csr_matrix); /* proto */
 static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_self, __Pyx_memviewslice __pyx_v_item_features, __Pyx_memviewslice __pyx_v_item_feature_gradients, __Pyx_memviewslice __pyx_v_item_biases, __Pyx_memviewslice __pyx_v_item_bias_gradients, __Pyx_memviewslice __pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_feature_gradients, __Pyx_memviewslice __pyx_v_user_biases, __Pyx_memviewslice __pyx_v_user_bias_gradients, int __pyx_v_no_components); /* proto */
-static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_Y, __Pyx_memviewslice __pyx_v_shuffle_indices, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, double __pyx_v_learning_rate, double __pyx_v_item_alpha, double __pyx_v_user_alpha, CYTHON_UNUSED int __pyx_v_num_threads); /* proto */
-static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_predictions, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, CYTHON_UNUSED int __pyx_v_num_threads); /* proto */
+static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_logistic(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_Y, __Pyx_memviewslice __pyx_v_shuffle_indices, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, double __pyx_v_learning_rate, double __pyx_v_item_alpha, double __pyx_v_user_alpha, CYTHON_UNUSED int __pyx_v_num_threads); /* proto */
+static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2fit_warp(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_Y, __Pyx_memviewslice __pyx_v_shuffle_indices, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, double __pyx_v_learning_rate, double __pyx_v_item_alpha, double __pyx_v_user_alpha, CYTHON_UNUSED int __pyx_v_num_threads); /* proto */
+static PyObject *__pyx_pf_7lightfm_12lightfm_fast_4fit_bpr(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_Y, __Pyx_memviewslice __pyx_v_shuffle_indices, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, double __pyx_v_learning_rate, double __pyx_v_item_alpha, double __pyx_v_user_alpha, CYTHON_UNUSED int __pyx_v_num_threads); /* proto */
+static PyObject *__pyx_pf_7lightfm_12lightfm_fast_6predict_lightfm(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_predictions, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, CYTHON_UNUSED int __pyx_v_num_threads); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(struct __pyx_array_obj *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_array___pyx_pf_15View_dot_MemoryView_5array_4__dealloc__(struct __pyx_array_obj *__pyx_v_self); /* proto */
@@ -1221,6 +1228,7 @@ static char __pyx_k_test[] = "__test__";
 static char __pyx_k_class[] = "__class__";
 static char __pyx_k_error[] = "error";
 static char __pyx_k_flags[] = "flags";
+static char __pyx_k_gamma[] = "gamma";
 static char __pyx_k_range[] = "range";
 static char __pyx_k_shape[] = "shape";
 static char __pyx_k_start[] = "start";
@@ -1231,18 +1239,23 @@ static char __pyx_k_indptr[] = "indptr";
 static char __pyx_k_name_2[] = "__name__";
 static char __pyx_k_struct[] = "struct";
 static char __pyx_k_unpack[] = "unpack";
+static char __pyx_k_weight[] = "weight";
+static char __pyx_k_fit_bpr[] = "fit_bpr";
 static char __pyx_k_fortran[] = "fortran";
 static char __pyx_k_indices[] = "indices";
 static char __pyx_k_item_id[] = "item_id";
 static char __pyx_k_lightfm[] = "lightfm";
 static char __pyx_k_memview[] = "memview";
+static char __pyx_k_sampled[] = "sampled";
 static char __pyx_k_user_id[] = "user_id";
 static char __pyx_k_Ellipsis[] = "Ellipsis";
+static char __pyx_k_fit_warp[] = "fit_warp";
 static char __pyx_k_item_ids[] = "item_ids";
 static char __pyx_k_itemsize[] = "itemsize";
 static char __pyx_k_user_ids[] = "user_ids";
 static char __pyx_k_TypeError[] = "TypeError";
 static char __pyx_k_enumerate[] = "enumerate";
+static char __pyx_k_violation[] = "violation";
 static char __pyx_k_IndexError[] = "IndexError";
 static char __pyx_k_ValueError[] = "ValueError";
 static char __pyx_k_csr_matrix[] = "csr_matrix";
@@ -1251,12 +1264,13 @@ static char __pyx_k_prediction[] = "prediction";
 static char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static char __pyx_k_user_alpha[] = "user_alpha";
 static char __pyx_k_MemoryError[] = "MemoryError";
-static char __pyx_k_fit_lightfm[] = "fit_lightfm";
 static char __pyx_k_item_biases[] = "item_biases";
+static char __pyx_k_max_sampled[] = "max_sampled";
 static char __pyx_k_no_examples[] = "no_examples";
 static char __pyx_k_num_threads[] = "num_threads";
 static char __pyx_k_predictions[] = "predictions";
 static char __pyx_k_user_biases[] = "user_biases";
+static char __pyx_k_fit_logistic[] = "fit_logistic";
 static char __pyx_k_item_features[] = "item_features";
 static char __pyx_k_learning_rate[] = "learning_rate";
 static char __pyx_k_no_components[] = "no_components";
@@ -1266,8 +1280,12 @@ static char __pyx_k_allocate_buffer[] = "allocate_buffer";
 static char __pyx_k_dtype_is_object[] = "dtype_is_object";
 static char __pyx_k_predict_lightfm[] = "predict_lightfm";
 static char __pyx_k_shuffle_indices[] = "shuffle_indices";
+static char __pyx_k_negative_item_id[] = "negative_item_id";
+static char __pyx_k_positive_item_id[] = "positive_item_id";
 static char __pyx_k_strided_and_direct[] = "<strided and direct>";
 static char __pyx_k_item_bias_gradients[] = "item_bias_gradients";
+static char __pyx_k_negative_prediction[] = "negative_prediction";
+static char __pyx_k_positive_prediction[] = "positive_prediction";
 static char __pyx_k_user_bias_gradients[] = "user_bias_gradients";
 static char __pyx_k_lightfm_lightfm_fast[] = "lightfm.lightfm_fast";
 static char __pyx_k_strided_and_indirect[] = "<strided and indirect>";
@@ -1286,7 +1304,7 @@ static char __pyx_k_Step_may_not_be_zero_axis_d[] = "Step may not be zero (axis 
 static char __pyx_k_itemsize_0_for_cython_array[] = "itemsize <= 0 for cython.array";
 static char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
-static char __pyx_k_home_maciej_Code_lightfm_public[] = "/home/maciej/Code/lightfm_public/lightfm/lightfm_fast.pyx";
+static char __pyx_k_home_maciej_Code_lightfm_public[] = "/home/maciej/Code/lightfm-public/lightfm/lightfm_fast.pyx";
 static char __pyx_k_All_dimensions_preceding_dimensi[] = "All dimensions preceding dimension %d must be indexed and not sliced";
 static char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does not expose strides";
 static char __pyx_k_Can_only_create_a_buffer_that_is[] = "Can only create a buffer that is contiguous in memory.";
@@ -1328,11 +1346,14 @@ static PyObject *__pyx_n_s_data;
 static PyObject *__pyx_n_s_dtype_is_object;
 static PyObject *__pyx_n_s_enumerate;
 static PyObject *__pyx_n_s_error;
-static PyObject *__pyx_n_s_fit_lightfm;
+static PyObject *__pyx_n_s_fit_bpr;
+static PyObject *__pyx_n_s_fit_logistic;
+static PyObject *__pyx_n_s_fit_warp;
 static PyObject *__pyx_n_s_flags;
 static PyObject *__pyx_n_s_format;
 static PyObject *__pyx_n_s_fortran;
 static PyObject *__pyx_n_u_fortran;
+static PyObject *__pyx_n_s_gamma;
 static PyObject *__pyx_kp_s_got_differing_extents_in_dimensi;
 static PyObject *__pyx_kp_s_home_maciej_Code_lightfm_public;
 static PyObject *__pyx_n_s_i;
@@ -1354,16 +1375,21 @@ static PyObject *__pyx_n_s_lightfm;
 static PyObject *__pyx_n_s_lightfm_lightfm_fast;
 static PyObject *__pyx_n_s_loss;
 static PyObject *__pyx_n_s_main;
+static PyObject *__pyx_n_s_max_sampled;
 static PyObject *__pyx_n_s_memview;
 static PyObject *__pyx_n_s_mode;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_name_2;
 static PyObject *__pyx_n_s_ndim;
+static PyObject *__pyx_n_s_negative_item_id;
+static PyObject *__pyx_n_s_negative_prediction;
 static PyObject *__pyx_n_s_no_components;
 static PyObject *__pyx_n_s_no_examples;
 static PyObject *__pyx_n_s_num_threads;
 static PyObject *__pyx_n_s_obj;
 static PyObject *__pyx_n_s_pack;
+static PyObject *__pyx_n_s_positive_item_id;
+static PyObject *__pyx_n_s_positive_prediction;
 static PyObject *__pyx_n_s_predict_lightfm;
 static PyObject *__pyx_n_s_prediction;
 static PyObject *__pyx_n_s_predictions;
@@ -1371,6 +1397,7 @@ static PyObject *__pyx_n_s_pyx_getbuffer;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_row;
+static PyObject *__pyx_n_s_sampled;
 static PyObject *__pyx_n_s_shape;
 static PyObject *__pyx_n_s_shuffle_indices;
 static PyObject *__pyx_n_s_size;
@@ -1392,6 +1419,8 @@ static PyObject *__pyx_n_s_user_feature_gradients;
 static PyObject *__pyx_n_s_user_features;
 static PyObject *__pyx_n_s_user_id;
 static PyObject *__pyx_n_s_user_ids;
+static PyObject *__pyx_n_s_violation;
+static PyObject *__pyx_n_s_weight;
 static PyObject *__pyx_n_s_y;
 static PyObject *__pyx_n_s_y_row;
 static PyObject *__pyx_int_0;
@@ -1412,14 +1441,18 @@ static PyObject *__pyx_tuple__12;
 static PyObject *__pyx_tuple__13;
 static PyObject *__pyx_tuple__15;
 static PyObject *__pyx_tuple__17;
-static PyObject *__pyx_tuple__18;
 static PyObject *__pyx_tuple__19;
-static PyObject *__pyx_tuple__20;
 static PyObject *__pyx_tuple__21;
+static PyObject *__pyx_tuple__22;
+static PyObject *__pyx_tuple__23;
+static PyObject *__pyx_tuple__24;
+static PyObject *__pyx_tuple__25;
 static PyObject *__pyx_codeobj__14;
 static PyObject *__pyx_codeobj__16;
+static PyObject *__pyx_codeobj__18;
+static PyObject *__pyx_codeobj__20;
 
-/* "lightfm/lightfm_fast.pyx":26
+/* "lightfm/lightfm_fast.pyx":29
  *     cdef int nnz
  * 
  *     def __init__(self, csr_matrix):             # <<<<<<<<<<<<<<
@@ -1455,7 +1488,7 @@ static int __pyx_pw_7lightfm_12lightfm_fast_9CSRMatrix_1__init__(PyObject *__pyx
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -1466,7 +1499,7 @@ static int __pyx_pw_7lightfm_12lightfm_fast_9CSRMatrix_1__init__(PyObject *__pyx
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("lightfm.lightfm_fast.CSRMatrix.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1496,65 +1529,65 @@ static int __pyx_pf_7lightfm_12lightfm_fast_9CSRMatrix___init__(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "lightfm/lightfm_fast.pyx":28
+  /* "lightfm/lightfm_fast.pyx":31
  *     def __init__(self, csr_matrix):
  * 
  *         self.indices = csr_matrix.indices             # <<<<<<<<<<<<<<
  *         self.indptr = csr_matrix.indptr
  *         self.data = csr_matrix.data
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_csr_matrix, __pyx_n_s_indices); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_csr_matrix, __pyx_n_s_indices); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyObject_to_MemoryviewSlice_dc_int(__pyx_t_1);
-  if (unlikely(!__pyx_t_2.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_2.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->indices, 0);
   __pyx_v_self->indices = __pyx_t_2;
   __pyx_t_2.memview = NULL;
   __pyx_t_2.data = NULL;
 
-  /* "lightfm/lightfm_fast.pyx":29
+  /* "lightfm/lightfm_fast.pyx":32
  * 
  *         self.indices = csr_matrix.indices
  *         self.indptr = csr_matrix.indptr             # <<<<<<<<<<<<<<
  *         self.data = csr_matrix.data
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_csr_matrix, __pyx_n_s_indptr); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_csr_matrix, __pyx_n_s_indptr); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyObject_to_MemoryviewSlice_dc_int(__pyx_t_1);
-  if (unlikely(!__pyx_t_2.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_2.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->indptr, 0);
   __pyx_v_self->indptr = __pyx_t_2;
   __pyx_t_2.memview = NULL;
   __pyx_t_2.data = NULL;
 
-  /* "lightfm/lightfm_fast.pyx":30
+  /* "lightfm/lightfm_fast.pyx":33
  *         self.indices = csr_matrix.indices
  *         self.indptr = csr_matrix.indptr
  *         self.data = csr_matrix.data             # <<<<<<<<<<<<<<
  * 
  *         self.rows, self.cols = csr_matrix.shape
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_csr_matrix, __pyx_n_s_data); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_csr_matrix, __pyx_n_s_data); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyObject_to_MemoryviewSlice_dc_int(__pyx_t_1);
-  if (unlikely(!__pyx_t_2.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_2.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->data, 0);
   __pyx_v_self->data = __pyx_t_2;
   __pyx_t_2.memview = NULL;
   __pyx_t_2.data = NULL;
 
-  /* "lightfm/lightfm_fast.pyx":32
+  /* "lightfm/lightfm_fast.pyx":35
  *         self.data = csr_matrix.data
  * 
  *         self.rows, self.cols = csr_matrix.shape             # <<<<<<<<<<<<<<
  *         self.nnz = len(self.data)
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_csr_matrix, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_csr_matrix, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
     PyObject* sequence = __pyx_t_1;
@@ -1566,7 +1599,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_9CSRMatrix___init__(struct __pyx_obj
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -1579,15 +1612,15 @@ static int __pyx_pf_7lightfm_12lightfm_fast_9CSRMatrix___init__(struct __pyx_obj
     __Pyx_INCREF(__pyx_t_3);
     __Pyx_INCREF(__pyx_t_4);
     #else
-    __pyx_t_3 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_6 = Py_TYPE(__pyx_t_5)->tp_iternext;
@@ -1595,7 +1628,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_9CSRMatrix___init__(struct __pyx_obj
     __Pyx_GOTREF(__pyx_t_3);
     index = 1; __pyx_t_4 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_4)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_4);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __pyx_t_6 = NULL;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     goto __pyx_L4_unpacking_done;
@@ -1603,30 +1636,30 @@ static int __pyx_pf_7lightfm_12lightfm_fast_9CSRMatrix___init__(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_6 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __pyx_L4_unpacking_done:;
   }
-  __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_4); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_4); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_self->rows = __pyx_t_7;
   __pyx_v_self->cols = __pyx_t_8;
 
-  /* "lightfm/lightfm_fast.pyx":33
+  /* "lightfm/lightfm_fast.pyx":36
  * 
  *         self.rows, self.cols = csr_matrix.shape
  *         self.nnz = len(self.data)             # <<<<<<<<<<<<<<
  * 
  *     cdef int get_row_start(self, int row) nogil:
  */
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->data, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->data, 1, (PyObject *(*)(char *)) __pyx_memview_get_int, (int (*)(char *, PyObject *)) __pyx_memview_set_int, 0);; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_9 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_9 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_9 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_9 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_self->nnz = __pyx_t_9;
 
-  /* "lightfm/lightfm_fast.pyx":26
+  /* "lightfm/lightfm_fast.pyx":29
  *     cdef int nnz
  * 
  *     def __init__(self, csr_matrix):             # <<<<<<<<<<<<<<
@@ -1650,7 +1683,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_9CSRMatrix___init__(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":35
+/* "lightfm/lightfm_fast.pyx":38
  *         self.nnz = len(self.data)
  * 
  *     cdef int get_row_start(self, int row) nogil:             # <<<<<<<<<<<<<<
@@ -1662,7 +1695,7 @@ static int __pyx_f_7lightfm_12lightfm_fast_9CSRMatrix_get_row_start(struct __pyx
   int __pyx_r;
   int __pyx_t_1;
 
-  /* "lightfm/lightfm_fast.pyx":41
+  /* "lightfm/lightfm_fast.pyx":44
  *         """
  * 
  *         return self.indptr[row]             # <<<<<<<<<<<<<<
@@ -1673,7 +1706,7 @@ static int __pyx_f_7lightfm_12lightfm_fast_9CSRMatrix_get_row_start(struct __pyx
   __pyx_r = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_self->indptr.data) + __pyx_t_1)) )));
   goto __pyx_L0;
 
-  /* "lightfm/lightfm_fast.pyx":35
+  /* "lightfm/lightfm_fast.pyx":38
  *         self.nnz = len(self.data)
  * 
  *     cdef int get_row_start(self, int row) nogil:             # <<<<<<<<<<<<<<
@@ -1686,7 +1719,7 @@ static int __pyx_f_7lightfm_12lightfm_fast_9CSRMatrix_get_row_start(struct __pyx
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":43
+/* "lightfm/lightfm_fast.pyx":46
  *         return self.indptr[row]
  * 
  *     cdef int get_row_end(self, int row) nogil:             # <<<<<<<<<<<<<<
@@ -1698,7 +1731,7 @@ static int __pyx_f_7lightfm_12lightfm_fast_9CSRMatrix_get_row_end(struct __pyx_o
   int __pyx_r;
   long __pyx_t_1;
 
-  /* "lightfm/lightfm_fast.pyx":49
+  /* "lightfm/lightfm_fast.pyx":52
  *         """
  * 
  *         return self.indptr[row + 1]             # <<<<<<<<<<<<<<
@@ -1709,7 +1742,7 @@ static int __pyx_f_7lightfm_12lightfm_fast_9CSRMatrix_get_row_end(struct __pyx_o
   __pyx_r = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_self->indptr.data) + __pyx_t_1)) )));
   goto __pyx_L0;
 
-  /* "lightfm/lightfm_fast.pyx":43
+  /* "lightfm/lightfm_fast.pyx":46
  *         return self.indptr[row]
  * 
  *     cdef int get_row_end(self, int row) nogil:             # <<<<<<<<<<<<<<
@@ -1722,7 +1755,7 @@ static int __pyx_f_7lightfm_12lightfm_fast_9CSRMatrix_get_row_end(struct __pyx_o
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":74
+/* "lightfm/lightfm_fast.pyx":77
  *     cdef double user_scale
  * 
  *     def __init__(self,             # <<<<<<<<<<<<<<
@@ -1775,46 +1808,46 @@ static int __pyx_pw_7lightfm_12lightfm_fast_11FastLightFM_1__init__(PyObject *__
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_feature_gradients)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_biases)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_bias_gradients)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  4:
         if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_features)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 4); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 4); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  5:
         if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_feature_gradients)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 5); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 5); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  6:
         if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_biases)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 6); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 6); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  7:
         if (likely((values[7] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_bias_gradients)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 7); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 7); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  8:
         if (likely((values[8] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_no_components)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 8); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, 8); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 9) {
       goto __pyx_L5_argtuple_error;
@@ -1829,19 +1862,19 @@ static int __pyx_pw_7lightfm_12lightfm_fast_11FastLightFM_1__init__(PyObject *__
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
       values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
     }
-    __pyx_v_item_features = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(values[0]); if (unlikely(!__pyx_v_item_features.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_item_feature_gradients = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(values[1]); if (unlikely(!__pyx_v_item_feature_gradients.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 76; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_item_biases = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[2]); if (unlikely(!__pyx_v_item_biases.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_item_bias_gradients = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[3]); if (unlikely(!__pyx_v_item_bias_gradients.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_user_features = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(values[4]); if (unlikely(!__pyx_v_user_features.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 79; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_user_feature_gradients = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(values[5]); if (unlikely(!__pyx_v_user_feature_gradients.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_user_biases = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[6]); if (unlikely(!__pyx_v_user_biases.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_user_bias_gradients = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[7]); if (unlikely(!__pyx_v_user_bias_gradients.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 82; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_no_components = __Pyx_PyInt_As_int(values[8]); if (unlikely((__pyx_v_no_components == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_features = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(values[0]); if (unlikely(!__pyx_v_item_features.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_feature_gradients = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(values[1]); if (unlikely(!__pyx_v_item_feature_gradients.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 79; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_biases = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[2]); if (unlikely(!__pyx_v_item_biases.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_bias_gradients = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[3]); if (unlikely(!__pyx_v_item_bias_gradients.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_user_features = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(values[4]); if (unlikely(!__pyx_v_user_features.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 82; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_user_feature_gradients = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(values[5]); if (unlikely(!__pyx_v_user_feature_gradients.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_user_biases = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[6]); if (unlikely(!__pyx_v_user_biases.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 84; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_user_bias_gradients = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[7]); if (unlikely(!__pyx_v_user_bias_gradients.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_no_components = __Pyx_PyInt_As_int(values[8]); if (unlikely((__pyx_v_no_components == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("lightfm.lightfm_fast.FastLightFM.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1859,7 +1892,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "lightfm/lightfm_fast.pyx":85
+  /* "lightfm/lightfm_fast.pyx":88
  *                  int no_components):
  * 
  *         self.item_features = item_features             # <<<<<<<<<<<<<<
@@ -1870,7 +1903,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   __PYX_INC_MEMVIEW(&__pyx_v_item_features, 0);
   __pyx_v_self->item_features = __pyx_v_item_features;
 
-  /* "lightfm/lightfm_fast.pyx":86
+  /* "lightfm/lightfm_fast.pyx":89
  * 
  *         self.item_features = item_features
  *         self.item_feature_gradients = item_feature_gradients             # <<<<<<<<<<<<<<
@@ -1881,7 +1914,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   __PYX_INC_MEMVIEW(&__pyx_v_item_feature_gradients, 0);
   __pyx_v_self->item_feature_gradients = __pyx_v_item_feature_gradients;
 
-  /* "lightfm/lightfm_fast.pyx":87
+  /* "lightfm/lightfm_fast.pyx":90
  *         self.item_features = item_features
  *         self.item_feature_gradients = item_feature_gradients
  *         self.item_biases = item_biases             # <<<<<<<<<<<<<<
@@ -1892,7 +1925,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   __PYX_INC_MEMVIEW(&__pyx_v_item_biases, 0);
   __pyx_v_self->item_biases = __pyx_v_item_biases;
 
-  /* "lightfm/lightfm_fast.pyx":88
+  /* "lightfm/lightfm_fast.pyx":91
  *         self.item_feature_gradients = item_feature_gradients
  *         self.item_biases = item_biases
  *         self.item_bias_gradients = item_bias_gradients             # <<<<<<<<<<<<<<
@@ -1903,7 +1936,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   __PYX_INC_MEMVIEW(&__pyx_v_item_bias_gradients, 0);
   __pyx_v_self->item_bias_gradients = __pyx_v_item_bias_gradients;
 
-  /* "lightfm/lightfm_fast.pyx":89
+  /* "lightfm/lightfm_fast.pyx":92
  *         self.item_biases = item_biases
  *         self.item_bias_gradients = item_bias_gradients
  *         self.user_features = user_features             # <<<<<<<<<<<<<<
@@ -1914,7 +1947,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   __PYX_INC_MEMVIEW(&__pyx_v_user_features, 0);
   __pyx_v_self->user_features = __pyx_v_user_features;
 
-  /* "lightfm/lightfm_fast.pyx":90
+  /* "lightfm/lightfm_fast.pyx":93
  *         self.item_bias_gradients = item_bias_gradients
  *         self.user_features = user_features
  *         self.user_feature_gradients = user_feature_gradients             # <<<<<<<<<<<<<<
@@ -1925,7 +1958,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   __PYX_INC_MEMVIEW(&__pyx_v_user_feature_gradients, 0);
   __pyx_v_self->user_feature_gradients = __pyx_v_user_feature_gradients;
 
-  /* "lightfm/lightfm_fast.pyx":91
+  /* "lightfm/lightfm_fast.pyx":94
  *         self.user_features = user_features
  *         self.user_feature_gradients = user_feature_gradients
  *         self.user_biases = user_biases             # <<<<<<<<<<<<<<
@@ -1936,7 +1969,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   __PYX_INC_MEMVIEW(&__pyx_v_user_biases, 0);
   __pyx_v_self->user_biases = __pyx_v_user_biases;
 
-  /* "lightfm/lightfm_fast.pyx":92
+  /* "lightfm/lightfm_fast.pyx":95
  *         self.user_feature_gradients = user_feature_gradients
  *         self.user_biases = user_biases
  *         self.user_bias_gradients = user_bias_gradients             # <<<<<<<<<<<<<<
@@ -1947,7 +1980,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   __PYX_INC_MEMVIEW(&__pyx_v_user_bias_gradients, 0);
   __pyx_v_self->user_bias_gradients = __pyx_v_user_bias_gradients;
 
-  /* "lightfm/lightfm_fast.pyx":94
+  /* "lightfm/lightfm_fast.pyx":97
  *         self.user_bias_gradients = user_bias_gradients
  * 
  *         self.no_components = no_components             # <<<<<<<<<<<<<<
@@ -1956,7 +1989,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
  */
   __pyx_v_self->no_components = __pyx_v_no_components;
 
-  /* "lightfm/lightfm_fast.pyx":95
+  /* "lightfm/lightfm_fast.pyx":98
  * 
  *         self.no_components = no_components
  *         self.item_scale = 1.0             # <<<<<<<<<<<<<<
@@ -1965,7 +1998,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
  */
   __pyx_v_self->item_scale = 1.0;
 
-  /* "lightfm/lightfm_fast.pyx":96
+  /* "lightfm/lightfm_fast.pyx":99
  *         self.no_components = no_components
  *         self.item_scale = 1.0
  *         self.user_scale = 1.0             # <<<<<<<<<<<<<<
@@ -1974,7 +2007,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
  */
   __pyx_v_self->user_scale = 1.0;
 
-  /* "lightfm/lightfm_fast.pyx":74
+  /* "lightfm/lightfm_fast.pyx":77
  *     cdef double user_scale
  * 
  *     def __init__(self,             # <<<<<<<<<<<<<<
@@ -1996,7 +2029,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":99
+/* "lightfm/lightfm_fast.pyx":102
  * 
  * 
  * cdef inline double sigmoid(double v) nogil:             # <<<<<<<<<<<<<<
@@ -2007,7 +2040,7 @@ static int __pyx_pf_7lightfm_12lightfm_fast_11FastLightFM___init__(struct __pyx_
 static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_sigmoid(double __pyx_v_v) {
   double __pyx_r;
 
-  /* "lightfm/lightfm_fast.pyx":104
+  /* "lightfm/lightfm_fast.pyx":107
  *     """
  * 
  *     return 1.0 / (1.0 + exp(-v))             # <<<<<<<<<<<<<<
@@ -2017,7 +2050,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_sigmoid(double __pyx
   __pyx_r = (1.0 / (1.0 + exp((-__pyx_v_v))));
   goto __pyx_L0;
 
-  /* "lightfm/lightfm_fast.pyx":99
+  /* "lightfm/lightfm_fast.pyx":102
  * 
  * 
  * cdef inline double sigmoid(double v) nogil:             # <<<<<<<<<<<<<<
@@ -2030,7 +2063,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_sigmoid(double __pyx
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":107
+/* "lightfm/lightfm_fast.pyx":110
  * 
  * 
  * cdef inline double compute_component_sum(CSRMatrix feature_indices,             # <<<<<<<<<<<<<<
@@ -2051,7 +2084,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_component_su
   int __pyx_t_5;
   int __pyx_t_6;
 
-  /* "lightfm/lightfm_fast.pyx":119
+  /* "lightfm/lightfm_fast.pyx":122
  *     cdef double component_sum, feature_weight
  * 
  *     component_sum = 0.0             # <<<<<<<<<<<<<<
@@ -2060,7 +2093,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_component_su
  */
   __pyx_v_component_sum = 0.0;
 
-  /* "lightfm/lightfm_fast.pyx":121
+  /* "lightfm/lightfm_fast.pyx":124
  *     component_sum = 0.0
  * 
  *     for i in range(start, stop):             # <<<<<<<<<<<<<<
@@ -2071,7 +2104,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_component_su
   for (__pyx_t_2 = __pyx_v_start; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "lightfm/lightfm_fast.pyx":123
+    /* "lightfm/lightfm_fast.pyx":126
  *     for i in range(start, stop):
  * 
  *         feature = feature_indices.indices[i]             # <<<<<<<<<<<<<<
@@ -2081,7 +2114,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_component_su
     __pyx_t_3 = __pyx_v_i;
     __pyx_v_feature = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_feature_indices->indices.data) + __pyx_t_3)) )));
 
-    /* "lightfm/lightfm_fast.pyx":124
+    /* "lightfm/lightfm_fast.pyx":127
  * 
  *         feature = feature_indices.indices[i]
  *         feature_weight = feature_indices.data[i]             # <<<<<<<<<<<<<<
@@ -2091,7 +2124,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_component_su
     __pyx_t_4 = __pyx_v_i;
     __pyx_v_feature_weight = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_feature_indices->data.data) + __pyx_t_4)) )));
 
-    /* "lightfm/lightfm_fast.pyx":126
+    /* "lightfm/lightfm_fast.pyx":129
  *         feature_weight = feature_indices.data[i]
  * 
  *         component_sum += feature_weight * features[feature, component]             # <<<<<<<<<<<<<<
@@ -2103,7 +2136,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_component_su
     __pyx_v_component_sum = (__pyx_v_component_sum + (__pyx_v_feature_weight * (*((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_features.data + __pyx_t_5 * __pyx_v_features.strides[0]) )) + __pyx_t_6)) )))));
   }
 
-  /* "lightfm/lightfm_fast.pyx":128
+  /* "lightfm/lightfm_fast.pyx":131
  *         component_sum += feature_weight * features[feature, component]
  * 
  *     return component_sum             # <<<<<<<<<<<<<<
@@ -2113,7 +2146,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_component_su
   __pyx_r = __pyx_v_component_sum;
   goto __pyx_L0;
 
-  /* "lightfm/lightfm_fast.pyx":107
+  /* "lightfm/lightfm_fast.pyx":110
  * 
  * 
  * cdef inline double compute_component_sum(CSRMatrix feature_indices,             # <<<<<<<<<<<<<<
@@ -2126,7 +2159,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_component_su
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":131
+/* "lightfm/lightfm_fast.pyx":134
  * 
  * 
  * cdef inline double compute_bias_sum(CSRMatrix feature_indices,             # <<<<<<<<<<<<<<
@@ -2146,7 +2179,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(str
   int __pyx_t_4;
   int __pyx_t_5;
 
-  /* "lightfm/lightfm_fast.pyx":142
+  /* "lightfm/lightfm_fast.pyx":145
  *     cdef double bias_sum, feature_weight
  * 
  *     bias_sum = 0.0             # <<<<<<<<<<<<<<
@@ -2155,7 +2188,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(str
  */
   __pyx_v_bias_sum = 0.0;
 
-  /* "lightfm/lightfm_fast.pyx":144
+  /* "lightfm/lightfm_fast.pyx":147
  *     bias_sum = 0.0
  * 
  *     for i in range(start, stop):             # <<<<<<<<<<<<<<
@@ -2166,7 +2199,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(str
   for (__pyx_t_2 = __pyx_v_start; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "lightfm/lightfm_fast.pyx":146
+    /* "lightfm/lightfm_fast.pyx":149
  *     for i in range(start, stop):
  * 
  *         feature = feature_indices.indices[i]             # <<<<<<<<<<<<<<
@@ -2176,7 +2209,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(str
     __pyx_t_3 = __pyx_v_i;
     __pyx_v_feature = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_feature_indices->indices.data) + __pyx_t_3)) )));
 
-    /* "lightfm/lightfm_fast.pyx":147
+    /* "lightfm/lightfm_fast.pyx":150
  * 
  *         feature = feature_indices.indices[i]
  *         feature_weight = feature_indices.data[i]             # <<<<<<<<<<<<<<
@@ -2186,7 +2219,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(str
     __pyx_t_4 = __pyx_v_i;
     __pyx_v_feature_weight = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_feature_indices->data.data) + __pyx_t_4)) )));
 
-    /* "lightfm/lightfm_fast.pyx":149
+    /* "lightfm/lightfm_fast.pyx":152
  *         feature_weight = feature_indices.data[i]
  * 
  *         bias_sum += feature_weight * biases[feature]             # <<<<<<<<<<<<<<
@@ -2197,7 +2230,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(str
     __pyx_v_bias_sum = (__pyx_v_bias_sum + (__pyx_v_feature_weight * (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_biases.data) + __pyx_t_5)) )))));
   }
 
-  /* "lightfm/lightfm_fast.pyx":151
+  /* "lightfm/lightfm_fast.pyx":154
  *         bias_sum += feature_weight * biases[feature]
  * 
  *     return bias_sum             # <<<<<<<<<<<<<<
@@ -2207,7 +2240,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(str
   __pyx_r = __pyx_v_bias_sum;
   goto __pyx_L0;
 
-  /* "lightfm/lightfm_fast.pyx":131
+  /* "lightfm/lightfm_fast.pyx":134
  * 
  * 
  * cdef inline double compute_bias_sum(CSRMatrix feature_indices,             # <<<<<<<<<<<<<<
@@ -2220,7 +2253,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(str
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":154
+/* "lightfm/lightfm_fast.pyx":157
  * 
  * 
  * cdef inline double compute_prediction(CSRMatrix item_features,             # <<<<<<<<<<<<<<
@@ -2241,7 +2274,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
   int __pyx_t_1;
   int __pyx_t_2;
 
-  /* "lightfm/lightfm_fast.pyx":173
+  /* "lightfm/lightfm_fast.pyx":176
  *     # Get the iteration ranges for features
  *     # for this training example.
  *     item_start_index = item_features.get_row_start(item_id)             # <<<<<<<<<<<<<<
@@ -2250,7 +2283,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
  */
   __pyx_v_item_start_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_item_features->__pyx_vtab)->get_row_start(__pyx_v_item_features, __pyx_v_item_id);
 
-  /* "lightfm/lightfm_fast.pyx":174
+  /* "lightfm/lightfm_fast.pyx":177
  *     # for this training example.
  *     item_start_index = item_features.get_row_start(item_id)
  *     item_stop_index = item_features.get_row_end(item_id)             # <<<<<<<<<<<<<<
@@ -2259,7 +2292,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
  */
   __pyx_v_item_stop_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_item_features->__pyx_vtab)->get_row_end(__pyx_v_item_features, __pyx_v_item_id);
 
-  /* "lightfm/lightfm_fast.pyx":176
+  /* "lightfm/lightfm_fast.pyx":179
  *     item_stop_index = item_features.get_row_end(item_id)
  * 
  *     user_start_index = user_features.get_row_start(user_id)             # <<<<<<<<<<<<<<
@@ -2268,7 +2301,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
  */
   __pyx_v_user_start_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_user_features->__pyx_vtab)->get_row_start(__pyx_v_user_features, __pyx_v_user_id);
 
-  /* "lightfm/lightfm_fast.pyx":177
+  /* "lightfm/lightfm_fast.pyx":180
  * 
  *     user_start_index = user_features.get_row_start(user_id)
  *     user_stop_index = user_features.get_row_end(user_id)             # <<<<<<<<<<<<<<
@@ -2277,7 +2310,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
  */
   __pyx_v_user_stop_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_user_features->__pyx_vtab)->get_row_end(__pyx_v_user_features, __pyx_v_user_id);
 
-  /* "lightfm/lightfm_fast.pyx":180
+  /* "lightfm/lightfm_fast.pyx":183
  * 
  *     # Initialize prediction.
  *     prediction = 0.0             # <<<<<<<<<<<<<<
@@ -2286,7 +2319,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
  */
   __pyx_v_prediction = 0.0;
 
-  /* "lightfm/lightfm_fast.pyx":184
+  /* "lightfm/lightfm_fast.pyx":187
  *     # Add the inner product of feature blocks. Results are
  *     # scaled down by accumulated lazy regularization.
  *     for i in range(lightfm.no_components):             # <<<<<<<<<<<<<<
@@ -2297,26 +2330,26 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "lightfm/lightfm_fast.pyx":188
+    /* "lightfm/lightfm_fast.pyx":191
  *         item_component = (compute_component_sum(item_features, lightfm.item_features, i,
- *                                                item_start_index, item_stop_index)
- *                          * lightfm.item_scale)             # <<<<<<<<<<<<<<
+ *                                                 item_start_index, item_stop_index)
+ *                           * lightfm.item_scale)             # <<<<<<<<<<<<<<
  *         user_component = (compute_component_sum(user_features, lightfm.user_features, i,
- *                                                user_start_index, user_stop_index)
+ *                                                 user_start_index, user_stop_index)
  */
     __pyx_v_item_component = (__pyx_f_7lightfm_12lightfm_fast_compute_component_sum(__pyx_v_item_features, __pyx_v_lightfm->item_features, __pyx_v_i, __pyx_v_item_start_index, __pyx_v_item_stop_index) * __pyx_v_lightfm->item_scale);
 
-    /* "lightfm/lightfm_fast.pyx":191
+    /* "lightfm/lightfm_fast.pyx":194
  *         user_component = (compute_component_sum(user_features, lightfm.user_features, i,
- *                                                user_start_index, user_stop_index)
- *                          * lightfm.user_scale)             # <<<<<<<<<<<<<<
+ *                                                 user_start_index, user_stop_index)
+ *                           * lightfm.user_scale)             # <<<<<<<<<<<<<<
  * 
  *         prediction += item_component * user_component
  */
     __pyx_v_user_component = (__pyx_f_7lightfm_12lightfm_fast_compute_component_sum(__pyx_v_user_features, __pyx_v_lightfm->user_features, __pyx_v_i, __pyx_v_user_start_index, __pyx_v_user_stop_index) * __pyx_v_lightfm->user_scale);
 
-    /* "lightfm/lightfm_fast.pyx":193
- *                          * lightfm.user_scale)
+    /* "lightfm/lightfm_fast.pyx":196
+ *                           * lightfm.user_scale)
  * 
  *         prediction += item_component * user_component             # <<<<<<<<<<<<<<
  * 
@@ -2325,7 +2358,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
     __pyx_v_prediction = (__pyx_v_prediction + (__pyx_v_item_component * __pyx_v_user_component));
   }
 
-  /* "lightfm/lightfm_fast.pyx":196
+  /* "lightfm/lightfm_fast.pyx":199
  * 
  *     # Add biases. Scaled down by lazy regularization.
  *     prediction += compute_bias_sum(item_features, lightfm.item_biases,             # <<<<<<<<<<<<<<
@@ -2334,7 +2367,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
  */
   __pyx_v_prediction = (__pyx_v_prediction + (__pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(__pyx_v_item_features, __pyx_v_lightfm->item_biases, __pyx_v_item_start_index, __pyx_v_item_stop_index) * __pyx_v_lightfm->item_scale));
 
-  /* "lightfm/lightfm_fast.pyx":198
+  /* "lightfm/lightfm_fast.pyx":201
  *     prediction += compute_bias_sum(item_features, lightfm.item_biases,
  *                                    item_start_index, item_stop_index) * lightfm.item_scale
  *     prediction += compute_bias_sum(user_features, lightfm.user_biases,             # <<<<<<<<<<<<<<
@@ -2343,17 +2376,17 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
  */
   __pyx_v_prediction = (__pyx_v_prediction + (__pyx_f_7lightfm_12lightfm_fast_compute_bias_sum(__pyx_v_user_features, __pyx_v_lightfm->user_biases, __pyx_v_user_start_index, __pyx_v_user_stop_index) * __pyx_v_lightfm->user_scale));
 
-  /* "lightfm/lightfm_fast.pyx":201
+  /* "lightfm/lightfm_fast.pyx":204
  *                                    user_start_index, user_stop_index) * lightfm.user_scale
  * 
- *     return sigmoid(prediction)             # <<<<<<<<<<<<<<
+ *     return prediction             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_r = __pyx_f_7lightfm_12lightfm_fast_sigmoid(__pyx_v_prediction);
+  __pyx_r = __pyx_v_prediction;
   goto __pyx_L0;
 
-  /* "lightfm/lightfm_fast.pyx":154
+  /* "lightfm/lightfm_fast.pyx":157
  * 
  * 
  * cdef inline double compute_prediction(CSRMatrix item_features,             # <<<<<<<<<<<<<<
@@ -2366,7 +2399,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_compute_prediction(s
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":204
+/* "lightfm/lightfm_fast.pyx":207
  * 
  * 
  * cdef inline double update_biases(CSRMatrix feature_indices,             # <<<<<<<<<<<<<<
@@ -2390,7 +2423,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
   int __pyx_t_7;
   int __pyx_t_8;
 
-  /* "lightfm/lightfm_fast.pyx":219
+  /* "lightfm/lightfm_fast.pyx":222
  *     cdef double feature_weight, local_learning_rate, sum_learning_rate
  * 
  *     for i in range(start, stop):             # <<<<<<<<<<<<<<
@@ -2401,7 +2434,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
   for (__pyx_t_2 = __pyx_v_start; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "lightfm/lightfm_fast.pyx":221
+    /* "lightfm/lightfm_fast.pyx":224
  *     for i in range(start, stop):
  * 
  *         feature = feature_indices.indices[i]             # <<<<<<<<<<<<<<
@@ -2411,7 +2444,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
     __pyx_t_3 = __pyx_v_i;
     __pyx_v_feature = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_feature_indices->indices.data) + __pyx_t_3)) )));
 
-    /* "lightfm/lightfm_fast.pyx":222
+    /* "lightfm/lightfm_fast.pyx":225
  * 
  *         feature = feature_indices.indices[i]
  *         feature_weight = feature_indices.data[i]             # <<<<<<<<<<<<<<
@@ -2421,7 +2454,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
     __pyx_t_4 = __pyx_v_i;
     __pyx_v_feature_weight = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_feature_indices->data.data) + __pyx_t_4)) )));
 
-    /* "lightfm/lightfm_fast.pyx":224
+    /* "lightfm/lightfm_fast.pyx":227
  *         feature_weight = feature_indices.data[i]
  * 
  *         local_learning_rate = learning_rate / sqrt(gradients[feature])             # <<<<<<<<<<<<<<
@@ -2431,7 +2464,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
     __pyx_t_5 = __pyx_v_feature;
     __pyx_v_local_learning_rate = (__pyx_v_learning_rate / sqrt((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_gradients.data) + __pyx_t_5)) )))));
 
-    /* "lightfm/lightfm_fast.pyx":225
+    /* "lightfm/lightfm_fast.pyx":228
  * 
  *         local_learning_rate = learning_rate / sqrt(gradients[feature])
  *         biases[feature] -= local_learning_rate * feature_weight * gradient             # <<<<<<<<<<<<<<
@@ -2441,7 +2474,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
     __pyx_t_6 = __pyx_v_feature;
     *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_biases.data) + __pyx_t_6)) )) -= ((__pyx_v_local_learning_rate * __pyx_v_feature_weight) * __pyx_v_gradient);
 
-    /* "lightfm/lightfm_fast.pyx":226
+    /* "lightfm/lightfm_fast.pyx":229
  *         local_learning_rate = learning_rate / sqrt(gradients[feature])
  *         biases[feature] -= local_learning_rate * feature_weight * gradient
  *         gradients[feature] += gradient ** 2             # <<<<<<<<<<<<<<
@@ -2451,7 +2484,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
     __pyx_t_7 = __pyx_v_feature;
     *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_gradients.data) + __pyx_t_7)) )) += pow(__pyx_v_gradient, 2.0);
 
-    /* "lightfm/lightfm_fast.pyx":230
+    /* "lightfm/lightfm_fast.pyx":233
  *         # Lazy regularization: scale up by the regularization
  *         # parameter.
  *         biases[feature] *= (1.0 + alpha * local_learning_rate)             # <<<<<<<<<<<<<<
@@ -2461,7 +2494,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
     __pyx_t_8 = __pyx_v_feature;
     *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_biases.data) + __pyx_t_8)) )) *= (1.0 + (__pyx_v_alpha * __pyx_v_local_learning_rate));
 
-    /* "lightfm/lightfm_fast.pyx":232
+    /* "lightfm/lightfm_fast.pyx":235
  *         biases[feature] *= (1.0 + alpha * local_learning_rate)
  * 
  *         sum_learning_rate += local_learning_rate             # <<<<<<<<<<<<<<
@@ -2471,7 +2504,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
     __pyx_v_sum_learning_rate = (__pyx_v_sum_learning_rate + __pyx_v_local_learning_rate);
   }
 
-  /* "lightfm/lightfm_fast.pyx":234
+  /* "lightfm/lightfm_fast.pyx":237
  *         sum_learning_rate += local_learning_rate
  * 
  *     return sum_learning_rate             # <<<<<<<<<<<<<<
@@ -2481,7 +2514,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
   __pyx_r = __pyx_v_sum_learning_rate;
   goto __pyx_L0;
 
-  /* "lightfm/lightfm_fast.pyx":204
+  /* "lightfm/lightfm_fast.pyx":207
  * 
  * 
  * cdef inline double update_biases(CSRMatrix feature_indices,             # <<<<<<<<<<<<<<
@@ -2494,7 +2527,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_biases(struct
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":237
+/* "lightfm/lightfm_fast.pyx":240
  * 
  * 
  * cdef inline double update_features(CSRMatrix feature_indices,             # <<<<<<<<<<<<<<
@@ -2522,7 +2555,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
   int __pyx_t_11;
   int __pyx_t_12;
 
-  /* "lightfm/lightfm_fast.pyx":253
+  /* "lightfm/lightfm_fast.pyx":256
  *     cdef double feature_weight, local_learning_rate, sum_learning_rate
  * 
  *     for i in range(start, stop):             # <<<<<<<<<<<<<<
@@ -2533,7 +2566,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
   for (__pyx_t_2 = __pyx_v_start; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "lightfm/lightfm_fast.pyx":255
+    /* "lightfm/lightfm_fast.pyx":258
  *     for i in range(start, stop):
  * 
  *         feature = feature_indices.indices[i]             # <<<<<<<<<<<<<<
@@ -2543,7 +2576,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
     __pyx_t_3 = __pyx_v_i;
     __pyx_v_feature = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_feature_indices->indices.data) + __pyx_t_3)) )));
 
-    /* "lightfm/lightfm_fast.pyx":256
+    /* "lightfm/lightfm_fast.pyx":259
  * 
  *         feature = feature_indices.indices[i]
  *         feature_weight = feature_indices.data[i]             # <<<<<<<<<<<<<<
@@ -2553,7 +2586,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
     __pyx_t_4 = __pyx_v_i;
     __pyx_v_feature_weight = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_feature_indices->data.data) + __pyx_t_4)) )));
 
-    /* "lightfm/lightfm_fast.pyx":258
+    /* "lightfm/lightfm_fast.pyx":261
  *         feature_weight = feature_indices.data[i]
  * 
  *         local_learning_rate = learning_rate / sqrt(gradients[feature, component])             # <<<<<<<<<<<<<<
@@ -2564,7 +2597,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
     __pyx_t_6 = __pyx_v_component;
     __pyx_v_local_learning_rate = (__pyx_v_learning_rate / sqrt((*((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_gradients.data + __pyx_t_5 * __pyx_v_gradients.strides[0]) )) + __pyx_t_6)) )))));
 
-    /* "lightfm/lightfm_fast.pyx":259
+    /* "lightfm/lightfm_fast.pyx":262
  * 
  *         local_learning_rate = learning_rate / sqrt(gradients[feature, component])
  *         features[feature, component] -= local_learning_rate * feature_weight * gradient             # <<<<<<<<<<<<<<
@@ -2575,7 +2608,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
     __pyx_t_8 = __pyx_v_component;
     *((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_features.data + __pyx_t_7 * __pyx_v_features.strides[0]) )) + __pyx_t_8)) )) -= ((__pyx_v_local_learning_rate * __pyx_v_feature_weight) * __pyx_v_gradient);
 
-    /* "lightfm/lightfm_fast.pyx":260
+    /* "lightfm/lightfm_fast.pyx":263
  *         local_learning_rate = learning_rate / sqrt(gradients[feature, component])
  *         features[feature, component] -= local_learning_rate * feature_weight * gradient
  *         gradients[feature, component] += gradient ** 2             # <<<<<<<<<<<<<<
@@ -2586,7 +2619,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
     __pyx_t_10 = __pyx_v_component;
     *((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_gradients.data + __pyx_t_9 * __pyx_v_gradients.strides[0]) )) + __pyx_t_10)) )) += pow(__pyx_v_gradient, 2.0);
 
-    /* "lightfm/lightfm_fast.pyx":264
+    /* "lightfm/lightfm_fast.pyx":267
  *         # Lazy regularization: scale up by the regularization
  *         # parameter.
  *         features[feature, component] *= (1.0 + alpha * local_learning_rate)             # <<<<<<<<<<<<<<
@@ -2597,7 +2630,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
     __pyx_t_12 = __pyx_v_component;
     *((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_features.data + __pyx_t_11 * __pyx_v_features.strides[0]) )) + __pyx_t_12)) )) *= (1.0 + (__pyx_v_alpha * __pyx_v_local_learning_rate));
 
-    /* "lightfm/lightfm_fast.pyx":266
+    /* "lightfm/lightfm_fast.pyx":269
  *         features[feature, component] *= (1.0 + alpha * local_learning_rate)
  * 
  *         sum_learning_rate += local_learning_rate             # <<<<<<<<<<<<<<
@@ -2607,7 +2640,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
     __pyx_v_sum_learning_rate = (__pyx_v_sum_learning_rate + __pyx_v_local_learning_rate);
   }
 
-  /* "lightfm/lightfm_fast.pyx":268
+  /* "lightfm/lightfm_fast.pyx":271
  *         sum_learning_rate += local_learning_rate
  * 
  *     return sum_learning_rate             # <<<<<<<<<<<<<<
@@ -2617,7 +2650,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
   __pyx_r = __pyx_v_sum_learning_rate;
   goto __pyx_L0;
 
-  /* "lightfm/lightfm_fast.pyx":237
+  /* "lightfm/lightfm_fast.pyx":240
  * 
  * 
  * cdef inline double update_features(CSRMatrix feature_indices,             # <<<<<<<<<<<<<<
@@ -2630,7 +2663,7 @@ static CYTHON_INLINE double __pyx_f_7lightfm_12lightfm_fast_update_features(stru
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":271
+/* "lightfm/lightfm_fast.pyx":274
  * 
  * 
  * cdef inline void update(double loss,             # <<<<<<<<<<<<<<
@@ -2650,7 +2683,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
   int __pyx_t_1;
   int __pyx_t_2;
 
-  /* "lightfm/lightfm_fast.pyx":287
+  /* "lightfm/lightfm_fast.pyx":290
  *     cdef double avg_learning_rate, item_component, user_component
  * 
  *     avg_learning_rate = 0.0             # <<<<<<<<<<<<<<
@@ -2659,7 +2692,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_avg_learning_rate = 0.0;
 
-  /* "lightfm/lightfm_fast.pyx":291
+  /* "lightfm/lightfm_fast.pyx":294
  *     # Get the iteration ranges for features
  *     # for this training example.
  *     item_start_index = item_features.get_row_start(item_id)             # <<<<<<<<<<<<<<
@@ -2668,7 +2701,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_item_start_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_item_features->__pyx_vtab)->get_row_start(__pyx_v_item_features, __pyx_v_item_id);
 
-  /* "lightfm/lightfm_fast.pyx":292
+  /* "lightfm/lightfm_fast.pyx":295
  *     # for this training example.
  *     item_start_index = item_features.get_row_start(item_id)
  *     item_stop_index = item_features.get_row_end(item_id)             # <<<<<<<<<<<<<<
@@ -2677,7 +2710,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_item_stop_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_item_features->__pyx_vtab)->get_row_end(__pyx_v_item_features, __pyx_v_item_id);
 
-  /* "lightfm/lightfm_fast.pyx":294
+  /* "lightfm/lightfm_fast.pyx":297
  *     item_stop_index = item_features.get_row_end(item_id)
  * 
  *     user_start_index = user_features.get_row_start(user_id)             # <<<<<<<<<<<<<<
@@ -2686,7 +2719,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_user_start_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_user_features->__pyx_vtab)->get_row_start(__pyx_v_user_features, __pyx_v_user_id);
 
-  /* "lightfm/lightfm_fast.pyx":295
+  /* "lightfm/lightfm_fast.pyx":298
  * 
  *     user_start_index = user_features.get_row_start(user_id)
  *     user_stop_index = user_features.get_row_end(user_id)             # <<<<<<<<<<<<<<
@@ -2695,7 +2728,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_user_stop_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_user_features->__pyx_vtab)->get_row_end(__pyx_v_user_features, __pyx_v_user_id);
 
-  /* "lightfm/lightfm_fast.pyx":297
+  /* "lightfm/lightfm_fast.pyx":300
  *     user_stop_index = user_features.get_row_end(user_id)
  * 
  *     avg_learning_rate += update_biases(item_features, item_start_index, item_stop_index,             # <<<<<<<<<<<<<<
@@ -2704,7 +2737,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_biases(__pyx_v_item_features, __pyx_v_item_start_index, __pyx_v_item_stop_index, __pyx_v_lightfm->item_biases, __pyx_v_lightfm->item_bias_gradients, __pyx_v_loss, __pyx_v_learning_rate, __pyx_v_item_alpha));
 
-  /* "lightfm/lightfm_fast.pyx":300
+  /* "lightfm/lightfm_fast.pyx":303
  *                                        lightfm.item_biases, lightfm.item_bias_gradients,
  *                                        loss, learning_rate, item_alpha)
  *     avg_learning_rate += update_biases(user_features, user_start_index, user_stop_index,             # <<<<<<<<<<<<<<
@@ -2713,7 +2746,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_biases(__pyx_v_user_features, __pyx_v_user_start_index, __pyx_v_user_stop_index, __pyx_v_lightfm->user_biases, __pyx_v_lightfm->user_bias_gradients, __pyx_v_loss, __pyx_v_learning_rate, __pyx_v_user_alpha));
 
-  /* "lightfm/lightfm_fast.pyx":305
+  /* "lightfm/lightfm_fast.pyx":308
  * 
  *     # Update latent representations.
  *     for i in range(lightfm.no_components):             # <<<<<<<<<<<<<<
@@ -2724,45 +2757,45 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "lightfm/lightfm_fast.pyx":309
+    /* "lightfm/lightfm_fast.pyx":312
  *         item_component = (compute_component_sum(item_features, lightfm.item_features, i,
- *                                                item_start_index, item_stop_index)
- *                          * lightfm.item_scale)             # <<<<<<<<<<<<<<
+ *                                                 item_start_index, item_stop_index)
+ *                           * lightfm.item_scale)             # <<<<<<<<<<<<<<
  *         user_component = (compute_component_sum(user_features, lightfm.user_features, i,
- *                                                user_start_index, user_stop_index)
+ *                                                 user_start_index, user_stop_index)
  */
     __pyx_v_item_component = (__pyx_f_7lightfm_12lightfm_fast_compute_component_sum(__pyx_v_item_features, __pyx_v_lightfm->item_features, __pyx_v_i, __pyx_v_item_start_index, __pyx_v_item_stop_index) * __pyx_v_lightfm->item_scale);
 
-    /* "lightfm/lightfm_fast.pyx":312
+    /* "lightfm/lightfm_fast.pyx":315
  *         user_component = (compute_component_sum(user_features, lightfm.user_features, i,
- *                                                user_start_index, user_stop_index)
- *                          * lightfm.user_scale)             # <<<<<<<<<<<<<<
+ *                                                 user_start_index, user_stop_index)
+ *                           * lightfm.user_scale)             # <<<<<<<<<<<<<<
  * 
- *         avg_learning_rate += update_features(item_features, lightfm.item_features, lightfm.item_feature_gradients,
+ *         avg_learning_rate += update_features(item_features, lightfm.item_features,
  */
     __pyx_v_user_component = (__pyx_f_7lightfm_12lightfm_fast_compute_component_sum(__pyx_v_user_features, __pyx_v_lightfm->user_features, __pyx_v_i, __pyx_v_user_start_index, __pyx_v_user_stop_index) * __pyx_v_lightfm->user_scale);
 
-    /* "lightfm/lightfm_fast.pyx":314
- *                          * lightfm.user_scale)
+    /* "lightfm/lightfm_fast.pyx":317
+ *                           * lightfm.user_scale)
  * 
- *         avg_learning_rate += update_features(item_features, lightfm.item_features, lightfm.item_feature_gradients,             # <<<<<<<<<<<<<<
+ *         avg_learning_rate += update_features(item_features, lightfm.item_features,             # <<<<<<<<<<<<<<
+ *                                              lightfm.item_feature_gradients,
  *                                              i, item_start_index, item_stop_index,
- *                                              loss * user_component, learning_rate, item_alpha)
  */
     __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_features(__pyx_v_item_features, __pyx_v_lightfm->item_features, __pyx_v_lightfm->item_feature_gradients, __pyx_v_i, __pyx_v_item_start_index, __pyx_v_item_stop_index, (__pyx_v_loss * __pyx_v_user_component), __pyx_v_learning_rate, __pyx_v_item_alpha));
 
-    /* "lightfm/lightfm_fast.pyx":317
+    /* "lightfm/lightfm_fast.pyx":321
  *                                              i, item_start_index, item_stop_index,
  *                                              loss * user_component, learning_rate, item_alpha)
- *         avg_learning_rate += update_features(user_features, lightfm.user_features, lightfm.user_feature_gradients,             # <<<<<<<<<<<<<<
+ *         avg_learning_rate += update_features(user_features, lightfm.user_features,             # <<<<<<<<<<<<<<
+ *                                              lightfm.user_feature_gradients,
  *                                              i, user_start_index, user_stop_index,
- *                                              loss * item_component, learning_rate, user_alpha)
  */
     __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_features(__pyx_v_user_features, __pyx_v_lightfm->user_features, __pyx_v_lightfm->user_feature_gradients, __pyx_v_i, __pyx_v_user_start_index, __pyx_v_user_stop_index, (__pyx_v_loss * __pyx_v_item_component), __pyx_v_learning_rate, __pyx_v_user_alpha));
   }
 
-  /* "lightfm/lightfm_fast.pyx":322
- * 
+  /* "lightfm/lightfm_fast.pyx":326
+ *                                              loss * item_component, learning_rate, user_alpha)
  * 
  *     avg_learning_rate /= ((lightfm.no_components + 1) * (user_stop_index - user_start_index)             # <<<<<<<<<<<<<<
  *                           + (lightfm.no_components + 1) * (item_stop_index - item_start_index))
@@ -2770,7 +2803,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate / (((__pyx_v_lightfm->no_components + 1) * (__pyx_v_user_stop_index - __pyx_v_user_start_index)) + ((__pyx_v_lightfm->no_components + 1) * (__pyx_v_item_stop_index - __pyx_v_item_start_index))));
 
-  /* "lightfm/lightfm_fast.pyx":327
+  /* "lightfm/lightfm_fast.pyx":331
  *     # Update the scaling factors for lazy regularization, using the average learning rate
  *     # of features updated for this example.
  *     lightfm.item_scale *= (1 - item_alpha * avg_learning_rate)             # <<<<<<<<<<<<<<
@@ -2779,7 +2812,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_lightfm->item_scale = (__pyx_v_lightfm->item_scale * (1.0 - (__pyx_v_item_alpha * __pyx_v_avg_learning_rate)));
 
-  /* "lightfm/lightfm_fast.pyx":328
+  /* "lightfm/lightfm_fast.pyx":332
  *     # of features updated for this example.
  *     lightfm.item_scale *= (1 - item_alpha * avg_learning_rate)
  *     lightfm.user_scale *= (1 - user_alpha * avg_learning_rate)             # <<<<<<<<<<<<<<
@@ -2788,7 +2821,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
  */
   __pyx_v_lightfm->user_scale = (__pyx_v_lightfm->user_scale * (1.0 - (__pyx_v_user_alpha * __pyx_v_avg_learning_rate)));
 
-  /* "lightfm/lightfm_fast.pyx":271
+  /* "lightfm/lightfm_fast.pyx":274
  * 
  * 
  * cdef inline void update(double loss,             # <<<<<<<<<<<<<<
@@ -2799,7 +2832,224 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_update(double __pyx_v_
   /* function exit code */
 }
 
-/* "lightfm/lightfm_fast.pyx":331
+/* "lightfm/lightfm_fast.pyx":335
+ * 
+ * 
+ * cdef inline void warp_update(double loss,             # <<<<<<<<<<<<<<
+ *                              CSRMatrix item_features,
+ *                              CSRMatrix user_features,
+ */
+
+static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_warp_update(double __pyx_v_loss, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, int __pyx_v_user_id, int __pyx_v_positive_item_id, int __pyx_v_negative_item_id, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, double __pyx_v_learning_rate, double __pyx_v_item_alpha, double __pyx_v_user_alpha) {
+  int __pyx_v_i;
+  int __pyx_v_positive_item_start_index;
+  int __pyx_v_positive_item_stop_index;
+  int __pyx_v_user_start_index;
+  int __pyx_v_user_stop_index;
+  int __pyx_v_negative_item_start_index;
+  int __pyx_v_negative_item_stop_index;
+  double __pyx_v_avg_learning_rate;
+  double __pyx_v_positive_item_component;
+  double __pyx_v_negative_item_component;
+  double __pyx_v_user_component;
+  int __pyx_t_1;
+  int __pyx_t_2;
+
+  /* "lightfm/lightfm_fast.pyx":353
+ *     cdef double avg_learning_rate, positive_item_component, negative_item_component, user_component
+ * 
+ *     avg_learning_rate = 0.0             # <<<<<<<<<<<<<<
+ * 
+ *     # Get the iteration ranges for features
+ */
+  __pyx_v_avg_learning_rate = 0.0;
+
+  /* "lightfm/lightfm_fast.pyx":357
+ *     # Get the iteration ranges for features
+ *     # for this training example.
+ *     positive_item_start_index = item_features.get_row_start(positive_item_id)             # <<<<<<<<<<<<<<
+ *     positive_item_stop_index = item_features.get_row_end(positive_item_id)
+ * 
+ */
+  __pyx_v_positive_item_start_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_item_features->__pyx_vtab)->get_row_start(__pyx_v_item_features, __pyx_v_positive_item_id);
+
+  /* "lightfm/lightfm_fast.pyx":358
+ *     # for this training example.
+ *     positive_item_start_index = item_features.get_row_start(positive_item_id)
+ *     positive_item_stop_index = item_features.get_row_end(positive_item_id)             # <<<<<<<<<<<<<<
+ * 
+ *     negative_item_start_index = item_features.get_row_start(negative_item_id)
+ */
+  __pyx_v_positive_item_stop_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_item_features->__pyx_vtab)->get_row_end(__pyx_v_item_features, __pyx_v_positive_item_id);
+
+  /* "lightfm/lightfm_fast.pyx":360
+ *     positive_item_stop_index = item_features.get_row_end(positive_item_id)
+ * 
+ *     negative_item_start_index = item_features.get_row_start(negative_item_id)             # <<<<<<<<<<<<<<
+ *     negative_item_stop_index = item_features.get_row_end(negative_item_id)
+ * 
+ */
+  __pyx_v_negative_item_start_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_item_features->__pyx_vtab)->get_row_start(__pyx_v_item_features, __pyx_v_negative_item_id);
+
+  /* "lightfm/lightfm_fast.pyx":361
+ * 
+ *     negative_item_start_index = item_features.get_row_start(negative_item_id)
+ *     negative_item_stop_index = item_features.get_row_end(negative_item_id)             # <<<<<<<<<<<<<<
+ * 
+ *     user_start_index = user_features.get_row_start(user_id)
+ */
+  __pyx_v_negative_item_stop_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_item_features->__pyx_vtab)->get_row_end(__pyx_v_item_features, __pyx_v_negative_item_id);
+
+  /* "lightfm/lightfm_fast.pyx":363
+ *     negative_item_stop_index = item_features.get_row_end(negative_item_id)
+ * 
+ *     user_start_index = user_features.get_row_start(user_id)             # <<<<<<<<<<<<<<
+ *     user_stop_index = user_features.get_row_end(user_id)
+ * 
+ */
+  __pyx_v_user_start_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_user_features->__pyx_vtab)->get_row_start(__pyx_v_user_features, __pyx_v_user_id);
+
+  /* "lightfm/lightfm_fast.pyx":364
+ * 
+ *     user_start_index = user_features.get_row_start(user_id)
+ *     user_stop_index = user_features.get_row_end(user_id)             # <<<<<<<<<<<<<<
+ * 
+ *     avg_learning_rate += update_biases(item_features, positive_item_start_index,
+ */
+  __pyx_v_user_stop_index = ((struct __pyx_vtabstruct_7lightfm_12lightfm_fast_CSRMatrix *)__pyx_v_user_features->__pyx_vtab)->get_row_end(__pyx_v_user_features, __pyx_v_user_id);
+
+  /* "lightfm/lightfm_fast.pyx":366
+ *     user_stop_index = user_features.get_row_end(user_id)
+ * 
+ *     avg_learning_rate += update_biases(item_features, positive_item_start_index,             # <<<<<<<<<<<<<<
+ *                                        positive_item_stop_index,
+ *                                        lightfm.item_biases, lightfm.item_bias_gradients,
+ */
+  __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_biases(__pyx_v_item_features, __pyx_v_positive_item_start_index, __pyx_v_positive_item_stop_index, __pyx_v_lightfm->item_biases, __pyx_v_lightfm->item_bias_gradients, (-__pyx_v_loss), __pyx_v_learning_rate, __pyx_v_item_alpha));
+
+  /* "lightfm/lightfm_fast.pyx":370
+ *                                        lightfm.item_biases, lightfm.item_bias_gradients,
+ *                                        -loss, learning_rate, item_alpha)
+ *     avg_learning_rate += update_biases(item_features, negative_item_start_index,             # <<<<<<<<<<<<<<
+ *                                        negative_item_stop_index,
+ *                                        lightfm.item_biases, lightfm.item_bias_gradients,
+ */
+  __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_biases(__pyx_v_item_features, __pyx_v_negative_item_start_index, __pyx_v_negative_item_stop_index, __pyx_v_lightfm->item_biases, __pyx_v_lightfm->item_bias_gradients, __pyx_v_loss, __pyx_v_learning_rate, __pyx_v_item_alpha));
+
+  /* "lightfm/lightfm_fast.pyx":374
+ *                                        lightfm.item_biases, lightfm.item_bias_gradients,
+ *                                        loss, learning_rate, item_alpha)
+ *     avg_learning_rate += update_biases(user_features, user_start_index, user_stop_index,             # <<<<<<<<<<<<<<
+ *                                        lightfm.user_biases, lightfm.user_bias_gradients,
+ *                                        loss, learning_rate, user_alpha)
+ */
+  __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_biases(__pyx_v_user_features, __pyx_v_user_start_index, __pyx_v_user_stop_index, __pyx_v_lightfm->user_biases, __pyx_v_lightfm->user_bias_gradients, __pyx_v_loss, __pyx_v_learning_rate, __pyx_v_user_alpha));
+
+  /* "lightfm/lightfm_fast.pyx":379
+ * 
+ *     # Update latent representations.
+ *     for i in range(lightfm.no_components):             # <<<<<<<<<<<<<<
+ * 
+ *         positive_item_component = (compute_component_sum(item_features, lightfm.item_features, i,
+ */
+  __pyx_t_1 = __pyx_v_lightfm->no_components;
+  for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
+    __pyx_v_i = __pyx_t_2;
+
+    /* "lightfm/lightfm_fast.pyx":384
+ *                                                          positive_item_start_index,
+ *                                                          positive_item_stop_index)
+ *                                    * lightfm.item_scale)             # <<<<<<<<<<<<<<
+ *         negative_item_component = (compute_component_sum(item_features, lightfm.item_features, i,
+ *                                                          negative_item_start_index,
+ */
+    __pyx_v_positive_item_component = (__pyx_f_7lightfm_12lightfm_fast_compute_component_sum(__pyx_v_item_features, __pyx_v_lightfm->item_features, __pyx_v_i, __pyx_v_positive_item_start_index, __pyx_v_positive_item_stop_index) * __pyx_v_lightfm->item_scale);
+
+    /* "lightfm/lightfm_fast.pyx":388
+ *                                                          negative_item_start_index,
+ *                                                          negative_item_stop_index)
+ *                                    * lightfm.item_scale)             # <<<<<<<<<<<<<<
+ *         user_component = (compute_component_sum(user_features, lightfm.user_features, i,
+ *                                                 user_start_index, user_stop_index)
+ */
+    __pyx_v_negative_item_component = (__pyx_f_7lightfm_12lightfm_fast_compute_component_sum(__pyx_v_item_features, __pyx_v_lightfm->item_features, __pyx_v_i, __pyx_v_negative_item_start_index, __pyx_v_negative_item_stop_index) * __pyx_v_lightfm->item_scale);
+
+    /* "lightfm/lightfm_fast.pyx":391
+ *         user_component = (compute_component_sum(user_features, lightfm.user_features, i,
+ *                                                 user_start_index, user_stop_index)
+ *                           * lightfm.user_scale)             # <<<<<<<<<<<<<<
+ * 
+ *         avg_learning_rate += update_features(item_features, lightfm.item_features,
+ */
+    __pyx_v_user_component = (__pyx_f_7lightfm_12lightfm_fast_compute_component_sum(__pyx_v_user_features, __pyx_v_lightfm->user_features, __pyx_v_i, __pyx_v_user_start_index, __pyx_v_user_stop_index) * __pyx_v_lightfm->user_scale);
+
+    /* "lightfm/lightfm_fast.pyx":393
+ *                           * lightfm.user_scale)
+ * 
+ *         avg_learning_rate += update_features(item_features, lightfm.item_features,             # <<<<<<<<<<<<<<
+ *                                              lightfm.item_feature_gradients,
+ *                                              i, positive_item_start_index, positive_item_stop_index,
+ */
+    __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_features(__pyx_v_item_features, __pyx_v_lightfm->item_features, __pyx_v_lightfm->item_feature_gradients, __pyx_v_i, __pyx_v_positive_item_start_index, __pyx_v_positive_item_stop_index, ((-__pyx_v_loss) * __pyx_v_user_component), __pyx_v_learning_rate, __pyx_v_item_alpha));
+
+    /* "lightfm/lightfm_fast.pyx":397
+ *                                              i, positive_item_start_index, positive_item_stop_index,
+ *                                              -loss * user_component, learning_rate, item_alpha)
+ *         avg_learning_rate += update_features(item_features, lightfm.item_features,             # <<<<<<<<<<<<<<
+ *                                              lightfm.item_feature_gradients,
+ *                                              i, negative_item_start_index, negative_item_stop_index,
+ */
+    __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_features(__pyx_v_item_features, __pyx_v_lightfm->item_features, __pyx_v_lightfm->item_feature_gradients, __pyx_v_i, __pyx_v_negative_item_start_index, __pyx_v_negative_item_stop_index, (__pyx_v_loss * __pyx_v_user_component), __pyx_v_learning_rate, __pyx_v_item_alpha));
+
+    /* "lightfm/lightfm_fast.pyx":401
+ *                                              i, negative_item_start_index, negative_item_stop_index,
+ *                                              loss * user_component, learning_rate, item_alpha)
+ *         avg_learning_rate += update_features(user_features, lightfm.user_features,             # <<<<<<<<<<<<<<
+ *                                              lightfm.user_feature_gradients,
+ *                                              i, user_start_index, user_stop_index,
+ */
+    __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate + __pyx_f_7lightfm_12lightfm_fast_update_features(__pyx_v_user_features, __pyx_v_lightfm->user_features, __pyx_v_lightfm->user_feature_gradients, __pyx_v_i, __pyx_v_user_start_index, __pyx_v_user_stop_index, (__pyx_v_loss * (__pyx_v_negative_item_component - __pyx_v_positive_item_component)), __pyx_v_learning_rate, __pyx_v_user_alpha));
+  }
+
+  /* "lightfm/lightfm_fast.pyx":408
+ *                                              learning_rate, user_alpha)
+ * 
+ *     avg_learning_rate /= ((lightfm.no_components + 1) * (user_stop_index - user_start_index)             # <<<<<<<<<<<<<<
+ *                           + (lightfm.no_components + 1) *
+ *                           (positive_item_stop_index - positive_item_start_index)
+ */
+  __pyx_v_avg_learning_rate = (__pyx_v_avg_learning_rate / ((((__pyx_v_lightfm->no_components + 1) * (__pyx_v_user_stop_index - __pyx_v_user_start_index)) + ((__pyx_v_lightfm->no_components + 1) * (__pyx_v_positive_item_stop_index - __pyx_v_positive_item_start_index))) + ((__pyx_v_lightfm->no_components + 1) * (__pyx_v_negative_item_stop_index - __pyx_v_negative_item_start_index))));
+
+  /* "lightfm/lightfm_fast.pyx":416
+ *     # Update the scaling factors for lazy regularization, using the average learning rate
+ *     # of features updated for this example.
+ *     lightfm.item_scale *= (1 - item_alpha * avg_learning_rate)             # <<<<<<<<<<<<<<
+ *     lightfm.user_scale *= (1 - user_alpha * avg_learning_rate)
+ * 
+ */
+  __pyx_v_lightfm->item_scale = (__pyx_v_lightfm->item_scale * (1.0 - (__pyx_v_item_alpha * __pyx_v_avg_learning_rate)));
+
+  /* "lightfm/lightfm_fast.pyx":417
+ *     # of features updated for this example.
+ *     lightfm.item_scale *= (1 - item_alpha * avg_learning_rate)
+ *     lightfm.user_scale *= (1 - user_alpha * avg_learning_rate)             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __pyx_v_lightfm->user_scale = (__pyx_v_lightfm->user_scale * (1.0 - (__pyx_v_user_alpha * __pyx_v_avg_learning_rate)));
+
+  /* "lightfm/lightfm_fast.pyx":335
+ * 
+ * 
+ * cdef inline void warp_update(double loss,             # <<<<<<<<<<<<<<
+ *                              CSRMatrix item_features,
+ *                              CSRMatrix user_features,
+ */
+
+  /* function exit code */
+}
+
+/* "lightfm/lightfm_fast.pyx":420
  * 
  * 
  * cdef inline void regularize(FastLightFM lightfm,             # <<<<<<<<<<<<<<
@@ -2822,7 +3072,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
   int __pyx_t_8;
   int __pyx_t_9;
 
-  /* "lightfm/lightfm_fast.pyx":339
+  /* "lightfm/lightfm_fast.pyx":428
  * 
  *     cdef int i, j
  *     cdef int no_features = lightfm.item_features.shape[0]             # <<<<<<<<<<<<<<
@@ -2831,7 +3081,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
  */
   __pyx_v_no_features = (__pyx_v_lightfm->item_features.shape[0]);
 
-  /* "lightfm/lightfm_fast.pyx":340
+  /* "lightfm/lightfm_fast.pyx":429
  *     cdef int i, j
  *     cdef int no_features = lightfm.item_features.shape[0]
  *     cdef int no_users = lightfm.user_features.shape[0]             # <<<<<<<<<<<<<<
@@ -2840,7 +3090,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
  */
   __pyx_v_no_users = (__pyx_v_lightfm->user_features.shape[0]);
 
-  /* "lightfm/lightfm_fast.pyx":342
+  /* "lightfm/lightfm_fast.pyx":431
  *     cdef int no_users = lightfm.user_features.shape[0]
  * 
  *     for i in range(no_features):             # <<<<<<<<<<<<<<
@@ -2851,7 +3101,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "lightfm/lightfm_fast.pyx":343
+    /* "lightfm/lightfm_fast.pyx":432
  * 
  *     for i in range(no_features):
  *         for j in range(lightfm.no_components):             # <<<<<<<<<<<<<<
@@ -2862,7 +3112,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
     for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
       __pyx_v_j = __pyx_t_4;
 
-      /* "lightfm/lightfm_fast.pyx":344
+      /* "lightfm/lightfm_fast.pyx":433
  *     for i in range(no_features):
  *         for j in range(lightfm.no_components):
  *             lightfm.item_features[i, j] *= lightfm.item_scale             # <<<<<<<<<<<<<<
@@ -2874,7 +3124,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
       *((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_lightfm->item_features.data + __pyx_t_5 * __pyx_v_lightfm->item_features.strides[0]) )) + __pyx_t_6)) )) *= __pyx_v_lightfm->item_scale;
     }
 
-    /* "lightfm/lightfm_fast.pyx":346
+    /* "lightfm/lightfm_fast.pyx":435
  *             lightfm.item_features[i, j] *= lightfm.item_scale
  * 
  *         lightfm.item_biases[i] *= lightfm.item_scale             # <<<<<<<<<<<<<<
@@ -2885,7 +3135,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
     *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_lightfm->item_biases.data) + __pyx_t_3)) )) *= __pyx_v_lightfm->item_scale;
   }
 
-  /* "lightfm/lightfm_fast.pyx":348
+  /* "lightfm/lightfm_fast.pyx":437
  *         lightfm.item_biases[i] *= lightfm.item_scale
  * 
  *     for i in range(no_users):             # <<<<<<<<<<<<<<
@@ -2896,7 +3146,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "lightfm/lightfm_fast.pyx":349
+    /* "lightfm/lightfm_fast.pyx":438
  * 
  *     for i in range(no_users):
  *         for j in range(lightfm.no_components):             # <<<<<<<<<<<<<<
@@ -2907,7 +3157,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_4; __pyx_t_7+=1) {
       __pyx_v_j = __pyx_t_7;
 
-      /* "lightfm/lightfm_fast.pyx":350
+      /* "lightfm/lightfm_fast.pyx":439
  *     for i in range(no_users):
  *         for j in range(lightfm.no_components):
  *             lightfm.user_features[i, j] *= lightfm.user_scale             # <<<<<<<<<<<<<<
@@ -2919,7 +3169,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
       *((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_lightfm->user_features.data + __pyx_t_8 * __pyx_v_lightfm->user_features.strides[0]) )) + __pyx_t_9)) )) *= __pyx_v_lightfm->user_scale;
     }
 
-    /* "lightfm/lightfm_fast.pyx":351
+    /* "lightfm/lightfm_fast.pyx":440
  *         for j in range(lightfm.no_components):
  *             lightfm.user_features[i, j] *= lightfm.user_scale
  *         lightfm.user_biases[i] *= lightfm.user_scale             # <<<<<<<<<<<<<<
@@ -2930,7 +3180,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
     *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_lightfm->user_biases.data) + __pyx_t_4)) )) *= __pyx_v_lightfm->user_scale;
   }
 
-  /* "lightfm/lightfm_fast.pyx":353
+  /* "lightfm/lightfm_fast.pyx":442
  *         lightfm.user_biases[i] *= lightfm.user_scale
  * 
  *     lightfm.item_scale = 1.0             # <<<<<<<<<<<<<<
@@ -2939,7 +3189,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
  */
   __pyx_v_lightfm->item_scale = 1.0;
 
-  /* "lightfm/lightfm_fast.pyx":354
+  /* "lightfm/lightfm_fast.pyx":443
  * 
  *     lightfm.item_scale = 1.0
  *     lightfm.user_scale = 1.0             # <<<<<<<<<<<<<<
@@ -2948,7 +3198,7 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
  */
   __pyx_v_lightfm->user_scale = 1.0;
 
-  /* "lightfm/lightfm_fast.pyx":331
+  /* "lightfm/lightfm_fast.pyx":420
  * 
  * 
  * cdef inline void regularize(FastLightFM lightfm,             # <<<<<<<<<<<<<<
@@ -2959,19 +3209,19 @@ static CYTHON_INLINE void __pyx_f_7lightfm_12lightfm_fast_regularize(struct __py
   /* function exit code */
 }
 
-/* "lightfm/lightfm_fast.pyx":357
+/* "lightfm/lightfm_fast.pyx":446
  * 
  * 
- * def fit_lightfm(CSRMatrix item_features,             # <<<<<<<<<<<<<<
- *                 CSRMatrix user_features,
- *                 int[::1] user_ids,
+ * def fit_logistic(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *                  CSRMatrix user_features,
+ *                  int[::1] user_ids,
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7lightfm_12lightfm_fast_1fit_lightfm(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_7lightfm_12lightfm_fast_fit_lightfm[] = "\n    Fit the LightFM model.\n    ";
-static PyMethodDef __pyx_mdef_7lightfm_12lightfm_fast_1fit_lightfm = {"fit_lightfm", (PyCFunction)__pyx_pw_7lightfm_12lightfm_fast_1fit_lightfm, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7lightfm_12lightfm_fast_fit_lightfm};
-static PyObject *__pyx_pw_7lightfm_12lightfm_fast_1fit_lightfm(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7lightfm_12lightfm_fast_1fit_logistic(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7lightfm_12lightfm_fast_fit_logistic[] = "\n    Fit the LightFM model.\n    ";
+static PyMethodDef __pyx_mdef_7lightfm_12lightfm_fast_1fit_logistic = {"fit_logistic", (PyCFunction)__pyx_pw_7lightfm_12lightfm_fast_1fit_logistic, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7lightfm_12lightfm_fast_fit_logistic};
+static PyObject *__pyx_pw_7lightfm_12lightfm_fast_1fit_logistic(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features = 0;
   struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features = 0;
   __Pyx_memviewslice __pyx_v_user_ids = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -2988,7 +3238,7 @@ static PyObject *__pyx_pw_7lightfm_12lightfm_fast_1fit_lightfm(PyObject *__pyx_s
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("fit_lightfm (wrapper)", 0);
+  __Pyx_RefNannySetupContext("fit_logistic (wrapper)", 0);
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_item_features,&__pyx_n_s_user_features,&__pyx_n_s_user_ids,&__pyx_n_s_item_ids,&__pyx_n_s_Y,&__pyx_n_s_shuffle_indices,&__pyx_n_s_lightfm,&__pyx_n_s_learning_rate,&__pyx_n_s_item_alpha,&__pyx_n_s_user_alpha,&__pyx_n_s_num_threads,0};
     PyObject* values[11] = {0,0,0,0,0,0,0,0,0,0,0};
@@ -3018,56 +3268,56 @@ static PyObject *__pyx_pw_7lightfm_12lightfm_fast_1fit_lightfm(PyObject *__pyx_s
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_features)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_ids)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_ids)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  4:
         if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_Y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 4); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 4); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  5:
         if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_shuffle_indices)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 5); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 5); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  6:
         if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_lightfm)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 6); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 6); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  7:
         if (likely((values[7] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_learning_rate)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 7); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 7); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  8:
         if (likely((values[8] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_alpha)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 8); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 8); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  9:
         if (likely((values[9] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_alpha)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 9); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 9); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case 10:
         if (likely((values[10] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_num_threads)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, 10); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, 10); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "fit_lightfm") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "fit_logistic") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 11) {
       goto __pyx_L5_argtuple_error;
@@ -3086,28 +3336,28 @@ static PyObject *__pyx_pw_7lightfm_12lightfm_fast_1fit_lightfm(PyObject *__pyx_s
     }
     __pyx_v_item_features = ((struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *)values[0]);
     __pyx_v_user_features = ((struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *)values[1]);
-    __pyx_v_user_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[2]); if (unlikely(!__pyx_v_user_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 359; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_item_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[3]); if (unlikely(!__pyx_v_item_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 360; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_Y = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[4]); if (unlikely(!__pyx_v_Y.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 361; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_shuffle_indices = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[5]); if (unlikely(!__pyx_v_shuffle_indices.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 362; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_user_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[2]); if (unlikely(!__pyx_v_user_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 448; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[3]); if (unlikely(!__pyx_v_item_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 449; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_Y = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[4]); if (unlikely(!__pyx_v_Y.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 450; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_shuffle_indices = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[5]); if (unlikely(!__pyx_v_shuffle_indices.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 451; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
     __pyx_v_lightfm = ((struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *)values[6]);
-    __pyx_v_learning_rate = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_learning_rate == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 364; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_item_alpha = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_item_alpha == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 365; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_user_alpha = __pyx_PyFloat_AsDouble(values[9]); if (unlikely((__pyx_v_user_alpha == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 366; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_num_threads = __Pyx_PyInt_As_int(values[10]); if (unlikely((__pyx_v_num_threads == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 367; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_learning_rate = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_learning_rate == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 453; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_alpha = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_item_alpha == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 454; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_user_alpha = __pyx_PyFloat_AsDouble(values[9]); if (unlikely((__pyx_v_user_alpha == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 455; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_num_threads = __Pyx_PyInt_As_int(values[10]); if (unlikely((__pyx_v_num_threads == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 456; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("fit_lightfm", 1, 11, 11, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("fit_logistic", 1, 11, 11, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("lightfm.lightfm_fast.fit_lightfm", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("lightfm.lightfm_fast.fit_logistic", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_item_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "item_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_user_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "user_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lightfm), __pyx_ptype_7lightfm_12lightfm_fast_FastLightFM, 1, "lightfm", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 363; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(__pyx_self, __pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_ids, __pyx_v_item_ids, __pyx_v_Y, __pyx_v_shuffle_indices, __pyx_v_lightfm, __pyx_v_learning_rate, __pyx_v_item_alpha, __pyx_v_user_alpha, __pyx_v_num_threads);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_item_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "item_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_user_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "user_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 447; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lightfm), __pyx_ptype_7lightfm_12lightfm_fast_FastLightFM, 1, "lightfm", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 452; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_r = __pyx_pf_7lightfm_12lightfm_fast_fit_logistic(__pyx_self, __pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_ids, __pyx_v_item_ids, __pyx_v_Y, __pyx_v_shuffle_indices, __pyx_v_lightfm, __pyx_v_learning_rate, __pyx_v_item_alpha, __pyx_v_user_alpha, __pyx_v_num_threads);
 
   /* function exit code */
   goto __pyx_L0;
@@ -3118,7 +3368,7 @@ static PyObject *__pyx_pw_7lightfm_12lightfm_fast_1fit_lightfm(PyObject *__pyx_s
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_Y, __Pyx_memviewslice __pyx_v_shuffle_indices, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, double __pyx_v_learning_rate, double __pyx_v_item_alpha, double __pyx_v_user_alpha, CYTHON_UNUSED int __pyx_v_num_threads) {
+static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_logistic(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_Y, __Pyx_memviewslice __pyx_v_shuffle_indices, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, double __pyx_v_learning_rate, double __pyx_v_item_alpha, double __pyx_v_user_alpha, CYTHON_UNUSED int __pyx_v_num_threads) {
   int __pyx_v_i;
   CYTHON_UNUSED int __pyx_v_no_examples;
   int __pyx_v_user_id;
@@ -3138,9 +3388,9 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
   int __pyx_t_6;
   int __pyx_t_7;
   int __pyx_t_8;
-  __Pyx_RefNannySetupContext("fit_lightfm", 0);
+  __Pyx_RefNannySetupContext("fit_logistic", 0);
 
-  /* "lightfm/lightfm_fast.pyx":376
+  /* "lightfm/lightfm_fast.pyx":465
  *     cdef int y, y_row
  * 
  *     no_examples = Y.shape[0]             # <<<<<<<<<<<<<<
@@ -3149,7 +3399,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
  */
   __pyx_v_no_examples = (__pyx_v_Y.shape[0]);
 
-  /* "lightfm/lightfm_fast.pyx":378
+  /* "lightfm/lightfm_fast.pyx":467
  *     no_examples = Y.shape[0]
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -3163,7 +3413,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
       #endif
       /*try:*/ {
 
-        /* "lightfm/lightfm_fast.pyx":379
+        /* "lightfm/lightfm_fast.pyx":468
  * 
  *     with nogil:
  *         for i in prange(no_examples, num_threads=num_threads):             # <<<<<<<<<<<<<<
@@ -3187,21 +3437,21 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
                 #endif /* _OPENMP */
                 {
                     #ifdef _OPENMP
-                    #pragma omp for lastprivate(__pyx_v_y) lastprivate(__pyx_v_y_row) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_loss) lastprivate(__pyx_v_item_id) lastprivate(__pyx_v_prediction) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_row)
+                    #pragma omp for lastprivate(__pyx_v_row) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_y) lastprivate(__pyx_v_y_row) lastprivate(__pyx_v_prediction) lastprivate(__pyx_v_loss) lastprivate(__pyx_v_item_id)
                     #endif /* _OPENMP */
                     for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_3; __pyx_t_2++){
                         {
                             __pyx_v_i = 0 + 1 * __pyx_t_2;
                             /* Initialize private variables to invalid values */
+                            __pyx_v_row = ((int)0xbad0bad0);
+                            __pyx_v_user_id = ((int)0xbad0bad0);
                             __pyx_v_y = ((int)0xbad0bad0);
                             __pyx_v_y_row = ((int)0xbad0bad0);
-                            __pyx_v_user_id = ((int)0xbad0bad0);
+                            __pyx_v_prediction = ((double)__PYX_NAN());
                             __pyx_v_loss = ((double)__PYX_NAN());
                             __pyx_v_item_id = ((int)0xbad0bad0);
-                            __pyx_v_prediction = ((double)__PYX_NAN());
-                            __pyx_v_row = ((int)0xbad0bad0);
 
-                            /* "lightfm/lightfm_fast.pyx":380
+                            /* "lightfm/lightfm_fast.pyx":469
  *     with nogil:
  *         for i in prange(no_examples, num_threads=num_threads):
  *             row = shuffle_indices[i]             # <<<<<<<<<<<<<<
@@ -3211,7 +3461,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
                             __pyx_t_4 = __pyx_v_i;
                             __pyx_v_row = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_shuffle_indices.data) + __pyx_t_4)) )));
 
-                            /* "lightfm/lightfm_fast.pyx":382
+                            /* "lightfm/lightfm_fast.pyx":471
  *             row = shuffle_indices[i]
  * 
  *             user_id = user_ids[row]             # <<<<<<<<<<<<<<
@@ -3221,26 +3471,26 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
                             __pyx_t_5 = __pyx_v_row;
                             __pyx_v_user_id = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_user_ids.data) + __pyx_t_5)) )));
 
-                            /* "lightfm/lightfm_fast.pyx":383
+                            /* "lightfm/lightfm_fast.pyx":472
  * 
  *             user_id = user_ids[row]
  *             item_id = item_ids[row]             # <<<<<<<<<<<<<<
  * 
- *             prediction = compute_prediction(item_features,
+ *             prediction = sigmoid(compute_prediction(item_features,
  */
                             __pyx_t_6 = __pyx_v_row;
                             __pyx_v_item_id = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_item_ids.data) + __pyx_t_6)) )));
 
-                            /* "lightfm/lightfm_fast.pyx":385
+                            /* "lightfm/lightfm_fast.pyx":474
  *             item_id = item_ids[row]
  * 
- *             prediction = compute_prediction(item_features,             # <<<<<<<<<<<<<<
- *                                             user_features,
- *                                             user_id,
+ *             prediction = sigmoid(compute_prediction(item_features,             # <<<<<<<<<<<<<<
+ *                                                     user_features,
+ *                                                     user_id,
  */
-                            __pyx_v_prediction = __pyx_f_7lightfm_12lightfm_fast_compute_prediction(__pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_id, __pyx_v_item_id, __pyx_v_lightfm);
+                            __pyx_v_prediction = __pyx_f_7lightfm_12lightfm_fast_sigmoid(__pyx_f_7lightfm_12lightfm_fast_compute_prediction(__pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_id, __pyx_v_item_id, __pyx_v_lightfm));
 
-                            /* "lightfm/lightfm_fast.pyx":393
+                            /* "lightfm/lightfm_fast.pyx":482
  *             # Any value less or equal to zero
  *             # is a negative interaction.
  *             y_row = Y[row]             # <<<<<<<<<<<<<<
@@ -3250,7 +3500,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
                             __pyx_t_7 = __pyx_v_row;
                             __pyx_v_y_row = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_Y.data) + __pyx_t_7)) )));
 
-                            /* "lightfm/lightfm_fast.pyx":394
+                            /* "lightfm/lightfm_fast.pyx":483
  *             # is a negative interaction.
  *             y_row = Y[row]
  *             if y_row <= 0:             # <<<<<<<<<<<<<<
@@ -3260,7 +3510,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
                             __pyx_t_8 = ((__pyx_v_y_row <= 0) != 0);
                             if (__pyx_t_8) {
 
-                              /* "lightfm/lightfm_fast.pyx":395
+                              /* "lightfm/lightfm_fast.pyx":484
  *             y_row = Y[row]
  *             if y_row <= 0:
  *                 y = 0             # <<<<<<<<<<<<<<
@@ -3272,7 +3522,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
                             }
                             /*else*/ {
 
-                              /* "lightfm/lightfm_fast.pyx":397
+                              /* "lightfm/lightfm_fast.pyx":486
  *                 y = 0
  *             else:
  *                 y = 1             # <<<<<<<<<<<<<<
@@ -3283,7 +3533,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
                             }
                             __pyx_L10:;
 
-                            /* "lightfm/lightfm_fast.pyx":399
+                            /* "lightfm/lightfm_fast.pyx":488
  *                 y = 1
  * 
  *             loss = (prediction - y)             # <<<<<<<<<<<<<<
@@ -3292,7 +3542,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
  */
                             __pyx_v_loss = (__pyx_v_prediction - __pyx_v_y);
 
-                            /* "lightfm/lightfm_fast.pyx":400
+                            /* "lightfm/lightfm_fast.pyx":489
  * 
  *             loss = (prediction - y)
  *             update(loss,             # <<<<<<<<<<<<<<
@@ -3313,7 +3563,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
         #endif
       }
 
-      /* "lightfm/lightfm_fast.pyx":378
+      /* "lightfm/lightfm_fast.pyx":467
  *     no_examples = Y.shape[0]
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -3331,7 +3581,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
       }
   }
 
-  /* "lightfm/lightfm_fast.pyx":410
+  /* "lightfm/lightfm_fast.pyx":499
  *                    user_alpha)
  * 
  *     regularize(lightfm,             # <<<<<<<<<<<<<<
@@ -3340,12 +3590,12 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
  */
   __pyx_f_7lightfm_12lightfm_fast_regularize(__pyx_v_lightfm, __pyx_v_item_alpha, __pyx_v_user_alpha);
 
-  /* "lightfm/lightfm_fast.pyx":357
+  /* "lightfm/lightfm_fast.pyx":446
  * 
  * 
- * def fit_lightfm(CSRMatrix item_features,             # <<<<<<<<<<<<<<
- *                 CSRMatrix user_features,
- *                 int[::1] user_ids,
+ * def fit_logistic(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *                  CSRMatrix user_features,
+ *                  int[::1] user_ids,
  */
 
   /* function exit code */
@@ -3359,7 +3609,826 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
   return __pyx_r;
 }
 
-/* "lightfm/lightfm_fast.pyx":415
+/* "lightfm/lightfm_fast.pyx":504
+ * 
+ * 
+ * def fit_warp(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *              CSRMatrix user_features,
+ *              int[::1] user_ids,
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7lightfm_12lightfm_fast_3fit_warp(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7lightfm_12lightfm_fast_2fit_warp[] = "\n    Fit the model using the WARP loss.\n    ";
+static PyMethodDef __pyx_mdef_7lightfm_12lightfm_fast_3fit_warp = {"fit_warp", (PyCFunction)__pyx_pw_7lightfm_12lightfm_fast_3fit_warp, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7lightfm_12lightfm_fast_2fit_warp};
+static PyObject *__pyx_pw_7lightfm_12lightfm_fast_3fit_warp(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features = 0;
+  struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features = 0;
+  __Pyx_memviewslice __pyx_v_user_ids = { 0, 0, { 0 }, { 0 }, { 0 } };
+  __Pyx_memviewslice __pyx_v_item_ids = { 0, 0, { 0 }, { 0 }, { 0 } };
+  __Pyx_memviewslice __pyx_v_Y = { 0, 0, { 0 }, { 0 }, { 0 } };
+  __Pyx_memviewslice __pyx_v_shuffle_indices = { 0, 0, { 0 }, { 0 }, { 0 } };
+  struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm = 0;
+  double __pyx_v_learning_rate;
+  double __pyx_v_item_alpha;
+  double __pyx_v_user_alpha;
+  CYTHON_UNUSED int __pyx_v_num_threads;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("fit_warp (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_item_features,&__pyx_n_s_user_features,&__pyx_n_s_user_ids,&__pyx_n_s_item_ids,&__pyx_n_s_Y,&__pyx_n_s_shuffle_indices,&__pyx_n_s_lightfm,&__pyx_n_s_learning_rate,&__pyx_n_s_item_alpha,&__pyx_n_s_user_alpha,&__pyx_n_s_num_threads,0};
+    PyObject* values[11] = {0,0,0,0,0,0,0,0,0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case 11: values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
+        case 10: values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
+        case  9: values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
+        case  8: values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+        case  7: values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_features)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        case  1:
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_features)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  2:
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_ids)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  3:
+        if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_ids)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  4:
+        if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_Y)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 4); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  5:
+        if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_shuffle_indices)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 5); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  6:
+        if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_lightfm)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 6); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  7:
+        if (likely((values[7] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_learning_rate)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 7); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  8:
+        if (likely((values[8] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_alpha)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 8); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  9:
+        if (likely((values[9] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_alpha)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 9); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case 10:
+        if (likely((values[10] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_num_threads)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, 10); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "fit_warp") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 11) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+      values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+      values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+      values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+      values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
+      values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+      values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
+      values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
+      values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
+    }
+    __pyx_v_item_features = ((struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *)values[0]);
+    __pyx_v_user_features = ((struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *)values[1]);
+    __pyx_v_user_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[2]); if (unlikely(!__pyx_v_user_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 506; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[3]); if (unlikely(!__pyx_v_item_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 507; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_Y = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[4]); if (unlikely(!__pyx_v_Y.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 508; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_shuffle_indices = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[5]); if (unlikely(!__pyx_v_shuffle_indices.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 509; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_lightfm = ((struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *)values[6]);
+    __pyx_v_learning_rate = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_learning_rate == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 511; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_alpha = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_item_alpha == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 512; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_user_alpha = __pyx_PyFloat_AsDouble(values[9]); if (unlikely((__pyx_v_user_alpha == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 513; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_num_threads = __Pyx_PyInt_As_int(values[10]); if (unlikely((__pyx_v_num_threads == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 514; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("fit_warp", 1, 11, 11, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("lightfm.lightfm_fast.fit_warp", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_item_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "item_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_user_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "user_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 505; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lightfm), __pyx_ptype_7lightfm_12lightfm_fast_FastLightFM, 1, "lightfm", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 510; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_r = __pyx_pf_7lightfm_12lightfm_fast_2fit_warp(__pyx_self, __pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_ids, __pyx_v_item_ids, __pyx_v_Y, __pyx_v_shuffle_indices, __pyx_v_lightfm, __pyx_v_learning_rate, __pyx_v_item_alpha, __pyx_v_user_alpha, __pyx_v_num_threads);
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2fit_warp(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_Y, __Pyx_memviewslice __pyx_v_shuffle_indices, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, double __pyx_v_learning_rate, double __pyx_v_item_alpha, double __pyx_v_user_alpha, CYTHON_UNUSED int __pyx_v_num_threads) {
+  int __pyx_v_i;
+  int __pyx_v_no_examples;
+  int __pyx_v_user_id;
+  int __pyx_v_positive_item_id;
+  int __pyx_v_gamma;
+  int __pyx_v_max_sampled;
+  int __pyx_v_negative_item_id;
+  int __pyx_v_sampled;
+  int __pyx_v_row;
+  double __pyx_v_positive_prediction;
+  double __pyx_v_negative_prediction;
+  double __pyx_v_violation;
+  double __pyx_v_weight;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  int __pyx_t_4;
+  int __pyx_t_5;
+  int __pyx_t_6;
+  int __pyx_t_7;
+  __Pyx_RefNannySetupContext("fit_warp", 0);
+
+  /* "lightfm/lightfm_fast.pyx":523
+ *     cdef double positive_prediction, negative_prediction, violation, weight
+ * 
+ *     no_examples = Y.shape[0]             # <<<<<<<<<<<<<<
+ *     gamma = 10
+ * 
+ */
+  __pyx_v_no_examples = (__pyx_v_Y.shape[0]);
+
+  /* "lightfm/lightfm_fast.pyx":524
+ * 
+ *     no_examples = Y.shape[0]
+ *     gamma = 10             # <<<<<<<<<<<<<<
+ * 
+ *     max_sampled = item_features.rows / gamma
+ */
+  __pyx_v_gamma = 10;
+
+  /* "lightfm/lightfm_fast.pyx":526
+ *     gamma = 10
+ * 
+ *     max_sampled = item_features.rows / gamma             # <<<<<<<<<<<<<<
+ * 
+ *     with nogil:
+ */
+  __pyx_v_max_sampled = (__pyx_v_item_features->rows / __pyx_v_gamma);
+
+  /* "lightfm/lightfm_fast.pyx":528
+ *     max_sampled = item_features.rows / gamma
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for i in range(no_examples):
+ *             row = shuffle_indices[i]
+ */
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      #endif
+      /*try:*/ {
+
+        /* "lightfm/lightfm_fast.pyx":529
+ * 
+ *     with nogil:
+ *         for i in range(no_examples):             # <<<<<<<<<<<<<<
+ *             row = shuffle_indices[i]
+ * 
+ */
+        __pyx_t_1 = __pyx_v_no_examples;
+        for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
+          __pyx_v_i = __pyx_t_2;
+
+          /* "lightfm/lightfm_fast.pyx":530
+ *     with nogil:
+ *         for i in range(no_examples):
+ *             row = shuffle_indices[i]             # <<<<<<<<<<<<<<
+ * 
+ *             user_id = user_ids[row]
+ */
+          __pyx_t_3 = __pyx_v_i;
+          __pyx_v_row = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_shuffle_indices.data) + __pyx_t_3)) )));
+
+          /* "lightfm/lightfm_fast.pyx":532
+ *             row = shuffle_indices[i]
+ * 
+ *             user_id = user_ids[row]             # <<<<<<<<<<<<<<
+ *             positive_item_id = item_ids[row]
+ * 
+ */
+          __pyx_t_4 = __pyx_v_row;
+          __pyx_v_user_id = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_user_ids.data) + __pyx_t_4)) )));
+
+          /* "lightfm/lightfm_fast.pyx":533
+ * 
+ *             user_id = user_ids[row]
+ *             positive_item_id = item_ids[row]             # <<<<<<<<<<<<<<
+ * 
+ *             if not Y[row] == 1:
+ */
+          __pyx_t_5 = __pyx_v_row;
+          __pyx_v_positive_item_id = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_item_ids.data) + __pyx_t_5)) )));
+
+          /* "lightfm/lightfm_fast.pyx":535
+ *             positive_item_id = item_ids[row]
+ * 
+ *             if not Y[row] == 1:             # <<<<<<<<<<<<<<
+ *                 continue
+ * 
+ */
+          __pyx_t_6 = __pyx_v_row;
+          __pyx_t_7 = ((!(((*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_Y.data) + __pyx_t_6)) ))) == 1) != 0)) != 0);
+          if (__pyx_t_7) {
+
+            /* "lightfm/lightfm_fast.pyx":536
+ * 
+ *             if not Y[row] == 1:
+ *                 continue             # <<<<<<<<<<<<<<
+ * 
+ *             positive_prediction = compute_prediction(item_features,
+ */
+            goto __pyx_L6_continue;
+          }
+
+          /* "lightfm/lightfm_fast.pyx":538
+ *                 continue
+ * 
+ *             positive_prediction = compute_prediction(item_features,             # <<<<<<<<<<<<<<
+ *                                                      user_features,
+ *                                                      user_id,
+ */
+          __pyx_v_positive_prediction = __pyx_f_7lightfm_12lightfm_fast_compute_prediction(__pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_id, __pyx_v_positive_item_id, __pyx_v_lightfm);
+
+          /* "lightfm/lightfm_fast.pyx":543
+ *                                                      positive_item_id,
+ *                                                      lightfm)
+ *             violation = 0             # <<<<<<<<<<<<<<
+ *             sampled = 0
+ * 
+ */
+          __pyx_v_violation = 0.0;
+
+          /* "lightfm/lightfm_fast.pyx":544
+ *                                                      lightfm)
+ *             violation = 0
+ *             sampled = 0             # <<<<<<<<<<<<<<
+ * 
+ *             while sampled < max_sampled:
+ */
+          __pyx_v_sampled = 0;
+
+          /* "lightfm/lightfm_fast.pyx":546
+ *             sampled = 0
+ * 
+ *             while sampled < max_sampled:             # <<<<<<<<<<<<<<
+ * 
+ *                 sampled += 1
+ */
+          while (1) {
+            __pyx_t_7 = ((__pyx_v_sampled < __pyx_v_max_sampled) != 0);
+            if (!__pyx_t_7) break;
+
+            /* "lightfm/lightfm_fast.pyx":548
+ *             while sampled < max_sampled:
+ * 
+ *                 sampled += 1             # <<<<<<<<<<<<<<
+ *                 negative_item_id = rand() % item_features.rows
+ * 
+ */
+            __pyx_v_sampled = (__pyx_v_sampled + 1);
+
+            /* "lightfm/lightfm_fast.pyx":549
+ * 
+ *                 sampled += 1
+ *                 negative_item_id = rand() % item_features.rows             # <<<<<<<<<<<<<<
+ * 
+ *                 if positive_item_id == negative_item_id:
+ */
+            __pyx_v_negative_item_id = (rand() % __pyx_v_item_features->rows);
+
+            /* "lightfm/lightfm_fast.pyx":551
+ *                 negative_item_id = rand() % item_features.rows
+ * 
+ *                 if positive_item_id == negative_item_id:             # <<<<<<<<<<<<<<
+ *                     break
+ * 
+ */
+            __pyx_t_7 = ((__pyx_v_positive_item_id == __pyx_v_negative_item_id) != 0);
+            if (__pyx_t_7) {
+
+              /* "lightfm/lightfm_fast.pyx":552
+ * 
+ *                 if positive_item_id == negative_item_id:
+ *                     break             # <<<<<<<<<<<<<<
+ * 
+ *                 negative_prediction = compute_prediction(item_features,
+ */
+              goto __pyx_L10_break;
+            }
+
+            /* "lightfm/lightfm_fast.pyx":554
+ *                     break
+ * 
+ *                 negative_prediction = compute_prediction(item_features,             # <<<<<<<<<<<<<<
+ *                                                          user_features,
+ *                                                          user_id,
+ */
+            __pyx_v_negative_prediction = __pyx_f_7lightfm_12lightfm_fast_compute_prediction(__pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_id, __pyx_v_negative_item_id, __pyx_v_lightfm);
+
+            /* "lightfm/lightfm_fast.pyx":560
+ *                                                          lightfm)
+ * 
+ *                 if negative_prediction > positive_prediction - 1:             # <<<<<<<<<<<<<<
+ *                     weight = log(floor((item_features.rows - 1) / sampled))
+ *                     violation = 1 - positive_prediction + negative_prediction
+ */
+            __pyx_t_7 = ((__pyx_v_negative_prediction > (__pyx_v_positive_prediction - 1.0)) != 0);
+            if (__pyx_t_7) {
+
+              /* "lightfm/lightfm_fast.pyx":561
+ * 
+ *                 if negative_prediction > positive_prediction - 1:
+ *                     weight = log(floor((item_features.rows - 1) / sampled))             # <<<<<<<<<<<<<<
+ *                     violation = 1 - positive_prediction + negative_prediction
+ *                     warp_update(weight * violation,
+ */
+              __pyx_v_weight = log(floor(((__pyx_v_item_features->rows - 1) / __pyx_v_sampled)));
+
+              /* "lightfm/lightfm_fast.pyx":562
+ *                 if negative_prediction > positive_prediction - 1:
+ *                     weight = log(floor((item_features.rows - 1) / sampled))
+ *                     violation = 1 - positive_prediction + negative_prediction             # <<<<<<<<<<<<<<
+ *                     warp_update(weight * violation,
+ *                                 item_features,
+ */
+              __pyx_v_violation = ((1.0 - __pyx_v_positive_prediction) + __pyx_v_negative_prediction);
+
+              /* "lightfm/lightfm_fast.pyx":563
+ *                     weight = log(floor((item_features.rows - 1) / sampled))
+ *                     violation = 1 - positive_prediction + negative_prediction
+ *                     warp_update(weight * violation,             # <<<<<<<<<<<<<<
+ *                                 item_features,
+ *                                 user_features,
+ */
+              __pyx_f_7lightfm_12lightfm_fast_warp_update((__pyx_v_weight * __pyx_v_violation), __pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_id, __pyx_v_positive_item_id, __pyx_v_negative_item_id, __pyx_v_lightfm, __pyx_v_learning_rate, __pyx_v_item_alpha, __pyx_v_user_alpha);
+
+              /* "lightfm/lightfm_fast.pyx":573
+ *                                 item_alpha,
+ *                                 user_alpha)
+ *                     break             # <<<<<<<<<<<<<<
+ * 
+ *         regularize(lightfm,
+ */
+              goto __pyx_L10_break;
+            }
+          }
+          __pyx_L10_break:;
+          __pyx_L6_continue:;
+        }
+
+        /* "lightfm/lightfm_fast.pyx":575
+ *                     break
+ * 
+ *         regularize(lightfm,             # <<<<<<<<<<<<<<
+ *                    item_alpha,
+ *                    user_alpha)
+ */
+        __pyx_f_7lightfm_12lightfm_fast_regularize(__pyx_v_lightfm, __pyx_v_item_alpha, __pyx_v_user_alpha);
+      }
+
+      /* "lightfm/lightfm_fast.pyx":528
+ *     max_sampled = item_features.rows / gamma
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for i in range(no_examples):
+ *             row = shuffle_indices[i]
+ */
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L5;
+        }
+        __pyx_L5:;
+      }
+  }
+
+  /* "lightfm/lightfm_fast.pyx":504
+ * 
+ * 
+ * def fit_warp(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *              CSRMatrix user_features,
+ *              int[::1] user_ids,
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_user_ids, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_item_ids, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_Y, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_shuffle_indices, 1);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "lightfm/lightfm_fast.pyx":580
+ * 
+ * 
+ * def fit_bpr(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *             CSRMatrix user_features,
+ *             int[::1] user_ids,
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7lightfm_12lightfm_fast_5fit_bpr(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7lightfm_12lightfm_fast_4fit_bpr[] = "\n    Fit the model using the BPR loss.\n    ";
+static PyMethodDef __pyx_mdef_7lightfm_12lightfm_fast_5fit_bpr = {"fit_bpr", (PyCFunction)__pyx_pw_7lightfm_12lightfm_fast_5fit_bpr, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7lightfm_12lightfm_fast_4fit_bpr};
+static PyObject *__pyx_pw_7lightfm_12lightfm_fast_5fit_bpr(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features = 0;
+  struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features = 0;
+  __Pyx_memviewslice __pyx_v_user_ids = { 0, 0, { 0 }, { 0 }, { 0 } };
+  __Pyx_memviewslice __pyx_v_item_ids = { 0, 0, { 0 }, { 0 }, { 0 } };
+  __Pyx_memviewslice __pyx_v_Y = { 0, 0, { 0 }, { 0 }, { 0 } };
+  __Pyx_memviewslice __pyx_v_shuffle_indices = { 0, 0, { 0 }, { 0 }, { 0 } };
+  struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm = 0;
+  double __pyx_v_learning_rate;
+  double __pyx_v_item_alpha;
+  double __pyx_v_user_alpha;
+  CYTHON_UNUSED int __pyx_v_num_threads;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("fit_bpr (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_item_features,&__pyx_n_s_user_features,&__pyx_n_s_user_ids,&__pyx_n_s_item_ids,&__pyx_n_s_Y,&__pyx_n_s_shuffle_indices,&__pyx_n_s_lightfm,&__pyx_n_s_learning_rate,&__pyx_n_s_item_alpha,&__pyx_n_s_user_alpha,&__pyx_n_s_num_threads,0};
+    PyObject* values[11] = {0,0,0,0,0,0,0,0,0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case 11: values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
+        case 10: values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
+        case  9: values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
+        case  8: values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+        case  7: values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_features)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        case  1:
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_features)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  2:
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_ids)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  3:
+        if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_ids)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  4:
+        if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_Y)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 4); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  5:
+        if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_shuffle_indices)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 5); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  6:
+        if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_lightfm)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 6); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  7:
+        if (likely((values[7] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_learning_rate)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 7); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  8:
+        if (likely((values[8] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_alpha)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 8); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case  9:
+        if (likely((values[9] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_alpha)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 9); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+        case 10:
+        if (likely((values[10] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_num_threads)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, 10); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "fit_bpr") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 11) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+      values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+      values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+      values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+      values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
+      values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+      values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
+      values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
+      values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
+    }
+    __pyx_v_item_features = ((struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *)values[0]);
+    __pyx_v_user_features = ((struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *)values[1]);
+    __pyx_v_user_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[2]); if (unlikely(!__pyx_v_user_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 582; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[3]); if (unlikely(!__pyx_v_item_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 583; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_Y = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[4]); if (unlikely(!__pyx_v_Y.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 584; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_shuffle_indices = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[5]); if (unlikely(!__pyx_v_shuffle_indices.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 585; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_lightfm = ((struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *)values[6]);
+    __pyx_v_learning_rate = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_learning_rate == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 587; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_alpha = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_item_alpha == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 588; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_user_alpha = __pyx_PyFloat_AsDouble(values[9]); if (unlikely((__pyx_v_user_alpha == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 589; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_num_threads = __Pyx_PyInt_As_int(values[10]); if (unlikely((__pyx_v_num_threads == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 590; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("fit_bpr", 1, 11, 11, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("lightfm.lightfm_fast.fit_bpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_item_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "item_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_user_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "user_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 581; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lightfm), __pyx_ptype_7lightfm_12lightfm_fast_FastLightFM, 1, "lightfm", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 586; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_r = __pyx_pf_7lightfm_12lightfm_fast_4fit_bpr(__pyx_self, __pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_ids, __pyx_v_item_ids, __pyx_v_Y, __pyx_v_shuffle_indices, __pyx_v_lightfm, __pyx_v_learning_rate, __pyx_v_item_alpha, __pyx_v_user_alpha, __pyx_v_num_threads);
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7lightfm_12lightfm_fast_4fit_bpr(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_Y, __Pyx_memviewslice __pyx_v_shuffle_indices, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, double __pyx_v_learning_rate, double __pyx_v_item_alpha, double __pyx_v_user_alpha, CYTHON_UNUSED int __pyx_v_num_threads) {
+  int __pyx_v_i;
+  int __pyx_v_no_examples;
+  int __pyx_v_user_id;
+  int __pyx_v_positive_item_id;
+  int __pyx_v_negative_item_id;
+  int __pyx_v_row;
+  double __pyx_v_positive_prediction;
+  double __pyx_v_negative_prediction;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  int __pyx_t_4;
+  int __pyx_t_5;
+  int __pyx_t_6;
+  int __pyx_t_7;
+  __Pyx_RefNannySetupContext("fit_bpr", 0);
+
+  /* "lightfm/lightfm_fast.pyx":599
+ *     cdef double positive_prediction, negative_prediction
+ * 
+ *     no_examples = Y.shape[0]             # <<<<<<<<<<<<<<
+ * 
+ *     with nogil:
+ */
+  __pyx_v_no_examples = (__pyx_v_Y.shape[0]);
+
+  /* "lightfm/lightfm_fast.pyx":601
+ *     no_examples = Y.shape[0]
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for i in range(no_examples):
+ *             row = shuffle_indices[i]
+ */
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      #endif
+      /*try:*/ {
+
+        /* "lightfm/lightfm_fast.pyx":602
+ * 
+ *     with nogil:
+ *         for i in range(no_examples):             # <<<<<<<<<<<<<<
+ *             row = shuffle_indices[i]
+ * 
+ */
+        __pyx_t_1 = __pyx_v_no_examples;
+        for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
+          __pyx_v_i = __pyx_t_2;
+
+          /* "lightfm/lightfm_fast.pyx":603
+ *     with nogil:
+ *         for i in range(no_examples):
+ *             row = shuffle_indices[i]             # <<<<<<<<<<<<<<
+ * 
+ *             if not Y[row] == 1:
+ */
+          __pyx_t_3 = __pyx_v_i;
+          __pyx_v_row = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_shuffle_indices.data) + __pyx_t_3)) )));
+
+          /* "lightfm/lightfm_fast.pyx":605
+ *             row = shuffle_indices[i]
+ * 
+ *             if not Y[row] == 1:             # <<<<<<<<<<<<<<
+ *                 continue
+ * 
+ */
+          __pyx_t_4 = __pyx_v_row;
+          __pyx_t_5 = ((!(((*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_Y.data) + __pyx_t_4)) ))) == 1) != 0)) != 0);
+          if (__pyx_t_5) {
+
+            /* "lightfm/lightfm_fast.pyx":606
+ * 
+ *             if not Y[row] == 1:
+ *                 continue             # <<<<<<<<<<<<<<
+ * 
+ *             user_id = user_ids[row]
+ */
+            goto __pyx_L6_continue;
+          }
+
+          /* "lightfm/lightfm_fast.pyx":608
+ *                 continue
+ * 
+ *             user_id = user_ids[row]             # <<<<<<<<<<<<<<
+ *             positive_item_id = item_ids[row]
+ *             negative_item_id = rand() % item_features.rows
+ */
+          __pyx_t_6 = __pyx_v_row;
+          __pyx_v_user_id = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_user_ids.data) + __pyx_t_6)) )));
+
+          /* "lightfm/lightfm_fast.pyx":609
+ * 
+ *             user_id = user_ids[row]
+ *             positive_item_id = item_ids[row]             # <<<<<<<<<<<<<<
+ *             negative_item_id = rand() % item_features.rows
+ * 
+ */
+          __pyx_t_7 = __pyx_v_row;
+          __pyx_v_positive_item_id = (*((int *) ( /* dim=0 */ ((char *) (((int *) __pyx_v_item_ids.data) + __pyx_t_7)) )));
+
+          /* "lightfm/lightfm_fast.pyx":610
+ *             user_id = user_ids[row]
+ *             positive_item_id = item_ids[row]
+ *             negative_item_id = rand() % item_features.rows             # <<<<<<<<<<<<<<
+ * 
+ *             positive_prediction = compute_prediction(item_features,
+ */
+          __pyx_v_negative_item_id = (rand() % __pyx_v_item_features->rows);
+
+          /* "lightfm/lightfm_fast.pyx":612
+ *             negative_item_id = rand() % item_features.rows
+ * 
+ *             positive_prediction = compute_prediction(item_features,             # <<<<<<<<<<<<<<
+ *                                                      user_features,
+ *                                                      user_id,
+ */
+          __pyx_v_positive_prediction = __pyx_f_7lightfm_12lightfm_fast_compute_prediction(__pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_id, __pyx_v_positive_item_id, __pyx_v_lightfm);
+
+          /* "lightfm/lightfm_fast.pyx":617
+ *                                                      positive_item_id,
+ *                                                      lightfm)
+ *             negative_prediction = compute_prediction(item_features,             # <<<<<<<<<<<<<<
+ *                                                      user_features,
+ *                                                      user_id,
+ */
+          __pyx_v_negative_prediction = __pyx_f_7lightfm_12lightfm_fast_compute_prediction(__pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_id, __pyx_v_negative_item_id, __pyx_v_lightfm);
+
+          /* "lightfm/lightfm_fast.pyx":623
+ *                                                      lightfm)
+ * 
+ *             warp_update(sigmoid(positive_prediction - negative_prediction),             # <<<<<<<<<<<<<<
+ *                         item_features,
+ *                         user_features,
+ */
+          __pyx_f_7lightfm_12lightfm_fast_warp_update(__pyx_f_7lightfm_12lightfm_fast_sigmoid((__pyx_v_positive_prediction - __pyx_v_negative_prediction)), __pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_id, __pyx_v_positive_item_id, __pyx_v_negative_item_id, __pyx_v_lightfm, __pyx_v_learning_rate, __pyx_v_item_alpha, __pyx_v_user_alpha);
+          __pyx_L6_continue:;
+        }
+
+        /* "lightfm/lightfm_fast.pyx":634
+ *                         user_alpha)
+ * 
+ *         regularize(lightfm,             # <<<<<<<<<<<<<<
+ *                    item_alpha,
+ *                    user_alpha)
+ */
+        __pyx_f_7lightfm_12lightfm_fast_regularize(__pyx_v_lightfm, __pyx_v_item_alpha, __pyx_v_user_alpha);
+      }
+
+      /* "lightfm/lightfm_fast.pyx":601
+ *     no_examples = Y.shape[0]
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for i in range(no_examples):
+ *             row = shuffle_indices[i]
+ */
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L5;
+        }
+        __pyx_L5:;
+      }
+  }
+
+  /* "lightfm/lightfm_fast.pyx":580
+ * 
+ * 
+ * def fit_bpr(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *             CSRMatrix user_features,
+ *             int[::1] user_ids,
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_user_ids, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_item_ids, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_Y, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_v_shuffle_indices, 1);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "lightfm/lightfm_fast.pyx":639
  * 
  * 
  * def predict_lightfm(CSRMatrix item_features,             # <<<<<<<<<<<<<<
@@ -3368,10 +4437,10 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_fit_lightfm(CYTHON_UNUSED PyOb
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7lightfm_12lightfm_fast_3predict_lightfm(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_7lightfm_12lightfm_fast_2predict_lightfm[] = "\n    Generate predictions.\n    ";
-static PyMethodDef __pyx_mdef_7lightfm_12lightfm_fast_3predict_lightfm = {"predict_lightfm", (PyCFunction)__pyx_pw_7lightfm_12lightfm_fast_3predict_lightfm, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7lightfm_12lightfm_fast_2predict_lightfm};
-static PyObject *__pyx_pw_7lightfm_12lightfm_fast_3predict_lightfm(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7lightfm_12lightfm_fast_7predict_lightfm(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7lightfm_12lightfm_fast_6predict_lightfm[] = "\n    Generate predictions.\n    ";
+static PyMethodDef __pyx_mdef_7lightfm_12lightfm_fast_7predict_lightfm = {"predict_lightfm", (PyCFunction)__pyx_pw_7lightfm_12lightfm_fast_7predict_lightfm, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7lightfm_12lightfm_fast_6predict_lightfm};
+static PyObject *__pyx_pw_7lightfm_12lightfm_fast_7predict_lightfm(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features = 0;
   struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features = 0;
   __Pyx_memviewslice __pyx_v_user_ids = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -3410,36 +4479,36 @@ static PyObject *__pyx_pw_7lightfm_12lightfm_fast_3predict_lightfm(PyObject *__p
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_features)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_user_ids)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_item_ids)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 3); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  4:
         if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_predictions)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 4); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 4); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  5:
         if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_lightfm)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 5); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 5); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  6:
         if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_num_threads)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 6); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, 6); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "predict_lightfm") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "predict_lightfm") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 7) {
       goto __pyx_L5_argtuple_error;
@@ -3454,24 +4523,24 @@ static PyObject *__pyx_pw_7lightfm_12lightfm_fast_3predict_lightfm(PyObject *__p
     }
     __pyx_v_item_features = ((struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *)values[0]);
     __pyx_v_user_features = ((struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *)values[1]);
-    __pyx_v_user_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[2]); if (unlikely(!__pyx_v_user_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 417; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_item_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[3]); if (unlikely(!__pyx_v_item_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 418; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_predictions = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[4]); if (unlikely(!__pyx_v_predictions.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 419; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_user_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[2]); if (unlikely(!__pyx_v_user_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 641; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_item_ids = __Pyx_PyObject_to_MemoryviewSlice_dc_int(values[3]); if (unlikely(!__pyx_v_item_ids.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 642; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_predictions = __Pyx_PyObject_to_MemoryviewSlice_dc_double(values[4]); if (unlikely(!__pyx_v_predictions.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 643; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
     __pyx_v_lightfm = ((struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *)values[5]);
-    __pyx_v_num_threads = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_num_threads == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 421; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_num_threads = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_num_threads == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 645; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("predict_lightfm", 1, 7, 7, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("lightfm.lightfm_fast.predict_lightfm", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_item_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "item_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_user_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "user_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 416; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lightfm), __pyx_ptype_7lightfm_12lightfm_fast_FastLightFM, 1, "lightfm", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 420; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(__pyx_self, __pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_ids, __pyx_v_item_ids, __pyx_v_predictions, __pyx_v_lightfm, __pyx_v_num_threads);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_item_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "item_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_user_features), __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix, 1, "user_features", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 640; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lightfm), __pyx_ptype_7lightfm_12lightfm_fast_FastLightFM, 1, "lightfm", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 644; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_r = __pyx_pf_7lightfm_12lightfm_fast_6predict_lightfm(__pyx_self, __pyx_v_item_features, __pyx_v_user_features, __pyx_v_user_ids, __pyx_v_item_ids, __pyx_v_predictions, __pyx_v_lightfm, __pyx_v_num_threads);
 
   /* function exit code */
   goto __pyx_L0;
@@ -3482,7 +4551,7 @@ static PyObject *__pyx_pw_7lightfm_12lightfm_fast_3predict_lightfm(PyObject *__p
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_predictions, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, CYTHON_UNUSED int __pyx_v_num_threads) {
+static PyObject *__pyx_pf_7lightfm_12lightfm_fast_6predict_lightfm(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_item_features, struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *__pyx_v_user_features, __Pyx_memviewslice __pyx_v_user_ids, __Pyx_memviewslice __pyx_v_item_ids, __Pyx_memviewslice __pyx_v_predictions, struct __pyx_obj_7lightfm_12lightfm_fast_FastLightFM *__pyx_v_lightfm, CYTHON_UNUSED int __pyx_v_num_threads) {
   int __pyx_v_i;
   CYTHON_UNUSED int __pyx_v_no_examples;
   PyObject *__pyx_r = NULL;
@@ -3495,7 +4564,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED
   int __pyx_t_6;
   __Pyx_RefNannySetupContext("predict_lightfm", 0);
 
-  /* "lightfm/lightfm_fast.pyx":428
+  /* "lightfm/lightfm_fast.pyx":652
  *     cdef int i, no_examples
  * 
  *     no_examples = predictions.shape[0]             # <<<<<<<<<<<<<<
@@ -3504,7 +4573,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED
  */
   __pyx_v_no_examples = (__pyx_v_predictions.shape[0]);
 
-  /* "lightfm/lightfm_fast.pyx":430
+  /* "lightfm/lightfm_fast.pyx":654
  *     no_examples = predictions.shape[0]
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -3518,7 +4587,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED
       #endif
       /*try:*/ {
 
-        /* "lightfm/lightfm_fast.pyx":431
+        /* "lightfm/lightfm_fast.pyx":655
  * 
  *     with nogil:
  *         for i in prange(no_examples, num_threads=num_threads):             # <<<<<<<<<<<<<<
@@ -3548,7 +4617,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED
                         {
                             __pyx_v_i = 0 + 1 * __pyx_t_2;
 
-                            /* "lightfm/lightfm_fast.pyx":434
+                            /* "lightfm/lightfm_fast.pyx":658
  *             predictions[i] = compute_prediction(item_features,
  *                                                 user_features,
  *                                                 user_ids[i],             # <<<<<<<<<<<<<<
@@ -3557,7 +4626,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED
  */
                             __pyx_t_4 = __pyx_v_i;
 
-                            /* "lightfm/lightfm_fast.pyx":435
+                            /* "lightfm/lightfm_fast.pyx":659
  *                                                 user_features,
  *                                                 user_ids[i],
  *                                                 item_ids[i],             # <<<<<<<<<<<<<<
@@ -3565,7 +4634,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED
  */
                             __pyx_t_5 = __pyx_v_i;
 
-                            /* "lightfm/lightfm_fast.pyx":432
+                            /* "lightfm/lightfm_fast.pyx":656
  *     with nogil:
  *         for i in prange(no_examples, num_threads=num_threads):
  *             predictions[i] = compute_prediction(item_features,             # <<<<<<<<<<<<<<
@@ -3587,7 +4656,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED
         #endif
       }
 
-      /* "lightfm/lightfm_fast.pyx":430
+      /* "lightfm/lightfm_fast.pyx":654
  *     no_examples = predictions.shape[0]
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -3605,7 +4674,7 @@ static PyObject *__pyx_pf_7lightfm_12lightfm_fast_2predict_lightfm(CYTHON_UNUSED
       }
   }
 
-  /* "lightfm/lightfm_fast.pyx":415
+  /* "lightfm/lightfm_fast.pyx":639
  * 
  * 
  * def predict_lightfm(CSRMatrix item_features,             # <<<<<<<<<<<<<<
@@ -15165,11 +16234,14 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_dtype_is_object, __pyx_k_dtype_is_object, sizeof(__pyx_k_dtype_is_object), 0, 0, 1, 1},
   {&__pyx_n_s_enumerate, __pyx_k_enumerate, sizeof(__pyx_k_enumerate), 0, 0, 1, 1},
   {&__pyx_n_s_error, __pyx_k_error, sizeof(__pyx_k_error), 0, 0, 1, 1},
-  {&__pyx_n_s_fit_lightfm, __pyx_k_fit_lightfm, sizeof(__pyx_k_fit_lightfm), 0, 0, 1, 1},
+  {&__pyx_n_s_fit_bpr, __pyx_k_fit_bpr, sizeof(__pyx_k_fit_bpr), 0, 0, 1, 1},
+  {&__pyx_n_s_fit_logistic, __pyx_k_fit_logistic, sizeof(__pyx_k_fit_logistic), 0, 0, 1, 1},
+  {&__pyx_n_s_fit_warp, __pyx_k_fit_warp, sizeof(__pyx_k_fit_warp), 0, 0, 1, 1},
   {&__pyx_n_s_flags, __pyx_k_flags, sizeof(__pyx_k_flags), 0, 0, 1, 1},
   {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
   {&__pyx_n_s_fortran, __pyx_k_fortran, sizeof(__pyx_k_fortran), 0, 0, 1, 1},
   {&__pyx_n_u_fortran, __pyx_k_fortran, sizeof(__pyx_k_fortran), 0, 1, 0, 1},
+  {&__pyx_n_s_gamma, __pyx_k_gamma, sizeof(__pyx_k_gamma), 0, 0, 1, 1},
   {&__pyx_kp_s_got_differing_extents_in_dimensi, __pyx_k_got_differing_extents_in_dimensi, sizeof(__pyx_k_got_differing_extents_in_dimensi), 0, 0, 1, 0},
   {&__pyx_kp_s_home_maciej_Code_lightfm_public, __pyx_k_home_maciej_Code_lightfm_public, sizeof(__pyx_k_home_maciej_Code_lightfm_public), 0, 0, 1, 0},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
@@ -15191,16 +16263,21 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_lightfm_lightfm_fast, __pyx_k_lightfm_lightfm_fast, sizeof(__pyx_k_lightfm_lightfm_fast), 0, 0, 1, 1},
   {&__pyx_n_s_loss, __pyx_k_loss, sizeof(__pyx_k_loss), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
+  {&__pyx_n_s_max_sampled, __pyx_k_max_sampled, sizeof(__pyx_k_max_sampled), 0, 0, 1, 1},
   {&__pyx_n_s_memview, __pyx_k_memview, sizeof(__pyx_k_memview), 0, 0, 1, 1},
   {&__pyx_n_s_mode, __pyx_k_mode, sizeof(__pyx_k_mode), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_name_2, __pyx_k_name_2, sizeof(__pyx_k_name_2), 0, 0, 1, 1},
   {&__pyx_n_s_ndim, __pyx_k_ndim, sizeof(__pyx_k_ndim), 0, 0, 1, 1},
+  {&__pyx_n_s_negative_item_id, __pyx_k_negative_item_id, sizeof(__pyx_k_negative_item_id), 0, 0, 1, 1},
+  {&__pyx_n_s_negative_prediction, __pyx_k_negative_prediction, sizeof(__pyx_k_negative_prediction), 0, 0, 1, 1},
   {&__pyx_n_s_no_components, __pyx_k_no_components, sizeof(__pyx_k_no_components), 0, 0, 1, 1},
   {&__pyx_n_s_no_examples, __pyx_k_no_examples, sizeof(__pyx_k_no_examples), 0, 0, 1, 1},
   {&__pyx_n_s_num_threads, __pyx_k_num_threads, sizeof(__pyx_k_num_threads), 0, 0, 1, 1},
   {&__pyx_n_s_obj, __pyx_k_obj, sizeof(__pyx_k_obj), 0, 0, 1, 1},
   {&__pyx_n_s_pack, __pyx_k_pack, sizeof(__pyx_k_pack), 0, 0, 1, 1},
+  {&__pyx_n_s_positive_item_id, __pyx_k_positive_item_id, sizeof(__pyx_k_positive_item_id), 0, 0, 1, 1},
+  {&__pyx_n_s_positive_prediction, __pyx_k_positive_prediction, sizeof(__pyx_k_positive_prediction), 0, 0, 1, 1},
   {&__pyx_n_s_predict_lightfm, __pyx_k_predict_lightfm, sizeof(__pyx_k_predict_lightfm), 0, 0, 1, 1},
   {&__pyx_n_s_prediction, __pyx_k_prediction, sizeof(__pyx_k_prediction), 0, 0, 1, 1},
   {&__pyx_n_s_predictions, __pyx_k_predictions, sizeof(__pyx_k_predictions), 0, 0, 1, 1},
@@ -15208,6 +16285,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_row, __pyx_k_row, sizeof(__pyx_k_row), 0, 0, 1, 1},
+  {&__pyx_n_s_sampled, __pyx_k_sampled, sizeof(__pyx_k_sampled), 0, 0, 1, 1},
   {&__pyx_n_s_shape, __pyx_k_shape, sizeof(__pyx_k_shape), 0, 0, 1, 1},
   {&__pyx_n_s_shuffle_indices, __pyx_k_shuffle_indices, sizeof(__pyx_k_shuffle_indices), 0, 0, 1, 1},
   {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
@@ -15229,12 +16307,14 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_user_features, __pyx_k_user_features, sizeof(__pyx_k_user_features), 0, 0, 1, 1},
   {&__pyx_n_s_user_id, __pyx_k_user_id, sizeof(__pyx_k_user_id), 0, 0, 1, 1},
   {&__pyx_n_s_user_ids, __pyx_k_user_ids, sizeof(__pyx_k_user_ids), 0, 0, 1, 1},
+  {&__pyx_n_s_violation, __pyx_k_violation, sizeof(__pyx_k_violation), 0, 0, 1, 1},
+  {&__pyx_n_s_weight, __pyx_k_weight, sizeof(__pyx_k_weight), 0, 0, 1, 1},
   {&__pyx_n_s_y, __pyx_k_y, sizeof(__pyx_k_y), 0, 0, 1, 1},
   {&__pyx_n_s_y_row, __pyx_k_y_row, sizeof(__pyx_k_y_row), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 121; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 124; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 127; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 142; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -15386,29 +16466,53 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__12);
   __Pyx_GIVEREF(__pyx_tuple__12);
 
-  /* "lightfm/lightfm_fast.pyx":357
+  /* "lightfm/lightfm_fast.pyx":446
  * 
  * 
- * def fit_lightfm(CSRMatrix item_features,             # <<<<<<<<<<<<<<
- *                 CSRMatrix user_features,
- *                 int[::1] user_ids,
+ * def fit_logistic(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *                  CSRMatrix user_features,
+ *                  int[::1] user_ids,
  */
-  __pyx_tuple__13 = PyTuple_Pack(20, __pyx_n_s_item_features, __pyx_n_s_user_features, __pyx_n_s_user_ids, __pyx_n_s_item_ids, __pyx_n_s_Y, __pyx_n_s_shuffle_indices, __pyx_n_s_lightfm, __pyx_n_s_learning_rate, __pyx_n_s_item_alpha, __pyx_n_s_user_alpha, __pyx_n_s_num_threads, __pyx_n_s_i, __pyx_n_s_no_examples, __pyx_n_s_user_id, __pyx_n_s_item_id, __pyx_n_s_row, __pyx_n_s_prediction, __pyx_n_s_loss, __pyx_n_s_y, __pyx_n_s_y_row); if (unlikely(!__pyx_tuple__13)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__13 = PyTuple_Pack(20, __pyx_n_s_item_features, __pyx_n_s_user_features, __pyx_n_s_user_ids, __pyx_n_s_item_ids, __pyx_n_s_Y, __pyx_n_s_shuffle_indices, __pyx_n_s_lightfm, __pyx_n_s_learning_rate, __pyx_n_s_item_alpha, __pyx_n_s_user_alpha, __pyx_n_s_num_threads, __pyx_n_s_i, __pyx_n_s_no_examples, __pyx_n_s_user_id, __pyx_n_s_item_id, __pyx_n_s_row, __pyx_n_s_prediction, __pyx_n_s_loss, __pyx_n_s_y, __pyx_n_s_y_row); if (unlikely(!__pyx_tuple__13)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
-  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(11, 0, 20, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_maciej_Code_lightfm_public, __pyx_n_s_fit_lightfm, 357, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(11, 0, 20, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_maciej_Code_lightfm_public, __pyx_n_s_fit_logistic, 446, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "lightfm/lightfm_fast.pyx":415
+  /* "lightfm/lightfm_fast.pyx":504
+ * 
+ * 
+ * def fit_warp(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *              CSRMatrix user_features,
+ *              int[::1] user_ids,
+ */
+  __pyx_tuple__15 = PyTuple_Pack(24, __pyx_n_s_item_features, __pyx_n_s_user_features, __pyx_n_s_user_ids, __pyx_n_s_item_ids, __pyx_n_s_Y, __pyx_n_s_shuffle_indices, __pyx_n_s_lightfm, __pyx_n_s_learning_rate, __pyx_n_s_item_alpha, __pyx_n_s_user_alpha, __pyx_n_s_num_threads, __pyx_n_s_i, __pyx_n_s_no_examples, __pyx_n_s_user_id, __pyx_n_s_positive_item_id, __pyx_n_s_gamma, __pyx_n_s_max_sampled, __pyx_n_s_negative_item_id, __pyx_n_s_sampled, __pyx_n_s_row, __pyx_n_s_positive_prediction, __pyx_n_s_negative_prediction, __pyx_n_s_violation, __pyx_n_s_weight); if (unlikely(!__pyx_tuple__15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_tuple__15);
+  __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(11, 0, 24, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_maciej_Code_lightfm_public, __pyx_n_s_fit_warp, 504, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "lightfm/lightfm_fast.pyx":580
+ * 
+ * 
+ * def fit_bpr(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *             CSRMatrix user_features,
+ *             int[::1] user_ids,
+ */
+  __pyx_tuple__17 = PyTuple_Pack(20, __pyx_n_s_item_features, __pyx_n_s_user_features, __pyx_n_s_user_ids, __pyx_n_s_item_ids, __pyx_n_s_Y, __pyx_n_s_shuffle_indices, __pyx_n_s_lightfm, __pyx_n_s_learning_rate, __pyx_n_s_item_alpha, __pyx_n_s_user_alpha, __pyx_n_s_num_threads, __pyx_n_s_i, __pyx_n_s_no_examples, __pyx_n_s_user_id, __pyx_n_s_positive_item_id, __pyx_n_s_negative_item_id, __pyx_n_s_sampled, __pyx_n_s_row, __pyx_n_s_positive_prediction, __pyx_n_s_negative_prediction); if (unlikely(!__pyx_tuple__17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_tuple__17);
+  __Pyx_GIVEREF(__pyx_tuple__17);
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(11, 0, 20, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_maciej_Code_lightfm_public, __pyx_n_s_fit_bpr, 580, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "lightfm/lightfm_fast.pyx":639
  * 
  * 
  * def predict_lightfm(CSRMatrix item_features,             # <<<<<<<<<<<<<<
  *                     CSRMatrix user_features,
  *                     int[::1] user_ids,
  */
-  __pyx_tuple__15 = PyTuple_Pack(9, __pyx_n_s_item_features, __pyx_n_s_user_features, __pyx_n_s_user_ids, __pyx_n_s_item_ids, __pyx_n_s_predictions, __pyx_n_s_lightfm, __pyx_n_s_num_threads, __pyx_n_s_i, __pyx_n_s_no_examples); if (unlikely(!__pyx_tuple__15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(7, 0, 9, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_maciej_Code_lightfm_public, __pyx_n_s_predict_lightfm, 415, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__19 = PyTuple_Pack(9, __pyx_n_s_item_features, __pyx_n_s_user_features, __pyx_n_s_user_ids, __pyx_n_s_item_ids, __pyx_n_s_predictions, __pyx_n_s_lightfm, __pyx_n_s_num_threads, __pyx_n_s_i, __pyx_n_s_no_examples); if (unlikely(!__pyx_tuple__19)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_tuple__19);
+  __Pyx_GIVEREF(__pyx_tuple__19);
+  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(7, 0, 9, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_maciej_Code_lightfm_public, __pyx_n_s_predict_lightfm, 639, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "View.MemoryView":276
  *         return self.name
@@ -15417,9 +16521,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__17)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 276; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_tuple__17);
-  __Pyx_GIVEREF(__pyx_tuple__17);
+  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__21)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 276; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_tuple__21);
+  __Pyx_GIVEREF(__pyx_tuple__21);
 
   /* "View.MemoryView":277
  * 
@@ -15428,9 +16532,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__18)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 277; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_tuple__18);
-  __Pyx_GIVEREF(__pyx_tuple__18);
+  __pyx_tuple__22 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__22)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 277; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_tuple__22);
+  __Pyx_GIVEREF(__pyx_tuple__22);
 
   /* "View.MemoryView":278
  * cdef generic = Enum("<strided and direct or indirect>")
@@ -15439,9 +16543,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__19)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 278; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_tuple__19);
-  __Pyx_GIVEREF(__pyx_tuple__19);
+  __pyx_tuple__23 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__23)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 278; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_tuple__23);
+  __Pyx_GIVEREF(__pyx_tuple__23);
 
   /* "View.MemoryView":281
  * 
@@ -15450,9 +16554,9 @@ static int __Pyx_InitCachedConstants(void) {
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__20)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 281; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_tuple__20);
-  __Pyx_GIVEREF(__pyx_tuple__20);
+  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__24)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 281; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_tuple__24);
+  __Pyx_GIVEREF(__pyx_tuple__24);
 
   /* "View.MemoryView":282
  * 
@@ -15461,9 +16565,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__21)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 282; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_tuple__21);
-  __Pyx_GIVEREF(__pyx_tuple__21);
+  __pyx_tuple__25 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__25)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 282; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_tuple__25);
+  __Pyx_GIVEREF(__pyx_tuple__25);
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -15576,14 +16680,14 @@ PyMODINIT_FUNC PyInit_lightfm_fast(void)
   __pyx_vtabptr_7lightfm_12lightfm_fast_CSRMatrix = &__pyx_vtable_7lightfm_12lightfm_fast_CSRMatrix;
   __pyx_vtable_7lightfm_12lightfm_fast_CSRMatrix.get_row_start = (int (*)(struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *, int))__pyx_f_7lightfm_12lightfm_fast_9CSRMatrix_get_row_start;
   __pyx_vtable_7lightfm_12lightfm_fast_CSRMatrix.get_row_end = (int (*)(struct __pyx_obj_7lightfm_12lightfm_fast_CSRMatrix *, int))__pyx_f_7lightfm_12lightfm_fast_9CSRMatrix_get_row_end;
-  if (PyType_Ready(&__pyx_type_7lightfm_12lightfm_fast_CSRMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_7lightfm_12lightfm_fast_CSRMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_7lightfm_12lightfm_fast_CSRMatrix.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_7lightfm_12lightfm_fast_CSRMatrix.tp_dict, __pyx_vtabptr_7lightfm_12lightfm_fast_CSRMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyObject_SetAttrString(__pyx_m, "CSRMatrix", (PyObject *)&__pyx_type_7lightfm_12lightfm_fast_CSRMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_SetVtable(__pyx_type_7lightfm_12lightfm_fast_CSRMatrix.tp_dict, __pyx_vtabptr_7lightfm_12lightfm_fast_CSRMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "CSRMatrix", (PyObject *)&__pyx_type_7lightfm_12lightfm_fast_CSRMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_7lightfm_12lightfm_fast_CSRMatrix = &__pyx_type_7lightfm_12lightfm_fast_CSRMatrix;
-  if (PyType_Ready(&__pyx_type_7lightfm_12lightfm_fast_FastLightFM) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_7lightfm_12lightfm_fast_FastLightFM) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_7lightfm_12lightfm_fast_FastLightFM.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "FastLightFM", (PyObject *)&__pyx_type_7lightfm_12lightfm_fast_FastLightFM) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "FastLightFM", (PyObject *)&__pyx_type_7lightfm_12lightfm_fast_FastLightFM) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_7lightfm_12lightfm_fast_FastLightFM = &__pyx_type_7lightfm_12lightfm_fast_FastLightFM;
   if (PyType_Ready(&__pyx_type___pyx_array) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type___pyx_array.tp_print = 0;
@@ -15617,28 +16721,52 @@ PyMODINIT_FUNC PyInit_lightfm_fast(void)
   /*--- Function import code ---*/
   /*--- Execution code ---*/
 
-  /* "lightfm/lightfm_fast.pyx":357
+  /* "lightfm/lightfm_fast.pyx":446
  * 
  * 
- * def fit_lightfm(CSRMatrix item_features,             # <<<<<<<<<<<<<<
- *                 CSRMatrix user_features,
- *                 int[::1] user_ids,
+ * def fit_logistic(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *                  CSRMatrix user_features,
+ *                  int[::1] user_ids,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lightfm_12lightfm_fast_1fit_lightfm, NULL, __pyx_n_s_lightfm_lightfm_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lightfm_12lightfm_fast_1fit_logistic, NULL, __pyx_n_s_lightfm_lightfm_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fit_lightfm, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 357; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fit_logistic, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 446; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "lightfm/lightfm_fast.pyx":415
+  /* "lightfm/lightfm_fast.pyx":504
+ * 
+ * 
+ * def fit_warp(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *              CSRMatrix user_features,
+ *              int[::1] user_ids,
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lightfm_12lightfm_fast_3fit_warp, NULL, __pyx_n_s_lightfm_lightfm_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fit_warp, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 504; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "lightfm/lightfm_fast.pyx":580
+ * 
+ * 
+ * def fit_bpr(CSRMatrix item_features,             # <<<<<<<<<<<<<<
+ *             CSRMatrix user_features,
+ *             int[::1] user_ids,
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lightfm_12lightfm_fast_5fit_bpr, NULL, __pyx_n_s_lightfm_lightfm_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fit_bpr, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 580; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "lightfm/lightfm_fast.pyx":639
  * 
  * 
  * def predict_lightfm(CSRMatrix item_features,             # <<<<<<<<<<<<<<
  *                     CSRMatrix user_features,
  *                     int[::1] user_ids,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lightfm_12lightfm_fast_3predict_lightfm, NULL, __pyx_n_s_lightfm_lightfm_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7lightfm_12lightfm_fast_7predict_lightfm, NULL, __pyx_n_s_lightfm_lightfm_fast); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_predict_lightfm, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 415; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_predict_lightfm, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 639; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "lightfm/lightfm_fast.pyx":1
@@ -15671,7 +16799,7 @@ PyMODINIT_FUNC PyInit_lightfm_fast(void)
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__17, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 276; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__21, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 276; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(generic);
   __Pyx_DECREF_SET(generic, __pyx_t_1);
@@ -15685,7 +16813,7 @@ PyMODINIT_FUNC PyInit_lightfm_fast(void)
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__18, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 277; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 277; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(strided);
   __Pyx_DECREF_SET(strided, __pyx_t_1);
@@ -15699,7 +16827,7 @@ PyMODINIT_FUNC PyInit_lightfm_fast(void)
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 278; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__23, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 278; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(indirect);
   __Pyx_DECREF_SET(indirect, __pyx_t_1);
@@ -15713,7 +16841,7 @@ PyMODINIT_FUNC PyInit_lightfm_fast(void)
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__20, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 281; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 281; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(contiguous);
   __Pyx_DECREF_SET(contiguous, __pyx_t_1);
@@ -15727,7 +16855,7 @@ PyMODINIT_FUNC PyInit_lightfm_fast(void)
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__21, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 282; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject *)__pyx_MemviewEnum_type)), __pyx_tuple__25, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 282; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(indirect_contiguous);
   __Pyx_DECREF_SET(indirect_contiguous, __pyx_t_1);

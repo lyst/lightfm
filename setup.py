@@ -39,8 +39,6 @@ class Cythonize(Command):
         import Cython
         from Cython.Build import cythonize
 
-        assert float(Cython.__version__) >= 0.22
-
         cythonize(define_extensions('.pyx'))
 
 
@@ -88,7 +86,7 @@ class PyTest(TestCommand):
 
 setup(
     name='lightfm',
-    version='0.0.1',
+    version='1.0',
     description='LightFM recommendation model',
     url='https://github.com/lyst/lightfm',
     download_url='https://github.com/lyst/lightfm/tarball/1.0',
