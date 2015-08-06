@@ -8,11 +8,11 @@ The model can be trained using three methods:
 
 - logistic loss: useful when both positive (1) and negative (-1) interactions
                  are present.
-- BPR: [Bayesian Personalised Ranking](1) pairwise loss. Maximises the
+- BPR: Bayesian Personalised Ranking [1] pairwise loss. Maximises the
        prediction difference between a positive example and a randomly
        chosen negative example. Useful when only positive interactions
        are present and optimising ROC AUC is desired.
-- WARP: [Weighted Approximate-Rank Pairwise](2) loss. Maximises
+- WARP: Weighted Approximate-Rank Pairwise [2] loss. Maximises
         the rank of positive examples by repeatedly sampling negative
         examples until rank violating one is found. Useful when only
         positive interactions are present and optimising the top of
