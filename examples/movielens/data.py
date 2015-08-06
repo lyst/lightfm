@@ -42,8 +42,8 @@ def _get_raw_movielens_data():
         _download_movielens(path)
 
     with zipfile.ZipFile(path) as datafile:
-        return (datafile.read('ml-100k/ua.base').split('\n'),
-                datafile.read('ml-100k/ua.test').split('\n'))
+        return (datafile.read('ml-100k/ua.base').decode().split('\n'),
+                datafile.read('ml-100k/ua.test').decode().split('\n'))
 
 
 def _parse(data):
@@ -90,7 +90,7 @@ def _get_movie_raw_metadata():
         _download_movielens(path)
 
     with zipfile.ZipFile(path) as datafile:
-        return datafile.read('ml-100k/u.item').split('\n')
+        return datafile.read('ml-100k/u.item').decode(errors='ignore').split('\n')
 
 
 def get_movielens_item_metadata(use_item_ids):
