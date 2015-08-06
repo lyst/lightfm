@@ -5,3 +5,4 @@
 *.so
 examples/movielens/.ipynb_checkpoints/
 build/
+dist/
