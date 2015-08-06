@@ -5,7 +5,8 @@ import numpy as np
 import scipy.sparse as sp
 
 from .lightfm_fast import (CSRMatrix, FastLightFM,
-                           fit_lightfm, predict_lightfm)
+                           fit_logistic, predict_lightfm,
+                           fit_warp, fit_bpr)
 
 
 class LightFM(object):
@@ -98,7 +99,7 @@ class LightFM(object):
         return user_features, item_features
 
     def fit(self, interactions, user_features=None, item_features=None,
-            epochs=1, num_threads=1, verbose=False):
+            loss='logistic', epochs=1, num_threads=1, verbose=False):
 
         # Discard old results, if any
         self._reset_state()
@@ -111,9 +112,23 @@ class LightFM(object):
                                 verbose=verbose)
 
     def fit_partial(self, interactions, user_features=None, item_features=None,
-                    epochs=1, num_threads=1, verbose=False):
+                    loss='logistic', epochs=1, num_threads=1, verbose=False):
         """
-        Fit the model.
+        Fit the model. Repeated calls to this function will resume training from
+        the point where the last call finished.
+
+        Three loss functions are available:
+        - logistic: useful when both positive (1) and negative (-1) interactions
+                    are present.
+        - BPR: Bayesian Personalised Ranking [1] pairwise loss. Maximises the
+               prediction difference between a positive example and a randomly
+               chosen negative example. Useful when only positive interactions
+               are present and optimising ROC AUC is desired.
+        - WARP: Weighted Approximate-Rank Pairwise [2] loss. Maximises
+                the rank of positive examples by repeatedly sampling negative
+                examples until rank violating one is found. Useful when only
+                positive interactions are present and optimising the top of
+                the recommendation list (precision@k) is desired.
 
         Arguments:
         - coo_matrix interactions: matrix of shape [n_users, n_items] containing
@@ -124,12 +139,21 @@ class LightFM(object):
         - csr_matrix item_features: array of shape [n_items, n_item_features].
                                     Each row contains that item's weights
                                     over features.
+        - string loss ('logistic', 'bpr', 'warp'): the loss function to use.
         - int epochs: number of epochs to run. Default: 1
         - int num_threads: number of parallel computation threads to use. Should
                            not be higher than the number of physical cores.
                            Default: 1
         - bool verbose: whether to print progress messages.
+
+        [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from implicit feedback."
+            Proceedings of the Twenty-Fifth Conference on Uncertainty in Artificial
+            Intelligence. AUAI Press, 2009.
+        [2] Weston, Jason, Samy Bengio, and Nicolas Usunier. "Wsabie: Scaling up to large
+            vocabulary image annotation." IJCAI. Vol. 11. 2011.
         """
+
+        assert loss in ('logistic', 'warp', 'bpr')
 
         # We need this in the COO format.
         # If that's already true, this is a no-op.
@@ -165,11 +189,12 @@ class LightFM(object):
             self._run_epoch(item_features,
                             user_features,
                             interactions,
-                            num_threads)
+                            num_threads,
+                            loss)
 
         return self
 
-    def _run_epoch(self, item_features, user_features, interactions, num_threads):
+    def _run_epoch(self, item_features, user_features, interactions, num_threads, loss):
         """
         Run an individual epoch.
         """
@@ -189,7 +214,20 @@ class LightFM(object):
                                    self.no_components)
 
         # Call the estimation routines.
-        fit_lightfm(CSRMatrix(item_features),
+        if loss == 'warp':
+            fit_warp(CSRMatrix(item_features),
+                     CSRMatrix(user_features),
+                     interactions.row,
+                     interactions.col,
+                     interactions.data,
+                     shuffle_indices,
+                     lightfm_data,
+                     self.learning_rate,
+                     self.item_alpha,
+                     self.user_alpha,
+                     num_threads)
+        elif loss == 'bpr':
+            fit_bpr(CSRMatrix(item_features),
                     CSRMatrix(user_features),
                     interactions.row,
                     interactions.col,
@@ -200,6 +238,18 @@ class LightFM(object):
                     self.item_alpha,
                     self.user_alpha,
                     num_threads)
+        else:
+            fit_logistic(CSRMatrix(item_features),
+                         CSRMatrix(user_features),
+                         interactions.row,
+                         interactions.col,
+                         interactions.data,
+                         shuffle_indices,
+                         lightfm_data,
+                         self.learning_rate,
+                         self.item_alpha,
+                         self.user_alpha,
+                         num_threads)
 
     def predict(self, user_ids, item_ids, item_features=None, user_features=None, num_threads=1):
         """
