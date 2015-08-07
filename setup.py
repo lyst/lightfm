@@ -1,3 +1,4 @@
+import glob
 import os
 import platform
 import subprocess
@@ -7,18 +8,30 @@ from setuptools import setup, Command, Extension
 from setuptools.command.test import test as TestCommand
 
 
-# Use gcc for openMP on OSX
-if 'darwin' in platform.platform().lower():
-    os.environ["CC"] = "gcc-4.9"
-    os.environ["CXX"] = "g++-4.9"
-
-
 def define_extensions(file_ext):
 
     return [Extension("lightfm.lightfm_fast",
                       ['lightfm/lightfm_fast%s' % file_ext],
                       extra_link_args=["-fopenmp"],
                       extra_compile_args=['-fopenmp'])]
+
+
+def set_gcc():
+    """
+    Try to find and use GCC on OSX for OpenMP support.
+    """
+
+    if 'darwin' in platform.platform().lower():
+
+        gcc_binaries = sorted(glob.glob('/usr/local/bin/gcc-*'))
+
+        if gcc_binaries:
+            _, gcc = os.path.split(gcc_binaries[-1])
+            os.environ["CC"] = gcc
+
+        else:
+            raise Exception('No GCC available. Install gcc from Homebrew '
+                            'using brew install gcc.')
 
 
 class Cythonize(Command):
@@ -82,6 +95,9 @@ class PyTest(TestCommand):
         import pytest
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)
+
+
+set_gcc()
 
 
 setup(
