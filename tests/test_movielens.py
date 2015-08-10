@@ -76,8 +76,8 @@ def test_logistic_precision():
     assert train_precision > 0.3
     assert test_precision > 0.03
 
-    assert full_train_auc > 0.89
-    assert full_test_auc > 0.89
+    assert full_train_auc > 0.79
+    assert full_test_auc > 0.74
 
 
 def test_bpr_precision():
@@ -101,8 +101,8 @@ def test_bpr_precision():
     assert train_precision > 0.31
     assert test_precision > 0.04
 
-    assert full_train_auc > 0.99
-    assert full_test_auc > 0.99
+    assert full_train_auc > 0.86
+    assert full_test_auc > 0.84
 
 
 def test_warp_precision():
@@ -126,8 +126,8 @@ def test_warp_precision():
     assert train_precision > 0.45
     assert test_precision > 0.07
 
-    assert full_train_auc > 0.97
-    assert full_test_auc > 0.97
+    assert full_train_auc > 0.94
+    assert full_test_auc > 0.9
 
 
 def test_movielens_genre_accuracy():

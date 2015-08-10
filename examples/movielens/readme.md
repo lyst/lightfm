@@ -87,7 +87,7 @@ In this case, we set the latent dimensionality of the model to 30. Fitting is st
 
 
 
-    <lightfm.lightfm.LightFM at 0x7f6da1ee9150>
+    <lightfm.lightfm.LightFM at 0x7f7e30054510>
 
 
 
@@ -105,8 +105,8 @@ Let's try to get a handle on the model accuracy using the ROC AUC score.
 
 
 
-    array([ 2.40843111, -2.43246742,  1.00799466, ...,  0.26045235,
-           -4.55268913, -2.65239631])
+    array([ 1.86904553, -2.60198906,  1.7206847 , ..., -0.64748412,
+           -3.50834665, -2.6182965 ])
 
 
 
@@ -116,7 +116,7 @@ Let's try to get a handle on the model accuracy using the ROC AUC score.
 
 
 
-    0.98811480614048208
+    0.98822444246531116
 
 
 
@@ -131,7 +131,7 @@ We've got very high accuracy on the train dataset; let's check the test set.
 
 
 
-    0.72650050369969887
+    0.72556470199548917
 
 
 
@@ -145,7 +145,7 @@ The accuracy is much lower on the test data, suggesting a high degree of overfit
 
 
 
-    0.76048448049595274
+    0.76144594842685653
 
 
 
@@ -178,7 +178,7 @@ We need to pass these to the `fit` method in order to use them.
 
 
 
-    0.672735713709675
+    0.67207762427127649
 
 
 
@@ -196,7 +196,7 @@ If we add item-specific features back, we should get the original accuracy back.
 
 
 
-    0.75671177598332684
+    0.7545881265357901
 
 
 
@@ -283,18 +283,18 @@ Before using them, let's first load the data and define some evaluation function
             uid_array.fill(user_id)
             predictions = model.predict(uid_array, pid_array, num_threads=4)
     
-            true_pids = row.indices[row.indices == 1]
+            true_pids = row.indices[row.data == 1]
     
             grnd = np.zeros(no_items, dtype=np.int32)
             grnd[true_pids] = 1
     
-            if true_pids:
+            if len(true_pids):
                 scores.append(roc_auc_score(grnd, predictions))
     
         return sum(scores) / len(scores)
 
 
-Now let's train a BPR model and look at its accuracy. The BPR model aims to maximise the ROC AUC, so we should expect it to perform well on that metric.
+Now let's train a BPR model and look at its accuracy.
 
 
         model = LightFM(learning_rate=0.05)
@@ -316,11 +316,11 @@ Now let's train a BPR model and look at its accuracy. The BPR model aims to maxi
         print('Precision: %s, %s' % (train_precision, test_precision))
         print('AUC: %s, %s' % (train_auc, test_auc))
 
-    Precision: 0.431919406151, 0.0674443266172
-    AUC: 0.997621878716, 0.997621878716
+    Precision: 0.421208907741, 0.0623541887593
+    AUC: 0.8420236438, 0.822428641787
 
 
-As expected, AUC is quite high. The WARP model, on the other hand, optimises for precision@k---we should expect its performance to be better on precision and lower on AUC.
+The WARP model, on the other hand, optimises for precision@k---we should expect its performance to be better on precision.
 
 
         model = LightFM(learning_rate=0.05)
@@ -342,11 +342,14 @@ As expected, AUC is quite high. The WARP model, on the other hand, optimises for
         print('Precision: %s, %s' % (train_precision, test_precision))
         print('AUC: %s, %s' % (train_auc, test_auc))
 
-    Precision: 0.620890774125, 0.103923647932
-    AUC: 0.980586765027, 0.987068965517
+    Precision: 0.616118769883, 0.106468716861
+    AUC: 0.941491185886, 0.903792882909
 
 
-And that is exactly what we see: we get much higher precision@10 at the expense of some AUC.
+And that is exactly what we see: we get much higher precision@10 (but the AUC metric is also improved).
+
+
+    
 
 
     
