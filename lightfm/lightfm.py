@@ -53,16 +53,16 @@ class LightFM(object):
 
         # Initialise item features.
         self.item_embeddings = ((np.random.rand(no_item_features, no_components) - 0.5)
-                                / no_components)
+                                / no_components).astype(np.float32)
         self.item_embedding_gradients = np.ones_like(self.item_embeddings)
-        self.item_biases = np.zeros(no_item_features, dtype=np.float64)
+        self.item_biases = np.zeros(no_item_features, dtype=np.float32)
         self.item_bias_gradients = np.ones_like(self.item_biases)
 
         # Initialise user features.
         self.user_embeddings = ((np.random.rand(no_user_features, no_components) - 0.5)
-                                / no_components)
+                                / no_components).astype(np.float32)
         self.user_embedding_gradients = np.ones_like(self.user_embeddings)
-        self.user_biases = np.zeros(no_user_features, dtype=np.float64)
+        self.user_biases = np.zeros(no_user_features, dtype=np.float32)
         self.user_bias_gradients = np.ones_like(self.user_biases)
 
     def _construct_feature_matrices(self, n_users, n_items, user_features,
