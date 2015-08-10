@@ -63,12 +63,12 @@ def full_auc(model, ground_truth):
         uid_array.fill(user_id)
         predictions = model.predict(uid_array, pid_array, num_threads=4)
 
-        true_pids = row.indices[row.indices == 1]
+        true_pids = row.indices[row.data == 1]
 
         grnd = np.zeros(no_items, dtype=np.int32)
         grnd[true_pids] = 1
 
-        if true_pids:
+        if len(true_pids):
             scores.append(roc_auc_score(grnd, predictions))
 
     return sum(scores) / len(scores)
