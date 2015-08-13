@@ -13,7 +13,9 @@ def define_extensions(file_ext):
     return [Extension("lightfm.lightfm_fast",
                       ['lightfm/lightfm_fast%s' % file_ext],
                       extra_link_args=["-fopenmp"],
-                      extra_compile_args=['-fopenmp'])]
+                      extra_compile_args=['-fopenmp',
+                                          '-march=native',
+                                          '-ffast-math'])]
 
 
 def set_gcc():
