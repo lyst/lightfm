@@ -1,3 +1,4 @@
+import glob
 import os
 import platform
 import subprocess
@@ -7,18 +8,32 @@ from setuptools import setup, Command, Extension
 from setuptools.command.test import test as TestCommand
 
 
-# Use gcc for openMP on OSX
-if 'darwin' in platform.platform().lower():
-    os.environ["CC"] = "gcc-4.9"
-    os.environ["CXX"] = "g++-4.9"
-
-
 def define_extensions(file_ext):
 
     return [Extension("lightfm.lightfm_fast",
                       ['lightfm/lightfm_fast%s' % file_ext],
                       extra_link_args=["-fopenmp"],
-                      extra_compile_args=['-fopenmp'])]
+                      extra_compile_args=['-fopenmp',
+                                          '-march=native',
+                                          '-ffast-math'])]
+
+
+def set_gcc():
+    """
+    Try to find and use GCC on OSX for OpenMP support.
+    """
+
+    if 'darwin' in platform.platform().lower():
+
+        gcc_binaries = sorted(glob.glob('/usr/local/bin/gcc-*'))
+
+        if gcc_binaries:
+            _, gcc = os.path.split(gcc_binaries[-1])
+            os.environ["CC"] = gcc
+
+        else:
+            raise Exception('No GCC available. Install gcc from Homebrew '
+                            'using brew install gcc.')
 
 
 class Cythonize(Command):
@@ -84,12 +99,15 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
+set_gcc()
+
+
 setup(
     name='lightfm',
-    version='1.0',
+    version='1.2',
     description='LightFM recommendation model',
     url='https://github.com/lyst/lightfm',
-    download_url='https://github.com/lyst/lightfm/tarball/1.0',
+    download_url='https://github.com/lyst/lightfm/tarball/1.2',
     packages=['lightfm'],
     install_requires=['numpy'],
     tests_require=['pytest', 'requests', 'scikit-learn', 'scipy'],

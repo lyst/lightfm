@@ -1,6 +1,6 @@
-import pickle
 import imp
 import os
+import pickle
 
 import numpy as np
 
@@ -76,8 +76,8 @@ def test_logistic_precision():
     assert train_precision > 0.3
     assert test_precision > 0.03
 
-    assert full_train_auc > 0.89
-    assert full_test_auc > 0.89
+    assert full_train_auc > 0.79
+    assert full_test_auc > 0.74
 
 
 def test_bpr_precision():
@@ -101,8 +101,34 @@ def test_bpr_precision():
     assert train_precision > 0.31
     assert test_precision > 0.04
 
-    assert full_train_auc > 0.99
-    assert full_test_auc > 0.99
+    assert full_train_auc > 0.86
+    assert full_test_auc > 0.84
+
+
+def test_bpr_precision_multithreaded():
+
+    model = LightFM(learning_rate=0.05)
+
+    model.fit_partial(train,
+                      epochs=10,
+                      loss='bpr',
+                      num_threads=4)
+
+    train_precision = precision_at_k(model,
+                                     train,
+                                     10)
+    test_precision = precision_at_k(model,
+                                    test,
+                                    10)
+
+    full_train_auc = full_auc(model, train)
+    full_test_auc = full_auc(model, test)
+
+    assert train_precision > 0.31
+    assert test_precision > 0.04
+
+    assert full_train_auc > 0.86
+    assert full_test_auc > 0.84
 
 
 def test_warp_precision():
@@ -126,8 +152,49 @@ def test_warp_precision():
     assert train_precision > 0.45
     assert test_precision > 0.07
 
-    assert full_train_auc > 0.97
-    assert full_test_auc > 0.97
+    assert full_train_auc > 0.94
+    assert full_test_auc > 0.9
+
+
+def test_warp_precision_multithreaded():
+
+    model = LightFM(learning_rate=0.05)
+
+    model.fit_partial(train,
+                      epochs=10,
+                      loss='warp',
+                      num_threads=4)
+
+    train_precision = precision_at_k(model,
+                                     train,
+                                     10)
+    test_precision = precision_at_k(model,
+                                    test,
+                                    10)
+
+    full_train_auc = full_auc(model, train)
+    full_test_auc = full_auc(model, test)
+
+    assert train_precision > 0.45
+    assert test_precision > 0.07
+
+    assert full_train_auc > 0.94
+    assert full_test_auc > 0.9
+
+
+def test_warp_stability():
+
+    learning_rates = (0.05, 0.1, 0.5)
+
+    for lrate in learning_rates:
+
+        model = LightFM(learning_rate=lrate)
+        model.fit_partial(train,
+                          epochs=10,
+                          loss='warp')
+
+        assert not np.isnan(model.user_embeddings).any()
+        assert not np.isnan(model.item_embeddings).any()
 
 
 def test_movielens_genre_accuracy():

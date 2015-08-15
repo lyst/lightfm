@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 
 
-def precision_at_k(model, ground_truth, k):
+def precision_at_k(model, ground_truth, k, user_features=None, item_features=None):
     """
     Measure precision at k for model and ground truth.
 
@@ -27,7 +27,10 @@ def precision_at_k(model, ground_truth, k):
     for user_id, row in enumerate(ground_truth):
         uid_array = np.empty(no_items, dtype=np.int32)
         uid_array.fill(user_id)
-        predictions = model.predict(uid_array, pid_array, num_threads=4)
+        predictions = model.predict(uid_array, pid_array,
+                                    user_features=user_features,
+                                    item_features=item_features,
+                                    num_threads=4)
 
         top_k = set(np.argsort(-predictions)[:k])
         true_pids = set(row.indices[row.data == 1])
@@ -38,7 +41,7 @@ def precision_at_k(model, ground_truth, k):
     return sum(precisions) / len(precisions)
 
 
-def full_auc(model, ground_truth):
+def full_auc(model, ground_truth, user_features=None, item_features=None):
     """
     Measure AUC for model and ground truth on all items.
 
@@ -61,14 +64,17 @@ def full_auc(model, ground_truth):
     for user_id, row in enumerate(ground_truth):
         uid_array = np.empty(no_items, dtype=np.int32)
         uid_array.fill(user_id)
-        predictions = model.predict(uid_array, pid_array, num_threads=4)
+        predictions = model.predict(uid_array, pid_array,
+                                    user_features=user_features,
+                                    item_features=item_features,
+                                    num_threads=4)
 
-        true_pids = row.indices[row.indices == 1]
+        true_pids = row.indices[row.data == 1]
 
         grnd = np.zeros(no_items, dtype=np.int32)
         grnd[true_pids] = 1
 
-        if true_pids:
+        if len(true_pids):
             scores.append(roc_auc_score(grnd, predictions))
 
     return sum(scores) / len(scores)
