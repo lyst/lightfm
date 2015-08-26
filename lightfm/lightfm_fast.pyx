@@ -3,6 +3,7 @@
 
 import numpy as np
 from cython.parallel import parallel, prange
+cimport cython.operator.dereference as deref
 from libc.stdlib cimport free, malloc
 cimport openmp
 
@@ -22,6 +23,8 @@ cdef extern from "stdlib.h" nogil:
     ctypedef void const_void "const void"
     void qsort(void *base, int nmemb, int size,
                int(*compar)(const_void *, const_void *)) nogil
+    void* bsearch(const void *key, void *base, int nmemb, int size,
+                  int(*compar)(const_void *, const_void *)) nogil
 
 
 cdef int sample_range(int min_val, int max_val, unsigned int *seed) nogil:
@@ -55,6 +58,16 @@ cdef int reverse_pair_compare(const_void *a, const_void *b) nogil:
         return 1
     else:
         return -1
+
+
+cdef int int_compare(const_void *a, const_void *b) nogil:
+
+    if deref(<int*>a) - deref(<int*>b) > 0:
+        return 1
+    elif deref(<int*>a) - deref(<int*>b) < 0:
+        return -1
+    else:
+        return 0
 
 
 cdef class CSRMatrix:
@@ -185,11 +198,14 @@ cdef inline int in_positives(int item_id, int user_id, CSRMatrix interactions) n
     start_idx = interactions.get_row_start(user_id)
     stop_idx = interactions.get_row_end(user_id)
 
-    for i in range(start_idx, stop_idx):
-        if item_id == interactions.indices[i]:
-            return 1
-
-    return 0
+    if bsearch(&item_id,
+               &interactions.indices[start_idx],
+               stop_idx - start_idx,
+               sizeof(int),
+               int_compare) == NULL:
+        return 0
+    else:
+        return 1
 
 
 cdef inline void compute_representation(CSRMatrix features,
@@ -1095,3 +1111,12 @@ def predict_lightfm(CSRMatrix item_features,
             predictions[i] = compute_prediction_from_repr(user_repr,
                                                           it_repr,
                                                           lightfm.no_components)
+
+
+# Expose test functions
+def __test_in_positives(int row, int col, CSRMatrix mat):
+
+    if in_positives(col, row, mat):
+        return True
+    else:
+        return False
