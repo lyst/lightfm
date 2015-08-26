@@ -16,7 +16,7 @@ The model can be trained using three methods:
        are present and optimising ROC AUC is desired.
 - WARP: Weighted Approximate-Rank Pairwise [2] loss. Maximises
         the rank of positive examples by repeatedly sampling negative
-        examples until rank violating one is found. Useful when only
+        examples until a rank violating one is found. Useful when only
         positive interactions are present and optimising the top of
         the recommendation list (precision@k) is desired.
 - k-OS WARP: k-th order statistic loss [3]. A modification of WARP that uses the k-th
@@ -30,7 +30,6 @@ Two learning rate schedules are implemented:
 Install from pypi using pip: `pip install lightfm`.
 
 Note for OSX users: due to its use of OpenMP, `lightfm` does not compile under Clang. To install it, you will need a reasonably recent version of `gcc` (from Homebrew for instance). This should be picked up by `setup.py`; if it is not, please open an issue.
-```
 
 ## Usage
 Model fitting is very straightforward.
