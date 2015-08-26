@@ -98,8 +98,7 @@ vocabulary image annotation." IJCAI. Vol. 11. 2011.
 the k-order statistic loss." Proceedings of the 7th ACM conference on Recommender systems. ACM, 2013.
 
 [4] Duchi, John, Elad Hazan, and Yoram Singer. "Adaptive subgradient methods
-for online learning and stochastic optimization."
+for online learning and stochastic optimization." The Journal of Machine Learning Research 12 (2011): 2121-2159.
 
-The Journal of Machine Learning Research 12 (2011): 2121-2159.
 [5] Zeiler, Matthew D. "ADADELTA: An adaptive learning rate method."
 arXiv preprint arXiv:1212.5701 (2012).
