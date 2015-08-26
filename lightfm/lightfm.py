@@ -171,6 +171,15 @@ class LightFM(object):
 
         return user_features, item_features
 
+    def _get_positives_lookup_matrix(self, interactions):
+
+        mat = interactions.tocsr()
+
+        if not mat.has_sorted_indices:
+            return mat.sorted_indices()
+        else:
+            return mat
+
     def fit(self, interactions, user_features=None, item_features=None,
             epochs=1, num_threads=1, verbose=False):
 
@@ -277,7 +286,7 @@ class LightFM(object):
         if loss == 'warp':
             fit_warp(CSRMatrix(item_features),
                      CSRMatrix(user_features),
-                     CSRMatrix(interactions.tocsr()),
+                     CSRMatrix(self._get_positives_lookup_matrix(interactions)),
                      interactions.row,
                      interactions.col,
                      interactions.data,
@@ -290,7 +299,7 @@ class LightFM(object):
         elif loss == 'bpr':
             fit_bpr(CSRMatrix(item_features),
                     CSRMatrix(user_features),
-                    CSRMatrix(interactions.tocsr()),
+                    CSRMatrix(self._get_positives_lookup_matrix(interactions)),
                     interactions.row,
                     interactions.col,
                     interactions.data,
@@ -303,7 +312,7 @@ class LightFM(object):
         elif loss == 'warp-kos':
             fit_warp_kos(CSRMatrix(item_features),
                          CSRMatrix(user_features),
-                         CSRMatrix(interactions.tocsr()),
+                         CSRMatrix(self._get_positives_lookup_matrix(interactions)),
                          interactions.row,
                          shuffle_indices,
                          lightfm_data,
