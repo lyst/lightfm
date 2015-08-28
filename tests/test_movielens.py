@@ -82,11 +82,11 @@ def test_logistic_precision():
 
 def test_bpr_precision():
 
-    model = LightFM(learning_rate=0.05)
+    model = LightFM(learning_rate=0.05,
+                    loss='bpr')
 
     model.fit_partial(train,
-                      epochs=10,
-                      loss='bpr')
+                      epochs=10)
 
     train_precision = precision_at_k(model,
                                      train,
@@ -107,11 +107,11 @@ def test_bpr_precision():
 
 def test_bpr_precision_multithreaded():
 
-    model = LightFM(learning_rate=0.05)
+    model = LightFM(learning_rate=0.05,
+                    loss='bpr')
 
     model.fit_partial(train,
                       epochs=10,
-                      loss='bpr',
                       num_threads=4)
 
     train_precision = precision_at_k(model,
@@ -133,11 +133,11 @@ def test_bpr_precision_multithreaded():
 
 def test_warp_precision():
 
-    model = LightFM(learning_rate=0.05)
+    model = LightFM(learning_rate=0.05,
+                    loss='warp')
 
     model.fit_partial(train,
-                      epochs=10,
-                      loss='warp')
+                      epochs=10)
 
     train_precision = precision_at_k(model,
                                      train,
@@ -158,11 +158,11 @@ def test_warp_precision():
 
 def test_warp_precision_multithreaded():
 
-    model = LightFM(learning_rate=0.05)
+    model = LightFM(learning_rate=0.05,
+                    loss='warp')
 
     model.fit_partial(train,
                       epochs=10,
-                      loss='warp',
                       num_threads=4)
 
     train_precision = precision_at_k(model,
@@ -182,16 +182,103 @@ def test_warp_precision_multithreaded():
     assert full_test_auc > 0.9
 
 
+def test_warp_precision_adadelta():
+
+    model = LightFM(learning_schedule='adadelta',
+                    rho=0.95,
+                    epsilon=0.000001,
+                    loss='warp')
+
+    model.fit_partial(train,
+                      epochs=10,
+                      num_threads=1)
+
+    train_precision = precision_at_k(model,
+                                     train,
+                                     10)
+    test_precision = precision_at_k(model,
+                                    test,
+                                    10)
+
+    full_train_auc = full_auc(model, train)
+    full_test_auc = full_auc(model, test)
+
+    assert train_precision > 0.45
+    assert test_precision > 0.07
+
+    assert full_train_auc > 0.94
+    assert full_test_auc > 0.9
+
+
+def test_warp_precision_adadelta_multithreaded():
+
+    model = LightFM(learning_schedule='adadelta',
+                    rho=0.95,
+                    epsilon=0.000001,
+                    loss='warp')
+
+    model.fit_partial(train,
+                      epochs=10,
+                      num_threads=4)
+
+    train_precision = precision_at_k(model,
+                                     train,
+                                     10)
+    test_precision = precision_at_k(model,
+                                    test,
+                                    10)
+
+    full_train_auc = full_auc(model, train)
+    full_test_auc = full_auc(model, test)
+
+    assert train_precision > 0.45
+    assert test_precision > 0.07
+
+    assert full_train_auc > 0.94
+    assert full_test_auc > 0.9
+
+
+def test_warp_kos_precision():
+
+    # Remove all negative examples
+    training = train.copy()
+    training.data[training.data < 1] = 0
+    training = training.tocsr()
+    training.eliminate_zeros()
+
+    model = LightFM(learning_rate=0.05, k=5,
+                    loss='warp-kos')
+
+    model.fit_partial(training,
+                      epochs=10)
+
+    train_precision = precision_at_k(model,
+                                     training,
+                                     10)
+    test_precision = precision_at_k(model,
+                                    test,
+                                    10)
+
+    full_train_auc = full_auc(model, training)
+    full_test_auc = full_auc(model, test)
+
+    assert train_precision > 0.44
+    assert test_precision > 0.06
+
+    assert full_train_auc > 0.9
+    assert full_test_auc > 0.87
+
+
 def test_warp_stability():
 
     learning_rates = (0.05, 0.1, 0.5)
 
     for lrate in learning_rates:
 
-        model = LightFM(learning_rate=lrate)
+        model = LightFM(learning_rate=lrate,
+                        loss='warp')
         model.fit_partial(train,
-                          epochs=10,
-                          loss='warp')
+                          epochs=10)
 
         assert not np.isnan(model.user_embeddings).any()
         assert not np.isnan(model.item_embeddings).any()
