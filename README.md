@@ -6,7 +6,7 @@ The LightFM model incorporates both item and user metadata into the traditional 
 
 The details of the approach are described in the LightFM paper, available on [arXiv](http://arxiv.org/abs/1507.08439).
 
-The model can be trained using three methods:
+The model can be trained using four methods:
 
 - logistic loss: useful when both positive (1) and negative (-1) interactions
                  are present.
