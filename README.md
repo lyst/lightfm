@@ -47,11 +47,11 @@ Assuming `train` is a (no_users, no_items) sparse matrix (with 1s denoting posit
 ```python
 model = fit(train, epochs=20)
 ```
-This will assume that each item and each user is described by their own specific feature.
+This will train a traditional MF model, as no user or item features have been supplied.
 
 To get predictions, call `model.predict`:
 ```python
-predictions = model.predict(test.row, test_col)
+predictions = model.predict(test_user_ids, test_item_ids)
 ```
 
 User and item features can be incorporated into training by passing them into the `fit` method. Assuming `user_features` is a (no_users, no_user_features) sparse matrix (and similarly for `item_features`), you can call
@@ -60,8 +60,8 @@ model = fit(train,
             user_features=user_features,
             item_features=item_features,
             epochs=20)
-predictions = model.predict(test.row,
-                            test_col,
+predictions = model.predict(test_user_ids,
+                            test_item_ids,
                             user_features=user_features,
                             item_features=item_features)
 ```
@@ -69,8 +69,16 @@ to train the model and obtain predictions.
 
 Both training and prediction can employ multiple cores for speed:
 ```python
-model = fit(train, epochs=20, num_threads=4)
-predictions = model.predict(test.row, test_col, num_threads=4)
+model.fit(train, epochs=20, num_threads=4)
+predictions = model.predict(test_user_ids, test_item_ids, num_threads=4)
+```
+
+This implementation uses asynchronous stochastic gradient descent [6] for training. This can lead to lower accuracy when the interaction matrix (or the feature matrices) are very dense and a large number of threads is used. In practice, however, training on a sparse dataset with 20 threads does not lead to a measurable loss of accuracy.
+
+In an implicit feedback setting, the BPR, WARP, or k-OS WARP loss functions can be used. If `train` is a sparse matrix with positive entries representing positive interactions, the model can be trained as follows:
+```python
+model = LightFM(no_components=30, loss='warp')
+model = fit(train, epochs=20)
 ```
 
 ## Examples
@@ -104,3 +112,5 @@ for online learning and stochastic optimization." The Journal of Machine Learnin
 
 [5] Zeiler, Matthew D. "ADADELTA: An adaptive learning rate method."
 arXiv preprint arXiv:1212.5701 (2012).
+
+[6] Recht, Benjamin, et al. "Hogwild: A lock-free approach to parallelizing stochastic gradient descent." Advances in Neural Information Processing Systems. 2011.
