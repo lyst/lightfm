@@ -1,4 +1,6 @@
-# Lightfm
+# LightFM
+
+![LightFM logo](lightfm.png)
 
 A Python implementation of LightFM, a hybrid recommendation algorithm.
 
