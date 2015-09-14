@@ -45,7 +45,7 @@ model = LightFM(no_components=30)
 
 Assuming `train` is a (no_users, no_items) sparse matrix (with 1s denoting positive, and -1s negative interactions), you can fit a traditional matrix factorization model by calling
 ```python
-model = fit(train, epochs=20)
+model.fit(train, epochs=20)
 ```
 This will train a traditional MF model, as no user or item features have been supplied.
 
@@ -56,10 +56,10 @@ predictions = model.predict(test_user_ids, test_item_ids)
 
 User and item features can be incorporated into training by passing them into the `fit` method. Assuming `user_features` is a (no_users, no_user_features) sparse matrix (and similarly for `item_features`), you can call
 ```python
-model = fit(train,
-            user_features=user_features,
-            item_features=item_features,
-            epochs=20)
+model.fit(train,
+          user_features=user_features,
+          item_features=item_features,
+          epochs=20)
 predictions = model.predict(test_user_ids,
                             test_item_ids,
                             user_features=user_features,
@@ -78,7 +78,7 @@ This implementation uses asynchronous stochastic gradient descent [6] for traini
 In an implicit feedback setting, the BPR, WARP, or k-OS WARP loss functions can be used. If `train` is a sparse matrix with positive entries representing positive interactions, the model can be trained as follows:
 ```python
 model = LightFM(no_components=30, loss='warp')
-model = fit(train, epochs=20)
+model.fit(train, epochs=20)
 ```
 
 ## Examples
