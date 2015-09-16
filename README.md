@@ -85,7 +85,7 @@ model.fit(train, epochs=20)
 
 Check the `examples` directory for more examples.
 
-The [Movielens example](/examples/movielens/example.ipynb) shows how to use `lightfm` on the Movielens dataset, both with and without using movie metadata.
+The [Movielens example](/examples/movielens/example.ipynb) shows how to use `lightfm` on the Movielens dataset, both with and without using movie metadata. [Another example](/examples/movielens/learning_schedules.ipynb) compares the performance of the adagrad and adadelta learning schedules.
 
 ## Development
 Pull requests are welcome. To install for development:
