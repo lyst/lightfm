@@ -26,20 +26,59 @@ def test_matrix_types():
                 sp.csr_matrix,
                 sp.csc_matrix)
 
+    dtypes = (np.int32,
+              np.int64,
+              np.float32,
+              np.float64)
+
     no_users, no_items = (10, 100)
     no_features = 20
 
     for mattype in mattypes:
-        train = mattype((no_users,
-                         no_items),
-                        dtype=np.int32)
+        for dtype in dtypes:
+            train = mattype((no_users,
+                             no_items),
+                            dtype=dtype)
 
-        user_features = mattype((no_users,
-                                 no_features),
-                                dtype=np.int32)
-        item_features = mattype((no_items,
-                                 no_features),
-                                dtype=np.int32)
+            user_features = mattype((no_users,
+                                     no_features),
+                                    dtype=dtype)
+            item_features = mattype((no_items,
+                                     no_features),
+                                    dtype=dtype)
+
+            model = LightFM()
+            model.fit_partial(train,
+                              user_features=user_features,
+                              item_features=item_features)
+
+            model.predict(np.random.randint(0, no_users, 10).astype(np.int32),
+                          np.random.randint(0, no_items, 10).astype(np.int32),
+                          user_features=user_features,
+                          item_features=item_features)
+
+
+def test_input_dtypes():
+
+    dtypes = (np.int32,
+              np.int64,
+              np.float32,
+              np.float64)
+
+    no_users, no_items = (10, 100)
+    no_features = 20
+
+    for dtype in dtypes:
+        train = sp.coo_matrix((no_users,
+                               no_items),
+                              dtype=dtype)
+
+        user_features = sp.coo_matrix((no_users,
+                                       no_features),
+                                      dtype=dtype)
+        item_features = sp.coo_matrix((no_items,
+                                       no_features),
+                                      dtype=dtype)
 
         model = LightFM()
         model.fit_partial(train,
