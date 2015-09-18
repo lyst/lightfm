@@ -9,6 +9,9 @@ from .lightfm_fast import (CSRMatrix, FastLightFM,
                            fit_warp, fit_bpr, fit_warp_kos)
 
 
+CYTHON_DTYPE = np.int32
+
+
 class LightFM(object):
 
     def __init__(self, no_components=10, k=5, n=10,
@@ -180,6 +183,13 @@ class LightFM(object):
         else:
             return mat
 
+    def _to_cython_dtype(self, mat):
+
+        if mat.dtype != CYTHON_DTYPE:
+            return mat.astype(CYTHON_DTYPE)
+        else:
+            return mat
+
     def fit(self, interactions, user_features=None, item_features=None,
             epochs=1, num_threads=1, verbose=False):
 
@@ -226,6 +236,10 @@ class LightFM(object):
                                                            n_items,
                                                            user_features,
                                                            item_features)
+
+        interactions = self._to_cython_dtype(interactions)
+        user_features = self._to_cython_dtype(user_features)
+        item_features = self._to_cython_dtype(item_features)
 
         if self.item_embeddings is None:
             # Initialise latent factors only if this is the first call
@@ -364,6 +378,9 @@ class LightFM(object):
                                                            n_items,
                                                            user_features,
                                                            item_features)
+
+        user_features = self._to_cython_dtype(user_features)
+        item_features = self._to_cython_dtype(item_features)
 
         lightfm_data = FastLightFM(self.item_embeddings,
                                    self.item_embedding_gradients,
