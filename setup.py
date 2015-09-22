@@ -23,9 +23,16 @@ def set_gcc():
     Try to find and use GCC on OSX for OpenMP support.
     """
 
+    # For macports and homebrew
+    patterns = ['/opt/local/bin/gcc-mp-[0-9].[0-9]',
+                '/usr/local/bin/gcc-[0-9].[0-9]']
+
     if 'darwin' in platform.platform().lower():
 
-        gcc_binaries = sorted(glob.glob('/usr/local/bin/gcc-*'))
+        gcc_binaries = []
+        for pattern in patterns:
+            gcc_binaries += glob.glob(pattern)
+        gcc_binaries.sort()
 
         if gcc_binaries:
             _, gcc = os.path.split(gcc_binaries[-1])
