@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased][unreleased]
+## [1.5][2015-09-24]
 ### Changed
 - when installing on OSX, search macports install location for gcc
 
