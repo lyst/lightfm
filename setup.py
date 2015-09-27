@@ -34,7 +34,9 @@ def set_gcc():
 
     # For macports and homebrew
     patterns = ['/opt/local/bin/gcc-mp-[0-9].[0-9]',
-                '/usr/local/bin/gcc-[0-9].[0-9]']
+                '/opt/local/bin/gcc-mp-[0-9]',
+                '/usr/local/bin/gcc-[0-9].[0-9]',
+                '/usr/local/bin/gcc-[0-9]']
 
     if 'darwin' in platform.platform().lower():
 

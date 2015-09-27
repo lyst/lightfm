@@ -4,6 +4,8 @@
 ### Changed
 - when installing into an Anaconda distribution, drop -march=native compiler flag
   due to assembler issues.
+- when installing on OSX, search macports and homebrew install location for gcc
+  version 5.x
 
 ## [1.5][2015-09-24]
 ### Changed
