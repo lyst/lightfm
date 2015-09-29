@@ -122,10 +122,10 @@ set_gcc()
 
 setup(
     name='lightfm',
-    version='1.5',
+    version='1.6',
     description='LightFM recommendation model',
     url='https://github.com/lyst/lightfm',
-    download_url='https://github.com/lyst/lightfm/tarball/1.5',
+    download_url='https://github.com/lyst/lightfm/tarball/1.6',
     packages=['lightfm'],
     install_requires=['numpy'],
     tests_require=['pytest', 'requests', 'scikit-learn', 'scipy'],

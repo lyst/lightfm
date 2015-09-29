@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## [1.6][2015-09-29]
 ### Changed
 - when installing into an Anaconda distribution, drop -march=native compiler flag
   due to assembler issues.
