@@ -8,3 +8,5 @@ build/
 dist/
 bench/
 *#*
+*.7z
+*.xml
