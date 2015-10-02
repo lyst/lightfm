@@ -4,8 +4,21 @@ import platform
 import subprocess
 import sys
 
+import setuptools
 from setuptools import setup, Command, Extension
 from setuptools.command.test import test as TestCommand
+
+
+def remove_illegal_compiler_flags():
+
+    # This is an issue where building against default OSX
+    # Python distribution. Its default CFLAGS are for clang
+    # and do not work with gcc. We need to override them here
+    # to make it work.
+    flags = setuptools.distutils.sysconfig._config_vars['CFLAGS']
+    fixed_flags = flags.replace('-Wshorten-64-to-32', '')
+
+    setuptools.distutils.sysconfig._config_vars['CFLAGS'] = fixed_flags
 
 
 def define_extensions(file_ext):
@@ -20,7 +33,7 @@ def define_extensions(file_ext):
     # know we're dealing with Anaconda
     if 'anaconda' not in sys.version.lower():
         compile_args.append('-march=native')
-        
+
     return [Extension("lightfm.lightfm_fast",
                       ['lightfm/lightfm_fast%s' % file_ext],
                       extra_link_args=["-fopenmp"],
@@ -39,6 +52,8 @@ def set_gcc():
                 '/usr/local/bin/gcc-[0-9]']
 
     if 'darwin' in platform.platform().lower():
+
+        remove_illegal_compiler_flags()
 
         gcc_binaries = []
         for pattern in patterns:
