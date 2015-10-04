@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased][unreleased]
+### Changed
+- fixed bug where item momentum would be incorrectly used in adadelta training for user features (thanks to Jong Wook Kim @jongwook for the bug report).
+
 ## [1.6][2015-09-29]
 ### Changed
 - when installing into an Anaconda distribution, drop -march=native compiler flag

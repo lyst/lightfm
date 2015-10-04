@@ -440,7 +440,7 @@ cdef inline void update(double loss,
                                              lightfm.eps)
         avg_learning_rate += update_features(user_features, lightfm.user_features,
                                              lightfm.user_feature_gradients,
-                                             lightfm.item_feature_momentum,
+                                             lightfm.user_feature_momentum,
                                              i, user_start_index, user_stop_index,
                                              loss * item_component,
                                              lightfm.adadelta,
