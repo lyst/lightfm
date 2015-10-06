@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased][unreleased]
+### Changed
+- entirely drop `-march=native` from compiler flags due to more issues on various OSX installations
+
 ## [1.6][2015-09-29]
 ### Changed
 - when installing into an Anaconda distribution, drop -march=native compiler flag
