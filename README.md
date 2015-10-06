@@ -87,6 +87,8 @@ Check the `examples` directory for more examples.
 
 The [Movielens example](/examples/movielens/example.ipynb) shows how to use `lightfm` on the Movielens dataset, both with and without using movie metadata. [Another example](/examples/movielens/learning_schedules.ipynb) compares the performance of the adagrad and adadelta learning schedules.
 
+The [Cross Validated example](/examples/crossvalidated/example.ipynb) shows how to use `lightfm` on a dataset from [stats.stackexchange.com](http://stats.stackexchange.com) with both item and user features.
+
 ## Development
 Pull requests are welcome. To install for development:
 
