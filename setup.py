@@ -26,14 +26,6 @@ def define_extensions(file_ext):
     compile_args = ['-fopenmp',
                     '-ffast-math']
 
-    # There are problems with illegal ASM instructions
-    # when using the Anaconda distribution (at least on OSX).
-    # This could be because Anaconda uses its own assembler?
-    # To work around this we do not add -march=native if we
-    # know we're dealing with Anaconda
-    if 'anaconda' not in sys.version.lower():
-        compile_args.append('-march=native')
-
     return [Extension("lightfm.lightfm_fast",
                       ['lightfm/lightfm_fast%s' % file_ext],
                       extra_link_args=["-fopenmp"],
