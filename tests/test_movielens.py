@@ -504,3 +504,62 @@ def test_regularization():
 
     assert roc_auc_score(train.data, train_predictions) > 0.80
     assert roc_auc_score(test.data, test_predictions) > 0.75
+
+
+def test_training_schedules():
+
+    model = LightFM(no_components=10,
+                    learning_schedule='adagrad')
+    model.fit_partial(train,
+                      epochs=0)
+
+    assert (model.item_embedding_gradients == 1).all()
+    assert (model.item_embedding_momentum == 0).all()
+    assert (model.item_bias_gradients == 1).all()
+    assert (model.item_bias_momentum == 0).all()
+
+    assert (model.user_embedding_gradients == 1).all()
+    assert (model.user_embedding_momentum == 0).all()
+    assert (model.user_bias_gradients == 1).all()
+    assert (model.user_bias_momentum == 0).all()
+
+    model.fit_partial(train,
+                      epochs=1)
+
+    assert (model.item_embedding_gradients > 1).any()
+    assert (model.item_embedding_momentum == 0).all()
+    assert (model.item_bias_gradients > 1).any()
+    assert (model.item_bias_momentum == 0).all()
+
+    assert (model.user_embedding_gradients > 1).any()
+    assert (model.user_embedding_momentum == 0).all()
+    assert (model.user_bias_gradients > 1).any()
+    assert (model.user_bias_momentum == 0).all()
+
+    model = LightFM(no_components=10,
+                    learning_schedule='adadelta')
+    model.fit_partial(train,
+                      epochs=0)
+
+    assert (model.item_embedding_gradients == 0).all()
+    assert (model.item_embedding_momentum == 0).all()
+    assert (model.item_bias_gradients == 0).all()
+    assert (model.item_bias_momentum == 0).all()
+
+    assert (model.user_embedding_gradients == 0).all()
+    assert (model.user_embedding_momentum == 0).all()
+    assert (model.user_bias_gradients == 0).all()
+    assert (model.user_bias_momentum == 0).all()
+
+    model.fit_partial(train,
+                      epochs=1)
+
+    assert (model.item_embedding_gradients > 0).any()
+    assert (model.item_embedding_momentum > 0).any()
+    assert (model.item_bias_gradients > 0).any()
+    assert (model.item_bias_momentum > 0).any()
+
+    assert (model.user_embedding_gradients > 0).any()
+    assert (model.user_embedding_momentum > 0).any()
+    assert (model.user_bias_gradients > 0).any()
+    assert (model.user_bias_momentum > 0).any()
