@@ -89,6 +89,8 @@ The [Movielens example](/examples/movielens/example.ipynb) shows how to use `lig
 
 The [Cross Validated example](/examples/crossvalidated/example.ipynb) shows how to use `lightfm` on a dataset from [stats.stackexchange.com](http://stats.stackexchange.com) with both item and user features.
 
+The [Kaggle coupon purchase prediction](https://github.com/tdeboissiere/Kaggle/blob/master/Ponpare/ponpare_lightfm.ipynb) example applies LightFM to predicting coupon purchases.
+
 ## Development
 Pull requests are welcome. To install for development:
 
