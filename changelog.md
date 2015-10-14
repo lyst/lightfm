@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## [1.7][2015-10-14]
 ### Changed
 - fixed bug where item momentum would be incorrectly used in adadelta training for user features (thanks to Jong Wook Kim @jongwook for the bug report).
 - user and item features are now floats (instead of ints), allowing fractional feature weights to be used when fitting models.
