@@ -78,7 +78,7 @@ cdef class CSRMatrix:
 
     cdef int[::1] indices
     cdef int[::1] indptr
-    cdef int[::1] data
+    cdef flt[::1] data
 
     cdef int rows
     cdef int cols
@@ -214,7 +214,7 @@ cdef inline void compute_representation(CSRMatrix features,
                                         FastLightFM lightfm,
                                         int row_id,
                                         double scale,
-                                        float *representation) nogil:
+                                        flt *representation) nogil:
     """
     Compute latent representation for row_id.
     The last element of the representation is the bias.
@@ -603,7 +603,7 @@ def fit_logistic(CSRMatrix item_features,
                  CSRMatrix user_features,
                  int[::1] user_ids,
                  int[::1] item_ids,
-                 int[::1] Y,
+                 flt[::1] Y,
                  int[::1] shuffle_indices,
                  FastLightFM lightfm,
                  double learning_rate,
@@ -616,7 +616,8 @@ def fit_logistic(CSRMatrix item_features,
 
     cdef int i, no_examples, user_id, item_id, row
     cdef double prediction, loss
-    cdef int y, y_row
+    cdef int y
+    cdef flt y_row
     cdef flt *user_repr
     cdef flt *it_repr
 
@@ -686,7 +687,7 @@ def fit_warp(CSRMatrix item_features,
              CSRMatrix interactions,
              int[::1] user_ids,
              int[::1] item_ids,
-             int[::1] Y,
+             flt[::1] Y,
              int[::1] shuffle_indices,
              FastLightFM lightfm,
              double learning_rate,
@@ -972,7 +973,7 @@ def fit_bpr(CSRMatrix item_features,
             CSRMatrix interactions,
             int[::1] user_ids,
             int[::1] item_ids,
-            int[::1] Y,
+            flt[::1] Y,
             int[::1] shuffle_indices,
             FastLightFM lightfm,
             double learning_rate,
