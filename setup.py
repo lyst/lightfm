@@ -4,7 +4,7 @@ import platform
 import subprocess
 import sys
 
-from setuptools import setup, Command, Extension
+from setuptools import Command, Extension, setup
 from setuptools.command.test import test as TestCommand
 
 
@@ -20,7 +20,7 @@ def define_extensions(file_ext):
     # know we're dealing with Anaconda
     if 'anaconda' not in sys.version.lower():
         compile_args.append('-march=native')
-        
+
     return [Extension("lightfm.lightfm_fast",
                       ['lightfm/lightfm_fast%s' % file_ext],
                       extra_link_args=["-fopenmp"],

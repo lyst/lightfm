@@ -33,6 +33,8 @@ Install from pypi using pip: `pip install lightfm`.
 
 Note for OSX users: due to its use of OpenMP, `lightfm` does not compile under Clang. To install it, you will need a reasonably recent version of `gcc` (from Homebrew for instance). This should be picked up by `setup.py`; if it is not, please open an issue.
 
+Building with the default Python distribution included in OSX is also not supported; please try the version from Homebrew or Anaconda.
+
 ## Usage
 Model fitting is very straightforward.
 
