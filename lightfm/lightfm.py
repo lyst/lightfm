@@ -9,7 +9,7 @@ from .lightfm_fast import (CSRMatrix, FastLightFM,
                            fit_warp, fit_bpr, fit_warp_kos)
 
 
-CYTHON_DTYPE = np.int32
+CYTHON_DTYPE = np.float32
 
 
 class LightFM(object):
