@@ -2,6 +2,8 @@
 
 ![LightFM logo](lightfm.png)
 
+[![Circle CI](https://circleci.com/gh/lyst/lightfm.svg?style=svg)](https://circleci.com/gh/lyst/lightfm)
+
 A Python implementation of LightFM, a hybrid recommendation algorithm.
 
 The LightFM model incorporates both item and user metadata into the traditional matrix factorization algorithm. It represents each user and item as the sum of the latent representations of their features, thus allowing recommendations to generalise to new items (via item features) and to new users (via user features).
