@@ -103,7 +103,7 @@ class PyTest(TestCommand):
 
     def initialize_options(self):
         TestCommand.initialize_options(self)
-        self.pytest_args = []
+        self.pytest_args = ['tests/']
 
     def finalize_options(self):
         TestCommand.finalize_options(self)
@@ -127,8 +127,8 @@ setup(
     url='https://github.com/lyst/lightfm',
     download_url='https://github.com/lyst/lightfm/tarball/1.7',
     packages=['lightfm'],
-    install_requires=['numpy'],
-    tests_require=['pytest', 'requests', 'scikit-learn', 'scipy'],
+    install_requires=['numpy', 'scipy'],
+    tests_require=['pytest', 'requests', 'scikit-learn'],
     cmdclass={'test': PyTest, 'cythonize': Cythonize, 'clean': Clean},
     author='Lyst Ltd (Maciej Kula)',
     author_email='data@ly.st',

@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased][unreleased]
+### Changed
+- fix scipy missing from requirements in setup.py
+
 ## [1.7][2015-10-14]
 ### Changed
 - fixed bug where item momentum would be incorrectly used in adadelta training for user features (thanks to Jong Wook Kim @jongwook for the bug report).
