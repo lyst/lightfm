@@ -31,7 +31,7 @@ Two learning rate schedules are implemented:
 - adadelta: [5]
 
 ## Installation
-Install from pypi using pip: `pip install lightfm`.
+Install from pypi using pip: `pip install lightfm`. Everything should work out-of-the box on Linux and Windows using MSVC.
 
 Note for OSX users: due to its use of OpenMP, `lightfm` does not compile under Clang. To install it, you will need a reasonably recent version of `gcc` (from Homebrew for instance). This should be picked up by `setup.py`; if it is not, please open an issue.
 
