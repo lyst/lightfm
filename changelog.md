@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## [1.8][2016-01-14]
 ### Changed
 - fix scipy missing from requirements in setup.py
 - remove dependency on glibc by including a translation of the musl rand_r implementation
