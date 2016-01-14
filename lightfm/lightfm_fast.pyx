@@ -19,12 +19,58 @@ cdef extern from "math.h" nogil:
 
 
 cdef extern from "stdlib.h" nogil:
-    int rand_r(unsigned int*)
     ctypedef void const_void "const void"
     void qsort(void *base, int nmemb, int size,
                int(*compar)(const_void *, const_void *)) nogil
     void* bsearch(const void *key, void *base, int nmemb, int size,
                   int(*compar)(const_void *, const_void *)) nogil
+
+
+# The rand_r implementation included below is a translation of the musl
+# implementation (http://www.musl-libc.org/), which is licensed
+# under the MIT license:
+
+# ----------------------------------------------------------------------
+# Copyright © 2005-2014 Rich Felker, et al.
+
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# ----------------------------------------------------------------------
+
+cdef unsigned int temper(unsigned int x) nogil:
+
+    cdef unsigned int and_1, and_2
+
+    and_1 = 0x9D2C5680
+    and_2 = 0xEFC60000
+
+    x = x ^ (x >> 11)
+    x = x ^ (x << 7 & and_1)
+    x = x ^ (x << 15 & and_2)
+    x = x ^ (x >> 18)
+
+    return x
+
+
+cdef int rand_r(unsigned int * seed) nogil:
+    seed[0] = seed[0] * 1103515245 + 12345
+    return temper(seed[0]) / 2
 
 
 cdef int sample_range(int min_val, int max_val, unsigned int *seed) nogil:

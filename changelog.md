@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 ### Changed
 - fix scipy missing from requirements in setup.py
+- remove dependency on glibc by including a translation of the musl rand_r implementation
 
 ## [1.7][2015-10-14]
 ### Changed
