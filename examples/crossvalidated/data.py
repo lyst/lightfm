@@ -1,5 +1,9 @@
 import codecs
-from HTMLParser import HTMLParser
+try:
+    from html.parser import HTMLParser
+except ImportError:
+    # Python 2 backward compat
+    from HTMLParser import HTMLParser
 import os
 import re
 import subprocess
