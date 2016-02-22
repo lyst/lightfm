@@ -350,7 +350,7 @@ cdef double update_biases(CSRMatrix feature_indices,
 
             local_learning_rate = learning_rate / sqrt(gradients[feature])
             biases[feature] -= local_learning_rate * feature_weight * gradient
-            gradients[feature] += gradient ** 2
+            gradients[feature] += (gradient * feature_weight) ** 2
 
             # Lazy regularization: scale up by the regularization
             # parameter.
@@ -410,7 +410,7 @@ cdef inline double update_features(CSRMatrix feature_indices,
 
             local_learning_rate = learning_rate / sqrt(gradients[feature, component])
             features[feature, component] -= local_learning_rate * feature_weight * gradient
-            gradients[feature, component] += gradient ** 2
+            gradients[feature, component] += (gradient * feature_weight) ** 2
 
             # Lazy regularization: scale up by the regularization
             # parameter.

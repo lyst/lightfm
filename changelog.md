@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased][unreleased]
+### Fixed
+- fixed gradient accumulation in adagrad (the feature value is now correctly used when accumulating gradient).
+  Thanks to Benjamin Wilson for the bug report.
+
 ## [1.8][2016-01-14]
 ### Changed
 - fix scipy missing from requirements in setup.py
