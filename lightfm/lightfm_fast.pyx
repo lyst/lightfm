@@ -746,7 +746,7 @@ def fit_warp(CSRMatrix item_features,
 
     cdef int i, no_examples, user_id, positive_item_id, gamma, max_sampled
     cdef int negative_item_id, sampled, row
-    cdef double positive_prediction, negative_prediction, violation, weight
+    cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS
     cdef flt *user_repr
     cdef flt *pos_it_repr
@@ -797,7 +797,6 @@ def fit_warp(CSRMatrix item_features,
                                                                pos_it_repr,
                                                                lightfm.no_components)
 
-            violation = 0
             sampled = 0
 
             while sampled < max_sampled:
@@ -824,9 +823,7 @@ def fit_warp(CSRMatrix item_features,
                     if in_positives(negative_item_id, user_id, interactions):
                         continue
                     
-                    weight = log(floor((item_features.rows - 1) / sampled))
-                    violation = 1 - positive_prediction + negative_prediction
-                    loss = weight * violation
+                    loss = log(floor((item_features.rows - 1) / sampled))
 
                     # Clip gradients for numerical stability.
                     if loss > MAX_LOSS:
@@ -874,7 +871,7 @@ def fit_warp_kos(CSRMatrix item_features,
     cdef int i, j, no_examples, user_id, positive_item_id, gamma, max_sampled
     cdef int negative_item_id, sampled, row, sampled_positive_item_id
     cdef int user_pids_start, user_pids_stop, no_positives, POS_SAMPLES
-    cdef double positive_prediction, negative_prediction, violation, weight
+    cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS, sampled_positive_prediction
     cdef flt *user_repr
     cdef flt *pos_it_repr
@@ -956,7 +953,6 @@ def fit_warp_kos(CSRMatrix item_features,
                                    pos_it_repr)
 
             # Move on to the WARP step
-            violation = 0
             sampled = 0
 
             while sampled < max_sampled:
@@ -982,9 +978,7 @@ def fit_warp_kos(CSRMatrix item_features,
                     if in_positives(negative_item_id, user_id, data):
                         continue
 
-                    weight = log(floor((item_features.rows - 1) / sampled))
-                    violation = 1 - positive_prediction + negative_prediction
-                    loss = weight * violation
+                    loss = log(floor((item_features.rows - 1) / sampled))
 
                     # Clip gradients for numerical stability.
                     if loss > MAX_LOSS:
