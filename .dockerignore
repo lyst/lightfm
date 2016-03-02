@@ -1,0 +1,6 @@
+*.zip
+*.7z
+*.xml
+examples/crossvalidated/*.7z
+examples/crossvalidated/*.xml
+examples/movielens/*.zip

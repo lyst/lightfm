@@ -37,6 +37,20 @@ Note for OSX users: due to its use of OpenMP, `lightfm` does not compile under C
 
 Building with the default Python distribution included in OSX is also not supported; please try the version from Homebrew or Anaconda.
 
+If you are having problems, you should try using lightfm with Docker (see the next section).
+
+## Using with Docker
+On many systems it may be more convenient to try LightFM out in a Docker container. This repository provides a small Dockerfile sufficient to run LightFM and its examples. To run it:
+
+1. [Install Docker](https://docs.docker.com/compose/install/) and start the docker deamon/virtual machine.
+2. Clone this repository and navigate to it: `git clone git@github.com:lyst/lightfm.git && cd lightfm`.
+3. Run `docker-compose build lightfm` to build the container.
+
+The container should now be ready for use. You can then:
+
+1. Run tests by running `docker-compose run lightfm py.test -x tests/`
+2. Run the movielens example by running `docker-compose run lightfm jupyter notebook examples/movielens/example.ipynb --ip=0.0.0.0`. The notebook will be accessible at port 8888 of your container's IP address.
+
 ## Usage
 Model fitting is very straightforward.
 
