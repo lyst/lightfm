@@ -81,8 +81,8 @@ def _download():
         try:
             subprocess.check_call(['7za', 'x', download_path],
                                   cwd=data_path, stdout=fnull)
-        except subprocess.CalledProcessError:
-            print('You must install p7zip to extract the data.')
+        except (OSError, subprocess.CalledProcessError):
+            raise Exception('You must install p7zip to extract the data.')
 
 
 def _get_raw_data(fname):
