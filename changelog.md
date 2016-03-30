@@ -4,6 +4,9 @@
 ### Fixed
 - fixed gradient accumulation in adagrad (the feature value is now correctly used when accumulating gradient).
   Thanks to Benjamin Wilson for the bug report.
+### Added
+- max_sampled hyperparameter for WARP losses. This allows trading off accuracy for WARP training time: a smaller value
+  will mean less negative sampling and faster training when the model is near the optimum.
 
 ## [1.8][2016-01-14]
 ### Changed

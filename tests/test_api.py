@@ -165,3 +165,6 @@ def test_param_sanity():
 
     with pytest.raises(AssertionError):
         LightFM(item_alpha=-1.0)
+
+    with pytest.raises(ValueError):
+        LightFM(max_sampled=-1.0)
