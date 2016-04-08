@@ -218,7 +218,10 @@ class LightFM(object):
 
         Arguments:
         - coo_matrix interactions: matrix of shape [n_users, n_items] containing
-                                   user-item interactions
+                                   user-item interactions. Will be converted to 
+                                   numpy.float32 dtype if it is not of that type 
+                                   (this conversion may be heavy depending upon 
+                                   matrix size)
         - csr_matrix user_features: array of shape [n_users, n_user_features].
                                     Each row contains that user's weights
                                     over features.
