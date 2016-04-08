@@ -887,7 +887,7 @@ def fit_warp_kos(CSRMatrix item_features,
     gamma = 10
     MAX_LOSS = 10.0
 
-    max_sampled = 10 #item_features.rows / gamma #TODO: undo change when this gets a hyper-parameter (override from master)
+    max_sampled = item_features.rows / gamma
 
     with nogil, parallel(num_threads=num_threads):
 
