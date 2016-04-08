@@ -16,6 +16,7 @@ cdef extern from "math.h" nogil:
     double exp(double)
     double log(double)
     double floor(double)
+    float abs(float)
 
 
 cdef extern from "stdlib.h" nogil:
@@ -668,6 +669,7 @@ def fit_logistic(CSRMatrix item_features,
     cdef double prediction, loss
     cdef int y
     cdef flt y_row
+    cdef flt label, example_weight
     cdef flt *user_repr
     cdef flt *it_repr
 
@@ -704,15 +706,18 @@ def fit_logistic(CSRMatrix item_features,
                                                               it_repr,
                                                               lightfm.no_components))
 
+            # The value of the interaction matrix entry denotes
+            # both the class label and the example weight.
             # Any value less or equal to zero
             # is a negative interaction.
-            y_row = Y[row]
-            if y_row <= 0:
-                y = 0
-            else:
-                y = 1
+            example_weight = Y[row]
 
-            loss = (prediction - y)
+            if example_weight <= 0.0:
+                label = 0.0
+            else:
+                label = 1.0
+
+            loss = abs(example_weight) * (prediction - label)
             update(loss,
                    item_features,
                    user_features,
@@ -748,8 +753,9 @@ def fit_warp(CSRMatrix item_features,
     Fit the model using the WARP loss.
     """
 
-    cdef int i, no_examples, user_id, positive_item_id, gamma
+    cdef int i, no_examples, user_id, positive_item_id
     cdef int negative_item_id, sampled, row
+    cdef flt example_weight
     cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS
     cdef flt *user_repr
@@ -776,7 +782,13 @@ def fit_warp(CSRMatrix item_features,
             user_id = user_ids[row]
             positive_item_id = item_ids[row]
 
-            if not Y[row] == 1:
+            # The value of the interaction matrix entry denotes
+            # both the class label and the example weight.
+            # Any value less or equal to zero
+            # is a negative interaction.
+            example_weight = Y[row]
+
+            if example_weight <= 0.0:
                 continue
 
             compute_representation(user_features,
@@ -824,7 +836,7 @@ def fit_warp(CSRMatrix item_features,
                     if in_positives(negative_item_id, user_id, interactions):
                         continue
                     
-                    loss = log(floor((item_features.rows - 1) / sampled))
+                    loss = example_weight * log(floor((item_features.rows - 1) / sampled))
 
                     # Clip gradients for numerical stability.
                     if loss > MAX_LOSS:
@@ -869,11 +881,12 @@ def fit_warp_kos(CSRMatrix item_features,
     Fit the model using the WARP loss.
     """
 
-    cdef int i, j, no_examples, user_id, positive_item_id, gamma
+    cdef int i, j, no_examples, user_id, positive_item_id, sampled_id, positives_calculated
     cdef int negative_item_id, sampled, row, sampled_positive_item_id
     cdef int user_pids_start, user_pids_stop, no_positives, POS_SAMPLES
     cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS, sampled_positive_prediction
+    cdef flt example_weight
     cdef flt *user_repr
     cdef flt *pos_it_repr
     cdef flt *neg_it_repr
@@ -914,10 +927,17 @@ def fit_warp_kos(CSRMatrix item_features,
 
             # Sample k-th positive item
             no_positives = int_min(n, user_pids_stop - user_pids_start)
+            positives_calculated = 0
+
             for j in range(no_positives):
-                sampled_positive_item_id = data.indices[sample_range(user_pids_start,
-                                                                     user_pids_stop,
-                                                                     &random_states[openmp.omp_get_thread_num()])]
+                sampled_id = sample_range(user_pids_start,
+                                          user_pids_stop,
+                                          &random_states[openmp.omp_get_thread_num()])
+                sampled_positive_item_id = data.indices[sampled_id]
+                example_weight = data.data[sampled_id]
+
+                if example_weight <= 0.0:
+                    continue
 
                 compute_representation(item_features,
                                        lightfm.item_features,
@@ -934,13 +954,15 @@ def fit_warp_kos(CSRMatrix item_features,
                 pos_pairs[j].idx = sampled_positive_item_id
                 pos_pairs[j].val = sampled_positive_prediction
 
+                positives_calculated =+ 1
+
             qsort(pos_pairs,
-                  no_positives,
+                  positives_calculated,
                   sizeof(Pair),
                   reverse_pair_compare)
 
-            positive_item_id = pos_pairs[int_min(k, no_positives) - 1].idx
-            positive_prediction = pos_pairs[int_min(k, no_positives) - 1].val
+            positive_item_id = pos_pairs[int_min(k, positives_calculated) - 1].idx
+            positive_prediction = pos_pairs[int_min(k, positives_calculated) - 1].val
 
             compute_representation(item_features,
                                    lightfm.item_features,
@@ -1026,6 +1048,7 @@ def fit_bpr(CSRMatrix item_features,
     cdef int negative_item_id, sampled, row
     cdef double positive_prediction, negative_prediction
     cdef unsigned int[::1] random_states
+    cdef flt example_weight
     cdef flt *user_repr
     cdef flt *pos_it_repr
     cdef flt *neg_it_repr
@@ -1045,7 +1068,13 @@ def fit_bpr(CSRMatrix item_features,
         for i in prange(no_examples):
             row = shuffle_indices[i]
 
-            if not Y[row] == 1:
+            # The value of the interaction matrix entry denotes
+            # both the class label and the example weight.
+            # Any value less or equal to zero
+            # is a negative interaction.
+            example_weight = Y[row]
+
+            if example_weight <= 0.0:
                 continue
 
             user_id = user_ids[row]
@@ -1086,7 +1115,7 @@ def fit_bpr(CSRMatrix item_features,
                                                                neg_it_repr,
                                                                lightfm.no_components)
 
-            warp_update(sigmoid(positive_prediction - negative_prediction),
+            warp_update(example_weight * sigmoid(positive_prediction - negative_prediction),
                         item_features,
                         user_features,
                         user_id,
