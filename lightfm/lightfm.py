@@ -18,7 +18,7 @@ class LightFM(object):
                  learning_schedule='adagrad',
                  loss='logistic',
                  learning_rate=0.05, rho=0.95, epsilon=1e-6,
-                 item_alpha=0.0, user_alpha=0.0):
+                 item_alpha=0.0, user_alpha=0.0, max_sampled=None):
         """
         Initialise the model.
 
@@ -53,6 +53,9 @@ class LightFM(object):
         - float epsilon: conditioning parameter for the adadelta learning schedule. Default: 1e-6
         - float item_alpha: L2 penalty on item features. Default: 0.0
         - float user_alpha: L2 penalty on user features. Default: 0.0
+        - int max_sampled: maximum number of negative samples used during WARP fitting. Defaults to
+          the number of items divided by 10. Setting this to lower number may improve the speed of
+          WARP fitting at the expense of some accuracy.
 
         [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from implicit feedback."
             Proceedings of the Twenty-Fifth Conference on Uncertainty in Artificial
@@ -79,6 +82,9 @@ class LightFM(object):
         assert learning_schedule in ('adagrad', 'adadelta')
         assert loss in ('logistic', 'warp', 'bpr', 'warp-kos')
 
+        if max_sampled is not None and max_sampled < 1:
+            raise ValueError('max_sampled must be a positive integer')
+
         self.loss = loss
         self.learning_schedule = learning_schedule
 
@@ -90,6 +96,7 @@ class LightFM(object):
 
         self.rho = rho
         self.epsilon = epsilon
+        self.max_sampled = max_sampled
 
         self.item_alpha = item_alpha
         self.user_alpha = user_alpha
@@ -278,6 +285,9 @@ class LightFM(object):
         shuffle_indices = np.arange(len(interactions.data), dtype=np.int32)
         np.random.shuffle(shuffle_indices)
 
+        max_sampled = (self.max_sampled if self.max_sampled is not None
+                       else self.item_embeddings.shape[0] / 10)
+
         lightfm_data = FastLightFM(self.item_embeddings,
                                    self.item_embedding_gradients,
                                    self.item_embedding_momentum,
@@ -294,7 +304,8 @@ class LightFM(object):
                                    int(self.learning_schedule == 'adadelta'),
                                    self.learning_rate,
                                    self.rho,
-                                   self.epsilon)
+                                   self.epsilon,
+                                   max_sampled)
 
         # Call the estimation routines.
         if loss == 'warp':
@@ -382,6 +393,9 @@ class LightFM(object):
         user_features = self._to_cython_dtype(user_features)
         item_features = self._to_cython_dtype(item_features)
 
+        max_sampled = (self.max_sampled if self.max_sampled is not None
+                       else self.item_embeddings.shape[0] / 10)
+
         lightfm_data = FastLightFM(self.item_embeddings,
                                    self.item_embedding_gradients,
                                    self.item_embedding_momentum,
@@ -398,7 +412,8 @@ class LightFM(object):
                                    int(self.learning_schedule == 'adadelta'),
                                    self.learning_rate,
                                    self.rho,
-                                   self.epsilon)
+                                   self.epsilon,
+                                   max_sampled)
 
         predictions = np.empty(len(user_ids), dtype=np.float64)
 

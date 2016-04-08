@@ -238,6 +238,27 @@ def test_warp_precision_adadelta_multithreaded():
     assert full_test_auc > 0.9
 
 
+def test_warp_precision_max_sampled():
+
+    model = LightFM(learning_rate=0.05,
+                    max_sampled=1,
+                    loss='warp')
+
+    # This is equivalent to a no-op pass
+    # over the training data
+    model.max_sampled = 0
+
+    model.fit_partial(train,
+                      epochs=1)
+
+    full_train_auc = full_auc(model, train)
+    full_test_auc = full_auc(model, test)
+
+    # The AUC should be no better than random
+    assert full_train_auc < 0.55
+    assert full_test_auc < 0.55
+
+
 def test_warp_kos_precision():
 
     # Remove all negative examples

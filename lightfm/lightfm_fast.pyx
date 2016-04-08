@@ -182,6 +182,7 @@ cdef class FastLightFM:
     cdef flt learning_rate
     cdef flt rho
     cdef flt eps
+    cdef int max_sampled
 
     cdef double item_scale
     cdef double user_scale
@@ -203,7 +204,8 @@ cdef class FastLightFM:
                  int adadelta,
                  flt learning_rate,
                  flt rho,
-                 flt epsilon):
+                 flt epsilon,
+                 int max_sampled):
 
         self.item_features = item_features
         self.item_feature_gradients = item_feature_gradients
@@ -227,6 +229,8 @@ cdef class FastLightFM:
         self.user_scale = 1.0
 
         self.adadelta = adadelta
+
+        self.max_sampled = max_sampled
 
 
 cdef inline flt sigmoid(flt v) nogil:
@@ -744,7 +748,7 @@ def fit_warp(CSRMatrix item_features,
     Fit the model using the WARP loss.
     """
 
-    cdef int i, no_examples, user_id, positive_item_id, gamma, max_sampled
+    cdef int i, no_examples, user_id, positive_item_id, gamma
     cdef int negative_item_id, sampled, row
     cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS
@@ -758,10 +762,7 @@ def fit_warp(CSRMatrix item_features,
                                       size=num_threads).astype(np.uint32)
 
     no_examples = Y.shape[0]
-    gamma = 10
     MAX_LOSS = 10.0
-
-    max_sampled = item_features.rows / gamma
 
     with nogil, parallel(num_threads=num_threads):
 
@@ -799,7 +800,7 @@ def fit_warp(CSRMatrix item_features,
 
             sampled = 0
 
-            while sampled < max_sampled:
+            while sampled < lightfm.max_sampled:
 
                 sampled = sampled + 1
                 negative_item_id = (rand_r(&random_states[openmp.omp_get_thread_num()])
@@ -868,7 +869,7 @@ def fit_warp_kos(CSRMatrix item_features,
     Fit the model using the WARP loss.
     """
 
-    cdef int i, j, no_examples, user_id, positive_item_id, gamma, max_sampled
+    cdef int i, j, no_examples, user_id, positive_item_id, gamma
     cdef int negative_item_id, sampled, row, sampled_positive_item_id
     cdef int user_pids_start, user_pids_stop, no_positives, POS_SAMPLES
     cdef double positive_prediction, negative_prediction
@@ -884,10 +885,7 @@ def fit_warp_kos(CSRMatrix item_features,
                                       size=num_threads).astype(np.uint32)
 
     no_examples = user_ids.shape[0]
-    gamma = 10
     MAX_LOSS = 10.0
-
-    max_sampled = item_features.rows / gamma
 
     with nogil, parallel(num_threads=num_threads):
 
@@ -955,7 +953,7 @@ def fit_warp_kos(CSRMatrix item_features,
             # Move on to the WARP step
             sampled = 0
 
-            while sampled < max_sampled:
+            while sampled < lightfm.max_sampled:
 
                 sampled = sampled + 1
                 negative_item_id = (rand_r(&random_states[openmp.omp_get_thread_num()])
