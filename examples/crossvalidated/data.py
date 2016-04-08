@@ -22,6 +22,7 @@ from sklearn.feature_extraction import DictVectorizer
 class MLStripper(HTMLParser):
 
     def __init__(self):
+        HTMLParser.__init__(self)
         self.reset()
         self.fed = []
 
