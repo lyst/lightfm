@@ -97,7 +97,7 @@ def get_movielens_item_metadata(use_item_ids):
     """
     Build a matrix of genre features (no_items, no_features).
 
-    If use_item_ids is True, per-item feeatures will also be used.
+    If use_item_ids is True, per-item features will also be used.
     """
 
     features = {}
