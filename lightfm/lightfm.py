@@ -217,12 +217,15 @@ class LightFM(object):
         the point where the last call finished.
 
         Arguments:
-        - coo_matrix interactions: matrix of shape [n_users, n_items] containing
-                                   user-item interactions
-        - csr_matrix user_features: array of shape [n_users, n_user_features].
+        - coo_matrix interactions: np.float32 matrix of shape [n_users, n_items] containing
+                                   user-item interactions. Matrix entry values
+                                   are interpreted as sample weights for each
+                                   interaction. The class (positive/negative)
+                                   of each interaction is given by its sign.
+        - csr_matrix user_features: np.float32 array of shape [n_users, n_user_features].
                                     Each row contains that user's weights
                                     over features.
-        - csr_matrix item_features: array of shape [n_items, n_item_features].
+        - csr_matrix item_features: np.float32 array of shape [n_items, n_item_features].
                                     Each row contains that item's weights
                                     over features.
 

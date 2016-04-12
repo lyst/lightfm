@@ -112,7 +112,7 @@ def test_bpr_precision_multithreaded():
 
     model.fit_partial(train,
                       epochs=10,
-                      num_threads=4)
+                      num_threads=2)
 
     train_precision = precision_at_k(model,
                                      train,
@@ -163,7 +163,7 @@ def test_warp_precision_multithreaded():
 
     model.fit_partial(train,
                       epochs=10,
-                      num_threads=4)
+                      num_threads=2)
 
     train_precision = precision_at_k(model,
                                      train,
@@ -219,7 +219,7 @@ def test_warp_precision_adadelta_multithreaded():
 
     model.fit_partial(train,
                       epochs=10,
-                      num_threads=4)
+                      num_threads=2)
 
     train_precision = precision_at_k(model,
                                      train,
@@ -436,22 +436,27 @@ def test_user_supplied_features_accuracy():
     assert roc_auc_score(test.data, test_predictions) > 0.76
 
 
-def test_zeros_negative_accuracy():
+def test_zeros_weights_accuracy():
 
-    # Should get the same accuracy when zeros are used to
-    # denote negative interactions
-    train.data[train.data == -1] = 0
-    model = LightFM()
-    model.fit_partial(train,
-                      epochs=10)
+    # When very small weights are used
+    # accuracy should be no better than
+    # random.
+    train_mod = train.copy()
+    train_mod.data[train.data == -1] = 0
+    train_mod.data[train.data == 1] = 1e-04
 
-    train_predictions = model.predict(train.row,
-                                      train.col)
-    test_predictions = model.predict(test.row,
-                                     test.col)
+    for loss in ('logistic', 'bpr', 'warp', 'warp-kos'):
+        model = LightFM(loss=loss)
+        model.fit_partial(train_mod,
+                          epochs=10)
 
-    assert roc_auc_score(train.data, train_predictions) > 0.84
-    assert roc_auc_score(test.data, test_predictions) > 0.76
+        train_predictions = model.predict(train.row,
+                                          train.col)
+        test_predictions = model.predict(test.row,
+                                         test.col)
+
+        assert 0.45 < roc_auc_score(train.data, train_predictions) < 0.55
+        assert 0.45 < roc_auc_score(test.data, test_predictions) < 0.55
 
 
 def test_hogwild_accuracy():

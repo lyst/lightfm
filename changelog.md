@@ -7,6 +7,8 @@
 ### Added
 - max_sampled hyperparameter for WARP losses. This allows trading off accuracy for WARP training time: a smaller value
   will mean less negative sampling and faster training when the model is near the optimum.
+- the values of entries in interaction matrices now function as sample weights. A high positive value (for positive interactions)
+  or a high negative value (for negative interactions) will now increase the size of the SGD step taken for that interaction.
 
 ## [1.8][2016-01-14]
 ### Changed
