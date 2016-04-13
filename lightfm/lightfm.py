@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import textwrap
+
 import numpy as np
 
 import scipy.sparse as sp
@@ -197,30 +199,18 @@ class LightFM(object):
         else:
             return mat
 
-    def fit(self, interactions, user_features=None, item_features=None,
+    def fit(self, interactions,
+            user_features=None, item_features=None,
+            sample_weight=None,
             epochs=1, num_threads=1, verbose=False):
-
-        # Discard old results, if any
-        self._reset_state()
-
-        return self.fit_partial(interactions,
-                                user_features=user_features,
-                                item_features=item_features,
-                                epochs=epochs,
-                                num_threads=num_threads,
-                                verbose=verbose)
-
-    def fit_partial(self, interactions, user_features=None, item_features=None,
-                    epochs=1, num_threads=1, verbose=False):
         """
-        Fit the model. Repeated calls to this function will resume training from
-        the point where the last call finished.
+        Fit the model.
 
         Arguments:
         - coo_matrix interactions: matrix of shape [n_users, n_items] containing
-                                   user-item interactions. Will be converted to 
+                                   user-item interactions. Will be converted to
                                    numpy.float32 dtype if it is not of that type
-                                   (this conversion may be heavy depending upon 
+                                   (this conversion may be heavy depending upon
                                    matrix size)
         - csr_matrix user_features: array of shape [n_users, n_user_features].
                                     Each row contains that user's weights
@@ -228,6 +218,10 @@ class LightFM(object):
         - csr_matrix item_features: array of shape [n_items, n_item_features].
                                     Each row contains that item's weights
                                     over features.
+        - np.float32 array user_weights: array of shape [n_interactions,] with
+                                         weights applied to individual interactions.
+                                         Defaults to weight 1.0 for all interactions.
+                                         Not implemented for the k-OS loss.
 
         - int epochs: number of epochs to run. Default: 1
         - int num_threads: number of parallel computation threads to use. Should
@@ -235,6 +229,22 @@ class LightFM(object):
                            Default: 1
         - bool verbose: whether to print progress messages.
         """
+
+        # Discard old results, if any
+        self._reset_state()
+
+        return self.fit_partial(interactions,
+                                user_features=user_features,
+                                item_features=item_features,
+                                sample_weight=sample_weight,
+                                epochs=epochs,
+                                num_threads=num_threads,
+                                verbose=verbose)
+
+    def fit_partial(self, interactions,
+                    user_features=None, item_features=None,
+                    sample_weight=None,
+                    epochs=1, num_threads=1, verbose=False):
 
         # We need this in the COO format.
         # If that's already true, this is a no-op.
@@ -247,9 +257,17 @@ class LightFM(object):
                                                            user_features,
                                                            item_features)
 
+        if self.loss == 'warp-kos' and sample_weight is not None:
+            raise NotImplementedError('k-OS loss with sample weights '
+                                      'not implemented.')
+
         interactions = self._to_cython_dtype(interactions)
         user_features = self._to_cython_dtype(user_features)
         item_features = self._to_cython_dtype(item_features)
+        sample_weight = (self._to_cython_dtype(sample_weight)
+                         if sample_weight is not None else
+                         np.ones(interactions.getnnz(),
+                                 dtype=CYTHON_DTYPE))
 
         if self.item_embeddings is None:
             # Initialise latent factors only if this is the first call
@@ -261,10 +279,17 @@ class LightFM(object):
         # Check that the dimensionality of the feature matrices has
         # not changed between runs.
         if not item_features.shape[1] == self.item_embeddings.shape[0]:
-            raise Exception('Incorrect number of features in item_features')
+            raise ValueError('Incorrect number of features in item_features')
 
         if not user_features.shape[1] == self.user_embeddings.shape[0]:
-            raise Exception('Incorrect number of features in user_features')
+            raise ValueError('Incorrect number of features in user_features')
+
+        if sample_weight.ndim != 1:
+            raise ValueError('Sample weights must be 1-dimensional')
+
+        if sample_weight.shape[0] != interactions.getnnz():
+            raise ValueError('Number of sample weights incompatible '
+                             'with number of interactions')
 
         for epoch in range(epochs):
 
@@ -274,12 +299,21 @@ class LightFM(object):
             self._run_epoch(item_features,
                             user_features,
                             interactions,
+                            sample_weight,
                             num_threads,
                             self.loss)
 
         return self
 
-    def _run_epoch(self, item_features, user_features, interactions, num_threads, loss):
+    fit_partial.__doc__ = (fit.__doc__ +
+                           textwrap.dedent("""
+
+        Unlike fit, repeated calls to this method will cause trainig to resume
+        from the current model state.
+                           """))
+
+    def _run_epoch(self, item_features, user_features, interactions,
+                   sample_weight, num_threads, loss):
         """
         Run an individual epoch.
         """
@@ -318,6 +352,7 @@ class LightFM(object):
                      interactions.row,
                      interactions.col,
                      interactions.data,
+                     sample_weight,
                      shuffle_indices,
                      lightfm_data,
                      self.learning_rate,
@@ -331,6 +366,7 @@ class LightFM(object):
                     interactions.row,
                     interactions.col,
                     interactions.data,
+                    sample_weight,
                     shuffle_indices,
                     lightfm_data,
                     self.learning_rate,
@@ -356,6 +392,7 @@ class LightFM(object):
                          interactions.row,
                          interactions.col,
                          interactions.data,
+                         sample_weight,
                          shuffle_indices,
                          lightfm_data,
                          self.learning_rate,

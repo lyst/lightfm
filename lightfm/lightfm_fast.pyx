@@ -654,6 +654,7 @@ def fit_logistic(CSRMatrix item_features,
                  int[::1] user_ids,
                  int[::1] item_ids,
                  flt[::1] Y,
+                 flt[::1] sample_weight,
                  int[::1] shuffle_indices,
                  FastLightFM lightfm,
                  double learning_rate,
@@ -667,7 +668,7 @@ def fit_logistic(CSRMatrix item_features,
     cdef int i, no_examples, user_id, item_id, row
     cdef double prediction, loss
     cdef int y
-    cdef flt y_row
+    cdef flt y_row, weight
     cdef flt *user_repr
     cdef flt *it_repr
 
@@ -684,6 +685,7 @@ def fit_logistic(CSRMatrix item_features,
 
             user_id = user_ids[row]
             item_id = item_ids[row]
+            weight = sample_weight[row]
 
             compute_representation(user_features,
                                    lightfm.user_features,
@@ -712,7 +714,7 @@ def fit_logistic(CSRMatrix item_features,
             else:
                 y = 1
 
-            loss = (prediction - y)
+            loss = weight * (prediction - y)
             update(loss,
                    item_features,
                    user_features,
@@ -738,6 +740,7 @@ def fit_warp(CSRMatrix item_features,
              int[::1] user_ids,
              int[::1] item_ids,
              flt[::1] Y,
+             flt[::1] sample_weight,
              int[::1] shuffle_indices,
              FastLightFM lightfm,
              double learning_rate,
@@ -752,6 +755,7 @@ def fit_warp(CSRMatrix item_features,
     cdef int negative_item_id, sampled, row
     cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS
+    cdef flt weight
     cdef flt *user_repr
     cdef flt *pos_it_repr
     cdef flt *neg_it_repr
@@ -778,6 +782,8 @@ def fit_warp(CSRMatrix item_features,
 
             if not Y[row] == 1:
                 continue
+
+            weight = sample_weight[row]
 
             compute_representation(user_features,
                                    lightfm.user_features,
@@ -823,8 +829,8 @@ def fit_warp(CSRMatrix item_features,
                     # Sample again if the sample negative is actually a positive
                     if in_positives(negative_item_id, user_id, interactions):
                         continue
-                    
-                    loss = log(floor((item_features.rows - 1) / sampled))
+
+                    loss = weight * log(floor((item_features.rows - 1) / sampled))
 
                     # Clip gradients for numerical stability.
                     if loss > MAX_LOSS:
@@ -1012,6 +1018,7 @@ def fit_bpr(CSRMatrix item_features,
             int[::1] user_ids,
             int[::1] item_ids,
             flt[::1] Y,
+            flt[::1] sample_weight,
             int[::1] shuffle_indices,
             FastLightFM lightfm,
             double learning_rate,
@@ -1025,6 +1032,7 @@ def fit_bpr(CSRMatrix item_features,
     cdef int i, no_examples, user_id, positive_item_id
     cdef int negative_item_id, sampled, row
     cdef double positive_prediction, negative_prediction
+    cdef flt weight
     cdef unsigned int[::1] random_states
     cdef flt *user_repr
     cdef flt *pos_it_repr
@@ -1048,6 +1056,7 @@ def fit_bpr(CSRMatrix item_features,
             if not Y[row] == 1:
                 continue
 
+            weight = sample_weight[row]
             user_id = user_ids[row]
             positive_item_id = item_ids[row]
 
@@ -1086,7 +1095,7 @@ def fit_bpr(CSRMatrix item_features,
                                                                neg_it_repr,
                                                                lightfm.no_components)
 
-            warp_update(sigmoid(positive_prediction - negative_prediction),
+            warp_update(weight * sigmoid(positive_prediction - negative_prediction),
                         item_features,
                         user_features,
                         user_id,
