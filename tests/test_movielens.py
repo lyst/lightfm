@@ -401,6 +401,30 @@ def test_movielens_accuracy_resume():
     assert roc_auc_score(test.data, test_predictions) > 0.76
 
 
+def test_movielens_accuracy_sample_weights():
+    # Scaling weights down and learning rate up
+    # by the same amount should result in
+    # roughly the same accuracy
+
+    scale = 1e-01
+    weights = np.ones(train.getnnz(),
+                      dtype=np.float32) * scale
+
+    for (loss, exp_score) in (('logistic', 0.74),
+                              ('bpr', 0.84),
+                              ('warp', 0.89)):
+        model = LightFM(loss=loss)
+        model.learning_rate * 1.0/scale
+
+        model.fit_partial(train,
+                          sample_weight=weights,
+                          epochs=10)
+
+        full_train_auc = full_auc(model, train)
+
+        assert full_train_auc > exp_score
+
+
 def test_state_reset():
 
     model = LightFM()
@@ -452,6 +476,29 @@ def test_zeros_negative_accuracy():
 
     assert roc_auc_score(train.data, train_predictions) > 0.84
     assert roc_auc_score(test.data, test_predictions) > 0.76
+
+
+def test_zero_weights_accuracy():
+
+    # When very small weights are used
+    # accuracy should be no better than
+    # random.
+    weights = np.zeros(train.getnnz(),
+                       dtype=np.float32)
+
+    for loss in ('logistic', 'bpr', 'warp'):
+        model = LightFM(loss=loss)
+        model.fit_partial(train,
+                          sample_weight=weights,
+                          epochs=10)
+
+        train_predictions = model.predict(train.row,
+                                          train.col)
+        test_predictions = model.predict(test.row,
+                                         test.col)
+
+        assert 0.45 < roc_auc_score(train.data, train_predictions) < 0.55
+        assert 0.45 < roc_auc_score(test.data, test_predictions) < 0.55
 
 
 def test_hogwild_accuracy():

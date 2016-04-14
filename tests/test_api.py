@@ -168,3 +168,27 @@ def test_param_sanity():
 
     with pytest.raises(ValueError):
         LightFM(max_sampled=-1.0)
+
+
+def test_sample_weight():
+
+    model = LightFM()
+
+    train = sp.coo_matrix(np.array([[0, 1],
+                                   [0, 0]]))
+
+    with pytest.raises(ValueError):
+        model.fit(train,
+                  sample_weight=np.zeros((2, 2)))
+
+    with pytest.raises(ValueError):
+        model.fit(train,
+                  sample_weight=np.zeros(3))
+
+    model.fit(train, sample_weight=np.ones(1))
+
+    model = LightFM(loss='warp-kos')
+
+    with pytest.raises(NotImplementedError):
+        model.fit(train,
+                  sample_weight=np.ones(1))
