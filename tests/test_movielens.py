@@ -407,8 +407,9 @@ def test_movielens_accuracy_sample_weights():
     # roughly the same accuracy
 
     scale = 1e-01
-    weights = np.ones(train.getnnz(),
-                      dtype=np.float32) * scale
+    weights = train.copy()
+    weights.data = np.ones(train.getnnz(),
+                           dtype=np.float32) * scale
 
     for (loss, exp_score) in (('logistic', 0.74),
                               ('bpr', 0.84),
@@ -483,8 +484,9 @@ def test_zero_weights_accuracy():
     # When very small weights are used
     # accuracy should be no better than
     # random.
-    weights = np.zeros(train.getnnz(),
-                       dtype=np.float32)
+    weights = train.copy()
+    weights.data = np.zeros(train.getnnz(),
+                            dtype=np.float32)
 
     for loss in ('logistic', 'bpr', 'warp'):
         model = LightFM(loss=loss)
