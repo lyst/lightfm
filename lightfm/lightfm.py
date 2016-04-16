@@ -199,6 +199,45 @@ class LightFM(object):
         else:
             return mat
 
+    def _process_sample_weight(self, interactions, sample_weight):
+
+        if sample_weight is not None:
+
+            if self.loss == 'warp-kos':
+                raise NotImplementedError('k-OS loss with sample weights '
+                                          'not implemented.')
+
+            if not isinstance(sample_weight, sp.coo_matrix):
+                raise ValueError('Sample_weight must be a COO matrix.')
+
+            if sample_weight.shape != interactions.shape:
+                raise ValueError('Sample weight and interactions '
+                                 'matrices must be the same shape')
+
+            if not (np.array_equal(interactions.row,
+                                   sample_weight.row)
+                    and
+                    np.array_equal(interactions.col,
+                                   sample_weight.col)):
+                raise ValueError('Sample weight and interaction matrix '
+                                 'entries must be in the same order')
+
+            if sample_weight.data.dtype != CYTHON_DTYPE:
+                sample_weight_data = sample_weight.data.astype(CYTHON_DTYPE)
+            else:
+                sample_weight_data = sample_weight.data
+        else:
+            if np.array_equiv(interactions.data, 1.0):
+                # Re-use interactions data if they are all
+                # ones
+                sample_weight_data = interactions.data
+            else:
+                # Otherwise allocate a new array of ones
+                sample_weight_data = np.ones_like(interactions.data,
+                                                  dtype=CYTHON_DTYPE)
+
+        return sample_weight_data
+
     def fit(self, interactions,
             user_features=None, item_features=None,
             sample_weight=None,
@@ -207,21 +246,28 @@ class LightFM(object):
         Fit the model.
 
         Arguments:
-        - coo_matrix interactions: matrix of shape [n_users, n_items] containing
+        - coo_matrix interactions: np.float32 matrix of shape [n_users, n_items] containing
                                    user-item interactions. Will be converted to
                                    numpy.float32 dtype if it is not of that type
                                    (this conversion may be heavy depending upon
                                    matrix size)
+
+        Optional arguments:
         - csr_matrix user_features: array of shape [n_users, n_user_features].
                                     Each row contains that user's weights
                                     over features.
         - csr_matrix item_features: array of shape [n_items, n_item_features].
                                     Each row contains that item's weights
                                     over features.
-        - np.float32 array user_weights: array of shape [n_interactions,] with
-                                         weights applied to individual interactions.
-                                         Defaults to weight 1.0 for all interactions.
-                                         Not implemented for the k-OS loss.
+        - coo_matrix sample_weight: np.float32 matrix of shape [n_users, n_items] with
+                                    entries expressing weights of individual
+                                    interactions from the interactions matrix.
+                                    Its row and col arrays must be the same as
+                                    those of the interactions matrix. For memory
+                                    efficiency its ssible to use the same arrays
+                                    for both weights and interaction matrices.
+                                    Defaults to weight 1.0 for all interactions.
+                                    Not implemented for the k-OS loss.
 
         - int epochs: number of epochs to run. Default: 1
         - int num_threads: number of parallel computation threads to use. Should
@@ -250,6 +296,12 @@ class LightFM(object):
         # If that's already true, this is a no-op.
         interactions = interactions.tocoo()
 
+        if interactions.dtype != CYTHON_DTYPE:
+            interactions.data = interactions.data.astype(CYTHON_DTYPE)
+
+        sample_weight_data = self._process_sample_weight(interactions,
+                                                         sample_weight)
+
         n_users, n_items = interactions.shape
         (user_features,
          item_features) = self._construct_feature_matrices(n_users,
@@ -257,11 +309,6 @@ class LightFM(object):
                                                            user_features,
                                                            item_features)
 
-        if self.loss == 'warp-kos' and sample_weight is not None:
-            raise NotImplementedError('k-OS loss with sample weights '
-                                      'not implemented.')
-
-        interactions = self._to_cython_dtype(interactions)
         user_features = self._to_cython_dtype(user_features)
         item_features = self._to_cython_dtype(item_features)
         sample_weight = (self._to_cython_dtype(sample_weight)
@@ -284,13 +331,6 @@ class LightFM(object):
         if not user_features.shape[1] == self.user_embeddings.shape[0]:
             raise ValueError('Incorrect number of features in user_features')
 
-        if sample_weight.ndim != 1:
-            raise ValueError('Sample weights must be 1-dimensional')
-
-        if sample_weight.shape[0] != interactions.getnnz():
-            raise ValueError('Number of sample weights incompatible '
-                             'with number of interactions')
-
         for epoch in range(epochs):
 
             if verbose:
@@ -299,7 +339,7 @@ class LightFM(object):
             self._run_epoch(item_features,
                             user_features,
                             interactions,
-                            sample_weight,
+                            sample_weight_data,
                             num_threads,
                             self.loss)
 

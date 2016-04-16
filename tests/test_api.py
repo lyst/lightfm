@@ -175,17 +175,33 @@ def test_sample_weight():
     model = LightFM()
 
     train = sp.coo_matrix(np.array([[0, 1],
-                                   [0, 0]]))
+                                    [0, 1]]))
 
     with pytest.raises(ValueError):
+        # Wrong number of weights
+        sample_weight = sp.coo_matrix(np.zeros((2, 2)))
+
         model.fit(train,
-                  sample_weight=np.zeros((2, 2)))
+                  sample_weight=sample_weight)
 
     with pytest.raises(ValueError):
+        # Wrong shape
+        sample_weight = sp.coo_matrix(np.zeros(2))
         model.fit(train,
                   sample_weight=np.zeros(3))
 
-    model.fit(train, sample_weight=np.ones(1))
+    with pytest.raises(ValueError):
+        # Wrong order of entries
+        sample_weight = sp.coo_matrix((train.data,
+                                       (train.row[::-1],
+                                        train.col[::-1])))
+        model.fit(train,
+                  sample_weight=np.zeros(3))
+
+    sample_weight = sp.coo_matrix((train.data,
+                                   (train.row,
+                                    train.col)))
+    model.fit(train, sample_weight=sample_weight)
 
     model = LightFM(loss='warp-kos')
 
