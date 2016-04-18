@@ -426,6 +426,35 @@ def test_movielens_accuracy_sample_weights():
         assert full_train_auc > exp_score
 
 
+def test_movielens_accuracy_sample_weights_grad_accumulation():
+
+    # Set weights to zero for all even-numbered users
+    # and check that they have not accumulated any
+    # gradient updates.
+
+    weights = train.copy()
+    weights.data = np.ones(train.getnnz(),
+                           dtype=np.float32)
+    even_users = weights.row % 2 == 0
+    weights.data *= even_users
+
+    even_idx = np.arange(train.shape[0]) % 2 == 0
+    odd_idx = np.arange(train.shape[0]) % 2 != 0
+
+    for loss in ('logistic', 'bpr', 'warp'):
+        model = LightFM(loss=loss)
+
+        model.fit_partial(train,
+                          sample_weight=weights,
+                          epochs=1)
+
+        assert np.allclose(model.user_embedding_gradients[odd_idx], 1.0)
+        assert np.allclose(model.user_bias_gradients[odd_idx], 1.0)
+
+        assert not np.allclose(model.user_embedding_gradients[even_idx], 1.0)
+        assert not np.allclose(model.user_bias_gradients[even_idx], 1.0)
+
+
 def test_state_reset():
 
     model = LightFM()
