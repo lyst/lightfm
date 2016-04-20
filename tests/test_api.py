@@ -208,3 +208,36 @@ def test_sample_weight():
     with pytest.raises(NotImplementedError):
         model.fit(train,
                   sample_weight=np.ones(1))
+
+
+def test_predict_ranks():
+
+    no_users, no_items = (10, 100)
+
+    train = sp.coo_matrix((no_users,
+                           no_items),
+                          dtype=np.float32)
+
+    model = LightFM()
+    model.fit_partial(train)
+
+    # Compute ranks for all items
+    rank_input = sp.csr_matrix(np.ones((no_users, no_items)))
+    ranks = model.predict_rank(rank_input, num_threads=2).todense()
+
+    assert np.all(ranks.min(axis=1) == 0)
+    assert np.all(ranks.max(axis=1) == no_items - 1)
+
+    for row in range(no_users):
+        assert np.all(np.sort(ranks[row]) == np.arange(no_items))
+
+    # Make sure this is true also when there are ties
+    model.user_embeddings = np.zeros_like(model.user_embeddings)
+    model.item_embeddings = np.zeros_like(model.item_embeddings)
+    model.user_biases = np.zeros_like(model.user_biases)
+    model.item_biases = np.zeros_like(model.item_biases)
+
+    ranks = model.predict_rank(rank_input, num_threads=2).todense()
+
+    assert np.all(ranks.min(axis=1) == 0)
+    assert np.all(ranks.max(axis=1) == 0)

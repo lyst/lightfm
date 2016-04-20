@@ -8,6 +8,7 @@ import scipy.sparse as sp
 
 from .lightfm_fast import (CSRMatrix, FastLightFM,
                            fit_logistic, predict_lightfm,
+                           predict_ranks,
                            fit_warp, fit_bpr, fit_warp_kos)
 
 
@@ -155,14 +156,14 @@ class LightFM(object):
 
         if user_features is None:
             user_features = sp.identity(n_users,
-                                        dtype=np.int32,
+                                        dtype=CYTHON_DTYPE,
                                         format='csr')
         else:
             user_features = user_features.tocsr()
 
         if item_features is None:
             item_features = sp.identity(n_items,
-                                        dtype=np.int32,
+                                        dtype=CYTHON_DTYPE,
                                         format='csr')
         else:
             item_features = item_features.tocsr()
@@ -508,3 +509,57 @@ class LightFM(object):
                         num_threads)
 
         return predictions
+
+    def predict_rank(self, interactions, item_features=None, user_features=None, num_threads=1):
+        """
+        """
+
+        n_users, n_items = interactions.shape
+
+        (user_features,
+         item_features) = self._construct_feature_matrices(n_users,
+                                                           n_items,
+                                                           user_features,
+                                                           item_features)
+
+        if not item_features.shape[1] == self.item_embeddings.shape[0]:
+            raise ValueError('Incorrect number of features in item_features')
+
+        if not user_features.shape[1] == self.user_embeddings.shape[0]:
+            raise ValueError('Incorrect number of features in user_features')
+
+        interactions = interactions.tocsr()
+        interactions = self._to_cython_dtype(interactions)
+
+        ranks = sp.csr_matrix((np.zeros_like(interactions.data),
+                               interactions.indices,
+                               interactions.indptr),
+                              shape=interactions.shape)
+
+        lightfm_data = FastLightFM(self.item_embeddings,
+                                   self.item_embedding_gradients,
+                                   self.item_embedding_momentum,
+                                   self.item_biases,
+                                   self.item_bias_gradients,
+                                   self.item_bias_momentum,
+                                   self.user_embeddings,
+                                   self.user_embedding_gradients,
+                                   self.user_embedding_momentum,
+                                   self.user_biases,
+                                   self.user_bias_gradients,
+                                   self.user_bias_momentum,
+                                   self.no_components,
+                                   int(self.learning_schedule == 'adadelta'),
+                                   self.learning_rate,
+                                   self.rho,
+                                   self.epsilon,
+                                   1)
+
+        predict_ranks(CSRMatrix(item_features),
+                      CSRMatrix(user_features),
+                      CSRMatrix(interactions),
+                      ranks.data,
+                      lightfm_data,
+                      num_threads)
+
+        return ranks

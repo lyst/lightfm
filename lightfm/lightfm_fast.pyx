@@ -90,6 +90,14 @@ cdef int int_min(int x, int y) nogil:
         return y
 
 
+cdef int int_max(int x, int y) nogil:
+
+    if x < y:
+        return y
+    else:
+        return x
+
+
 cdef struct Pair:
     int idx
     flt val
@@ -1159,6 +1167,128 @@ def predict_lightfm(CSRMatrix item_features,
             predictions[i] = compute_prediction_from_repr(user_repr,
                                                           it_repr,
                                                           lightfm.no_components)
+
+        free(user_repr)
+        free(it_repr)
+
+
+def predict_ranks(CSRMatrix item_features,
+                  CSRMatrix user_features,
+                  CSRMatrix interactions,
+                  flt[::1] ranks,
+                  FastLightFM lightfm,
+                  int num_threads):
+    """
+    """
+
+    cdef int i, j, user_id, item_id, predictions_size, row_start, row_stop
+    cdef flt *user_repr
+    cdef flt *it_repr
+    cdef flt *predictions
+    cdef flt prediction, rank
+
+    predictions_size = 0
+
+    # Figure out the max size of the predictions
+    # buffer.
+    for user_id in range(interactions.rows):
+        predictions_size = int_max(predictions_size,
+                                   interactions.get_row_end(user_id)
+                                   - interactions.get_row_start(user_id))
+
+    with nogil, parallel(num_threads=num_threads):
+
+        user_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
+        it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
+        item_ids = <int *>malloc(sizeof(int) * predictions_size)
+        predictions = <flt *>malloc(sizeof(flt) * predictions_size)
+
+        for user_id in prange(interactions.rows):
+
+            compute_representation(user_features,
+                                   lightfm.user_features,
+                                   lightfm.user_biases,
+                                   lightfm,
+                                   user_id,
+                                   lightfm.user_scale,
+                                   user_repr)
+
+            row_start = interactions.get_row_start(user_id)
+            row_stop = interactions.get_row_end(user_id)
+
+            # Compute predictions for the items whose
+            # ranks we want to know
+            for i in range(row_stop - row_start):
+
+                item_id = interactions.indices[row_start + i]
+
+                compute_representation(item_features,
+                                       lightfm.item_features,
+                                       lightfm.item_biases,
+                                       lightfm,
+                                       item_id,
+                                       lightfm.item_scale,
+                                       it_repr)
+
+                item_ids[i] = item_id
+                predictions[i] = compute_prediction_from_repr(user_repr,
+                                                              it_repr,
+                                                              lightfm.no_components)
+
+            # Now we can zip through all the other items and compute ranks
+            for item_id in range(interactions.cols):
+
+                compute_representation(item_features,
+                                       lightfm.item_features,
+                                       lightfm.item_biases,
+                                       lightfm,
+                                       item_id,
+                                       lightfm.item_scale,
+                                       it_repr)
+                prediction = compute_prediction_from_repr(user_repr,
+                                                          it_repr,
+                                                          lightfm.no_components)
+
+                for i in range(row_stop - row_start):
+                    if item_id != item_ids[i] and prediction > predictions[i]:
+                        ranks[row_start + i] += 1.0
+
+        free(user_repr)
+        free(it_repr)
+        free(predictions)
+
+
+def calculate_auc_from_rank(CSRMatrix ranks,
+                            flt[::1] auc,
+                            int num_threads):
+
+    cdef int i, j, user_id, row_start, row_stop, num_negatives
+    cdef flt rank
+
+    with nogil, parallel(num_threads=num_threads):
+        for user_id in prange(ranks.rows):
+
+            row_start = ranks.get_row_start(user_id)
+            row_stop = ranks.get_row_end(user_id)
+
+            for i in range(row_stop - row_start):
+
+                num_negatives = ranks.cols - (row_stop - row_start)
+                rank = ranks.data[row_stop + i]
+
+                # Iterate over the other positives. If they rank higher,
+                # reduce the rank of the current item.
+                for j in range(row_stop - row_start):
+                    if i != j and <int> (ranks.data[row_stop + j]) < <int> (ranks.data[row_stop + i]):
+                        rank = rank - 1.0
+
+                # Number of negatives that rank above the current item
+                # over the total number of negatives: the probability
+                # of rank inversion.
+                auc[user_id] += 1.0 - rank / num_negatives
+
+            if row_stop - row_start:
+                auc[user_id] /= row_stop - row_start
 
 
 # Expose test functions
