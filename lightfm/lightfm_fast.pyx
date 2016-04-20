@@ -1262,8 +1262,10 @@ def calculate_auc_from_rank(CSRMatrix ranks,
                             flt[::1] auc,
                             int num_threads):
 
-    cdef int i, j, user_id, row_start, row_stop, num_negatives
+    cdef int i, j, user_id, row_start, row_stop, num_negatives, one_class
     cdef flt rank
+
+    one_class = 0
 
     with nogil, parallel(num_threads=num_threads):
         for user_id in prange(ranks.rows):
@@ -1271,20 +1273,33 @@ def calculate_auc_from_rank(CSRMatrix ranks,
             row_start = ranks.get_row_start(user_id)
             row_stop = ranks.get_row_end(user_id)
 
+            num_negatives = ranks.cols - (row_stop - row_start)
+
+            # If there is only one class present,
+            # return 0.5.
+            if row_stop == row_start or num_negatives == ranks.cols:
+                auc[user_id] = 0.5
+                continue
+
             for i in range(row_stop - row_start):
 
-                num_negatives = ranks.cols - (row_stop - row_start)
-                rank = ranks.data[row_stop + i]
+                rank = ranks.data[row_start + i]
 
                 # Iterate over the other positives. If they rank higher,
                 # reduce the rank of the current item.
                 for j in range(row_stop - row_start):
+
+                    if rank <= 0.0:
+                        rank = 0.0
+                        break
+                    
                     if i != j and <int> (ranks.data[row_stop + j]) < <int> (ranks.data[row_stop + i]):
                         rank = rank - 1.0
 
                 # Number of negatives that rank above the current item
                 # over the total number of negatives: the probability
                 # of rank inversion.
+                # print(row_start, row_stop, ranks.data[row_stop + i], 1.0 - rank, num_negatives)
                 auc[user_id] += 1.0 - rank / num_negatives
 
             if row_stop - row_start:
