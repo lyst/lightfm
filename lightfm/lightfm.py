@@ -155,13 +155,15 @@ class LightFM(object):
 
         if user_features is None:
             user_features = sp.identity(n_users,
-                                        dtype=np.int32).tocsr()
+                                        dtype=np.int32,
+                                        format='csr')
         else:
             user_features = user_features.tocsr()
 
         if item_features is None:
             item_features = sp.identity(n_items,
-                                        dtype=np.int32).tocsr()
+                                        dtype=np.int32,
+                                        format='csr')
         else:
             item_features = item_features.tocsr()
 
