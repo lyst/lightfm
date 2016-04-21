@@ -4,8 +4,6 @@ import scipy.sparse as sp
 
 from sklearn.metrics import roc_auc_score
 
-from tests.utils import full_auc
-
 from lightfm import LightFM, evaluation
 
 

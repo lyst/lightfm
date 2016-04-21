@@ -8,9 +8,8 @@ import scipy.sparse as sp
 
 from sklearn.metrics import roc_auc_score
 
-from tests.utils import precision_at_k, full_auc
-
 from lightfm import LightFM
+from lightfm.evaluation import auc_score, precision_at_k
 
 imp_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                         '..',
@@ -19,6 +18,26 @@ imp_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                         'data.py')
 movielens_data = imp.load_source('movielens_data',
                                  imp_path)
+
+
+def _get_metrics(model, train_set, test_set):
+
+    train_set = train_set.tocsr()
+    test_set = test_set.tocsr()
+
+    train_set.data[train_set.data < 0] = 0.0
+    test_set.data[test_set.data < 0] = 0.0
+
+    train_set.eliminate_zeros()
+    test_set.eliminate_zeros()
+
+    train_users = train_set.getnnz(axis=1) > 0
+    test_users = test_set.getnnz(axis=1) > 0
+
+    return (precision_at_k(model, train_set)[train_users].mean(),
+            precision_at_k(model, test_set)[test_users].mean(),
+            auc_score(model, train_set)[train_users].mean(),
+            auc_score(model, test_set)[test_users].mean())
 
 
 def _get_feature_matrices(interactions):
@@ -63,15 +82,12 @@ def test_logistic_precision():
     model.fit_partial(train,
                       epochs=10)
 
-    train_precision = precision_at_k(model,
-                                     train,
-                                     10)
-    test_precision = precision_at_k(model,
-                                    test,
-                                    10)
-
-    full_train_auc = full_auc(model, train)
-    full_test_auc = full_auc(model, test)
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   train,
+                                   test)
 
     assert train_precision > 0.3
     assert test_precision > 0.03
@@ -88,15 +104,12 @@ def test_bpr_precision():
     model.fit_partial(train,
                       epochs=10)
 
-    train_precision = precision_at_k(model,
-                                     train,
-                                     10)
-    test_precision = precision_at_k(model,
-                                    test,
-                                    10)
-
-    full_train_auc = full_auc(model, train)
-    full_test_auc = full_auc(model, test)
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   train,
+                                   test)
 
     assert train_precision > 0.31
     assert test_precision > 0.04
@@ -114,15 +127,12 @@ def test_bpr_precision_multithreaded():
                       epochs=10,
                       num_threads=4)
 
-    train_precision = precision_at_k(model,
-                                     train,
-                                     10)
-    test_precision = precision_at_k(model,
-                                    test,
-                                    10)
-
-    full_train_auc = full_auc(model, train)
-    full_test_auc = full_auc(model, test)
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   train,
+                                   test)
 
     assert train_precision > 0.31
     assert test_precision > 0.04
@@ -139,15 +149,12 @@ def test_warp_precision():
     model.fit_partial(train,
                       epochs=10)
 
-    train_precision = precision_at_k(model,
-                                     train,
-                                     10)
-    test_precision = precision_at_k(model,
-                                    test,
-                                    10)
-
-    full_train_auc = full_auc(model, train)
-    full_test_auc = full_auc(model, test)
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   train,
+                                   test)
 
     assert train_precision > 0.45
     assert test_precision > 0.07
@@ -165,15 +172,12 @@ def test_warp_precision_multithreaded():
                       epochs=10,
                       num_threads=4)
 
-    train_precision = precision_at_k(model,
-                                     train,
-                                     10)
-    test_precision = precision_at_k(model,
-                                    test,
-                                    10)
-
-    full_train_auc = full_auc(model, train)
-    full_test_auc = full_auc(model, test)
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   train,
+                                   test)
 
     assert train_precision > 0.45
     assert test_precision > 0.07
@@ -193,15 +197,12 @@ def test_warp_precision_adadelta():
                       epochs=10,
                       num_threads=1)
 
-    train_precision = precision_at_k(model,
-                                     train,
-                                     10)
-    test_precision = precision_at_k(model,
-                                    test,
-                                    10)
-
-    full_train_auc = full_auc(model, train)
-    full_test_auc = full_auc(model, test)
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   train,
+                                   test)
 
     assert train_precision > 0.45
     assert test_precision > 0.07
@@ -221,15 +222,12 @@ def test_warp_precision_adadelta_multithreaded():
                       epochs=10,
                       num_threads=4)
 
-    train_precision = precision_at_k(model,
-                                     train,
-                                     10)
-    test_precision = precision_at_k(model,
-                                    test,
-                                    10)
-
-    full_train_auc = full_auc(model, train)
-    full_test_auc = full_auc(model, test)
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   train,
+                                   test)
 
     assert train_precision > 0.45
     assert test_precision > 0.07
@@ -251,8 +249,12 @@ def test_warp_precision_max_sampled():
     model.fit_partial(train,
                       epochs=1)
 
-    full_train_auc = full_auc(model, train)
-    full_test_auc = full_auc(model, test)
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   train,
+                                   test)
 
     # The AUC should be no better than random
     assert full_train_auc < 0.55
@@ -273,15 +275,12 @@ def test_warp_kos_precision():
     model.fit_partial(training,
                       epochs=10)
 
-    train_precision = precision_at_k(model,
-                                     training,
-                                     10)
-    test_precision = precision_at_k(model,
-                                    test,
-                                    10)
-
-    full_train_auc = full_auc(model, training)
-    full_test_auc = full_auc(model, test)
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   train,
+                                   test)
 
     assert train_precision > 0.44
     assert test_precision > 0.06
@@ -421,7 +420,12 @@ def test_movielens_accuracy_sample_weights():
                           sample_weight=weights,
                           epochs=10)
 
-        full_train_auc = full_auc(model, train)
+        (train_precision,
+         test_precision,
+         full_train_auc,
+         full_test_auc) = _get_metrics(model,
+                                       train,
+                                       test)
 
         assert full_train_auc > exp_score
 

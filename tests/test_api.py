@@ -241,3 +241,7 @@ def test_predict_ranks():
 
     assert np.all(ranks.min(axis=1) == 0)
     assert np.all(ranks.max(axis=1) == 0)
+
+    # Wrong input dimensions
+    with pytest.raises(ValueError):
+        model.predict_rank(sp.csr_matrix((5, 5)), num_threads=2)
