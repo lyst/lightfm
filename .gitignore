@@ -10,3 +10,4 @@ bench/
 *#*
 *.7z
 *.xml
+doc/_build/*

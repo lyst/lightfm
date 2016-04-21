@@ -4,10 +4,10 @@ import numpy as np
 
 import scipy.sparse as sp
 
-from .lightfm_fast import (CSRMatrix, FastLightFM,
-                           fit_logistic, predict_lightfm,
-                           predict_ranks,
-                           fit_warp, fit_bpr, fit_warp_kos)
+from ._lightfm_fast import (CSRMatrix, FastLightFM,
+                            fit_logistic, predict_lightfm,
+                            predict_ranks,
+                            fit_warp, fit_bpr, fit_warp_kos)
 
 
 __all__ = ['LightFM']
@@ -17,67 +17,86 @@ CYTHON_DTYPE = np.float32
 
 
 class LightFM(object):
+    """
+    A hybrid recommender model.
+
+    Parameters
+    ----------
+
+    no_components: int, optional
+        the dimensionality of the feature latent embeddings.
+    k: int, optional
+         for k-OS training, the k-th positive example will be selected from the n positive
+         examples sampled for every user.
+    n: int, optional
+         for k-OS training, maximum number of positives sampled for each update.
+    learning_schedule: string, optional
+         one of ('adagrad', 'adadelta').
+    loss: string, optional
+         one of  ('logistic', 'bpr', 'warp', 'warp-kos'): the loss function to use.
+    learning_rate: float, optional
+         initial learning rate for the adagrad learning schedule.
+    rho: float, optional
+         moving average coefficient for the adadelta learning schedule.
+    epsilon: float, optional
+        conditioning parameter for the adadelta learning schedule.
+    item_alpha: float, optional
+        L2 penalty on item features
+    user_alpha: float, optional
+        L2 penalty on user features.
+    max_sampled: int, optional
+        maximum number of negative samples used during WARP fitting. Defaults to
+        the number of items divided by 10. Setting this to lower number may improve the speed of
+        WARP fitting at the expense of some accuracy.
+
+    Notes
+    -----
+
+    Four loss functions are available:
+
+    - logistic: useful when both positive (1) and negative (-1) interactions
+      are present.
+    - BPR: Bayesian Personalised Ranking [1]_ pairwise loss. Maximises the
+      prediction difference between a positive example and a randomly
+      chosen negative example. Useful when only positive interactions
+      are present and optimising ROC AUC is desired.
+    - WARP: Weighted Approximate-Rank Pairwise [2]_ loss. Maximises
+      the rank of positive examples by repeatedly sampling negative
+      examples until rank violating one is found. Useful when only
+      positive interactions are present and optimising the top of
+      the recommendation list (precision@k) is desired.
+    - k-OS WARP: k-th order statistic loss [3]_. A modification of WARP that uses the k-th
+      positive example for any given user as a basis for pairwise updates.
+
+    Two learning rate schedules are available:
+
+    - adagrad: [4]_
+    - adadelta: [5]_
+
+    References
+    ----------
+
+    .. [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from implicit feedback."
+           Proceedings of the Twenty-Fifth Conference on Uncertainty in Artificial
+           Intelligence. AUAI Press, 2009.
+    .. [2] Weston, Jason, Samy Bengio, and Nicolas Usunier. "Wsabie: Scaling up to large
+           vocabulary image annotation." IJCAI. Vol. 11. 2011.
+    .. [3] Weston, Jason, Hector Yee, and Ron J. Weiss. "Learning to rank recommendations with
+           the k-order statistic loss."
+           Proceedings of the 7th ACM conference on Recommender systems. ACM, 2013.
+    .. [4] Duchi, John, Elad Hazan, and Yoram Singer. "Adaptive subgradient methods
+           for online learning and stochastic optimization."
+           The Journal of Machine Learning Research 12 (2011): 2121-2159.
+    .. [5] Zeiler, Matthew D. "ADADELTA: An adaptive learning rate method."
+           arXiv preprint arXiv:1212.5701 (2012).
+    """
 
     def __init__(self, no_components=10, k=5, n=10,
                  learning_schedule='adagrad',
                  loss='logistic',
                  learning_rate=0.05, rho=0.95, epsilon=1e-6,
                  item_alpha=0.0, user_alpha=0.0, max_sampled=None):
-        """
-        Initialise the model.
 
-        Four loss functions are available:
-
-        - logistic: useful when both positive (1) and negative (-1) interactions
-                    are present.
-        - BPR: Bayesian Personalised Ranking [1] pairwise loss. Maximises the
-               prediction difference between a positive example and a randomly
-               chosen negative example. Useful when only positive interactions
-               are present and optimising ROC AUC is desired.
-        - WARP: Weighted Approximate-Rank Pairwise [2] loss. Maximises
-                the rank of positive examples by repeatedly sampling negative
-                examples until rank violating one is found. Useful when only
-                positive interactions are present and optimising the top of
-                the recommendation list (precision@k) is desired.
-        - k-OS WARP: k-th order statistic loss [3]. A modification of WARP that uses the k-th
-                     positive example for any given user as a basis for pairwise updates.
-
-        Two learning rate schedules are available:
-
-        - adagrad: [4]
-        - adadelta: [5]
-
-        Parameters:
-
-        - int no_components: the dimensionality of the feature latent embeddings. Default: 10
-        - int k: for k-OS training, the k-th positive example will be selected from the n positive
-                 examples sampled for every user. Default: 5
-        - int n: for k-OS training, maximum number of positives sampled for each update. Default: 10
-        - string learning_schedule, one of ('adagrad', 'adadelta'). Default: 'adagrad'
-        - string loss, one of  ('logistic', 'bpr', 'warp', 'warp-kos'): the loss function to use. Default: 'logistic'
-        - float learning_rate: initial learning rate for the adagrad learning schedule. Default: 0.05
-        - float rho: moving average coefficient for the adadelta learning schedule. Default: 0.95
-        - float epsilon: conditioning parameter for the adadelta learning schedule. Default: 1e-6
-        - float item_alpha: L2 penalty on item features. Default: 0.0
-        - float user_alpha: L2 penalty on user features. Default: 0.0
-        - int max_sampled: maximum number of negative samples used during WARP fitting. Defaults to
-          the number of items divided by 10. Setting this to lower number may improve the speed of
-          WARP fitting at the expense of some accuracy.
-
-        [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from implicit feedback."
-            Proceedings of the Twenty-Fifth Conference on Uncertainty in Artificial
-            Intelligence. AUAI Press, 2009.
-        [2] Weston, Jason, Samy Bengio, and Nicolas Usunier. "Wsabie: Scaling up to large
-            vocabulary image annotation." IJCAI. Vol. 11. 2011.
-        [3] Weston, Jason, Hector Yee, and Ron J. Weiss. "Learning to rank recommendations with
-            the k-order statistic loss."
-            Proceedings of the 7th ACM conference on Recommender systems. ACM, 2013.
-        [4] Duchi, John, Elad Hazan, and Yoram Singer. "Adaptive subgradient methods
-            for online learning and stochastic optimization."
-            The Journal of Machine Learning Research 12 (2011): 2121-2159.
-        [5] Zeiler, Matthew D. "ADADELTA: An adaptive learning rate method."
-            arXiv preprint arXiv:1212.5701 (2012).
-        """
 
         assert item_alpha >= 0.0
         assert user_alpha >= 0.0
@@ -278,36 +297,33 @@ class LightFM(object):
         """
         Fit the model.
 
-        Arguments:
+        Arguments
+        ---------
 
-        - coo_matrix interactions: np.float32 matrix of shape [n_users, n_items] containing
-                                   user-item interactions. Will be converted to
-                                   numpy.float32 dtype if it is not of that type
-                                   (this conversion may be heavy depending upon
-                                   matrix size)
-
-        Optional arguments:
-
-        - csr_matrix user_features: array of shape [n_users, n_user_features].
-                                    Each row contains that user's weights
-                                    over features.
-        - csr_matrix item_features: array of shape [n_items, n_item_features].
-                                    Each row contains that item's weights
-                                    over features.
-        - coo_matrix sample_weight: np.float32 matrix of shape [n_users, n_items] with
-                                    entries expressing weights of individual
-                                    interactions from the interactions matrix.
-                                    Its row and col arrays must be the same as
-                                    those of the interactions matrix. For memory
-                                    efficiency its ssible to use the same arrays
-                                    for both weights and interaction matrices.
-                                    Defaults to weight 1.0 for all interactions.
-                                    Not implemented for the k-OS loss.
-        - int epochs: number of epochs to run. Default: 1
-        - int num_threads: number of parallel computation threads to use. Should
-                           not be higher than the number of physical cores.
-                           Default: 1
-        - bool verbose: whether to print progress messages.
+        interactions: np.float32 coo_matrix of shape [n_users, n_items]
+             the matrix containing
+             user-item interactions. Will be converted to
+             numpy.float32 dtype if it is not of that type.
+        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+             Each row contains that user's weights over features.
+        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+             Each row contains that item's weights over features.
+        sample_weight: np.float32 coo_matrix of shape [n_users, n_items], optional
+             matrix with entries expressing weights of individual
+             interactions from the interactions matrix.
+             Its row and col arrays must be the same as
+             those of the interactions matrix. For memory
+             efficiency its ssible to use the same arrays
+             for both weights and interaction matrices.
+             Defaults to weight 1.0 for all interactions.
+             Not implemented for the k-OS loss.
+        epochs: int, optional
+             number of epochs to run
+        num_threads: int, optional
+             Number of parallel computation threads to use. Should
+             not be higher than the number of physical cores.
+        verbose: bool, optional
+             whether to print progress messages.
         """
 
         # Discard old results, if any
@@ -328,38 +344,36 @@ class LightFM(object):
         """
         Fit the model.
 
-        Arguments:
+        Fit the model. Unlike fit, repeated calls to this method will
+        cause trainig to resume from the current model state.
 
-        - coo_matrix interactions: np.float32 matrix of shape [n_users, n_items] containing
-                                   user-item interactions. Will be converted to
-                                   numpy.float32 dtype if it is not of that type
-                                   (this conversion may be heavy depending upon
-                                   matrix size)
+        Arguments
+        ---------
 
-        Optional arguments:
-
-        - csr_matrix user_features: array of shape [n_users, n_user_features].
-                                    Each row contains that user's weights
-                                    over features.
-        - csr_matrix item_features: array of shape [n_items, n_item_features].
-                                    Each row contains that item's weights
-                                    over features.
-        - coo_matrix sample_weight: np.float32 matrix of shape [n_users, n_items] with
-                                    entries expressing weights of individual
-                                    interactions from the interactions matrix.
-                                    Its row and col arrays must be the same as
-                                    those of the interactions matrix. For memory
-                                    efficiency its ssible to use the same arrays
-                                    for both weights and interaction matrices.
-                                    Defaults to weight 1.0 for all interactions.
-                                    Not implemented for the k-OS loss.
-        - int epochs: number of epochs to run. Default: 1
-        - int num_threads: number of parallel computation threads to use. Should
-                           not be higher than the number of physical cores.
-                           Default: 1
-        - bool verbose: whether to print progress messages.
-
-        Unlike fit, repeated calls to this method will cause trainig to resume from the current model state.
+        interactions: np.float32 coo_matrix of shape [n_users, n_items]
+             the matrix containing
+             user-item interactions. Will be converted to
+             numpy.float32 dtype if it is not of that type.
+        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+             Each row contains that user's weights over features.
+        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+             Each row contains that item's weights over features.
+        sample_weight: np.float32 coo_matrix of shape [n_users, n_items], optional
+             matrix with entries expressing weights of individual
+             interactions from the interactions matrix.
+             Its row and col arrays must be the same as
+             those of the interactions matrix. For memory
+             efficiency its ssible to use the same arrays
+             for both weights and interaction matrices.
+             Defaults to weight 1.0 for all interactions.
+             Not implemented for the k-OS loss.
+        epochs: int, optional
+             number of epochs to run
+        num_threads: int, optional
+             Number of parallel computation threads to use. Should
+             not be higher than the number of physical cores.
+        verbose: bool, optional
+             whether to print progress messages.
         """
 
         # We need this in the COO format.
@@ -485,21 +499,30 @@ class LightFM(object):
 
     def predict(self, user_ids, item_ids, item_features=None, user_features=None, num_threads=1):
         """
-        Predict the probability of a positive interaction.
+        Compute the recommendation score for user-item pairs.
 
-        Arguments:
-        - csr_matrix item_features: array of shape [n_samples, n_item_features].
-                                    Each row contains that row's item's weights
-                                    over features.
-        - csr_matrix user_features: array of shape [n_samples, n_user_features].
-                                    Each row contains that row's user's weights
-                                    over features.
-        - int num_threads: number of parallel computation threads to use. Should
-                           not be higher than the number of physical cores.
-                           Default: 1
+        Arguments
+        ---------
 
-        Returns:
-        - numpy array predictions: [n_samples] array of positive class probabilities.
+        user_ids: np.int32 array of shape [n_pairs,]
+             an array containing the user ids for the user-item pairs for which
+             a prediction is to be computed
+        item_ids: np.int32 array of shape [n_pairs,]
+             an array containing the item ids for the user-item pairs for which
+             a prediction is to be computed.
+        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+             Each row contains that user's weights over features.
+        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+             Each row contains that item's weights over features.
+        num_threads: int, optional
+             Number of parallel computation threads to use. Should
+             not be higher than the number of physical cores.
+
+        Returns
+        -------
+
+        np.float32 array of shape [n_pairs,]
+            Numpy array containig the recommendation scores for pairs defined by the inputs.
         """
 
         assert len(user_ids) == len(item_ids)
@@ -537,24 +560,29 @@ class LightFM(object):
         ranking, with 0 meaning the top of the list (most recommended) and n_items - 1 being the end of the
         list (least recommended).
 
-        Arguments:
-        - csr_matrix interactions: np.float32 matrix of shape [n_users, n_items] with non-zero entries
-                                   denoting the user-item pairs whose rank will be computed.
-        - csr_matrix item_features: array of shape [n_samples, n_item_features].
-                                    Each row contains that row's item's weights
-                                    over features.
-        - csr_matrix user_features: array of shape [n_samples, n_user_features].
-                                    Each row contains that row's user's weights
-                                    over features.
-        - int num_threads: number of parallel computation threads to use. Should
-                           not be higher than the number of physical cores.
-                           Default: 1
+        Arguments
+        ---------
+        interactions: np.float32 csr_matrix of shape [n_users, n_items]
+             Non-zero entries denote the user-item pairs whose rank will be computed.
+        item_ids: np.int32 array of shape [n_pairs,]
+             an array containing the item ids for the user-item pairs for which
+             a prediction is to be computed.
+        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+             Each row contains that user's weights over features.
+        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+             Each row contains that item's weights over features.
+        num_threads: int, optional
+             Number of parallel computation threads to use. Should
+             not be higher than the number of physical cores.
 
-        Returns:
-        - np.float32 csr_matrix: the [i, j]-th entry of the matrix will contain the rank of the j-th item
-                                 in the sorted recommendations list for the i-th user. The degree
-                                 of sparsity of this matrix will be equal to that of the input interactions
-                                 matrix.
+        Returns
+        -------
+                                   
+        np.float32 csr_matrix of shape [n_users, n_items]
+            the [i, j]-th entry of the matrix will contain the rank of the j-th item
+            in the sorted recommendations list for the i-th user. The degree
+            of sparsity of this matrix will be equal to that of the input interactions
+            matrix.
         """
 
         n_users, n_items = interactions.shape
