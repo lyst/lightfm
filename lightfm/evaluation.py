@@ -82,7 +82,11 @@ def auc_score(model, interactions, user_features=None, item_features=None, num_t
 
     auc = np.zeros(ranks.shape[0], dtype=np.float32)
 
+    # The second argument is modified in-place, but
+    # here we don't care about the inconsistency
+    # introduced into the ranks matrix.
     calculate_auc_from_rank(CSRMatrix(ranks),
+                            ranks.data,
                             auc,
                             num_threads)
 
