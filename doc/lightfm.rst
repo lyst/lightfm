@@ -1,4 +1,4 @@
-lightfm package
+LightFM
 ===============
 
 .. autoclass:: lightfm.LightFM

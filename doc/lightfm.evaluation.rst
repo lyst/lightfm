@@ -1,4 +1,4 @@
-lightfm.evaluation module
+Model evaluation
 =========================
 
 .. automodule:: lightfm.evaluation
