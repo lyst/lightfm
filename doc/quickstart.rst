@@ -6,7 +6,7 @@ In this example, we'll build an implicit feedback recommender using the
 Movielens 100k dataset (http://grouplens.org/datasets/movielens/100k/).
 
 The code behind this example is available as a `Jupyter
-notebook <https://github.com/lyst/lightfm/tree/master/examples/quickstart/quickstart.ipynb>`_.
+notebook <https://github.com/lyst/lightfm/tree/master/examples/quickstart/quickstart.ipynb>`__
 
 LightFM includes functions for getting and processing this dataset, so
 obtaining it is quite easy.

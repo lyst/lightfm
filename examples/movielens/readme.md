@@ -1,353 +1,112 @@
 
-#Using lightfm on the Movielens dataset
-
-##Getting the data
-The first step is to get the movielens data.
-
-Let's import the utility functions from `data.py`:
-
-
-    import numpy as np
-    import data
-
-The following functions get the dataset, and save it to a local file, and parse it into sparse matrices we can pass into `LightFM`.
-
-In particular, `_build_interaction_matrix` constructs the interaction matrix: a (no_users, no_items) matrix with 1 in place of positive interactions, and -1 in place of negative interactions. For this experiment, any rating lower than 4 is a negative rating.
-
-
-    import inspect
-
-
-    print(inspect.getsource(data._build_interaction_matrix))
-
-    def _build_interaction_matrix(rows, cols, data):
-        """
-        Build the training matrix (no_users, no_items),
-        with ratings >= 4.0 being marked as positive and
-        the rest as negative.
-        """
-    
-        mat = sp.lil_matrix((rows, cols), dtype=np.int32)
-    
-        for uid, iid, rating, timestamp in data:
-            if rating >= 4.0:
-                mat[uid, iid] = 1.0
-            else:
-                mat[uid, iid] = -1.0
-    
-        return mat.tocoo()
-    
-
-
-Let's run it! The dataset will be automatically downloaded and processed.
-
-
-    train, test = data.get_movielens_data()
-
-Let's check the matrices.
-
-
-    train
-
-
-
-
-    <944x1683 sparse matrix of type '<type 'numpy.int32'>'
-    	with 90570 stored elements in COOrdinate format>
-
-
-
-
-    test
-
-
-
-
-    <944x1683 sparse matrix of type '<type 'numpy.int32'>'
-    	with 9430 stored elements in COOrdinate format>
-
-
-
-Looks good and ready to go.
-
-## Fitting the model
-Let's import the lightfm model.
-
-
-    from lightfm import LightFM
-
-
-    model = LightFM(no_components=30)
-
-In this case, we set the latent dimensionality of the model to 30. Fitting is straightforward.
-
-
-    model.fit(train, epochs=50)
-
-
-
-
-    <lightfm.lightfm.LightFM at 0x7f035fac4a10>
-
-
-
-Let's try to get a handle on the model accuracy using the ROC AUC score.
-
-
-    from sklearn.metrics import roc_auc_score
-    
-    train_predictions = model.predict(train.row,
-                                      train.col)
-
-
-    train_predictions
-
-
-
-
-    array([ 1.16739023, -1.81594849,  0.33082035, ..., -0.84471774,
-           -3.59646535, -2.3761344 ])
-
-
-
-
-    roc_auc_score(train.data, train_predictions)
-
-
-
-
-    0.98794140543734321
-
-
-
-We've got very high accuracy on the train dataset; let's check the test set.
-
-
-    test_predictions = model.predict(test.row, test.col)
-
-
-    roc_auc_score(test.data, test_predictions)
-
-
-
-
-    0.72314175941707015
-
-
-
-The accuracy is much lower on the test data, suggesting a high degree of overfitting. We can combat this by regularizing the model.
-
-
-    model = LightFM(no_components=30, user_alpha=0.0001, item_alpha=0.0001)
-    model.fit(train, epochs=50)
-    roc_auc_score(test.data, model.predict(test.row, test.col))
-
-
-
-
-    0.76055575505353468
-
-
-
-A modicum of regularization gives much better results.
-
-## Using metadata
-The promise of `lightfm` is the possibility of using metadata in cold-start scenarios. The Movielens dataset has genre data for the movies it contains. Let's use that to train the `LightFM` model.
-
-The `get_movielens_item_metadata` function constructs a (no_items, no_features) matrix containing features for the movies; if we use genres this will be a (no_items, no_genres) feature matrix.
-
-
-    item_features = data.get_movielens_item_metadata(use_item_ids=False)
-    item_features
-
-
-
-
-    <1683x19 sparse matrix of type '<type 'numpy.int32'>'
-    	with 2893 stored elements in LInked List format>
-
-
-
-We need to pass these to the `fit` method in order to use them.
-
-
-    model = LightFM(no_components=30, user_alpha=0.0001, item_alpha=0.0001)
-    model.fit(train, item_features=item_features, epochs=50)
-    roc_auc_score(test.data, model.predict(test.row, test.col, item_features=item_features))
-
-
-
-
-    0.67300181616251231
-
-
-
-This is not as accurate as a pure collaborative filtering solution, but should enable us to make recommendations new movies.
-
-If we add item-specific features back, we should get the original accuracy back.
-
-
-    item_features = data.get_movielens_item_metadata(use_item_ids=True)
-    item_features
-    model = LightFM(no_components=30, user_alpha=0.0001, item_alpha=0.0001)
-    model.fit(train, item_features=item_features, epochs=50)
-    roc_auc_score(test.data, model.predict(test.row, test.col, item_features=item_features))
-
-
-
-
-    0.75583737010915852
-
-
+# An implicit feedback recommender for the Movielens dataset
 
 ## Implicit feedback
-So far, we have been treating the signals from the data as binary explicit feedback: either a user likes a movie (score >= 4) or does not. However, in many applications feedback is purely implicit: the items a user interacted with are positive signals, but we have no negative signals.
+For some time, the recommender system literature focused on explicit feedback: the Netflix prize focused on accurately reproducing the ratings users have given to movies they watched.
 
-`lightfm` implements two models suitable for dealing with this sort of data:
+Focusing on ratings in this way ignored the importance of taking into account which movies the users chose to watch in the first place, and treating the absence of ratings as absence of information.
+
+But the things that we don't have ratings for aren't unknowns: we know the user didn't pick them. This reflects a user's conscious choice, and is a good source of information on what she thinks she might like. 
+
+This sort of phenomenon is described as data which is missing-not-at-random in the literature: the ratings that are missing are more likely to be negative precisely because the user chooses which items to rate. When choosing a restaurant, you only go to places which you think you'll enjoy, and never go to places that you think you'll hate. What this leads to is that you're only going to be submitting ratings for things which, a priori, you expected to like; the things that you expect you will not like you will never rate.
+
+This observation has led to the development of models that are suitable for implicit feedback. LightFM implements two that have proven particular successful:
 
 - BPR: Bayesian Personalised Ranking [1] pairwise loss. Maximises the prediction difference between a positive example and a randomly chosen negative example. Useful when only positive interactions are present and optimising ROC AUC is desired.
 - WARP: Weighted Approximate-Rank Pairwise [2] loss. Maximises the rank of positive examples by repeatedly sampling negative examples until rank violating one is found. Useful when only positive interactions are present and optimising the top of the recommendation list (precision@k) is desired.
+
+This example shows how to estimate these models on the Movielens dataset.
 
 [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from implicit feedback." Proceedings of the Twenty-Fifth Conference on Uncertainty in Artificial Intelligence. AUAI Press, 2009.
 
 [2] Weston, Jason, Samy Bengio, and Nicolas Usunier. "Wsabie: Scaling up to large vocabulary image annotation." IJCAI. Vol. 11. 2011.
 
-Before using them, let's first load the data and define some evaluation functions.
+
+## Getting the data
+The first step is to get the [Movielens data](http://grouplens.org/datasets/movielens/100k/). This is a classic small recommender dataset, consisting of around 950 users, 1700 movies, and 100,000 ratings. The ratings are on a scale from 1 to 5, but we'll all treat them as implicit positive feedback in this example.
 
 
-    train, test = data.get_movielens_data()
-    train.data = np.ones_like(train.data)
-    test.data = np.ones_like(test.data)
+Fortunately, this is one of the functions provided by LightFM itself.
 
 
-    from sklearn.metrics import roc_auc_score
-    
-    
-    def precision_at_k(model, ground_truth, k):
-        """
-        Measure precision at k for model and ground truth.
-    
-        Arguments:
-        - lightFM instance model
-        - sparse matrix ground_truth (no_users, no_items)
-        - int k
-    
-        Returns:
-        - float precision@k
-        """
-    
-        ground_truth = ground_truth.tocsr()
-    
-        no_users, no_items = ground_truth.shape
-    
-        pid_array = np.arange(no_items, dtype=np.int32)
-    
-        precisions = []
-    
-        for user_id, row in enumerate(ground_truth):
-            uid_array = np.empty(no_items, dtype=np.int32)
-            uid_array.fill(user_id)
-            predictions = model.predict(uid_array, pid_array, num_threads=4)
-    
-            top_k = set(np.argsort(-predictions)[:k])
-            true_pids = set(row.indices[row.data == 1])
-    
-            if true_pids:
-                precisions.append(len(top_k & true_pids) / float(k))
-    
-        return sum(precisions) / len(precisions)
-    
-    
-    def full_auc(model, ground_truth):
-        """
-        Measure AUC for model and ground truth on all items.
-    
-        Arguments:
-        - lightFM instance model
-        - sparse matrix ground_truth (no_users, no_items)
-    
-        Returns:
-        - float AUC
-        """
-    
-        ground_truth = ground_truth.tocsr()
-    
-        no_users, no_items = ground_truth.shape
-    
-        pid_array = np.arange(no_items, dtype=np.int32)
-    
-        scores = []
-    
-        for user_id, row in enumerate(ground_truth):
-            uid_array = np.empty(no_items, dtype=np.int32)
-            uid_array.fill(user_id)
-            predictions = model.predict(uid_array, pid_array, num_threads=4)
-    
-            true_pids = row.indices[row.data == 1]
-    
-            grnd = np.zeros(no_items, dtype=np.int32)
-            grnd[true_pids] = 1
-    
-            if len(true_pids):
-                scores.append(roc_auc_score(grnd, predictions))
-    
-        return sum(scores) / len(scores)
+```python
+import numpy as np
 
+from lightfm.datasets import fetch_movielens
+
+movielens = fetch_movielens()
+```
+
+This gives us a dictionary with the following fields:
+
+
+```python
+for key, value in movielens.items():
+    print(key, value)
+```
+
+    ('test', <943x1682 sparse matrix of type '<type 'numpy.int32'>'
+    	with 9430 stored elements in COOrdinate format>)
+    ('item_features', <1682x1682 sparse matrix of type '<type 'numpy.float32'>'
+    	with 1682 stored elements in Compressed Sparse Row format>)
+    ('train', <943x1682 sparse matrix of type '<type 'numpy.int32'>'
+    	with 90570 stored elements in COOrdinate format>)
+    ('item_labels', array([u'Toy Story (1995)', u'GoldenEye (1995)', u'Four Rooms (1995)', ...,
+           u'Sliding Doors (1998)', u'You So Crazy (1994)',
+           u'Scream of Stone (Schrei aus Stein) (1991)'], dtype=object))
+    ('item_feature_labels', array([u'Toy Story (1995)', u'GoldenEye (1995)', u'Four Rooms (1995)', ...,
+           u'Sliding Doors (1998)', u'You So Crazy (1994)',
+           u'Scream of Stone (Schrei aus Stein) (1991)'], dtype=object))
+
+
+The `train` and `test` elements are the most important: they contain the raw rating data, split into a train and a test set. Each row represents a user, and each column an item. Entries are ratings from 1 to 5.
+
+## Fitting models
 
 Now let's train a BPR model and look at its accuracy.
 
+We'll use two metrics of accuracy: precision@k and ROC AUC. Both are ranking metrics: to compute them, we'll be constructing recommendation lists for all of our users, and checking the ranking of known positive movies. For precision at k we'll be looking at whether they are within the first k results on the list; for AUC, we'll be calculating the probability that any known positive is higher on the list than a random negative example.
 
-        model = LightFM(learning_rate=0.05, loss='bpr')
-    
-        model.fit_partial(train,
-                          epochs=10)
-    
-        train_precision = precision_at_k(model,
-                                         train,
-                                         10)
-        test_precision = precision_at_k(model,
-                                        test,
-                                        10)
-    
-        train_auc = full_auc(model, train)
-        test_auc = full_auc(model, test)
-        
-        print('Precision: %s, %s' % (train_precision, test_precision))
-        print('AUC: %s, %s' % (train_auc, test_auc))
 
-    Precision: 0.421208907741, 0.0622481442206
-    AUC: 0.838544064431, 0.819069444911
+```python
+model = LightFM(learning_rate=0.05, loss='bpr')
+
+model.fit(train, epochs=10)
+
+train_precision = precision_at_k(model, train, k=10).mean()
+test_precision = precision_at_k(model, test, k=10).mean()
+
+train_auc = auc_score(model, train).mean()
+test_auc = auc_score(model, test).mean()
+
+print('Precision: train %.2f, test %.2f.' % (train_precision, test_precision))
+print('AUC: train %.2f, test %.2f.' % (train_auc, test_auc))
+```
+
+    Precision: train 0.41, test 0.06.
+    AUC: train 0.83, test 0.81.
 
 
 The WARP model, on the other hand, optimises for precision@k---we should expect its performance to be better on precision.
 
 
-        model = LightFM(learning_rate=0.05, loss='warp')
-    
-        model.fit_partial(train,
-                          epochs=10)
-    
-        train_precision = precision_at_k(model,
-                                         train,
-                                         10)
-        test_precision = precision_at_k(model,
-                                        test,
-                                        10)
-    
-        train_auc = full_auc(model, train)
-        test_auc = full_auc(model, test)
-        
-        print('Precision: %s, %s' % (train_precision, test_precision))
-        print('AUC: %s, %s' % (train_auc, test_auc))
+```python
+model = LightFM(learning_rate=0.05, loss='warp')
 
-    Precision: 0.624708377519, 0.110816542948
-    AUC: 0.941236748837, 0.904416726513
+model.fit_partial(train, epochs=10)
+
+train_precision = precision_at_k(model, train, k=10).mean()
+test_precision = precision_at_k(model, test, k=10).mean()
+
+train_auc = auc_score(model, train).mean()
+test_auc = auc_score(model, test).mean()
+
+print('Precision: train %.2f, test %.2f.' % (train_precision, test_precision))
+print('AUC: train %.2f, test %.2f.' % (train_auc, test_auc))
+```
+
+    Precision: train 0.61, test 0.11.
+    AUC: train 0.91, test 0.88.
 
 
 And that is exactly what we see: we get much higher precision@10 (but the AUC metric is also improved).
-
-
-    
-
-
-    
