@@ -49,6 +49,24 @@ class LightFM(object):
         the number of items divided by 10. Setting this to lower number may improve the speed of
         WARP fitting at the expense of some accuracy.
 
+    Attributes
+    ----------
+
+    item_embeddings: np.float32 array of shape [n_item_features, n_components]
+         Contains the estimated latent vectors for item features. The [i, j]-th entry
+         gives the value of the j-th component for the i-th item feature. In the simplest
+         case where the item feature matrix is an identity matrix, the i-th row
+         will represent the i-th item latent vector.
+    user_embeddings: np.float32 array of shape [n_user_features, n_components]
+         Contains the estimated latent vectors for user features. The [i, j]-th entry
+         gives the value of the j-th component for the i-th user feature. In the simplest
+         case where the user feature matrix is an identity matrix, the i-th row
+         will represent the i-th user latent vector.
+    item_biases: np.float32 array of shape [n_item_features,]
+         Contains the biases for item_features.
+    user_biases: np.float32 array of shape [n_user_features,]
+         Contains the biases for user_features.
+
     Notes
     -----
 
@@ -324,6 +342,13 @@ class LightFM(object):
              not be higher than the number of physical cores.
         verbose: bool, optional
              whether to print progress messages.
+
+        Returns
+        -------
+
+        LightFM instance
+            the fitted model
+
         """
 
         # Discard old results, if any
@@ -374,6 +399,12 @@ class LightFM(object):
              not be higher than the number of physical cores.
         verbose: bool, optional
              whether to print progress messages.
+
+        Returns
+        -------
+
+        LightFM instance
+            the fitted model
         """
 
         # We need this in the COO format.
