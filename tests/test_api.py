@@ -58,6 +58,25 @@ def test_matrix_types():
                           item_features=item_features)
 
 
+def test_predict():
+
+    no_users, no_items = (10, 100)
+
+    train = sp.coo_matrix((no_users,
+                           no_items),
+                          dtype=np.int32)
+
+    model = LightFM()
+    model.fit_partial(train)
+
+    for uid in range(no_users):
+        scores_arr = model.predict(np.repeat(uid, no_items),
+                                   np.arange(no_items))
+        scores_int = model.predict(uid,
+                                   np.arange(no_items))
+        assert np.allclose(scores_arr, scores_int)
+
+
 def test_input_dtypes():
 
     dtypes = (np.int32,

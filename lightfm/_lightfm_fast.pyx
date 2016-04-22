@@ -798,7 +798,7 @@ def fit_warp(CSRMatrix item_features,
             user_id = user_ids[row]
             positive_item_id = item_ids[row]
 
-            if not Y[row] == 1:
+            if not Y[row] > 0:
                 continue
 
             weight = sample_weight[row]
@@ -1071,7 +1071,7 @@ def fit_bpr(CSRMatrix item_features,
         for i in prange(no_examples):
             row = shuffle_indices[i]
 
-            if not Y[row] == 1:
+            if not Y[row] > 0:
                 continue
 
             weight = sample_weight[row]

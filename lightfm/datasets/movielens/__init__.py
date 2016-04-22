@@ -71,12 +71,13 @@ def _get_dimensions(train_data, test_data):
     return rows, cols
 
 
-def _build_interaction_matrix(rows, cols, data):
+def _build_interaction_matrix(rows, cols, data, min_rating):
 
     mat = sp.lil_matrix((rows, cols), dtype=np.int32)
 
     for uid, iid, rating, _ in data:
-        mat[uid, iid] = rating
+        if rating >= min_rating:
+            mat[uid, iid] = rating
 
     return mat.tocoo()
 
@@ -124,7 +125,8 @@ def _parse_item_metadata(num_items,
             genre_features.tocsr(), genre_feature_labels)
 
 
-def fetch_movielens(data_home=None, indicator_features=True, genre_features=False, download_if_missing=True):
+def fetch_movielens(data_home=None, indicator_features=True, genre_features=False,
+                    min_rating=0.0, download_if_missing=True):
     """
     Fetch the `Movielens 100k dataset <http://grouplens.org/datasets/movielens/100k/>`_.
 
@@ -144,6 +146,8 @@ def fetch_movielens(data_home=None, indicator_features=True, genre_features=Fals
         Use a [n_users, n_genres] matrix for item features. When True with item_indicator_features,
         indicator and genre features are concatenated into a single feature matrix of shape
         [n_users, n_users + n_genres].
+    min_rating: float, optional
+        Minimum rating to include in the interaction matrix.
     download_if_missing: bool, optional
         Download the data if not present. Raises an IOError if False and data is missing.
 
@@ -198,11 +202,13 @@ def fetch_movielens(data_home=None, indicator_features=True, genre_features=Fals
     # Load train interactions
     train = _build_interaction_matrix(num_users,
                                       num_items,
-                                      _parse(train_raw))
+                                      _parse(train_raw),
+                                      min_rating)
     # Load test interactions
     test = _build_interaction_matrix(num_users,
                                      num_items,
-                                     _parse(test_raw))
+                                     _parse(test_raw),
+                                     min_rating)
 
     assert train.shape == test.shape
 

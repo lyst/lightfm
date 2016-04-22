@@ -535,8 +535,8 @@ class LightFM(object):
         Arguments
         ---------
 
-        user_ids: np.int32 array of shape [n_pairs,]
-             an array containing the user ids for the user-item pairs for which
+        user_ids: integer or np.int32 array of shape [n_pairs,]
+             single user id or an array containing the user ids for the user-item pairs for which
              a prediction is to be computed
         item_ids: np.int32 array of shape [n_pairs,]
              an array containing the item ids for the user-item pairs for which
@@ -556,7 +556,15 @@ class LightFM(object):
             Numpy array containig the recommendation scores for pairs defined by the inputs.
         """
 
+        if not isinstance(user_ids, np.ndarray):
+            user_ids = np.repeat(np.int32(user_ids), len(item_ids))
+
         assert len(user_ids) == len(item_ids)
+
+        if user_ids.dtype != np.int32:
+            user_ids = user_ids.astype(np.int32)
+        if item_ids.dtype != np.int32:
+            item_ids = item_ids.astype(np.int32)
 
         n_users = user_ids.max() + 1
         n_items = item_ids.max() + 1

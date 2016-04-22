@@ -12,6 +12,12 @@ It also makes it possible to incorporate both item and user metadata into the tr
 
 The details of the approach are described in the LightFM paper, available on `arXiv <http://arxiv.org/abs/1507.08439>`_.
 
+Quickstart
+==========
+
+Jump straight to the :doc:`Movielens quickstart <quickstart>` if you're impatient.
+
+
 Installation
 ============
 
@@ -114,6 +120,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   Quickstart <quickstart>
    LightFM model <lightfm>
    Model evaluation <lightfm.evaluation>
    Datasets <datasets>

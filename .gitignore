@@ -4,6 +4,7 @@
 *.zip
 *.so
 examples/movielens/.ipynb_checkpoints/
+examples/quickstart/.ipynb_checkpoints/
 build/
 dist/
 bench/
