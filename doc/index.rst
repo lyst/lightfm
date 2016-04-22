@@ -116,6 +116,7 @@ Contents
 
    LightFM model <lightfm>
    Model evaluation <lightfm.evaluation>
+   Datasets <datasets>
 
 
 Indices and tables
