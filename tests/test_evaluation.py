@@ -1,20 +1,14 @@
 import numpy as np
 
+import scipy.sparse as sp
+
 from sklearn.metrics import roc_auc_score
 
+from lightfm import LightFM, evaluation
 
-def precision_at_k(model, ground_truth, k, user_features=None, item_features=None):
-    """
-    Measure precision at k for model and ground truth.
 
-    Arguments:
-    - lightFM instance model
-    - sparse matrix ground_truth (no_users, no_items)
-    - int k
-
-    Returns:
-    - float precision@k
-    """
+def _precision_at_k(model, ground_truth, k, user_features=None, item_features=None):
+    # Alternative test implementation
 
     ground_truth = ground_truth.tocsr()
 
@@ -41,17 +35,7 @@ def precision_at_k(model, ground_truth, k, user_features=None, item_features=Non
     return sum(precisions) / len(precisions)
 
 
-def full_auc(model, ground_truth, user_features=None, item_features=None):
-    """
-    Measure AUC for model and ground truth on all items.
-
-    Arguments:
-    - lightFM instance model
-    - sparse matrix ground_truth (no_users, no_items)
-
-    Returns:
-    - float AUC
-    """
+def _auc(model, ground_truth, user_features=None, item_features=None):
 
     ground_truth = ground_truth.tocsr()
 
@@ -77,4 +61,46 @@ def full_auc(model, ground_truth, user_features=None, item_features=None):
         if len(true_pids):
             scores.append(roc_auc_score(grnd, predictions))
 
-    return sum(scores) / len(scores)
+    return scores
+
+
+def test_precision_at_k():
+
+    no_users, no_items = (10, 100)
+
+    train = sp.rand(no_users, no_items, format='coo')
+    train.data = np.ones_like(train.data)
+
+    model = LightFM(loss='bpr')
+    model.fit_partial(train)
+
+    k = 10
+
+    mean_precision = evaluation.precision_at_k(model,
+                                               train,
+                                               k=k)[train.getnnz(axis=1) > 0].mean()
+    expected_mean_precision = _precision_at_k(model,
+                                              train,
+                                              k)
+
+    assert np.allclose(mean_precision, expected_mean_precision)
+
+
+def test_auc_score():
+
+    no_users, no_items = (10, 100)
+
+    train = sp.rand(no_users, no_items, format='coo')
+    train.data = np.ones_like(train.data)
+
+    model = LightFM(loss='bpr')
+    model.fit_partial(train)
+
+    auc = evaluation.auc_score(model,
+                               train,
+                               num_threads=2)[train.getnnz(axis=1) > 0]
+    expected_auc = np.array(_auc(model,
+                                 train))
+
+    assert auc.shape == expected_auc.shape
+    assert np.abs(auc.mean() - expected_auc.mean()) < 0.01

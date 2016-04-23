@@ -8,6 +8,7 @@
 - max_sampled hyperparameter for WARP losses. This allows trading off accuracy for WARP training time: a smaller value
   will mean less negative sampling and faster training when the model is near the optimum.
 - Added a sample_weight argument to fit and fit_partial functions. A high value will now increase the size of the SGD step taken for that interaction.
+- Added an evaluation module for more efficient evaluation of learning-to-rank models.
 
 ## [1.8][2016-01-14]
 ### Changed

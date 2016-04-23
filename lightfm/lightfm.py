@@ -1,14 +1,16 @@
 from __future__ import print_function
 
-import textwrap
-
 import numpy as np
 
 import scipy.sparse as sp
 
 from .lightfm_fast import (CSRMatrix, FastLightFM,
                            fit_logistic, predict_lightfm,
+                           predict_ranks,
                            fit_warp, fit_bpr, fit_warp_kos)
+
+
+__all__ = ['LightFM']
 
 
 CYTHON_DTYPE = np.float32
@@ -25,6 +27,7 @@ class LightFM(object):
         Initialise the model.
 
         Four loss functions are available:
+
         - logistic: useful when both positive (1) and negative (-1) interactions
                     are present.
         - BPR: Bayesian Personalised Ranking [1] pairwise loss. Maximises the
@@ -40,16 +43,18 @@ class LightFM(object):
                      positive example for any given user as a basis for pairwise updates.
 
         Two learning rate schedules are available:
+
         - adagrad: [4]
         - adadelta: [5]
 
         Parameters:
-        - integer no_components: the dimensionality of the feature latent embeddings. Default: 10
+
+        - int no_components: the dimensionality of the feature latent embeddings. Default: 10
         - int k: for k-OS training, the k-th positive example will be selected from the n positive
                  examples sampled for every user. Default: 5
         - int n: for k-OS training, maximum number of positives sampled for each update. Default: 10
         - string learning_schedule, one of ('adagrad', 'adadelta'). Default: 'adagrad'
-        - string loss ('logistic', 'bpr', 'warp', 'warp-kos'): the loss function to use. Default: 'logistic'
+        - string loss, one of  ('logistic', 'bpr', 'warp', 'warp-kos'): the loss function to use. Default: 'logistic'
         - float learning_rate: initial learning rate for the adagrad learning schedule. Default: 0.05
         - float rho: moving average coefficient for the adadelta learning schedule. Default: 0.95
         - float epsilon: conditioning parameter for the adadelta learning schedule. Default: 1e-6
@@ -155,13 +160,15 @@ class LightFM(object):
 
         if user_features is None:
             user_features = sp.identity(n_users,
-                                        dtype=np.int32).tocsr()
+                                        dtype=CYTHON_DTYPE,
+                                        format='csr')
         else:
             user_features = user_features.tocsr()
 
         if item_features is None:
             item_features = sp.identity(n_items,
-                                        dtype=np.int32).tocsr()
+                                        dtype=CYTHON_DTYPE,
+                                        format='csr')
         else:
             item_features = item_features.tocsr()
 
@@ -238,6 +245,32 @@ class LightFM(object):
 
         return sample_weight_data
 
+    def _get_lightfm_data(self):
+
+        max_sampled = (self.max_sampled if self.max_sampled is not None
+                       else self.item_embeddings.shape[0] / 10)
+
+        lightfm_data = FastLightFM(self.item_embeddings,
+                                   self.item_embedding_gradients,
+                                   self.item_embedding_momentum,
+                                   self.item_biases,
+                                   self.item_bias_gradients,
+                                   self.item_bias_momentum,
+                                   self.user_embeddings,
+                                   self.user_embedding_gradients,
+                                   self.user_embedding_momentum,
+                                   self.user_biases,
+                                   self.user_bias_gradients,
+                                   self.user_bias_momentum,
+                                   self.no_components,
+                                   int(self.learning_schedule == 'adadelta'),
+                                   self.learning_rate,
+                                   self.rho,
+                                   self.epsilon,
+                                   max_sampled)
+
+        return lightfm_data
+
     def fit(self, interactions,
             user_features=None, item_features=None,
             sample_weight=None,
@@ -246,6 +279,7 @@ class LightFM(object):
         Fit the model.
 
         Arguments:
+
         - coo_matrix interactions: np.float32 matrix of shape [n_users, n_items] containing
                                    user-item interactions. Will be converted to
                                    numpy.float32 dtype if it is not of that type
@@ -253,6 +287,7 @@ class LightFM(object):
                                    matrix size)
 
         Optional arguments:
+
         - csr_matrix user_features: array of shape [n_users, n_user_features].
                                     Each row contains that user's weights
                                     over features.
@@ -268,7 +303,6 @@ class LightFM(object):
                                     for both weights and interaction matrices.
                                     Defaults to weight 1.0 for all interactions.
                                     Not implemented for the k-OS loss.
-
         - int epochs: number of epochs to run. Default: 1
         - int num_threads: number of parallel computation threads to use. Should
                            not be higher than the number of physical cores.
@@ -291,6 +325,42 @@ class LightFM(object):
                     user_features=None, item_features=None,
                     sample_weight=None,
                     epochs=1, num_threads=1, verbose=False):
+        """
+        Fit the model.
+
+        Arguments:
+
+        - coo_matrix interactions: np.float32 matrix of shape [n_users, n_items] containing
+                                   user-item interactions. Will be converted to
+                                   numpy.float32 dtype if it is not of that type
+                                   (this conversion may be heavy depending upon
+                                   matrix size)
+
+        Optional arguments:
+
+        - csr_matrix user_features: array of shape [n_users, n_user_features].
+                                    Each row contains that user's weights
+                                    over features.
+        - csr_matrix item_features: array of shape [n_items, n_item_features].
+                                    Each row contains that item's weights
+                                    over features.
+        - coo_matrix sample_weight: np.float32 matrix of shape [n_users, n_items] with
+                                    entries expressing weights of individual
+                                    interactions from the interactions matrix.
+                                    Its row and col arrays must be the same as
+                                    those of the interactions matrix. For memory
+                                    efficiency its ssible to use the same arrays
+                                    for both weights and interaction matrices.
+                                    Defaults to weight 1.0 for all interactions.
+                                    Not implemented for the k-OS loss.
+        - int epochs: number of epochs to run. Default: 1
+        - int num_threads: number of parallel computation threads to use. Should
+                           not be higher than the number of physical cores.
+                           Default: 1
+        - bool verbose: whether to print progress messages.
+
+        Unlike fit, repeated calls to this method will cause trainig to resume from the current model state.
+        """
 
         # We need this in the COO format.
         # If that's already true, this is a no-op.
@@ -345,13 +415,6 @@ class LightFM(object):
 
         return self
 
-    fit_partial.__doc__ = (fit.__doc__ +
-                           textwrap.dedent("""
-
-        Unlike fit, repeated calls to this method will cause trainig to resume
-        from the current model state.
-                           """))
-
     def _run_epoch(self, item_features, user_features, interactions,
                    sample_weight, num_threads, loss):
         """
@@ -362,27 +425,7 @@ class LightFM(object):
         shuffle_indices = np.arange(len(interactions.data), dtype=np.int32)
         np.random.shuffle(shuffle_indices)
 
-        max_sampled = (self.max_sampled if self.max_sampled is not None
-                       else self.item_embeddings.shape[0] / 10)
-
-        lightfm_data = FastLightFM(self.item_embeddings,
-                                   self.item_embedding_gradients,
-                                   self.item_embedding_momentum,
-                                   self.item_biases,
-                                   self.item_bias_gradients,
-                                   self.item_bias_momentum,
-                                   self.user_embeddings,
-                                   self.user_embedding_gradients,
-                                   self.user_embedding_momentum,
-                                   self.user_biases,
-                                   self.user_bias_gradients,
-                                   self.user_bias_momentum,
-                                   self.no_components,
-                                   int(self.learning_schedule == 'adadelta'),
-                                   self.learning_rate,
-                                   self.rho,
-                                   self.epsilon,
-                                   max_sampled)
+        lightfm_data = self._get_lightfm_data()
 
         # Call the estimation routines.
         if loss == 'warp':
@@ -473,27 +516,7 @@ class LightFM(object):
         user_features = self._to_cython_dtype(user_features)
         item_features = self._to_cython_dtype(item_features)
 
-        max_sampled = (self.max_sampled if self.max_sampled is not None
-                       else self.item_embeddings.shape[0] / 10)
-
-        lightfm_data = FastLightFM(self.item_embeddings,
-                                   self.item_embedding_gradients,
-                                   self.item_embedding_momentum,
-                                   self.item_biases,
-                                   self.item_bias_gradients,
-                                   self.item_bias_momentum,
-                                   self.user_embeddings,
-                                   self.user_embedding_gradients,
-                                   self.user_embedding_momentum,
-                                   self.user_biases,
-                                   self.user_bias_gradients,
-                                   self.user_bias_momentum,
-                                   self.no_components,
-                                   int(self.learning_schedule == 'adadelta'),
-                                   self.learning_rate,
-                                   self.rho,
-                                   self.epsilon,
-                                   max_sampled)
+        lightfm_data = self._get_lightfm_data()
 
         predictions = np.empty(len(user_ids), dtype=np.float64)
 
@@ -506,3 +529,63 @@ class LightFM(object):
                         num_threads)
 
         return predictions
+
+    def predict_rank(self, interactions, item_features=None, user_features=None, num_threads=1):
+        """
+        Predict the rank of selected interactions. Computes recommendation rankings across all items
+        for every user in interactions and calculates the rank of all non-zero entries in the recommendation
+        ranking, with 0 meaning the top of the list (most recommended) and n_items - 1 being the end of the
+        list (least recommended).
+
+        Arguments:
+        - csr_matrix interactions: np.float32 matrix of shape [n_users, n_items] with non-zero entries
+                                   denoting the user-item pairs whose rank will be computed.
+        - csr_matrix item_features: array of shape [n_samples, n_item_features].
+                                    Each row contains that row's item's weights
+                                    over features.
+        - csr_matrix user_features: array of shape [n_samples, n_user_features].
+                                    Each row contains that row's user's weights
+                                    over features.
+        - int num_threads: number of parallel computation threads to use. Should
+                           not be higher than the number of physical cores.
+                           Default: 1
+
+        Returns:
+        - np.float32 csr_matrix: the [i, j]-th entry of the matrix will contain the rank of the j-th item
+                                 in the sorted recommendations list for the i-th user. The degree
+                                 of sparsity of this matrix will be equal to that of the input interactions
+                                 matrix.
+        """
+
+        n_users, n_items = interactions.shape
+
+        (user_features,
+         item_features) = self._construct_feature_matrices(n_users,
+                                                           n_items,
+                                                           user_features,
+                                                           item_features)
+
+        if not item_features.shape[1] == self.item_embeddings.shape[0]:
+            raise ValueError('Incorrect number of features in item_features')
+
+        if not user_features.shape[1] == self.user_embeddings.shape[0]:
+            raise ValueError('Incorrect number of features in user_features')
+
+        interactions = interactions.tocsr()
+        interactions = self._to_cython_dtype(interactions)
+
+        ranks = sp.csr_matrix((np.zeros_like(interactions.data),
+                               interactions.indices,
+                               interactions.indptr),
+                              shape=interactions.shape)
+
+        lightfm_data = self._get_lightfm_data()
+
+        predict_ranks(CSRMatrix(item_features),
+                      CSRMatrix(user_features),
+                      CSRMatrix(interactions),
+                      ranks.data,
+                      lightfm_data,
+                      num_threads)
+
+        return ranks
