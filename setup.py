@@ -20,7 +20,7 @@ def define_extensions():
     if 'anaconda' not in sys.version.lower():
         compile_args.append('-march=native')
 
-    if 'darwin' in sys.platform.lower() or True:
+    if 'darwin' in sys.platform.lower():
         print('Compiling on OSX: installing without OpenMP support.')
         return [Extension("lightfm._lightfm_fast_no_openmp",
                           ['lightfm/_lightfm_fast_no_openmp.c'],
@@ -136,7 +136,7 @@ setup(
     url='https://github.com/lyst/lightfm',
     download_url='https://github.com/lyst/lightfm/tarball/1.9',
     packages=['lightfm'],
-    install_requires=['numpy', 'scipy'],
+    install_requires=['numpy', 'scipy', 'requests'],
     tests_require=['pytest', 'requests', 'scikit-learn'],
     cmdclass={'test': PyTest, 'cythonize': Cythonize, 'clean': Clean},
     author='Lyst Ltd (Maciej Kula)',
