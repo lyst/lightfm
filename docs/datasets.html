@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Datasets &mdash; LightFM 1.9 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="LightFM 1.9 documentation" href="index.html"/>
+        <link rel="next" title="Examples" href="examples.html"/>
+        <link rel="prev" title="Model evaluation" href="lightfm.evaluation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> LightFM
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="home.html">Home</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="home.html#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="home.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="home.html#using-with-docker">Using with Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#development">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#getting-the-data">Getting the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#fitting-models">Fitting models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/learning_schedules.html">Learning rate schedules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#preliminaries">Preliminaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#experiment">Experiment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">LightFM</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Datasets</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/datasets.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="datasets">
+<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="lightfm.datasets.movielens.fetch_movielens">
+<code class="descclassname">lightfm.datasets.movielens.</code><code class="descname">fetch_movielens</code><span class="sig-paren">(</span><em>data_home=None</em>, <em>indicator_features=True</em>, <em>genre_features=False</em>, <em>min_rating=0.0</em>, <em>download_if_missing=True</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.datasets.movielens.fetch_movielens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the <a class="reference external" href="http://grouplens.org/datasets/movielens/100k/">Movielens 100k dataset</a>.</p>
+<p>The dataset contains 100,000 interactions from 1000 users on 1700 movies, and is exhaustively described
+in its <a class="reference external" href="http://files.grouplens.org/datasets/movielens/ml-100k-README.txt">README</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data_home</strong> (<em>path, optional</em>) &#8211; Path to the directory in which the downloaded data should be placed. Defaults to <code class="docutils literal"><span class="pre">~/lightfm_data/</span></code>.</li>
+<li><strong>indicator_features</strong> (<em>bool, optional</em>) &#8211; Use an [n_users, n_users] identity matrix for item features. When True with genre_features,
+indicator and genre features are concatenated into a single feature matrix of shape
+[n_users, n_users + n_genres].</li>
+<li><strong>genre_features</strong> (<em>bool, optional</em>) &#8211; Use a [n_users, n_genres] matrix for item features. When True with item_indicator_features,
+indicator and genre features are concatenated into a single feature matrix of shape
+[n_users, n_users + n_genres].</li>
+<li><strong>min_rating</strong> (<em>float, optional</em>) &#8211; Minimum rating to include in the interaction matrix.</li>
+<li><strong>download_if_missing</strong> (<em>bool, optional</em>) &#8211; Download the data if not present. Raises an IOError if False and data is missing.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The return value is a dictionary containing the following keys:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>train</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) &#8211; Contains training set interactions.</li>
+<li><strong>test</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) &#8211; Contains testing set interactions.</li>
+<li><strong>item_features</strong> (<em>sp.csr_matrix of shape [n_items, n_item_features]</em>) &#8211; Contains item features.</li>
+<li><strong>item_feature_labels</strong> (<em>np.array of strings of shape [n_item_features,]</em>) &#8211; Labels of item features.</li>
+<li><strong>item_labels</strong> (<em>np.array of strings of shape [n_items,]</em>) &#8211; Items&#8217; titles.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="lightfm.evaluation.html" class="btn btn-neutral" title="Model evaluation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Lyst (Maciej Kula).
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
