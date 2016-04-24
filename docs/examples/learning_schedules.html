@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using different learning schedules &mdash; LightFM 1.9 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="LightFM 1.9 documentation" href="../index.html"/>
+        <link rel="up" title="Examples" href="../examples.html"/>
+        <link rel="prev" title="An implicit feedback recommender for the Movielens dataset" href="movielens_implicit.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../index.html" class="icon icon-home"> LightFM
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../home.html">Home</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../home.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../home.html#using-with-docker">Using with Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#development">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#getting-the-data">Getting the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#fitting-models">Fitting models</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Learning rate schedules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#preliminaries">Preliminaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment">Experiment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">LightFM</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../examples.html">Examples</a> &raquo;</li>
+      
+    <li>Using different learning schedules</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/examples/learning_schedules.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="using-different-learning-schedules">
+<h1>Using different learning schedules<a class="headerlink" href="#using-different-learning-schedules" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal"><span class="pre">lightfm</span></code> implements two learning schedules: adagrad and adadelta.
+Neither is clearly superior, and, like other hyperparameter choices, the
+best learning schedule will differ based on the problem at hand.</p>
+<p>This example tries both at the Movielens 100k dataset.</p>
+<div class="section" id="preliminaries">
+<h2>Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s first get the data and define the evaluations functions.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">data</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
+<span class="kn">from</span> <span class="nn">lightfm.datasets</span> <span class="k">import</span> <span class="n">fetch_movielens</span>
+<span class="kn">from</span> <span class="nn">lightfm.evaluation</span> <span class="k">import</span> <span class="n">auc_score</span>
+
+<span class="n">movielens</span> <span class="o">=</span> <span class="n">fetch_movielens</span><span class="p">()</span>
+
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">movielens</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">],</span> <span class="n">movielens</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="experiment">
+<h2>Experiment<a class="headerlink" href="#experiment" title="Permalink to this headline">¶</a></h2>
+<p>To evaluate the performance of both learning schedules, let&#8217;s create two
+models and run each for a number of epochs, measuring the ROC AUC on the
+test set at the end of each epoch.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">3</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="mi">70</span>
+
+<span class="n">adagrad_model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                        <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">,</span>
+                        <span class="n">learning_schedule</span><span class="o">=</span><span class="s1">&#39;adagrad&#39;</span><span class="p">,</span>
+                        <span class="n">user_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                        <span class="n">item_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+<span class="n">adadelta_model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                        <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">,</span>
+                        <span class="n">learning_schedule</span><span class="o">=</span><span class="s1">&#39;adadelta&#39;</span><span class="p">,</span>
+                        <span class="n">user_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                        <span class="n">item_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+<span class="n">adagrad_auc</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="n">adagrad_model</span><span class="o">.</span><span class="n">fit_partial</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">adagrad_auc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">auc_score</span><span class="p">(</span><span class="n">adagrad_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+
+<span class="n">adadelta_auc</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="n">adadelta_model</span><span class="o">.</span><span class="n">fit_partial</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">adadelta_auc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">auc_score</span><span class="p">(</span><span class="n">adadelta_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>It looks like the adadelta gets to a better result at the beginning of
+training. However, as we keep running more epochs adagrad wins out,
+converging to a better final solution.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">adagrad_auc</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">adagrad_auc</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">adadelta_auc</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;adagrad&#39;</span><span class="p">,</span> <span class="s1">&#39;adadelta&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/learning_schedules_5_0.png" src="../_images/learning_schedules_5_0.png" />
+<p>We can try the same for the k-OS loss.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">3</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="mi">70</span>
+
+<span class="n">adagrad_model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                        <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp-kos&#39;</span><span class="p">,</span>
+                        <span class="n">learning_schedule</span><span class="o">=</span><span class="s1">&#39;adagrad&#39;</span><span class="p">,</span>
+                        <span class="n">user_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">item_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+<span class="n">adadelta_model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                        <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp-kos&#39;</span><span class="p">,</span>
+                        <span class="n">learning_schedule</span><span class="o">=</span><span class="s1">&#39;adadelta&#39;</span><span class="p">,</span>
+                        <span class="n">user_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">item_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+<span class="n">adagrad_auc</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="n">adagrad_model</span><span class="o">.</span><span class="n">fit_partial</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">adagrad_auc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">auc_score</span><span class="p">(</span><span class="n">adagrad_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+
+<span class="n">adadelta_auc</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="n">adadelta_model</span><span class="o">.</span><span class="n">fit_partial</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">adadelta_auc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">auc_score</span><span class="p">(</span><span class="n">adadelta_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">adagrad_auc</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">adagrad_auc</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">adadelta_auc</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;adagrad&#39;</span><span class="p">,</span> <span class="s1">&#39;adadelta&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/learning_schedules_8_0.png" src="../_images/learning_schedules_8_0.png" />
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="movielens_implicit.html" class="btn btn-neutral" title="An implicit feedback recommender for the Movielens dataset" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Lyst (Maciej Kula).
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
