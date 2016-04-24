@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to LightFM’s documentation! &mdash; LightFM 1.9 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="LightFM 1.9 documentation" href="index.html"/>
+        <link rel="next" title="Quickstart" href="quickstart.html"/>
+        <link rel="prev" title="Welcome to LightFM’s documentation!" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> LightFM
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Home</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-with-docker">Using with Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#getting-the-data">Getting the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#fitting-models">Fitting models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/learning_schedules.html">Learning rate schedules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#preliminaries">Preliminaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#experiment">Experiment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">LightFM</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Welcome to LightFM&#8217;s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/home.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="welcome-to-lightfm-s-documentation">
+<h1>Welcome to LightFM&#8217;s documentation!<a class="headerlink" href="#welcome-to-lightfm-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>LightFM is a Python implementation of a number of popular recommendation algorithms for both implicit and explicit feedback.</p>
+<p>It also makes it possible to incorporate both item and user metadata into the traditional matrix factorization algorithms It represents each user and item as the sum of the latent representations of their features, thus allowing recommendations to generalise to new items (via item features) and to new users (via user features).</p>
+<p>The details of the approach are described in the LightFM paper, available on <a class="reference external" href="http://arxiv.org/abs/1507.08439">arXiv</a>.</p>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p>Jump straight to the <a class="reference internal" href="quickstart.html"><span class="doc">Movielens quickstart</span></a> if you&#8217;re impatient.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pypi">
+<h3>PyPI<a class="headerlink" href="#pypi" title="Permalink to this headline">¶</a></h3>
+<p>Install from pypi using pip: <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lightfm</span></code>. Everything should work out-of-the box on Linux and Windows using MSVC.</p>
+<p>Note for OSX users: due to its use of OpenMP, LightFM does not compile under Clang. To install it, you will need a reasonably recent version of <code class="docutils literal"><span class="pre">gcc</span></code> (from Homebrew for instance). This should be picked up by <code class="docutils literal"><span class="pre">setup.py</span></code>; if it is not, please open an issue.</p>
+<p>Building with the default Python distribution included in OSX is also not supported; please try the version from Homebrew or Anaconda.</p>
+<p>If you are having problems, you should try using lightfm with Docker (see the next section).</p>
+</div>
+<div class="section" id="using-with-docker">
+<h3>Using with Docker<a class="headerlink" href="#using-with-docker" title="Permalink to this headline">¶</a></h3>
+<p>On many systems it may be more convenient to try LightFM out in a Docker container. This repository provides a small Dockerfile sufficient to run LightFM and its examples. To run it:</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://docs.docker.com/compose/install/">Install Docker</a> and start the docker deamon/virtual machine.</li>
+<li>Clone this repository and navigate to it: <code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:lyst/lightfm.git</span> <span class="pre">&amp;&amp;</span> <span class="pre">cd</span> <span class="pre">lightfm</span></code>.</li>
+<li>Run <code class="docutils literal"><span class="pre">docker-compose</span> <span class="pre">build</span> <span class="pre">lightfm</span></code> to build the container.</li>
+</ol>
+<p>The container should now be ready for use. You can then:</p>
+<ol class="arabic simple">
+<li>Run tests by running <code class="docutils literal"><span class="pre">docker-compose</span> <span class="pre">run</span> <span class="pre">lightfm</span> <span class="pre">py.test</span> <span class="pre">-x</span> <span class="pre">tests/</span></code></li>
+<li>Run the movielens example by running <code class="docutils literal"><span class="pre">docker-compose</span> <span class="pre">run</span> <span class="pre">lightfm</span> <span class="pre">jupyter</span> <span class="pre">notebook</span> <span class="pre">examples/movielens/example.ipynb</span> <span class="pre">--ip=0.0.0.0</span></code>. The notebook will be accessible at port 8888 of your container&#8217;s IP address.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Model fitting is very straightforward using the main <a class="reference internal" href="lightfm.html"><span class="doc">LightFM class</span></a>.</p>
+<p>Create a model instance with the desired latent dimensionality:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Assuming <code class="docutils literal"><span class="pre">train</span></code> is a (no_users, no_items) sparse matrix (with 1s denoting positive, and -1s negative interactions), you can fit a traditional matrix factorization model by calling:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will train a traditional MF model, as no user or item features have been supplied.</p>
+<p>To get predictions, call <code class="docutils literal"><span class="pre">model.predict</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_user_ids</span><span class="p">,</span> <span class="n">test_item_ids</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>User and item features can be incorporated into training by passing them into the <code class="docutils literal"><span class="pre">fit</span></code> method. Assuming <code class="docutils literal"><span class="pre">user_features</span></code> is a (no_users, no_user_features) sparse matrix (and similarly for <code class="docutils literal"><span class="pre">item_features</span></code>), you can call:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span>
+          <span class="n">user_features</span><span class="o">=</span><span class="n">user_features</span><span class="p">,</span>
+          <span class="n">item_features</span><span class="o">=</span><span class="n">item_features</span><span class="p">,</span>
+          <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_user_ids</span><span class="p">,</span>
+                            <span class="n">test_item_ids</span><span class="p">,</span>
+                            <span class="n">user_features</span><span class="o">=</span><span class="n">user_features</span><span class="p">,</span>
+                            <span class="n">item_features</span><span class="o">=</span><span class="n">item_features</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to train the model and obtain predictions.</p>
+<p>Both training and prediction can employ multiple cores for speed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_user_ids</span><span class="p">,</span> <span class="n">test_item_ids</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This implementation uses asynchronous stochastic gradient descent [6] for training. This can lead to lower accuracy when the interaction matrix (or the feature matrices) are very dense and a large number of threads is used. In practice, however, training on a sparse dataset with 20 threads does not lead to a measurable loss of accuracy.</p>
+<p>In an implicit feedback setting, the BPR, WARP, or k-OS WARP loss functions can be used. If <code class="docutils literal"><span class="pre">train</span></code> is a sparse matrix with positive entries representing positive interactions, the model can be trained as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Check the <code class="docutils literal"><span class="pre">examples</span></code> directory for more examples.</p>
+<p>The <a class="reference external" href="https://github.com/lyst/lightfm/blob/master/examples/movielens/example.ipynb">Movielens example</a> shows how to use LightFM on the Movielens dataset, both with and without using movie metadata. <a class="reference external" href="https://github.com/lyst/lightfm/blob/master/examples/movielens/learning_schedules.ipynb">Another example</a> compares the performance of the adagrad and adadelta learning schedules.</p>
+<p>The <a class="reference external" href="https://github.com/lyst/lightfm/blob/master/examples/crossvalidated/example.ipynb">Cross Validated example</a> shows how to use LightFM on a dataset from <a class="reference external" href="http://stats.stackexchange.com">stats.stackexchange.com</a> with both item and user features.</p>
+<p>The <a class="reference external" href="https://github.com/tdeboissiere/Kaggle/blob/master/Ponpare/ponpare_lightfm.ipynb">Kaggle coupon purchase prediction</a> example applies LightFM to predicting coupon purchases.</p>
+</div>
+<div class="section" id="development">
+<h2>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h2>
+<p>Pull requests are welcome. To install for development:</p>
+<ol class="arabic simple">
+<li>Clone the repository: <code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:lyst/lightfm.git</span></code></li>
+<li>Install it for development using pip: <code class="docutils literal"><span class="pre">cd</span> <span class="pre">lightfm</span> <span class="pre">&amp;&amp;</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code></li>
+<li>You can run tests by running <code class="docutils literal"><span class="pre">python</span> <span class="pre">setupy.py</span> <span class="pre">test</span></code>.</li>
+</ol>
+<p>When making changes to the <code class="docutils literal"><span class="pre">.pyx</span></code> extension files, you&#8217;ll need to run <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">cythonize</span></code> in order to produce the extension <code class="docutils literal"><span class="pre">.c</span></code> files before running <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to LightFM’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Lyst (Maciej Kula).
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
