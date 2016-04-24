@@ -153,9 +153,8 @@
 <div class="section" id="pypi">
 <h3>PyPI<a class="headerlink" href="#pypi" title="Permalink to this headline">¶</a></h3>
 <p>Install from pypi using pip: <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lightfm</span></code>. Everything should work out-of-the box on Linux and Windows using MSVC.</p>
-<p>Note for OSX users: due to its use of OpenMP, LightFM does not compile under Clang. To install it, you will need a reasonably recent version of <code class="docutils literal"><span class="pre">gcc</span></code> (from Homebrew for instance). This should be picked up by <code class="docutils literal"><span class="pre">setup.py</span></code>; if it is not, please open an issue.</p>
+<p>Note for OSX users: LightFM will by default not use OpenMP on OSX, and so all model fitting will be single-threaded. This is due to the fact that Clang does not support OpenMP, and installing an OpenMP-enabled version of gcc is complicated and labour-intensive. If you&#8217;d like to use the multi-threading capabilities of LightFM on OSX, you should try using it via Docker as described in the next secion.</p>
 <p>Building with the default Python distribution included in OSX is also not supported; please try the version from Homebrew or Anaconda.</p>
-<p>If you are having problems, you should try using lightfm with Docker (see the next section).</p>
 </div>
 <div class="section" id="using-with-docker">
 <h3>Using with Docker<a class="headerlink" href="#using-with-docker" title="Permalink to this headline">¶</a></h3>
