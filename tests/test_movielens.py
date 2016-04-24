@@ -9,15 +9,8 @@ import scipy.sparse as sp
 from sklearn.metrics import roc_auc_score
 
 from lightfm import LightFM
+from lightfm.datasets import fetch_movielens
 from lightfm.evaluation import auc_score, precision_at_k
-
-imp_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                        '..',
-                        'examples',
-                        'movielens',
-                        'data.py')
-movielens_data = imp.load_source('movielens_data',
-                                 imp_path)
 
 
 def _get_metrics(model, train_set, test_set):
@@ -53,7 +46,18 @@ def _get_feature_matrices(interactions):
             item_features.tocsr())
 
 
-train, test = movielens_data.get_movielens_data()
+def _binarize(dataset):
+
+    positives = dataset.data >= 4.0
+    dataset.data[positives] = 1.0
+    dataset.data[np.logical_not(positives)] = -1.0
+
+    return dataset
+
+
+movielens = fetch_movielens()
+train, test = _binarize(movielens['train']), _binarize(movielens['test'])
+
 
 (train_user_features,
  train_item_features) = _get_feature_matrices(train)
@@ -161,6 +165,56 @@ def test_warp_precision():
 
     assert full_train_auc > 0.94
     assert full_test_auc > 0.9
+
+
+def test_warp_precision_high_interaction_values():
+
+    model = LightFM(learning_rate=0.05,
+                    loss='warp')
+
+    _train = train.copy()
+    _train.data = _train.data * 5
+
+    model.fit_partial(_train,
+                      epochs=10)
+
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   _train,
+                                   test)
+
+    assert train_precision > 0.45
+    assert test_precision > 0.07
+
+    assert full_train_auc > 0.94
+    assert full_test_auc > 0.9
+
+
+def test_bpr_precision_high_interaction_values():
+
+    model = LightFM(learning_rate=0.05,
+                    loss='bpr')
+
+    _train = train.copy()
+    _train.data = _train.data * 5
+
+    model.fit_partial(_train,
+                      epochs=10)
+
+    (train_precision,
+     test_precision,
+     full_train_auc,
+     full_test_auc) = _get_metrics(model,
+                                   _train,
+                                   test)
+
+    assert train_precision > 0.31
+    assert test_precision > 0.04
+
+    assert full_train_auc > 0.86
+    assert full_test_auc > 0.84
 
 
 def test_warp_precision_multithreaded():
@@ -306,7 +360,8 @@ def test_warp_stability():
 
 def test_movielens_genre_accuracy():
 
-    item_features = movielens_data.get_movielens_item_metadata(use_item_ids=False)
+    item_features = fetch_movielens(indicator_features=False,
+                                    genre_features=True)['item_features']
 
     assert item_features.shape[1] < item_features.shape[0]
 
@@ -333,7 +388,8 @@ def test_movielens_both_accuracy():
     features (though more training may be necessary).
     """
 
-    item_features = movielens_data.get_movielens_item_metadata(use_item_ids=True)
+    item_features = fetch_movielens(indicator_features=True,
+                                    genre_features=True)['item_features']
 
     model = LightFM()
     model.fit_partial(train,

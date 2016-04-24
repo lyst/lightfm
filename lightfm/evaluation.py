@@ -1,7 +1,17 @@
+"""
+Module containing evaluation function suitable for judging the performance of a fitted
+LightFM model.
+"""
+
 import numpy as np
 
-from .lightfm_fast import (CSRMatrix,
-                           calculate_auc_from_rank)
+from ._lightfm_fast import (CSRMatrix,
+                            calculate_auc_from_rank)
+
+
+__all__ = ['precision_at_k',
+           'auc_score',
+           'reciprocal_rank']
 
 
 def precision_at_k(model, interactions, k=10, user_features=None, item_features=None, num_threads=1):
@@ -10,27 +20,29 @@ def precision_at_k(model, interactions, k=10, user_features=None, item_features=
     positions of the ranked list of results.
     A perfect score is 1.0.
 
-    Arguments:
-    - LightFM instance model: the model to be evaluated
-    - csr_matrix interactions: np.float32 matrix of shape [n_users, n_items]
-                               with non-zero entries representing known positives.
+    Parameters
+    ----------
 
-    Optional arguments:
-    - integer k: the k parameter. Default: 10.
-    - csr_matrix user_features: array of shape [n_users, n_user_features].
-                                Each row contains that user's weights
-                                over features.
-    - csr_matrix item_features: array of shape [n_items, n_item_features].
-                                Each row contains that item's weights
-                                over features.
-    - int num_threads: number of parallel computation threads to use. Should
-                       not be higher than the number of physical cores.
-                       Default: 1
+    model: LightFM instance
+         the model to be evaluated
+    interactions: np.float32 csr_matrix of shape [n_users, n_items]
+         Non-zero entries representing known positives.
+    k: integer, optional
+         The k parameter.
+    user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+         Each row contains that user's weights over features.
+    item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+         Each row contains that item's weights over features.
+    num_threads: int, optional
+         Number of parallel computation threads to use. Should
+         not be higher than the number of physical cores.
 
-    Returns:
-    - np.array of shape [n_users,] containing precision@k scores for each user.
+    Returns
+    -------
 
-    If there are no interactions for a given user the returned precision will be 0.
+    np.array of shape [n_users,]
+         Numpy array containing precision@k scores for each user. If there are no interactions for a given
+         user the returned precision will be 0.
     """
 
     ranks = model.predict_rank(interactions,
@@ -52,26 +64,27 @@ def auc_score(model, interactions, user_features=None, item_features=None, num_t
     example has a higher score than a randomly chosen negative example.
     A perfect score is 1.0.
 
-    Arguments:
-    - LightFM instance model: the model to be evaluated
-    - csr_matrix interactions: np.float32 matrix of shape [n_users, n_items]
-                               with non-zero entries representing known positives.
+    Parameters
+    ----------
 
-    Optional arguments:
-    - csr_matrix user_features: array of shape [n_users, n_user_features].
-                                Each row contains that user's weights
-                                over features.
-    - csr_matrix item_features: array of shape [n_items, n_item_features].
-                                Each row contains that item's weights
-                                over features.
-    - int num_threads: number of parallel computation threads to use. Should
-                       not be higher than the number of physical cores.
-                       Default: 1
+    model: LightFM instance
+         the model to be evaluated
+    interactions: np.float32 csr_matrix of shape [n_users, n_items]
+         Non-zero entries representing known positives.
+    user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+         Each row contains that user's weights over features.
+    item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+         Each row contains that item's weights over features.
+    num_threads: int, optional
+         Number of parallel computation threads to use. Should
+         not be higher than the number of physical cores.
 
-    Returns:
-    - np.array of shape [n_users,] containing ROC AUC scores for each user.
+    Returns
+    -------
 
-    If there are no interactions for a given user the returned score will be 0.5.
+    np.array of shape [n_users,]
+         Numpy array containing AUC scores for each user. If there are no interactions for a given
+         user the returned AUC will be 0.5.
     """
 
     ranks = model.predict_rank(interactions,
@@ -98,26 +111,27 @@ def reciprocal_rank(model, interactions, user_features=None, item_features=None,
     Measure the reciprocal rank metric for a model: 1 / the rank of the highest ranked positive example.
     A perfect score is 1.0.
 
-    Arguments:
-    - LightFM instance model: the model to be evaluated
-    - csr_matrix interactions: np.float32 matrix of shape [n_users, n_items]
-                               with non-zero entries representing known positives.
+    Parameters
+    ----------
 
-    Optional arguments:
-    - csr_matrix user_features: array of shape [n_users, n_user_features].
-                                Each row contains that user's weights
-                                over features.
-    - csr_matrix item_features: array of shape [n_items, n_item_features].
-                                Each row contains that item's weights
-                                over features.
-    - int num_threads: number of parallel computation threads to use. Should
-                       not be higher than the number of physical cores.
-                       Default: 1
+    model: LightFM instance
+         the model to be evaluated
+    interactions: np.float32 csr_matrix of shape [n_users, n_items]
+         Non-zero entries representing known positives.
+    user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+         Each row contains that user's weights over features.
+    item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+         Each row contains that item's weights over features.
+    num_threads: int, optional
+         Number of parallel computation threads to use. Should
+         not be higher than the number of physical cores.
 
-    Returns:
-    - np.array of shape [n_users,] containing ROC AUC scores for each user.
+    Returns
+    -------
 
-    If there are no interactions for a given user the returned score will be 0.0.
+    np.array of shape [n_users,]
+         Numpy array containing reciprocal rank scores for each user. If there are no interactions for a given
+         user the returned value will be 0.0.
     """
 
     ranks = model.predict_rank(interactions,

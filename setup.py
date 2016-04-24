@@ -21,8 +21,8 @@ def define_extensions(file_ext):
     if 'anaconda' not in sys.version.lower():
         compile_args.append('-march=native')
 
-    return [Extension("lightfm.lightfm_fast",
-                      ['lightfm/lightfm_fast%s' % file_ext],
+    return [Extension("lightfm._lightfm_fast",
+                      ['lightfm/_lightfm_fast%s' % file_ext],
                       extra_link_args=["-fopenmp"],
                       extra_compile_args=compile_args)]
 
@@ -95,7 +95,7 @@ class Clean(Command):
         subprocess.call(['rm', '-rf', os.path.join(pth, 'build')])
         subprocess.call(['rm', '-rf', os.path.join(pth, 'lightfm.egg-info')])
         subprocess.call(['find', pth, '-name', 'lightfm*.pyc', '-type', 'f', '-delete'])
-        subprocess.call(['rm', os.path.join(pth, 'lightfm', 'lightfm_fast.so')])
+        subprocess.call(['rm', os.path.join(pth, 'lightfm', '_lightfm_fast.so')])
 
 
 class PyTest(TestCommand):
@@ -122,10 +122,10 @@ set_gcc()
 
 setup(
     name='lightfm',
-    version='1.8',
+    version='1.9',
     description='LightFM recommendation model',
     url='https://github.com/lyst/lightfm',
-    download_url='https://github.com/lyst/lightfm/tarball/1.8',
+    download_url='https://github.com/lyst/lightfm/tarball/1.9',
     packages=['lightfm'],
     install_requires=['numpy', 'scipy'],
     tests_require=['pytest', 'requests', 'scikit-learn'],
