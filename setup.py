@@ -1,17 +1,16 @@
-import glob
 import os
 import platform
 import subprocess
 import sys
+import textwrap
 
 from setuptools import Command, Extension, setup
 from setuptools.command.test import test as TestCommand
 
 
-def define_extensions(file_ext):
+def define_extensions():
 
-    compile_args = ['-fopenmp',
-                    '-ffast-math']
+    compile_args = ['-ffast-math']
 
     # There are problems with illegal ASM instructions
     # when using the Anaconda distribution (at least on OSX).
@@ -21,37 +20,16 @@ def define_extensions(file_ext):
     if 'anaconda' not in sys.version.lower():
         compile_args.append('-march=native')
 
-    return [Extension("lightfm._lightfm_fast",
-                      ['lightfm/_lightfm_fast%s' % file_ext],
-                      extra_link_args=["-fopenmp"],
-                      extra_compile_args=compile_args)]
-
-
-def set_gcc():
-    """
-    Try to find and use GCC on OSX for OpenMP support.
-    """
-
-    # For macports and homebrew
-    patterns = ['/opt/local/bin/gcc-mp-[0-9].[0-9]',
-                '/opt/local/bin/gcc-mp-[0-9]',
-                '/usr/local/bin/gcc-[0-9].[0-9]',
-                '/usr/local/bin/gcc-[0-9]']
-
-    if 'darwin' in platform.platform().lower():
-
-        gcc_binaries = []
-        for pattern in patterns:
-            gcc_binaries += glob.glob(pattern)
-        gcc_binaries.sort()
-
-        if gcc_binaries:
-            _, gcc = os.path.split(gcc_binaries[-1])
-            os.environ["CC"] = gcc
-
-        else:
-            raise Exception('No GCC available. Install gcc from Homebrew '
-                            'using brew install gcc.')
+    if 'darwin' in sys.platform.lower():
+        print('Compiling on OSX: installing without OpenMP support.')
+        return [Extension("lightfm._lightfm_fast_no_openmp",
+                          ['lightfm/_lightfm_fast_no_openmp.c'],
+                          extra_compile_args=compile_args)]
+    else:
+        return [Extension("lightfm._lightfm_fast_openmp",
+                          ['lightfm/_lightfm_fast_openmp.c'],
+                          extra_link_args=["-fopenmp"],
+                          extra_compile_args=compile_args + ['-fopenmp'])]
 
 
 class Cythonize(Command):
@@ -67,12 +45,46 @@ class Cythonize(Command):
     def finalize_options(self):
         pass
 
+    def generate_pyx(self):
+
+        openmp_import = textwrap.dedent("""
+             from cython.parallel import parallel, prange
+             cimport openmp
+        """)
+
+        params = (('no_openmp', dict(openmp_import='',
+                                     nogil_block='with nogil:',
+                                     range_block='range',
+                                     thread_num='0')),
+                  ('openmp', dict(openmp_import=openmp_import,
+                                  nogil_block='with nogil, parallel(num_threads=num_threads):',
+                                  range_block='prange',
+                                  thread_num='openmp.omp_get_thread_num()')))
+
+        file_dir = os.path.join(os.path.dirname(__file__),
+                                'lightfm')
+
+        with open(os.path.join(file_dir,
+                               '_lightfm_fast.pyx.template'), 'rb') as fl:
+            template = fl.read()
+
+        for variant, template_params in params:
+            with open(os.path.join(file_dir,
+                                   '_lightfm_fast_{}.pyx'.format(variant)), 'wb') as fl:
+                fl.write(template.format(**template_params))
+
     def run(self):
 
         import Cython
         from Cython.Build import cythonize
 
-        cythonize(define_extensions('.pyx'))
+        self.generate_pyx()
+
+        cythonize([Extension("lightfm._lightfm_fast_no_openmp",
+                             ['lightfm/_lightfm_fast_no_openmp.pyx']),
+                   Extension("lightfm._lightfm_fast_openmp",
+                             ['lightfm/_lightfm_fast_openmp.pyx'],
+                             extra_link_args=['-fopenmp'])])
 
 
 class Clean(Command):
@@ -117,9 +129,6 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
-set_gcc()
-
-
 setup(
     name='lightfm',
     version='1.9',
@@ -127,7 +136,7 @@ setup(
     url='https://github.com/lyst/lightfm',
     download_url='https://github.com/lyst/lightfm/tarball/1.9',
     packages=['lightfm'],
-    install_requires=['numpy', 'scipy'],
+    install_requires=['numpy', 'scipy', 'requests'],
     tests_require=['pytest', 'requests', 'scikit-learn'],
     cmdclass={'test': PyTest, 'cythonize': Cythonize, 'clean': Clean},
     author='Lyst Ltd (Maciej Kula)',
@@ -136,5 +145,5 @@ setup(
     classifiers=['Development Status :: 3 - Alpha',
                  'License :: OSI Approved :: MIT License',
                  'Topic :: Scientific/Engineering :: Artificial Intelligence'],
-    ext_modules=define_extensions('.c')
+    ext_modules=define_extensions()
 )

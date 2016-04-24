@@ -2,10 +2,11 @@
 #cython: boundscheck=False, wraparound=False, cdivision=True, initializedcheck=False
 
 import numpy as np
-from cython.parallel import parallel, prange
+
 cimport cython.operator.dereference as deref
 from libc.stdlib cimport free, malloc
-cimport openmp
+
+{openmp_import}
 
 
 ctypedef float flt
@@ -692,12 +693,12 @@ def fit_logistic(CSRMatrix item_features,
 
     no_examples = Y.shape[0]
 
-    with nogil, parallel(num_threads=num_threads):
+    {nogil_block}
 
         user_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
 
-        for i in prange(no_examples):
+        for i in {range_block}(no_examples):
 
             row = shuffle_indices[i]
 
@@ -786,13 +787,13 @@ def fit_warp(CSRMatrix item_features,
     no_examples = Y.shape[0]
     MAX_LOSS = 10.0
 
-    with nogil, parallel(num_threads=num_threads):
+    {nogil_block}
 
         user_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         pos_it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         neg_it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
 
-        for i in prange(no_examples):
+        for i in {range_block}(no_examples):
             row = shuffle_indices[i]
 
             user_id = user_ids[row]
@@ -827,7 +828,7 @@ def fit_warp(CSRMatrix item_features,
             while sampled < lightfm.max_sampled:
 
                 sampled = sampled + 1
-                negative_item_id = (rand_r(&random_states[openmp.omp_get_thread_num()])
+                negative_item_id = (rand_r(&random_states[{thread_num}])
                                     % item_features.rows)
 
                 compute_representation(item_features,
@@ -911,14 +912,14 @@ def fit_warp_kos(CSRMatrix item_features,
     no_examples = user_ids.shape[0]
     MAX_LOSS = 10.0
 
-    with nogil, parallel(num_threads=num_threads):
+    {nogil_block}
 
         user_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         pos_it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         neg_it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         pos_pairs = <Pair*>malloc(sizeof(Pair) * n)
 
-        for i in prange(no_examples):
+        for i in {range_block}(no_examples):
             row = shuffle_indices[i]
             user_id = user_ids[row]
 
@@ -941,7 +942,7 @@ def fit_warp_kos(CSRMatrix item_features,
             for j in range(no_positives):
                 sampled_positive_item_id = data.indices[sample_range(user_pids_start,
                                                                      user_pids_stop,
-                                                                     &random_states[openmp.omp_get_thread_num()])]
+                                                                     &random_states[{thread_num}])]
 
                 compute_representation(item_features,
                                        lightfm.item_features,
@@ -980,7 +981,7 @@ def fit_warp_kos(CSRMatrix item_features,
             while sampled < lightfm.max_sampled:
 
                 sampled = sampled + 1
-                negative_item_id = (rand_r(&random_states[openmp.omp_get_thread_num()])
+                negative_item_id = (rand_r(&random_states[{thread_num}])
                                     % item_features.rows)
 
                 compute_representation(item_features,
@@ -1062,13 +1063,13 @@ def fit_bpr(CSRMatrix item_features,
 
     no_examples = Y.shape[0]
 
-    with nogil, parallel(num_threads=num_threads):
+    {nogil_block}
 
         user_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         pos_it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         neg_it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
 
-        for i in prange(no_examples):
+        for i in {range_block}(no_examples):
             row = shuffle_indices[i]
 
             if not Y[row] > 0:
@@ -1079,7 +1080,7 @@ def fit_bpr(CSRMatrix item_features,
             positive_item_id = item_ids[row]
 
             while True:
-                negative_item_id = (rand_r(&random_states[openmp.omp_get_thread_num()])
+                negative_item_id = (rand_r(&random_states[{thread_num}])
                                     % item_features.rows)
                 if not in_positives(negative_item_id, user_id, interactions):
                     break
@@ -1152,12 +1153,12 @@ def predict_lightfm(CSRMatrix item_features,
 
     no_examples = predictions.shape[0]
 
-    with nogil, parallel(num_threads=num_threads):
+    {nogil_block}
 
         user_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
 
-        for i in prange(no_examples):
+        for i in {range_block}(no_examples):
 
             compute_representation(user_features,
                                    lightfm.user_features,
@@ -1206,14 +1207,14 @@ def predict_ranks(CSRMatrix item_features,
                                    interactions.get_row_end(user_id)
                                    - interactions.get_row_start(user_id))
 
-    with nogil, parallel(num_threads=num_threads):
+    {nogil_block}
 
         user_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         item_ids = <int *>malloc(sizeof(int) * predictions_size)
         predictions = <flt *>malloc(sizeof(flt) * predictions_size)
 
-        for user_id in prange(interactions.rows):
+        for user_id in {range_block}(interactions.rows):
 
             compute_representation(user_features,
                                    lightfm.user_features,
@@ -1276,8 +1277,8 @@ def calculate_auc_from_rank(CSRMatrix ranks,
     cdef int i, j, user_id, row_start, row_stop, num_negatives, num_positives
     cdef flt rank
 
-    with nogil, parallel(num_threads=num_threads):
-        for user_id in prange(ranks.rows):
+    {nogil_block}
+        for user_id in {range_block}(ranks.rows):
 
             row_start = ranks.get_row_start(user_id)
             row_stop = ranks.get_row_end(user_id)
