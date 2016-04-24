@@ -9,11 +9,11 @@ examples:
 	mv examples/movielens/learning_schedules_files doc/examples/
 .PHONY: update-docs
 update-docs:
-	pip install -e .
-	cd doc && make html
-	git fetch origin gh-pages && git checkout gh-pages && \
-	rm -rf ./docs/ \
-	mkdir ./docs/ \
-	cp -r ./doc/_build/html/* ./docs/ \
+	pip install -e . \
+	&& cd doc && make html && cd .. \
+	&& git fetch origin gh-pages && git checkout gh-pages \
+	&& rm -rf ./docs/ \
+	&& mkdir ./docs/ \
+	&& cp -r ./doc/_build/html/* ./docs/ \
 	&& git add -A ./docs/* \
 	&& git commit -m 'Update docs.' && git push origin gh-pages
