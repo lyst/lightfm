@@ -1,0 +1,462 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>LightFM &mdash; LightFM 1.9 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="LightFM 1.9 documentation" href="index.html"/>
+        <link rel="next" title="Model evaluation" href="lightfm.evaluation.html"/>
+        <link rel="prev" title="Quickstart" href="quickstart.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> LightFM
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="home.html">Home</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="home.html#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="home.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="home.html#using-with-docker">Using with Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#development">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#getting-the-data">Getting the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#fitting-models">Fitting models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/learning_schedules.html">Learning rate schedules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#preliminaries">Preliminaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#experiment">Experiment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">LightFM</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>LightFM</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/lightfm.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="lightfm">
+<h1>LightFM<a class="headerlink" href="#lightfm" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="lightfm.LightFM">
+<em class="property">class </em><code class="descclassname">lightfm.</code><code class="descname">LightFM</code><span class="sig-paren">(</span><em>no_components=10</em>, <em>k=5</em>, <em>n=10</em>, <em>learning_schedule='adagrad'</em>, <em>loss='logistic'</em>, <em>learning_rate=0.05</em>, <em>rho=0.95</em>, <em>epsilon=1e-06</em>, <em>item_alpha=0.0</em>, <em>user_alpha=0.0</em>, <em>max_sampled=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM" title="Permalink to this definition">¶</a></dt>
+<dd><p>A hybrid recommender model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>no_components</strong> (<em>int, optional</em>) &#8211; the dimensionality of the feature latent embeddings.</li>
+<li><strong>k</strong> (<em>int, optional</em>) &#8211; for k-OS training, the k-th positive example will be selected from the n positive
+examples sampled for every user.</li>
+<li><strong>n</strong> (<em>int, optional</em>) &#8211; for k-OS training, maximum number of positives sampled for each update.</li>
+<li><strong>learning_schedule</strong> (<em>string, optional</em>) &#8211; one of (&#8216;adagrad&#8217;, &#8216;adadelta&#8217;).</li>
+<li><strong>loss</strong> (<em>string, optional</em>) &#8211; one of  (&#8216;logistic&#8217;, &#8216;bpr&#8217;, &#8216;warp&#8217;, &#8216;warp-kos&#8217;): the loss function to use.</li>
+<li><strong>learning_rate</strong> (<em>float, optional</em>) &#8211; initial learning rate for the adagrad learning schedule.</li>
+<li><strong>rho</strong> (<em>float, optional</em>) &#8211; moving average coefficient for the adadelta learning schedule.</li>
+<li><strong>epsilon</strong> (<em>float, optional</em>) &#8211; conditioning parameter for the adadelta learning schedule.</li>
+<li><strong>item_alpha</strong> (<em>float, optional</em>) &#8211; L2 penalty on item features</li>
+<li><strong>user_alpha</strong> (<em>float, optional</em>) &#8211; L2 penalty on user features.</li>
+<li><strong>max_sampled</strong> (<em>int, optional</em>) &#8211; maximum number of negative samples used during WARP fitting. Defaults to
+the number of items divided by 10. Setting this to lower number may improve the speed of
+WARP fitting at the expense of some accuracy.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>item_embeddings</strong> (<em>np.float32 array of shape [n_item_features, n_components]</em>) &#8211; Contains the estimated latent vectors for item features. The [i, j]-th entry
+gives the value of the j-th component for the i-th item feature. In the simplest
+case where the item feature matrix is an identity matrix, the i-th row
+will represent the i-th item latent vector.</li>
+<li><strong>user_embeddings</strong> (<em>np.float32 array of shape [n_user_features, n_components]</em>) &#8211; Contains the estimated latent vectors for user features. The [i, j]-th entry
+gives the value of the j-th component for the i-th user feature. In the simplest
+case where the user feature matrix is an identity matrix, the i-th row
+will represent the i-th user latent vector.</li>
+<li><strong>item_biases</strong> (<em>np.float32 array of shape [n_item_features,]</em>) &#8211; Contains the biases for item_features.</li>
+<li><strong>user_biases</strong> (<em>np.float32 array of shape [n_user_features,]</em>) &#8211; Contains the biases for user_features.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Four loss functions are available:</p>
+<ul class="simple">
+<li>logistic: useful when both positive (1) and negative (-1) interactions
+are present.</li>
+<li>BPR: Bayesian Personalised Ranking <a class="footnote-reference" href="#id6" id="id1">[1]</a> pairwise loss. Maximises the
+prediction difference between a positive example and a randomly
+chosen negative example. Useful when only positive interactions
+are present and optimising ROC AUC is desired.</li>
+<li>WARP: Weighted Approximate-Rank Pairwise <a class="footnote-reference" href="#id7" id="id2">[2]</a> loss. Maximises
+the rank of positive examples by repeatedly sampling negative
+examples until rank violating one is found. Useful when only
+positive interactions are present and optimising the top of
+the recommendation list (precision&#64;k) is desired.</li>
+<li>k-OS WARP: k-th order statistic loss <a class="footnote-reference" href="#id8" id="id3">[3]</a>. A modification of WARP that uses the k-th
+positive example for any given user as a basis for pairwise updates.</li>
+</ul>
+<p>Two learning rate schedules are available:</p>
+<ul class="simple">
+<li>adagrad: <a class="footnote-reference" href="#id9" id="id4">[4]</a></li>
+<li>adadelta: <a class="footnote-reference" href="#id10" id="id5">[5]</a></li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Rendle, Steffen, et al. &#8220;BPR: Bayesian personalized ranking from implicit feedback.&#8221;
+Proceedings of the Twenty-Fifth Conference on Uncertainty in Artificial
+Intelligence. AUAI Press, 2009.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Weston, Jason, Samy Bengio, and Nicolas Usunier. &#8220;Wsabie: Scaling up to large
+vocabulary image annotation.&#8221; IJCAI. Vol. 11. 2011.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>Weston, Jason, Hector Yee, and Ron J. Weiss. &#8220;Learning to rank recommendations with
+the k-order statistic loss.&#8221;
+Proceedings of the 7th ACM conference on Recommender systems. ACM, 2013.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td>Duchi, John, Elad Hazan, and Yoram Singer. &#8220;Adaptive subgradient methods
+for online learning and stochastic optimization.&#8221;
+The Journal of Machine Learning Research 12 (2011): 2121-2159.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td>Zeiler, Matthew D. &#8220;ADADELTA: An adaptive learning rate method.&#8221;
+arXiv preprint arXiv:1212.5701 (2012).</td></tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="lightfm.LightFM.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>interactions</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>sample_weight=None</em>, <em>epochs=1</em>, <em>num_threads=1</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>interactions</strong> (<em>np.float32 coo_matrix of shape [n_users, n_items]</em>) &#8211; the matrix containing
+user-item interactions. Will be converted to
+numpy.float32 dtype if it is not of that type.</li>
+<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape [n_users, n_user_features], optional</em>) &#8211; Each row contains that user&#8217;s weights over features.</li>
+<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape [n_items, n_item_features], optional</em>) &#8211; Each row contains that item&#8217;s weights over features.</li>
+<li><strong>sample_weight</strong> (<em>np.float32 coo_matrix of shape [n_users, n_items], optional</em>) &#8211; matrix with entries expressing weights of individual
+interactions from the interactions matrix.
+Its row and col arrays must be the same as
+those of the interactions matrix. For memory
+efficiency its ssible to use the same arrays
+for both weights and interaction matrices.
+Defaults to weight 1.0 for all interactions.
+Not implemented for the k-OS loss.</li>
+<li><strong>epochs</strong> (<em>int, optional</em>) &#8211; number of epochs to run</li>
+<li><strong>num_threads</strong> (<em>int, optional</em>) &#8211; Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</li>
+<li><strong>verbose</strong> (<em>bool, optional</em>) &#8211; whether to print progress messages.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the fitted model</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">LightFM instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lightfm.LightFM.fit_partial">
+<code class="descname">fit_partial</code><span class="sig-paren">(</span><em>interactions</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>sample_weight=None</em>, <em>epochs=1</em>, <em>num_threads=1</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM.fit_partial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model.</p>
+<p>Fit the model. Unlike fit, repeated calls to this method will
+cause trainig to resume from the current model state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>interactions</strong> (<em>np.float32 coo_matrix of shape [n_users, n_items]</em>) &#8211; the matrix containing
+user-item interactions. Will be converted to
+numpy.float32 dtype if it is not of that type.</li>
+<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape [n_users, n_user_features], optional</em>) &#8211; Each row contains that user&#8217;s weights over features.</li>
+<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape [n_items, n_item_features], optional</em>) &#8211; Each row contains that item&#8217;s weights over features.</li>
+<li><strong>sample_weight</strong> (<em>np.float32 coo_matrix of shape [n_users, n_items], optional</em>) &#8211; matrix with entries expressing weights of individual
+interactions from the interactions matrix.
+Its row and col arrays must be the same as
+those of the interactions matrix. For memory
+efficiency its ssible to use the same arrays
+for both weights and interaction matrices.
+Defaults to weight 1.0 for all interactions.
+Not implemented for the k-OS loss.</li>
+<li><strong>epochs</strong> (<em>int, optional</em>) &#8211; number of epochs to run</li>
+<li><strong>num_threads</strong> (<em>int, optional</em>) &#8211; Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</li>
+<li><strong>verbose</strong> (<em>bool, optional</em>) &#8211; whether to print progress messages.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the fitted model</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">LightFM instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lightfm.LightFM.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>user_ids</em>, <em>item_ids</em>, <em>item_features=None</em>, <em>user_features=None</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the recommendation score for user-item pairs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_ids</strong> (<em>integer or np.int32 array of shape [n_pairs,]</em>) &#8211; single user id or an array containing the user ids for the user-item pairs for which
+a prediction is to be computed</li>
+<li><strong>item_ids</strong> (<em>np.int32 array of shape [n_pairs,]</em>) &#8211; an array containing the item ids for the user-item pairs for which
+a prediction is to be computed.</li>
+<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape [n_users, n_user_features], optional</em>) &#8211; Each row contains that user&#8217;s weights over features.</li>
+<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape [n_items, n_item_features], optional</em>) &#8211; Each row contains that item&#8217;s weights over features.</li>
+<li><strong>num_threads</strong> (<em>int, optional</em>) &#8211; Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Numpy array containig the recommendation scores for pairs defined by the inputs.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.float32 array of shape [n_pairs,]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lightfm.LightFM.predict_rank">
+<code class="descname">predict_rank</code><span class="sig-paren">(</span><em>interactions</em>, <em>item_features=None</em>, <em>user_features=None</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM.predict_rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the rank of selected interactions. Computes recommendation rankings across all items
+for every user in interactions and calculates the rank of all non-zero entries in the recommendation
+ranking, with 0 meaning the top of the list (most recommended) and n_items - 1 being the end of the
+list (least recommended).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>interactions</strong> (<em>np.float32 csr_matrix of shape [n_users, n_items]</em>) &#8211; Non-zero entries denote the user-item pairs whose rank will be computed.</li>
+<li><strong>item_ids</strong> (<em>np.int32 array of shape [n_pairs,]</em>) &#8211; an array containing the item ids for the user-item pairs for which
+a prediction is to be computed.</li>
+<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape [n_users, n_user_features], optional</em>) &#8211; Each row contains that user&#8217;s weights over features.</li>
+<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape [n_items, n_item_features], optional</em>) &#8211; Each row contains that item&#8217;s weights over features.</li>
+<li><strong>num_threads</strong> (<em>int, optional</em>) &#8211; Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the [i, j]-th entry of the matrix will contain the rank of the j-th item
+in the sorted recommendations list for the i-th user. The degree
+of sparsity of this matrix will be equal to that of the input interactions
+matrix.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.float32 csr_matrix of shape [n_users, n_items]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lightfm.evaluation.html" class="btn btn-neutral float-right" title="Model evaluation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quickstart.html" class="btn btn-neutral" title="Quickstart" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Lyst (Maciej Kula).
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

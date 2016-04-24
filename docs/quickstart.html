@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quickstart &mdash; LightFM 1.9 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="LightFM 1.9 documentation" href="index.html"/>
+        <link rel="next" title="LightFM" href="lightfm.html"/>
+        <link rel="prev" title="Welcome to LightFM’s documentation!" href="home.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> LightFM
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="home.html">Home</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="home.html#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="home.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="home.html#using-with-docker">Using with Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html#development">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#getting-the-data">Getting the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#fitting-models">Fitting models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/learning_schedules.html">Learning rate schedules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#preliminaries">Preliminaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#experiment">Experiment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">LightFM</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Quickstart</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/quickstart.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<p>In this example, we&#8217;ll build an implicit feedback recommender using the
+Movielens 100k dataset (<a class="reference external" href="http://grouplens.org/datasets/movielens/100k/">http://grouplens.org/datasets/movielens/100k/</a>).</p>
+<p>The code behind this example is available as a <a class="reference external" href="https://github.com/lyst/lightfm/tree/master/examples/quickstart/quickstart.ipynb">Jupyter
+notebook</a></p>
+<p>LightFM includes functions for getting and processing this dataset, so
+obtaining it is quite easy.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lightfm.datasets</span> <span class="k">import</span> <span class="n">fetch_movielens</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">fetch_movielens</span><span class="p">(</span><span class="n">min_rating</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This downloads the dataset and automatically pre-processes it into
+sparse matrices suitable for further calculation. In particular, it
+prepares the sparse user-item matrices, containing positive entries
+where a user interacted with a product, and zeros otherwise.</p>
+<p>We have two such matrices, a training and a testing set. Both have
+around 1000 users and 1700 items. We&#8217;ll train the model on the train
+matrix but test it on the test matrix.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="mi">943</span><span class="n">x1682</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;type &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="s1">&#39;&gt;&#39;</span>
+    <span class="k">with</span> <span class="mi">19048</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">COOrdinate</span> <span class="nb">format</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="mi">943</span><span class="n">x1682</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;type &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="s1">&#39;&gt;&#39;</span>
+    <span class="k">with</span> <span class="mi">2153</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">COOrdinate</span> <span class="nb">format</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>We need to import the model class to fit the model:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
+</pre></div>
+</div>
+<p>We&#8217;re going to use the WARP (Weighted Approximate-Rank Pairwise) model.
+WARP is an implicit feedback model: all interactions in the training
+matrix are treated as positive signals, and products that users did not
+interact with they implicitly do not like. The goal of the model is to
+score these implicit positives highly while assigining low scores to
+implicit negatives.</p>
+<p>Model training is accomplished via SGD (stochastic gradient descent).
+This means that for every pass through the data &#8212; an epoch &#8212; the
+model learns to fit the data more and more closely. We&#8217;ll run it for 10
+epochs in this example. We can also run it on multiple cores, so we&#8217;ll
+set that to 2. (The dataset in this example is too small for that to
+make a difference, but it will matter on bigger datasets.)</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">)</span>
+<span class="o">%</span><span class="n">time</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">],</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CPU</span> <span class="n">times</span><span class="p">:</span> <span class="n">user</span> <span class="mf">1.55</span> <span class="n">s</span><span class="p">,</span> <span class="n">sys</span><span class="p">:</span> <span class="mi">4</span> <span class="n">ms</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="mf">1.56</span> <span class="n">s</span>
+<span class="n">Wall</span> <span class="n">time</span><span class="p">:</span> <span class="mi">838</span> <span class="n">ms</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">lightfm</span><span class="o">.</span><span class="n">lightfm</span><span class="o">.</span><span class="n">LightFM</span> <span class="n">at</span> <span class="mh">0x7f978c58ea50</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Done! We should now evaluate the model to see how well it&#8217;s doing. We&#8217;re
+most interested in how good the ranking produced by the model is.
+Precision&#64;k is one suitable metric, expressing the percentage of top k
+items in the ranking the user has actually interacted with. <code class="docutils literal"><span class="pre">lightfm</span></code>
+implements a number of metrics in the <code class="docutils literal"><span class="pre">evaluation</span></code> module.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lightfm.evaluation</span> <span class="k">import</span> <span class="n">precision_at_k</span>
+</pre></div>
+</div>
+<p>We&#8217;ll measure precision in both the train and the test set.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Train precision: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">precision_at_k</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test precision: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">precision_at_k</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Train</span> <span class="n">precision</span><span class="p">:</span> <span class="mf">0.43</span>
+<span class="n">Test</span> <span class="n">precision</span><span class="p">:</span> <span class="mf">0.04</span>
+</pre></div>
+</div>
+<p>Unsurprisingly, the model fits the train set better than the test set.</p>
+<p>For an alternative way of judging the model, we can sample a couple of
+users and get their recommendations. To make predictions for given user,
+we pass the id of that user and the ids of all products we want
+predictions for into the <code class="docutils literal"><span class="pre">predict</span></code> method.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_recommendation</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">user_ids</span><span class="p">):</span>
+
+
+    <span class="n">n_users</span><span class="p">,</span> <span class="n">n_items</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="k">for</span> <span class="n">user_id</span> <span class="ow">in</span> <span class="n">user_ids</span><span class="p">:</span>
+        <span class="n">known_positives</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;item_labels&#39;</span><span class="p">][</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()[</span><span class="n">user_id</span><span class="p">]</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span>
+
+        <span class="n">scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_items</span><span class="p">))</span>
+        <span class="n">top_items</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;item_labels&#39;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">scores</span><span class="p">)]</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;User </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">user_id</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     Known positives:&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">known_positives</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     Recommended:&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">top_items</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">sample_recommendation</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">450</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">User</span> <span class="mi">3</span>
+     <span class="n">Known</span> <span class="n">positives</span><span class="p">:</span>
+        <span class="n">Contact</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+        <span class="n">Air</span> <span class="n">Force</span> <span class="n">One</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+        <span class="n">In</span> <span class="o">&amp;</span> <span class="n">Out</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+     <span class="n">Recommended</span><span class="p">:</span>
+        <span class="n">Air</span> <span class="n">Force</span> <span class="n">One</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+        <span class="n">Assignment</span><span class="p">,</span> <span class="n">The</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+        <span class="n">Kiss</span> <span class="n">the</span> <span class="n">Girls</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+<span class="n">User</span> <span class="mi">25</span>
+     <span class="n">Known</span> <span class="n">positives</span><span class="p">:</span>
+        <span class="n">Fargo</span> <span class="p">(</span><span class="mi">1996</span><span class="p">)</span>
+        <span class="n">Godfather</span><span class="p">,</span> <span class="n">The</span> <span class="p">(</span><span class="mi">1972</span><span class="p">)</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">A</span><span class="o">.</span> <span class="n">Confidential</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+     <span class="n">Recommended</span><span class="p">:</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">A</span><span class="o">.</span> <span class="n">Confidential</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+        <span class="n">Titanic</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+        <span class="n">Fargo</span> <span class="p">(</span><span class="mi">1996</span><span class="p">)</span>
+<span class="n">User</span> <span class="mi">450</span>
+     <span class="n">Known</span> <span class="n">positives</span><span class="p">:</span>
+        <span class="n">Event</span> <span class="n">Horizon</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+        <span class="n">Scream</span> <span class="p">(</span><span class="mi">1996</span><span class="p">)</span>
+        <span class="n">Conspiracy</span> <span class="n">Theory</span> <span class="p">(</span><span class="mi">1997</span><span class="p">)</span>
+     <span class="n">Recommended</span><span class="p">:</span>
+        <span class="n">Independence</span> <span class="n">Day</span> <span class="p">(</span><span class="n">ID4</span><span class="p">)</span> <span class="p">(</span><span class="mi">1996</span><span class="p">)</span>
+        <span class="n">Scream</span> <span class="p">(</span><span class="mi">1996</span><span class="p">)</span>
+        <span class="n">Ransom</span> <span class="p">(</span><span class="mi">1996</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lightfm.html" class="btn btn-neutral float-right" title="LightFM" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="home.html" class="btn btn-neutral" title="Welcome to LightFM’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Lyst (Maciej Kula).
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
