@@ -446,9 +446,6 @@ class LightFM(object):
         if not user_features.shape[1] == self.user_embeddings.shape[0]:
             raise ValueError('Incorrect number of features in user_features')
 
-        if not sample_weight_data.flags['C_CONTIGUOUS']:
-            sample_weight_data = np.ascontiguousarray(sample_weight_data)
-
         for epoch in range(epochs):
 
             if verbose:
