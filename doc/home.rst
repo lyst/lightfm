@@ -19,9 +19,9 @@ Installation
 PyPI
 ~~~~
 
-Install from pypi using pip: ``pip install lightfm``. Everything should work out-of-the box on Linux and Windows using MSVC.
+Install from pypi using pip: ``pip install lightfm``. Everything should work out-of-the box on Linux, OSX using Homebrew Python, and Windows using Miniconda.
 
-Note for OSX users: LightFM will by default not use OpenMP on OSX, and so all model fitting will be single-threaded. This is due to the fact that Clang does not support OpenMP, and installing an OpenMP-enabled version of gcc is complicated and labour-intensive. If you'd like to use the multi-threading capabilities of LightFM on OSX, you should try using it via Docker as described in the next secion.
+Note for OSX and Windows users: LightFM will by default not use OpenMP on OSX and Windows, and so all model fitting will be single-threaded. This is due to the fact that Clang (and Miniconda) does not support OpenMP, and installing an OpenMP-enabled version of gcc is complicated and labour-intensive. If you'd like to use the multi-threading capabilities of LightFM on these platforms, you should try using it via Docker as described in the next secion.
 
 Building with the default Python distribution included in OSX is also not supported; please try the version from Homebrew or Anaconda.
 
