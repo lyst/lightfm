@@ -8,7 +8,7 @@ from setuptools import Command, Extension, setup
 from setuptools.command.test import test as TestCommand
 
 
-def define_extensions():
+def define_extensions(use_openmp):
 
     compile_args = ['-ffast-math']
 
@@ -20,8 +20,8 @@ def define_extensions():
     if 'anaconda' not in sys.version.lower():
         compile_args.append('-march=native')
 
-    if 'darwin' in sys.platform.lower():
-        print('Compiling on OSX: installing without OpenMP support.')
+    if not use_openmp:
+        print('Compiling without OpenMP support.')
         return [Extension("lightfm._lightfm_fast_no_openmp",
                           ['lightfm/_lightfm_fast_no_openmp.c'],
                           extra_compile_args=compile_args)]
@@ -129,6 +129,10 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
+
+use_openmp = not (sys.platform.startswith('darwin') or sys.platform.startswith('win'))
+
+
 setup(
     name='lightfm',
     version='1.9',
@@ -145,5 +149,5 @@ setup(
     classifiers=['Development Status :: 3 - Alpha',
                  'License :: OSI Approved :: MIT License',
                  'Topic :: Scientific/Engineering :: Artificial Intelligence'],
-    ext_modules=define_extensions()
+    ext_modules=define_extensions(use_openmp)
 )

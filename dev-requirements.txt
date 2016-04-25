@@ -1,0 +1,5 @@
+pytest
+requests
+numpy
+scipy
+scikit-learn

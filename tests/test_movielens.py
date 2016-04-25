@@ -97,7 +97,7 @@ def test_logistic_precision():
     assert test_precision > 0.03
 
     assert full_train_auc > 0.79
-    assert full_test_auc > 0.74
+    assert full_test_auc > 0.73
 
 
 def test_bpr_precision():
@@ -188,7 +188,7 @@ def test_warp_precision_high_interaction_values():
     assert train_precision > 0.45
     assert test_precision > 0.07
 
-    assert full_train_auc > 0.94
+    assert full_train_auc > 0.93
     assert full_test_auc > 0.9
 
 
