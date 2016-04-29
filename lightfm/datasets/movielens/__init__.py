@@ -9,24 +9,7 @@ import requests
 
 import scipy.sparse as sp
 
-
-ZIP_URL = 'http://files.grouplens.org/datasets/movielens/ml-100k.zip'
-ZIP_FILENAME = 'movielens.zip'
-
-
-def _get_data_dir():
-
-    return os.path.join(os.path.expanduser('~'),
-                        'lighfm_data')
-
-
-def _download(url, dest_path):
-
-    req = requests.get(url, stream=True)
-
-    with open(dest_path, 'wb') as fd:
-        for chunk in req.iter_content():
-            fd.write(chunk)
+from lightfm.datasets import _common
 
 
 def _read_raw_data(path):
@@ -175,21 +158,11 @@ def fetch_movielens(data_home=None, indicator_features=True, genre_features=Fals
         raise ValueError('At least one of item_indicator_features '
                          'or genre_features must be True')
 
-    if data_home is not None:
-        data_dir = os.path.abspath(data_home)
-    else:
-        data_dir = _get_data_dir()
-
-    if not os.path.isdir(data_dir):
-        os.makedirs(data_dir)
-
-    zip_path = os.path.join(data_dir, ZIP_FILENAME)
-
-    if not os.path.isfile(zip_path):
-        if download_if_missing:
-            _download(ZIP_URL, zip_path)
-        else:
-            raise IOError('Dataset missing.')
+    zip_path = _common.get_data(data_home,
+                                'http://files.grouplens.org/datasets/movielens/ml-100k.zip',
+                                'movielens100k',
+                                'movielens.zip',
+                                download_if_missing)
 
     # Load raw data
     (train_raw, test_raw,
@@ -239,6 +212,3 @@ def fetch_movielens(data_home=None, indicator_features=True, genre_features=Fals
             'item_labels': id_feature_labels}
 
     return data
-
-
-# data = fetch_movielens()
