@@ -765,7 +765,8 @@ def fit_warp(CSRMatrix item_features,
              double learning_rate,
              double item_alpha,
              double user_alpha,
-             int num_threads):
+             int num_threads,
+             random_state):
     """
     Fit the model using the WARP loss.
     """
@@ -780,9 +781,9 @@ def fit_warp(CSRMatrix item_features,
     cdef flt *neg_it_repr
     cdef unsigned int[::1] random_states
 
-    random_states = np.random.randint(0,
-                                      np.iinfo(np.int32).max,
-                                      size=num_threads).astype(np.uint32)
+    random_states = random_state.randint(0,
+                                         np.iinfo(np.int32).max,
+                                         size=num_threads).astype(np.uint32)
 
     no_examples = Y.shape[0]
     MAX_LOSS = 10.0
@@ -889,7 +890,8 @@ def fit_warp_kos(CSRMatrix item_features,
                  double user_alpha,
                  int k,
                  int n,
-                 int num_threads):
+                 int num_threads,
+                 random_state):
     """
     Fit the model using the WARP loss.
     """
@@ -905,9 +907,9 @@ def fit_warp_kos(CSRMatrix item_features,
     cdef Pair *pos_pairs
     cdef unsigned int[::1] random_states
 
-    random_states = np.random.randint(0,
-                                      np.iinfo(np.int32).max,
-                                      size=num_threads).astype(np.uint32)
+    random_states = random_state.randint(0,
+                                         np.iinfo(np.int32).max,
+                                         size=num_threads).astype(np.uint32)
 
     no_examples = user_ids.shape[0]
     MAX_LOSS = 10.0
@@ -1043,7 +1045,8 @@ def fit_bpr(CSRMatrix item_features,
             double learning_rate,
             double item_alpha,
             double user_alpha,
-            int num_threads):
+            int num_threads,
+            random_state):
     """
     Fit the model using the BPR loss.
     """
@@ -1057,9 +1060,9 @@ def fit_bpr(CSRMatrix item_features,
     cdef flt *pos_it_repr
     cdef flt *neg_it_repr
 
-    random_states = np.random.randint(0,
-                                      np.iinfo(np.int32).max,
-                                      size=num_threads).astype(np.uint32)
+    random_states = random_state.randint(0,
+                                         np.iinfo(np.int32).max,
+                                         size=num_threads).astype(np.uint32)
 
     no_examples = Y.shape[0]
 

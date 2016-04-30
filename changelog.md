@@ -10,6 +10,7 @@
   will mean less negative sampling and faster training when the model is near the optimum.
 - Added a sample_weight argument to fit and fit_partial functions. A high value will now increase the size of the SGD step taken for that interaction.
 - Added an evaluation module for more efficient evaluation of learning-to-rank models.
+- Added a random_state keyword argument to LightFM to allow repeatable model runs.
 ### Changed
 - By default, an OpenMP-less version will be built on OSX. This allows much easier installation at the expense of
 performance.
