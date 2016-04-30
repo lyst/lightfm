@@ -1,5 +1,7 @@
 import pytest
 
+import numpy as np
+
 import scipy.sparse as sp
 
 from lightfm.datasets import fetch_movielens, fetch_stackexchange
@@ -47,14 +49,25 @@ def test_basic_fetching_stackexchange():
         frac = float(test.getnnz()) / (train.getnnz() + test.getnnz())
         assert abs(frac - test_fraction) < 0.01
 
-    data = fetch_stackexchange('crossvalidated', indicator_features=True, tag_features=False)
-    assert isinstance(data['item_features'], sp.csr_matrix)
-    assert data['item_features'].shape[0] == data['item_features'].shape[1] == data['train'].shape[1]
+    for dataset in ('crossvalidated', 'stackoverflow'):
 
-    data = fetch_stackexchange('crossvalidated', indicator_features=False, tag_features=True)
-    assert isinstance(data['item_features'], sp.csr_matrix)
-    assert data['item_features'].shape[0] > data['item_features'].shape[1]
+        data = fetch_stackexchange(dataset, indicator_features=True, tag_features=False)
+        assert isinstance(data['item_features'], sp.csr_matrix)
+        assert (data['item_features'].shape[0] == data['item_features'].shape[1]
+                == data['train'].shape[1])
 
-    data = fetch_stackexchange('crossvalidated', indicator_features=True, tag_features=True)
-    assert isinstance(data['item_features'], sp.csr_matrix)
-    assert data['item_features'].shape[0] < data['item_features'].shape[1]
+        data = fetch_stackexchange(dataset, indicator_features=False, tag_features=True)
+        assert isinstance(data['item_features'], sp.csr_matrix)
+        assert data['item_features'].shape[0] > data['item_features'].shape[1]
+
+        data = fetch_stackexchange(dataset, indicator_features=True, tag_features=True)
+        assert isinstance(data['item_features'], sp.csr_matrix)
+        assert data['item_features'].shape[0] < data['item_features'].shape[1]
+
+        if dataset == 'crossvalidated':
+            assert data['train'].shape == (9431, 72360)
+        else:
+            assert data['train'].shape == (1349835, 11280896)
+
+        assert np.all(data['train'].data == 1.0)
+        assert np.all(data['test'].data == 1.0)
