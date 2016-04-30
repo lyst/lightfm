@@ -48,6 +48,9 @@ class LightFM(object):
         maximum number of negative samples used during WARP fitting. Defaults to
         the number of items divided by 10. Setting this to lower number may improve the speed of
         WARP fitting at the expense of some accuracy.
+    random_state: int seed, RandomState instance, or None
+        The seed of the pseudo random number generator to use when shuffling the data and
+        initializing the parameters.
 
     Attributes
     ----------
@@ -113,8 +116,8 @@ class LightFM(object):
                  learning_schedule='adagrad',
                  loss='logistic',
                  learning_rate=0.05, rho=0.95, epsilon=1e-6,
-                 item_alpha=0.0, user_alpha=0.0, max_sampled=None):
-
+                 item_alpha=0.0, user_alpha=0.0, max_sampled=None,
+                 random_state=None):
 
         assert item_alpha >= 0.0
         assert user_alpha >= 0.0
@@ -145,6 +148,13 @@ class LightFM(object):
         self.item_alpha = item_alpha
         self.user_alpha = user_alpha
 
+        if random_state is None:
+            self.rng = np.random.RandomState()
+        elif isinstance(random_state, np.random.RandomState):
+            self.rng = random_state
+        else:
+            self.rng = np.random.RandomState(random_state)
+
         self._reset_state()
 
     def _reset_state(self):
@@ -169,7 +179,7 @@ class LightFM(object):
         """
 
         # Initialise item features.
-        self.item_embeddings = ((np.random.rand(no_item_features, no_components) - 0.5)
+        self.item_embeddings = ((self.rng.rand(no_item_features, no_components) - 0.5)
                                 / no_components).astype(np.float32)
         self.item_embedding_gradients = np.zeros_like(self.item_embeddings)
         self.item_embedding_momentum = np.zeros_like(self.item_embeddings)
@@ -178,7 +188,7 @@ class LightFM(object):
         self.item_bias_momentum = np.zeros_like(self.item_biases)
 
         # Initialise user features.
-        self.user_embeddings = ((np.random.rand(no_user_features, no_components) - 0.5)
+        self.user_embeddings = ((self.rng.rand(no_user_features, no_components) - 0.5)
                                 / no_components).astype(np.float32)
         self.user_embedding_gradients = np.zeros_like(self.user_embeddings)
         self.user_embedding_momentum = np.zeros_like(self.user_embeddings)
@@ -468,7 +478,7 @@ class LightFM(object):
 
         # Create shuffle indexes.
         shuffle_indices = np.arange(len(interactions.data), dtype=np.int32)
-        np.random.shuffle(shuffle_indices)
+        self.rng.shuffle(shuffle_indices)
 
         lightfm_data = self._get_lightfm_data()
 
@@ -486,7 +496,8 @@ class LightFM(object):
                      self.learning_rate,
                      self.item_alpha,
                      self.user_alpha,
-                     num_threads)
+                     num_threads,
+                     self.rng)
         elif loss == 'bpr':
             fit_bpr(CSRMatrix(item_features),
                     CSRMatrix(user_features),
@@ -500,7 +511,8 @@ class LightFM(object):
                     self.learning_rate,
                     self.item_alpha,
                     self.user_alpha,
-                    num_threads)
+                    num_threads,
+                    self.rng)
         elif loss == 'warp-kos':
             fit_warp_kos(CSRMatrix(item_features),
                          CSRMatrix(user_features),
@@ -513,7 +525,8 @@ class LightFM(object):
                          self.user_alpha,
                          self.k,
                          self.n,
-                         num_threads)
+                         num_threads,
+                         self.rng)
         else:
             fit_logistic(CSRMatrix(item_features),
                          CSRMatrix(user_features),
