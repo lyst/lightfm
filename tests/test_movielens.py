@@ -27,13 +27,10 @@ def _get_metrics(model, train_set, test_set):
     train_set.eliminate_zeros()
     test_set.eliminate_zeros()
 
-    train_users = train_set.getnnz(axis=1) > 0
-    test_users = test_set.getnnz(axis=1) > 0
-
-    return (precision_at_k(model, train_set)[train_users].mean(),
-            precision_at_k(model, test_set)[test_users].mean(),
-            auc_score(model, train_set)[train_users].mean(),
-            auc_score(model, test_set)[test_users].mean())
+    return (precision_at_k(model, train_set).mean(),
+            precision_at_k(model, test_set).mean(),
+            auc_score(model, train_set).mean(),
+            auc_score(model, test_set).mean())
 
 
 def _get_feature_matrices(interactions):

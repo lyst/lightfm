@@ -76,14 +76,18 @@ def test_precision_at_k():
 
     k = 10
 
-    mean_precision = evaluation.precision_at_k(model,
-                                               train,
-                                               k=k)[train.getnnz(axis=1) > 0].mean()
+    precision = evaluation.precision_at_k(model,
+                                          train,
+                                          k=k)
     expected_mean_precision = _precision_at_k(model,
                                               train,
                                               k)
 
-    assert np.allclose(mean_precision, expected_mean_precision)
+    assert np.allclose(precision.mean(), expected_mean_precision)
+    assert len(precision) == (train.getnnz(axis=1) > 0).sum()
+    assert len(evaluation.precision_at_k(model,
+                                         train,
+                                         preserve_rows=True)) == train.shape[0]
 
 
 def test_auc_score():
@@ -98,9 +102,13 @@ def test_auc_score():
 
     auc = evaluation.auc_score(model,
                                train,
-                               num_threads=2)[train.getnnz(axis=1) > 0]
+                               num_threads=2)
     expected_auc = np.array(_auc(model,
                                  train))
 
     assert auc.shape == expected_auc.shape
     assert np.abs(auc.mean() - expected_auc.mean()) < 0.01
+    assert len(auc) == (train.getnnz(axis=1) > 0).sum()
+    assert len(evaluation.auc_score(model,
+                                    train,
+                                    preserve_rows=True)) == train.shape[0]
