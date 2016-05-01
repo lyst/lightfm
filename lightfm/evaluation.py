@@ -1,5 +1,5 @@
 """
-Module containing evaluation function suitable for judging the performance of a fitted
+Module containing evaluation functions suitable for judging the performance of a fitted
 LightFM model.
 """
 
@@ -14,7 +14,8 @@ __all__ = ['precision_at_k',
            'reciprocal_rank']
 
 
-def precision_at_k(model, interactions, k=10, user_features=None, item_features=None, num_threads=1):
+def precision_at_k(model, interactions, k=10, user_features=None, item_features=None,
+                   preserve_rows=False, num_threads=1):
     """
     Measure the precision at k metric for a model: the fraction of known positives in the first k
     positions of the ranked list of results.
@@ -33,6 +34,10 @@ def precision_at_k(model, interactions, k=10, user_features=None, item_features=
          Each row contains that user's weights over features.
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
          Each row contains that item's weights over features.
+    preserve_rows: boolean, optional
+         When False (default), the number of rows in the output will be equal to
+         the number of users with interactions in the evaluation set. When True,
+         the number of rows in the output will be equal to the number of users.
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
@@ -40,7 +45,7 @@ def precision_at_k(model, interactions, k=10, user_features=None, item_features=
     Returns
     -------
 
-    np.array of shape [n_users,]
+    np.array of shape [n_users with interactions or n_users,]
          Numpy array containing precision@k scores for each user. If there are no interactions for a given
          user the returned precision will be 0.
     """
@@ -55,10 +60,14 @@ def precision_at_k(model, interactions, k=10, user_features=None, item_features=
 
     precision = np.squeeze(np.array(ranks.sum(axis=1))) / k
 
+    if not preserve_rows:
+        precision = precision[interactions.getnnz(axis=1) > 0]
+
     return precision
 
 
-def auc_score(model, interactions, user_features=None, item_features=None, num_threads=1):
+def auc_score(model, interactions, user_features=None, item_features=None,
+              preserve_rows=False, num_threads=1):
     """
     Measure the ROC AUC metric for a model: the probability that a randomly chosen positive
     example has a higher score than a randomly chosen negative example.
@@ -75,6 +84,10 @@ def auc_score(model, interactions, user_features=None, item_features=None, num_t
          Each row contains that user's weights over features.
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
          Each row contains that item's weights over features.
+    preserve_rows: boolean, optional
+         When False (default), the number of rows in the output will be equal to
+         the number of users with interactions in the evaluation set. When True,
+         the number of rows in the output will be equal to the number of users.
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
@@ -82,7 +95,7 @@ def auc_score(model, interactions, user_features=None, item_features=None, num_t
     Returns
     -------
 
-    np.array of shape [n_users,]
+    np.array of shape [n_users with interactions or n_users,]
          Numpy array containing AUC scores for each user. If there are no interactions for a given
          user the returned AUC will be 0.5.
     """
@@ -103,10 +116,14 @@ def auc_score(model, interactions, user_features=None, item_features=None, num_t
                             auc,
                             num_threads)
 
+    if not preserve_rows:
+        auc = auc[interactions.getnnz(axis=1) > 0]
+
     return auc
 
 
-def reciprocal_rank(model, interactions, user_features=None, item_features=None, num_threads=1):
+def reciprocal_rank(model, interactions, user_features=None, item_features=None,
+                    preserve_rows=False, num_threads=1):
     """
     Measure the reciprocal rank metric for a model: 1 / the rank of the highest ranked positive example.
     A perfect score is 1.0.
@@ -122,6 +139,10 @@ def reciprocal_rank(model, interactions, user_features=None, item_features=None,
          Each row contains that user's weights over features.
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
          Each row contains that item's weights over features.
+    preserve_rows: boolean, optional
+         When False (default), the number of rows in the output will be equal to
+         the number of users with interactions in the evaluation set. When True,
+         the number of rows in the output will be equal to the number of users.
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
@@ -129,7 +150,7 @@ def reciprocal_rank(model, interactions, user_features=None, item_features=None,
     Returns
     -------
 
-    np.array of shape [n_users,]
+    np.array of shape [n_users with interactions or n_users,]
          Numpy array containing reciprocal rank scores for each user. If there are no interactions for a given
          user the returned value will be 0.0.
     """
@@ -141,4 +162,9 @@ def reciprocal_rank(model, interactions, user_features=None, item_features=None,
 
     ranks.data = 1.0 / (ranks.data + 1.0)
 
-    return np.squeeze(np.array(ranks.max(axis=1).todense()))
+    ranks = np.squeeze(np.array(ranks.max(axis=1).todense()))
+
+    if not preserve_rows:
+        ranks = ranks[interactions.getnnz(axis=1) > 0]
+
+    return ranks
