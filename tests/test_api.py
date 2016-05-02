@@ -236,6 +236,7 @@ def test_predict_ranks():
     train = sp.coo_matrix((no_users,
                            no_items),
                           dtype=np.float32)
+    train = sp.rand(no_users, no_items, format='csr')
 
     model = LightFM()
     model.fit_partial(train)
@@ -250,7 +251,20 @@ def test_predict_ranks():
     for row in range(no_users):
         assert np.all(np.sort(ranks[row]) == np.arange(no_items))
 
-    # Make sure this is true also when there are ties
+    # Train set exclusions. All ranks should be zero
+    # if train interactions is dense.
+    ranks = model.predict_rank(rank_input,
+                               train_interactions=rank_input).todense()
+    assert np.all(ranks == 0)
+
+    # Max rank should be num_items - 1 - number of positives
+    # in train in that row
+    ranks = model.predict_rank(rank_input,
+                               train_interactions=train).todense()
+    assert np.all(np.squeeze(np.array(ranks.max(axis=1)))
+                  == no_items - 1 - np.squeeze(np.array(train.getnnz(axis=1))))
+
+    # Make sure invariants hold when there are ties
     model.user_embeddings = np.zeros_like(model.user_embeddings)
     model.item_embeddings = np.zeros_like(model.item_embeddings)
     model.user_biases = np.zeros_like(model.user_biases)

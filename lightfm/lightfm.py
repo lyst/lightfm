@@ -605,7 +605,8 @@ class LightFM(object):
 
         return predictions
 
-    def predict_rank(self, interactions, item_features=None, user_features=None, num_threads=1):
+    def predict_rank(self, test_interactions, train_interactions=None,
+                     item_features=None, user_features=None, num_threads=1):
         """
         Predict the rank of selected interactions. Computes recommendation rankings across all items
         for every user in interactions and calculates the rank of all non-zero entries in the recommendation
@@ -614,8 +615,11 @@ class LightFM(object):
 
         Arguments
         ---------
-        interactions: np.float32 csr_matrix of shape [n_users, n_items]
+        test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
              Non-zero entries denote the user-item pairs whose rank will be computed.
+        train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
+             Non-zero entries denote the user-item pairs which will be excluded from rank computation.
+             Use to exclude training set interactions from being scored and ranked for evaluation.
         item_ids: np.int32 array of shape [n_pairs,]
              an array containing the item ids for the user-item pairs for which
              a prediction is to be computed.
@@ -637,7 +641,7 @@ class LightFM(object):
             matrix.
         """
 
-        n_users, n_items = interactions.shape
+        n_users, n_items = test_interactions.shape
 
         (user_features,
          item_features) = self._construct_feature_matrices(n_users,
@@ -651,19 +655,27 @@ class LightFM(object):
         if not user_features.shape[1] == self.user_embeddings.shape[0]:
             raise ValueError('Incorrect number of features in user_features')
 
-        interactions = interactions.tocsr()
-        interactions = self._to_cython_dtype(interactions)
+        test_interactions = test_interactions.tocsr()
+        test_interactions = self._to_cython_dtype(test_interactions)
 
-        ranks = sp.csr_matrix((np.zeros_like(interactions.data),
-                               interactions.indices,
-                               interactions.indptr),
-                              shape=interactions.shape)
+        if train_interactions is None:
+            train_interactions = sp.csr_matrix((n_users, n_items),
+                                               dtype=CYTHON_DTYPE)
+        else:
+            train_interactions = train_interactions.tocsr()
+            train_interactions = self._to_cython_dtype(train_interactions)
+
+        ranks = sp.csr_matrix((np.zeros_like(test_interactions.data),
+                               test_interactions.indices,
+                               test_interactions.indptr),
+                              shape=test_interactions.shape)
 
         lightfm_data = self._get_lightfm_data()
 
         predict_ranks(CSRMatrix(item_features),
                       CSRMatrix(user_features),
-                      CSRMatrix(interactions),
+                      CSRMatrix(test_interactions),
+                      CSRMatrix(train_interactions),
                       ranks.data,
                       lightfm_data,
                       num_threads)

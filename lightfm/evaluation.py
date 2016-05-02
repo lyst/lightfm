@@ -14,7 +14,8 @@ __all__ = ['precision_at_k',
            'reciprocal_rank']
 
 
-def precision_at_k(model, interactions, k=10, user_features=None, item_features=None,
+def precision_at_k(model, test_interactions, train_interactions=None,
+                   k=10, user_features=None, item_features=None,
                    preserve_rows=False, num_threads=1):
     """
     Measure the precision at k metric for a model: the fraction of known positives in the first k
@@ -26,8 +27,12 @@ def precision_at_k(model, interactions, k=10, user_features=None, item_features=
 
     model: LightFM instance
          the model to be evaluated
-    interactions: np.float32 csr_matrix of shape [n_users, n_items]
-         Non-zero entries representing known positives.
+    test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
+         Non-zero entries representing known positives in the evaluation set.
+    train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
+         Non-zero entries representing known positives in the train set. These
+         will be omitted from the score calulations to avoid re-recommending
+         known positives.
     k: integer, optional
          The k parameter.
     user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
@@ -50,7 +55,8 @@ def precision_at_k(model, interactions, k=10, user_features=None, item_features=
          user the returned precision will be 0.
     """
 
-    ranks = model.predict_rank(interactions,
+    ranks = model.predict_rank(test_interactions,
+                               train_interactions=train_interactions,
                                user_features=user_features,
                                item_features=item_features,
                                num_threads=num_threads)
@@ -61,12 +67,13 @@ def precision_at_k(model, interactions, k=10, user_features=None, item_features=
     precision = np.squeeze(np.array(ranks.sum(axis=1))) / k
 
     if not preserve_rows:
-        precision = precision[interactions.getnnz(axis=1) > 0]
+        precision = precision[test_interactions.getnnz(axis=1) > 0]
 
     return precision
 
 
-def auc_score(model, interactions, user_features=None, item_features=None,
+def auc_score(model, test_interactions, train_interactions=None,
+              user_features=None, item_features=None,
               preserve_rows=False, num_threads=1):
     """
     Measure the ROC AUC metric for a model: the probability that a randomly chosen positive
@@ -78,8 +85,12 @@ def auc_score(model, interactions, user_features=None, item_features=None,
 
     model: LightFM instance
          the model to be evaluated
-    interactions: np.float32 csr_matrix of shape [n_users, n_items]
-         Non-zero entries representing known positives.
+    test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
+         Non-zero entries representing known positives in the evaluation set.
+    train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
+         Non-zero entries representing known positives in the train set. These
+         will be omitted from the score calulations to avoid re-recommending
+         known positives.
     user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
          Each row contains that user's weights over features.
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
@@ -100,7 +111,8 @@ def auc_score(model, interactions, user_features=None, item_features=None,
          user the returned AUC will be 0.5.
     """
 
-    ranks = model.predict_rank(interactions,
+    ranks = model.predict_rank(test_interactions,
+                               train_interactions=train_interactions,
                                user_features=user_features,
                                item_features=item_features,
                                num_threads=num_threads)
@@ -108,21 +120,30 @@ def auc_score(model, interactions, user_features=None, item_features=None,
 
     auc = np.zeros(ranks.shape[0], dtype=np.float32)
 
+    if train_interactions is not None:
+        num_train_positives = (np.squeeze(np.array(train_interactions.getnnz(axis=1))
+                                          .astype(np.int32)))
+    else:
+        num_train_positives = np.zeros(test_interactions.shape[0],
+                                       dtype=np.int32)
+
     # The second argument is modified in-place, but
     # here we don't care about the inconsistency
     # introduced into the ranks matrix.
     calculate_auc_from_rank(CSRMatrix(ranks),
+                            num_train_positives,
                             ranks.data,
                             auc,
                             num_threads)
 
     if not preserve_rows:
-        auc = auc[interactions.getnnz(axis=1) > 0]
+        auc = auc[test_interactions.getnnz(axis=1) > 0]
 
     return auc
 
 
-def reciprocal_rank(model, interactions, user_features=None, item_features=None,
+def reciprocal_rank(model, test_interactions, train_interactions=None,
+                    user_features=None, item_features=None,
                     preserve_rows=False, num_threads=1):
     """
     Measure the reciprocal rank metric for a model: 1 / the rank of the highest ranked positive example.
@@ -133,8 +154,12 @@ def reciprocal_rank(model, interactions, user_features=None, item_features=None,
 
     model: LightFM instance
          the model to be evaluated
-    interactions: np.float32 csr_matrix of shape [n_users, n_items]
-         Non-zero entries representing known positives.
+    test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
+         Non-zero entries representing known positives in the evaluation set.
+    train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
+         Non-zero entries representing known positives in the train set. These
+         will be omitted from the score calulations to avoid re-recommending
+         known positives.
     user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
          Each row contains that user's weights over features.
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
@@ -155,7 +180,8 @@ def reciprocal_rank(model, interactions, user_features=None, item_features=None,
          user the returned value will be 0.0.
     """
 
-    ranks = model.predict_rank(interactions,
+    ranks = model.predict_rank(test_interactions,
+                               train_interactions=train_interactions,
                                user_features=user_features,
                                item_features=item_features,
                                num_threads=num_threads)
@@ -165,6 +191,6 @@ def reciprocal_rank(model, interactions, user_features=None, item_features=None,
     ranks = np.squeeze(np.array(ranks.max(axis=1).todense()))
 
     if not preserve_rows:
-        ranks = ranks[interactions.getnnz(axis=1) > 0]
+        ranks = ranks[test_interactions.getnnz(axis=1) > 0]
 
     return ranks
