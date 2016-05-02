@@ -94,8 +94,6 @@ Check the ``examples`` directory for more examples.
 
 The `Movielens example <https://github.com/lyst/lightfm/blob/master/examples/movielens/example.ipynb>`_ shows how to use LightFM on the Movielens dataset, both with and without using movie metadata. `Another example <https://github.com/lyst/lightfm/blob/master/examples/movielens/learning_schedules.ipynb>`_ compares the performance of the adagrad and adadelta learning schedules.
 
-The `Cross Validated example <https://github.com/lyst/lightfm/blob/master/examples/crossvalidated/example.ipynb>`_ shows how to use LightFM on a dataset from `stats.stackexchange.com <http://stats.stackexchange.com>`_ with both item and user features.
-
 The `Kaggle coupon purchase prediction <https://github.com/tdeboissiere/Kaggle/blob/master/Ponpare/ponpare_lightfm.ipynb>`_ example applies LightFM to predicting coupon purchases.
 
 Development
