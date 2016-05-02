@@ -100,6 +100,12 @@
 <li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#experiment">Experiment</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="examples/hybrid_crossvalidated.html">Item cold-start: recommending StackExchange questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/hybrid_crossvalidated.html#a-pure-collaborative-filtering-model">A pure collaborative filtering model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/hybrid_crossvalidated.html#a-hybrid-model">A hybrid model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/hybrid_crossvalidated.html#bonus-tag-embeddings">Bonus: tag embeddings</a></li>
 </ul>
 </li>
 </ul>
@@ -143,7 +149,7 @@
 <h1>LightFM<a class="headerlink" href="#lightfm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="lightfm.LightFM">
-<em class="property">class </em><code class="descclassname">lightfm.</code><code class="descname">LightFM</code><span class="sig-paren">(</span><em>no_components=10</em>, <em>k=5</em>, <em>n=10</em>, <em>learning_schedule='adagrad'</em>, <em>loss='logistic'</em>, <em>learning_rate=0.05</em>, <em>rho=0.95</em>, <em>epsilon=1e-06</em>, <em>item_alpha=0.0</em>, <em>user_alpha=0.0</em>, <em>max_sampled=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">lightfm.</code><code class="descname">LightFM</code><span class="sig-paren">(</span><em>no_components=10</em>, <em>k=5</em>, <em>n=10</em>, <em>learning_schedule='adagrad'</em>, <em>loss='logistic'</em>, <em>learning_rate=0.05</em>, <em>rho=0.95</em>, <em>epsilon=1e-06</em>, <em>item_alpha=0.0</em>, <em>user_alpha=0.0</em>, <em>max_sampled=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM" title="Permalink to this definition">¶</a></dt>
 <dd><p>A hybrid recommender model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -164,6 +170,8 @@ examples sampled for every user.</li>
 <li><strong>max_sampled</strong> (<em>int, optional</em>) &#8211; maximum number of negative samples used during WARP fitting. Defaults to
 the number of items divided by 10. Setting this to lower number may improve the speed of
 WARP fitting at the expense of some accuracy.</li>
+<li><strong>random_state</strong> (<em>int seed, RandomState instance, or None</em>) &#8211; The seed of the pseudo random number generator to use when shuffling the data and
+initializing the parameters.</li>
 </ul>
 </td>
 </tr>
@@ -356,7 +364,7 @@ not be higher than the number of physical cores.</li>
 
 <dl class="method">
 <dt id="lightfm.LightFM.predict_rank">
-<code class="descname">predict_rank</code><span class="sig-paren">(</span><em>interactions</em>, <em>item_features=None</em>, <em>user_features=None</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM.predict_rank" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict_rank</code><span class="sig-paren">(</span><em>test_interactions</em>, <em>train_interactions=None</em>, <em>item_features=None</em>, <em>user_features=None</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM.predict_rank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict the rank of selected interactions. Computes recommendation rankings across all items
 for every user in interactions and calculates the rank of all non-zero entries in the recommendation
 ranking, with 0 meaning the top of the list (most recommended) and n_items - 1 being the end of the
@@ -366,7 +374,9 @@ list (least recommended).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>interactions</strong> (<em>np.float32 csr_matrix of shape [n_users, n_items]</em>) &#8211; Non-zero entries denote the user-item pairs whose rank will be computed.</li>
+<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape [n_users, n_items]</em>) &#8211; Non-zero entries denote the user-item pairs whose rank will be computed.</li>
+<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape [n_users, n_items], optional</em>) &#8211; Non-zero entries denote the user-item pairs which will be excluded from rank computation.
+Use to exclude training set interactions from being scored and ranked for evaluation.</li>
 <li><strong>item_ids</strong> (<em>np.int32 array of shape [n_pairs,]</em>) &#8211; an array containing the item ids for the user-item pairs for which
 a prediction is to be computed.</li>
 <li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape [n_users, n_user_features], optional</em>) &#8211; Each row contains that user&#8217;s weights over features.</li>
