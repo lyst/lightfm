@@ -6,7 +6,9 @@ examples:
 	mv examples/movielens/example.rst doc/examples/movielens_implicit.rst
 	jupyter nbconvert --to rst examples/movielens/learning_schedules.ipynb
 	mv examples/movielens/learning_schedules.rst doc/examples/
-	mv examples/movielens/learning_schedules_files doc/examples/
+	cp -r examples/movielens/learning_schedules_files doc/examples/
+	jupyter nbconvert --to rst examples/stackexchange/hybrid_crossvalidated.ipynb
+	mv examples/stackexchange/hybrid_crossvalidated.rst doc/examples/
 .PHONY: update-docs
 update-docs:
 	pip install -e . \
