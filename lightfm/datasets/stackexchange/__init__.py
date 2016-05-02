@@ -2,14 +2,14 @@ import os
 
 import numpy as np
 
-import requests
-
 import scipy.sparse as sp
 
 from lightfm.datasets import _common
 
 
-def fetch_stackexchange(dataset, test_set_fraction=0.2, data_home=None,
+def fetch_stackexchange(dataset, test_set_fraction=0.2,
+                        min_training_interactions=1,
+                        data_home=None,
                         indicator_features=True, tag_features=False,
                         download_if_missing=True):
     """
@@ -34,6 +34,8 @@ def fetch_stackexchange(dataset, test_set_fraction=0.2, data_home=None,
         The fraction of the dataset used for testing. Splitting into the train and test set is done
         in a time-based fashion: all interactions before a certain time are in the train set and
         all interactions after that time are in the test set.
+    min_training_interactions: int, optional
+        Only include users with this amount of interactions in the training set.
     data_home: path, optional
         Path to the directory in which the downloaded data should be placed.
         Defaults to ``~/lightfm_data/``.
@@ -108,6 +110,12 @@ def fetch_stackexchange(dataset, test_set_fraction=0.2, data_home=None,
                           (interactions.row[in_test],
                            interactions.col[in_test])),
                          shape=interactions.shape)
+
+    if min_training_interactions > 0:
+        include = np.squeeze(np.array(train.getnnz(axis=1))) > min_training_interactions
+
+        train = train.tocsr()[include].tocoo()
+        test = test.tocsr()[include].tocoo()
 
     if indicator_features and not tag_features:
         features = sp.identity(train.shape[1],

@@ -36,7 +36,9 @@ def test_basic_fetching_stackexchange():
     test_fractions = (0.2, 0.5, 0.6)
 
     for test_fraction in test_fractions:
-        data = fetch_stackexchange('crossvalidated', test_set_fraction=test_fraction)
+        data = fetch_stackexchange('crossvalidated',
+                                   min_training_interactions=0,
+                                   test_set_fraction=test_fraction)
 
         train = data['train']
         test = data['test']
@@ -51,16 +53,22 @@ def test_basic_fetching_stackexchange():
 
     for dataset in ('crossvalidated', 'stackoverflow'):
 
-        data = fetch_stackexchange(dataset, indicator_features=True, tag_features=False)
+        data = fetch_stackexchange(dataset,
+                                   min_training_interactions=0,
+                                   indicator_features=True, tag_features=False)
         assert isinstance(data['item_features'], sp.csr_matrix)
         assert (data['item_features'].shape[0] == data['item_features'].shape[1]
                 == data['train'].shape[1])
 
-        data = fetch_stackexchange(dataset, indicator_features=False, tag_features=True)
+        data = fetch_stackexchange(dataset,
+                                   min_training_interactions=0,
+                                   indicator_features=False, tag_features=True)
         assert isinstance(data['item_features'], sp.csr_matrix)
         assert data['item_features'].shape[0] > data['item_features'].shape[1]
 
-        data = fetch_stackexchange(dataset, indicator_features=True, tag_features=True)
+        data = fetch_stackexchange(dataset,
+                                   min_training_interactions=0,
+                                   indicator_features=True, tag_features=True)
         assert isinstance(data['item_features'], sp.csr_matrix)
         assert data['item_features'].shape[0] < data['item_features'].shape[1]
 
