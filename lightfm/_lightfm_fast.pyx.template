@@ -1220,6 +1220,13 @@ def predict_ranks(CSRMatrix item_features,
 
         for user_id in {range_block}(test_interactions.rows):
 
+            row_start = test_interactions.get_row_start(user_id)
+            row_stop = test_interactions.get_row_end(user_id)
+
+            if row_stop == row_start:
+                # No test interactions for this user
+                continue
+
             compute_representation(user_features,
                                    lightfm.user_features,
                                    lightfm.user_biases,
@@ -1227,9 +1234,6 @@ def predict_ranks(CSRMatrix item_features,
                                    user_id,
                                    lightfm.user_scale,
                                    user_repr)
-
-            row_start = test_interactions.get_row_start(user_id)
-            row_stop = test_interactions.get_row_end(user_id)
 
             # Compute predictions for the items whose
             # ranks we want to know
