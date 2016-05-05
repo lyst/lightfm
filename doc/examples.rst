@@ -9,3 +9,4 @@ All the examples can be viewed (and run) as Jupyter notebooks in the `examples d
    Movielens implicit feedback recommender <examples/movielens_implicit>
    Learning rate schedules <examples/learning_schedules>
    Cold-start hybrid recommender <examples/hybrid_crossvalidated>
+   Learning-to-rank using WARP loss <examples/warp_loss>
