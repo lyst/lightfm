@@ -14,6 +14,7 @@
 ### Changed
 - By default, an OpenMP-less version will be built on OSX. This allows much easier installation at the expense of
 performance.
+- The default value of the max_sampled argument is now 10. This represents a decent default value that allows fast training.
 
 ## [1.8][2016-01-14]
 ### Changed
