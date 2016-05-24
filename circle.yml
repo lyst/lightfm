@@ -3,3 +3,8 @@ dependencies:
     - pip install numpy
     - pip install scipy
     - pip install scikit-learn
+test:
+  pre:
+    - pip install pytest
+  override:
+    - mv ~/lightfm/lightfm ~/lightfm/_lightfm && py.test -xv ~/lightfm/tests
