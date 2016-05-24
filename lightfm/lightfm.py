@@ -45,9 +45,11 @@ class LightFM(object):
     user_alpha: float, optional
         L2 penalty on user features.
     max_sampled: int, optional
-        maximum number of negative samples used during WARP fitting. Defaults to
-        the number of items divided by 10. Setting this to lower number may improve the speed of
-        WARP fitting at the expense of some accuracy.
+        maximum number of negative samples used during WARP fitting. It requires
+        a lot of sampling to find negative triplets for users that are already
+        well represented by the model; this can lead to very long training times
+        and overfitting. Setting this to a higher number will generally lead
+        to longer training times, but may in some cases improve accuracy.
     random_state: int seed, RandomState instance, or None
         The seed of the pseudo random number generator to use when shuffling the data and
         initializing the parameters.
@@ -116,7 +118,7 @@ class LightFM(object):
                  learning_schedule='adagrad',
                  loss='logistic',
                  learning_rate=0.05, rho=0.95, epsilon=1e-6,
-                 item_alpha=0.0, user_alpha=0.0, max_sampled=None,
+                 item_alpha=0.0, user_alpha=0.0, max_sampled=10,
                  random_state=None):
 
         assert item_alpha >= 0.0
@@ -129,7 +131,7 @@ class LightFM(object):
         assert learning_schedule in ('adagrad', 'adadelta')
         assert loss in ('logistic', 'warp', 'bpr', 'warp-kos')
 
-        if max_sampled is not None and max_sampled < 1:
+        if max_sampled < 1:
             raise ValueError('max_sampled must be a positive integer')
 
         self.loss = loss
@@ -294,9 +296,6 @@ class LightFM(object):
 
     def _get_lightfm_data(self):
 
-        max_sampled = (self.max_sampled if self.max_sampled is not None
-                       else self.item_embeddings.shape[0] / 10)
-
         lightfm_data = FastLightFM(self.item_embeddings,
                                    self.item_embedding_gradients,
                                    self.item_embedding_momentum,
@@ -314,7 +313,7 @@ class LightFM(object):
                                    self.learning_rate,
                                    self.rho,
                                    self.epsilon,
-                                   max_sampled)
+                                   self.max_sampled)
 
         return lightfm_data
 
