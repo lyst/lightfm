@@ -44,17 +44,27 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-nav-search">
-        
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-        
-          <a href="#" class="icon icon-home"> LightFM
-        
+          
+            <a href="#" class="icon icon-home"> LightFM
+          
 
-        
-        </a>
+          
+          </a>
 
-        
+          
+            
+            
+              <div class="version">
+                1.9
+              </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -63,62 +73,26 @@
   </form>
 </div>
 
-        
-      </div>
+          
+        </div>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-          
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="home.html">Home</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="home.html#quickstart">Quickstart</a></li>
-<li class="toctree-l2"><a class="reference internal" href="home.html#installation">Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="home.html#pypi">PyPI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="home.html#using-with-docker">Using with Docker</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="home.html#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="home.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="home.html#development">Development</a></li>
-</ul>
-</li>
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#getting-the-data">Getting the data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#fitting-models">Fitting models</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="examples/learning_schedules.html">Learning rate schedules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#preliminaries">Preliminaries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#experiment">Experiment</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="examples/hybrid_crossvalidated.html">Cold-start hybrid recommender</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/hybrid_crossvalidated.html#a-pure-collaborative-filtering-model">A pure collaborative filtering model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/hybrid_crossvalidated.html#a-hybrid-model">A hybrid model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/hybrid_crossvalidated.html#bonus-tag-embeddings">Bonus: tag embeddings</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="examples/warp_loss.html">Learning-to-rank using WARP loss</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/warp_loss.html#preliminaries">Preliminaries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/warp_loss.html#accuracy">Accuracy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/warp_loss.html#fitting-speed">Fitting speed</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 
+            
           
-        
+        </div>
       </div>
-      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -133,7 +107,13 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="#">Docs</a> &raquo;</li>
       
@@ -148,12 +128,13 @@
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document">
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="welcome-to-lightfm-s-documentation">
 <h1>Welcome to LightFM&#8217;s documentation!<a class="headerlink" href="#welcome-to-lightfm-s-documentation" title="Permalink to this headline">¶</a></h1>
 <p>LightFM is a Python implementation of a number of popular recommendation algorithms for both implicit and explicit feedback.</p>
-<p>It also makes it possible to incorporate both item and user metadata into the traditional matrix factorization algorithms It represents each user and item as the sum of the latent representations of their features, thus allowing recommendations to generalise to new items (via item features) and to new users (via user features).</p>
+<p>It also makes it possible to incorporate both item and user metadata into the traditional matrix factorization algorithms. It represents each user and item as the sum of the latent representations of their features, thus allowing recommendations to generalise to new items (via item features) and to new users (via user features).</p>
 <p>The details of the approach are described in the LightFM paper, available on <a class="reference external" href="http://arxiv.org/abs/1507.08439">arXiv</a>.</p>
 <div class="section" id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
@@ -186,22 +167,22 @@
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Model fitting is very straightforward using the main <a class="reference internal" href="lightfm.html"><span class="doc">LightFM class</span></a>.</p>
 <p>Create a model instance with the desired latent dimensionality:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Assuming <code class="docutils literal"><span class="pre">train</span></code> is a (no_users, no_items) sparse matrix (with 1s denoting positive, and -1s negative interactions), you can fit a traditional matrix factorization model by calling:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This will train a traditional MF model, as no user or item features have been supplied.</p>
 <p>To get predictions, call <code class="docutils literal"><span class="pre">model.predict</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_user_ids</span><span class="p">,</span> <span class="n">test_item_ids</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_user_ids</span><span class="p">,</span> <span class="n">test_item_ids</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>User and item features can be incorporated into training by passing them into the <code class="docutils literal"><span class="pre">fit</span></code> method. Assuming <code class="docutils literal"><span class="pre">user_features</span></code> is a (no_users, no_user_features) sparse matrix (and similarly for <code class="docutils literal"><span class="pre">item_features</span></code>), you can call:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span>
           <span class="n">user_features</span><span class="o">=</span><span class="n">user_features</span><span class="p">,</span>
           <span class="n">item_features</span><span class="o">=</span><span class="n">item_features</span><span class="p">,</span>
           <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -213,13 +194,13 @@
 </div>
 <p>to train the model and obtain predictions.</p>
 <p>Both training and prediction can employ multiple cores for speed:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_user_ids</span><span class="p">,</span> <span class="n">test_item_ids</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This implementation uses asynchronous stochastic gradient descent [6] for training. This can lead to lower accuracy when the interaction matrix (or the feature matrices) are very dense and a large number of threads is used. In practice, however, training on a sparse dataset with 20 threads does not lead to a measurable loss of accuracy.</p>
 <p>In an implicit feedback setting, the BPR, WARP, or k-OS WARP loss functions can be used. If <code class="docutils literal"><span class="pre">train</span></code> is a sparse matrix with positive entries representing positive interactions, the model can be trained as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -277,6 +258,7 @@
 </div>
 
 
+           </div>
           </div>
           <footer>
   
@@ -293,9 +275,10 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Lyst (Maciej Kula).
+
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 

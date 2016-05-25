@@ -45,17 +45,27 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-nav-search">
-        
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-        
-          <a href="index.html" class="icon icon-home"> LightFM
-        
+          
+            <a href="index.html" class="icon icon-home"> LightFM
+          
 
-        
-        </a>
+          
+          </a>
 
-        
+          
+            
+            
+              <div class="version">
+                1.9
+              </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -64,62 +74,26 @@
   </form>
 </div>
 
-        
-      </div>
+          
+        </div>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-          
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="home.html">Home</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="home.html#quickstart">Quickstart</a></li>
-<li class="toctree-l2"><a class="reference internal" href="home.html#installation">Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="home.html#pypi">PyPI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="home.html#using-with-docker">Using with Docker</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="home.html#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="home.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="home.html#development">Development</a></li>
-</ul>
-</li>
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#getting-the-data">Getting the data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/movielens_implicit.html#fitting-models">Fitting models</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="examples/learning_schedules.html">Learning rate schedules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#preliminaries">Preliminaries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/learning_schedules.html#experiment">Experiment</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="examples/hybrid_crossvalidated.html">Cold-start hybrid recommender</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/hybrid_crossvalidated.html#a-pure-collaborative-filtering-model">A pure collaborative filtering model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/hybrid_crossvalidated.html#a-hybrid-model">A hybrid model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/hybrid_crossvalidated.html#bonus-tag-embeddings">Bonus: tag embeddings</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="examples/warp_loss.html">Learning-to-rank using WARP loss</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/warp_loss.html#preliminaries">Preliminaries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/warp_loss.html#accuracy">Accuracy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/warp_loss.html#fitting-speed">Fitting speed</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 
+            
           
-        
+        </div>
       </div>
-      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -134,7 +108,13 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
@@ -149,13 +129,14 @@
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document">
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="lightfm">
 <h1>LightFM<a class="headerlink" href="#lightfm" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="lightfm.LightFM">
-<em class="property">class </em><code class="descclassname">lightfm.</code><code class="descname">LightFM</code><span class="sig-paren">(</span><em>no_components=10</em>, <em>k=5</em>, <em>n=10</em>, <em>learning_schedule='adagrad'</em>, <em>loss='logistic'</em>, <em>learning_rate=0.05</em>, <em>rho=0.95</em>, <em>epsilon=1e-06</em>, <em>item_alpha=0.0</em>, <em>user_alpha=0.0</em>, <em>max_sampled=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">lightfm.</code><code class="descname">LightFM</code><span class="sig-paren">(</span><em>no_components=10</em>, <em>k=5</em>, <em>n=10</em>, <em>learning_schedule='adagrad'</em>, <em>loss='logistic'</em>, <em>learning_rate=0.05</em>, <em>rho=0.95</em>, <em>epsilon=1e-06</em>, <em>item_alpha=0.0</em>, <em>user_alpha=0.0</em>, <em>max_sampled=10</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.LightFM" title="Permalink to this definition">¶</a></dt>
 <dd><p>A hybrid recommender model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -173,9 +154,11 @@ examples sampled for every user.</li>
 <li><strong>epsilon</strong> (<em>float, optional</em>) &#8211; conditioning parameter for the adadelta learning schedule.</li>
 <li><strong>item_alpha</strong> (<em>float, optional</em>) &#8211; L2 penalty on item features</li>
 <li><strong>user_alpha</strong> (<em>float, optional</em>) &#8211; L2 penalty on user features.</li>
-<li><strong>max_sampled</strong> (<em>int, optional</em>) &#8211; maximum number of negative samples used during WARP fitting. Defaults to
-the number of items divided by 10. Setting this to lower number may improve the speed of
-WARP fitting at the expense of some accuracy.</li>
+<li><strong>max_sampled</strong> (<em>int, optional</em>) &#8211; maximum number of negative samples used during WARP fitting. It requires
+a lot of sampling to find negative triplets for users that are already
+well represented by the model; this can lead to very long training times
+and overfitting. Setting this to a higher number will generally lead
+to longer training times, but may in some cases improve accuracy.</li>
 <li><strong>random_state</strong> (<em>int seed, RandomState instance, or None</em>) &#8211; The seed of the pseudo random number generator to use when shuffling the data and
 initializing the parameters.</li>
 </ul>
@@ -410,6 +393,7 @@ matrix.</p>
 </div>
 
 
+           </div>
           </div>
           <footer>
   
@@ -428,9 +412,10 @@ matrix.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Lyst (Maciej Kula).
+
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
