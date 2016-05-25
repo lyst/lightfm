@@ -141,6 +141,7 @@ setup(
     download_url='https://github.com/lyst/lightfm/tarball/1.9',
     packages=['lightfm',
               'lightfm.datasets'],
+    package_data={'': ['*.c']},
     install_requires=['numpy', 'scipy', 'requests'],
     tests_require=['pytest', 'requests', 'scikit-learn'],
     cmdclass={'test': PyTest, 'cythonize': Cythonize, 'clean': Clean},
