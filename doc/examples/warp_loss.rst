@@ -17,7 +17,7 @@ the form of the k-OS WARP loss, also implemented in LightFM.
 
 Like the BPR model, WARP deals with (user, positive item, negative item)
 triplets. Unlike BPR, the negative items in the triplet are not chosen
-by random sampling: they are chosen from among those negatie items which
+by random sampling: they are chosen from among those negative items which
 would violate the desired item ranking given the state of the model.
 This approximates a form of active learning where the model selects
 those triplets that it cannot currently rank correctly.
