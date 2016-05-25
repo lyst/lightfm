@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased][unreleased]
+## [1.9][2016-05-25]
 ### Fixed
 - fixed gradient accumulation in adagrad (the feature value is now correctly used when accumulating gradient).
   Thanks to Benjamin Wilson for the bug report.
