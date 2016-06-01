@@ -142,7 +142,7 @@ setup(
     packages=['lightfm',
               'lightfm.datasets'],
     package_data={'': ['*.c']},
-    install_requires=['numpy', 'scipy', 'requests'],
+    install_requires=['numpy', 'scipy>=0.17.0', 'requests'],
     tests_require=['pytest', 'requests', 'scikit-learn'],
     cmdclass={'test': PyTest, 'cythonize': Cythonize, 'clean': Clean},
     author='Lyst Ltd (Maciej Kula)',
