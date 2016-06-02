@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased][unreleased]
+### Fixed
+- added >=0.17.0 scipy depdendency to setup.py
+
 ## [1.9][2016-05-25]
 ### Fixed
 - fixed gradient accumulation in adagrad (the feature value is now correctly used when accumulating gradient).
