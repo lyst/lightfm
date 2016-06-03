@@ -65,12 +65,12 @@ class Cythonize(Command):
                                 'lightfm')
 
         with open(os.path.join(file_dir,
-                               '_lightfm_fast.pyx.template'), 'rb') as fl:
+                               '_lightfm_fast.pyx.template'), 'r') as fl:
             template = fl.read()
 
         for variant, template_params in params:
             with open(os.path.join(file_dir,
-                                   '_lightfm_fast_{}.pyx'.format(variant)), 'wb') as fl:
+                                   '_lightfm_fast_{}.pyx'.format(variant)), 'w') as fl:
                 fl.write(template.format(**template_params))
 
     def run(self):
