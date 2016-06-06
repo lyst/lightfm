@@ -66,6 +66,45 @@ def _precision_at_k(model, ground_truth, k, train=None, user_features=None, item
     return sum(precisions) / len(precisions)
 
 
+def _recall_at_k(model, ground_truth, k, train=None, user_features=None,
+                 item_features=None):
+    # Alternative test implementation
+
+    ground_truth = ground_truth.tocsr()
+
+    no_users, no_items = ground_truth.shape
+
+    pid_array = np.arange(no_items, dtype=np.int32)
+
+    recalls = []
+
+    uid_array = np.empty(no_items, dtype=np.int32)
+
+    if train is not None:
+        train = train.tocsr()
+
+    for user_id, row in enumerate(ground_truth):
+        uid_array.fill(user_id)
+
+        predictions = model.predict(uid_array, pid_array,
+                                    user_features=user_features,
+                                    item_features=item_features,
+                                    num_threads=4)
+        if train is not None:
+            train_items = train[user_id].indices
+            top_k = set([x for x in np.argsort(-predictions)
+                         if x not in train_items][:k])
+        else:
+            top_k = set(np.argsort(-predictions)[:k])
+
+        true_pids = set(row.indices[row.data == 1])
+
+        if true_pids:
+            recalls.append(len(top_k & true_pids) / float(len(true_pids)))
+
+    return sum(recalls) / len(recalls)
+
+
 def _auc(model, ground_truth, train=None, user_features=None, item_features=None):
 
     ground_truth = ground_truth.tocsr()
@@ -141,6 +180,44 @@ def test_precision_at_k():
                                               train=train)
 
     assert np.allclose(precision.mean(), expected_mean_precision)
+
+
+def test_recall_at_k():
+
+    no_users, no_items = (10, 100)
+
+    train, test = _generate_data(no_users, no_items)
+
+    model = LightFM(loss='bpr')
+    model.fit_partial(train)
+
+    k = 10
+
+    # Without omitting train interactions
+    recall = evaluation.recall_at_k(model,
+                                    test,
+                                    k=k)
+    expected_mean_recall = _recall_at_k(model,
+                                        test,
+                                        k)
+
+    assert np.allclose(recall.mean(), expected_mean_recall)
+    assert len(recall) == (test.getnnz(axis=1) > 0).sum()
+    assert len(evaluation.recall_at_k(model,
+                                      train,
+                                      preserve_rows=True)) == test.shape[0]
+
+    # With omitting train interactions
+    recall = evaluation.recall_at_k(model,
+                                    test,
+                                    k=k,
+                                    train_interactions=train)
+    expected_mean_recall = _recall_at_k(model,
+                                        test,
+                                        k,
+                                        train=train)
+
+    assert np.allclose(recall.mean(), expected_mean_recall)
 
 
 def test_auc_score():
