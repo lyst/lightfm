@@ -6,5 +6,7 @@ dependencies:
 test:
   pre:
     - pip install pytest
+    - pip install flake8
   override:
+    - flake8 --config .flake8rc
     - mv ~/lightfm/lightfm ~/lightfm/_lightfm && py.test -xv ~/lightfm/tests
