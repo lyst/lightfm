@@ -10,6 +10,7 @@ from ._lightfm_fast import (CSRMatrix,
 
 
 __all__ = ['precision_at_k',
+           'recall_at_k',
            'auc_score',
            'reciprocal_rank']
 
@@ -70,6 +71,66 @@ def precision_at_k(model, test_interactions, train_interactions=None,
         precision = precision[test_interactions.getnnz(axis=1) > 0]
 
     return precision
+
+
+def recall_at_k(model, test_interactions, train_interactions=None,
+                k=10, user_features=None, item_features=None,
+                preserve_rows=False, num_threads=1):
+    """
+    Measure the recall at k metric for a model: the number of positive items in the first k
+    positions of the ranked list of results divided by the number of positive items
+    in the test period. A perfect score is 1.0.
+
+    Parameters
+    ----------
+
+    model: LightFM instance
+         the model to be evaluated
+    test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
+         Non-zero entries representing known positives in the evaluation set.
+    train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
+         Non-zero entries representing known positives in the train set. These
+         will be omitted from the score calulations to avoid re-recommending
+         known positives.
+    k: integer, optional
+         The k parameter.
+    user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+         Each row contains that user's weights over features.
+    item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+         Each row contains that item's weights over features.
+    preserve_rows: boolean, optional
+         When False (default), the number of rows in the output will be equal to
+         the number of users with interactions in the evaluation set. When True,
+         the number of rows in the output will be equal to the number of users.
+    num_threads: int, optional
+         Number of parallel computation threads to use. Should
+         not be higher than the number of physical cores.
+
+    Returns
+    -------
+
+    np.array of shape [n_users with interactions or n_users,]
+         Numpy array containing recall@k scores for each user. If there are no interactions
+         for a given user having items in the test period, the returned recall will be 0.
+    """
+
+    ranks = model.predict_rank(test_interactions,
+                               train_interactions=train_interactions,
+                               user_features=user_features,
+                               item_features=item_features,
+                               num_threads=num_threads)
+
+    ranks.data[ranks.data < k] = 1.0
+    ranks.data[ranks.data >= k] = 0.0
+
+    retrieved = np.squeeze(test_interactions.getnnz(axis=1))
+    hit = np.squeeze(np.array(ranks.sum(axis=1)))
+
+    if not preserve_rows:
+        hit = hit[test_interactions.getnnz(axis=1) > 0]
+        retrieved = retrieved[test_interactions.getnnz(axis=1) > 0]
+
+    return hit / retrieved
 
 
 def auc_score(model, test_interactions, train_interactions=None,
