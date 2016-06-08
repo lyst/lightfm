@@ -1,6 +1,8 @@
 # Changelog
 
 ## [unreleased][unreleased]
+### Added
+- added recall@k evaluation function
 ### Fixed
 - added >=0.17.0 scipy depdendency to setup.py
 
