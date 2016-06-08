@@ -1,11 +1,7 @@
-import array
 import itertools
-import os
 import zipfile
 
 import numpy as np
-
-import requests
 
 import scipy.sparse as sp
 
@@ -113,14 +109,16 @@ def fetch_movielens(data_home=None, indicator_features=True, genre_features=Fals
     """
     Fetch the `Movielens 100k dataset <http://grouplens.org/datasets/movielens/100k/>`_.
 
-    The dataset contains 100,000 interactions from 1000 users on 1700 movies, and is exhaustively described
-    in its `README <http://files.grouplens.org/datasets/movielens/ml-100k-README.txt>`_.
+    The dataset contains 100,000 interactions from 1000 users on 1700 movies,
+    and is exhaustively described in its
+    `README <http://files.grouplens.org/datasets/movielens/ml-100k-README.txt>`_.
 
     Parameters
     ----------
 
     data_home: path, optional
-        Path to the directory in which the downloaded data should be placed. Defaults to ``~/lightfm_data/``.
+        Path to the directory in which the downloaded data should be placed.
+        Defaults to ``~/lightfm_data/``.
     indicator_features: bool, optional
         Use an [n_users, n_users] identity matrix for item features. When True with genre_features,
         indicator and genre features are concatenated into a single feature matrix of shape

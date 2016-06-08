@@ -119,10 +119,10 @@ def test_not_enough_features_fails():
                            no_items),
                           dtype=np.int32)
 
-    user_features = sp.csr_matrix((no_users-1,
+    user_features = sp.csr_matrix((no_users - 1,
                                    no_features),
                                   dtype=np.int32)
-    item_features = sp.csr_matrix((no_items-1,
+    item_features = sp.csr_matrix((no_items - 1,
                                    no_features),
                                   dtype=np.int32)
     model = LightFM()
@@ -261,8 +261,8 @@ def test_predict_ranks():
     # in train in that row
     ranks = model.predict_rank(rank_input,
                                train_interactions=train).todense()
-    assert np.all(np.squeeze(np.array(ranks.max(axis=1)))
-                  == no_items - 1 - np.squeeze(np.array(train.getnnz(axis=1))))
+    assert np.all(np.squeeze(np.array(ranks.max(axis=1))) ==
+                  no_items - 1 - np.squeeze(np.array(train.getnnz(axis=1))))
 
     # Make sure invariants hold when there are ties
     model.user_embeddings = np.zeros_like(model.user_embeddings)

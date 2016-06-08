@@ -51,8 +51,8 @@ def precision_at_k(model, test_interactions, train_interactions=None,
     -------
 
     np.array of shape [n_users with interactions or n_users,]
-         Numpy array containing precision@k scores for each user. If there are no interactions for a given
-         user the returned precision will be 0.
+         Numpy array containing precision@k scores for each user. If there are no interactions
+         for a given user the returned precision will be 0.
     """
 
     ranks = model.predict_rank(test_interactions,
@@ -146,8 +146,8 @@ def reciprocal_rank(model, test_interactions, train_interactions=None,
                     user_features=None, item_features=None,
                     preserve_rows=False, num_threads=1):
     """
-    Measure the reciprocal rank metric for a model: 1 / the rank of the highest ranked positive example.
-    A perfect score is 1.0.
+    Measure the reciprocal rank metric for a model: 1 / the rank of the highest
+    ranked positive example. A perfect score is 1.0.
 
     Parameters
     ----------
@@ -176,8 +176,8 @@ def reciprocal_rank(model, test_interactions, train_interactions=None,
     -------
 
     np.array of shape [n_users with interactions or n_users,]
-         Numpy array containing reciprocal rank scores for each user. If there are no interactions for a given
-         user the returned value will be 0.0.
+         Numpy array containing reciprocal rank scores for each user.
+         If there are no interactions for a given user the returned value will be 0.0.
     """
 
     ranks = model.predict_rank(test_interactions,

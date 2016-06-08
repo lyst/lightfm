@@ -1,5 +1,3 @@
-import imp
-import os
 import pickle
 
 import numpy as np
@@ -481,7 +479,7 @@ def test_movielens_accuracy_sample_weights():
                               ('bpr', 0.84),
                               ('warp', 0.89)):
         model = LightFM(loss=loss, random_state=SEED)
-        model.learning_rate * 1.0/scale
+        model.learning_rate * 1.0 / scale
 
         model.fit_partial(train,
                           sample_weight=weights,
