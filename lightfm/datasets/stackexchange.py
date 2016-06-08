@@ -97,8 +97,8 @@ def fetch_stackexchange(dataset, test_set_fraction=0.2,
                                      shape=data['features_shape'].flatten())
     tag_labels = data['labels']
 
-    test_cutoff_timestamp = np.sort(interactions.data)[len(interactions.data)
-                                                       * (1.0 - test_set_fraction)]
+    test_cutoff_timestamp = np.sort(interactions.data)[len(interactions.data) *
+                                                       (1.0 - test_set_fraction)]
     in_train = interactions.data < test_cutoff_timestamp
     in_test = np.logical_not(in_train)
 

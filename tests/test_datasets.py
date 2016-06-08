@@ -57,8 +57,8 @@ def test_basic_fetching_stackexchange():
                                    min_training_interactions=0,
                                    indicator_features=True, tag_features=False)
         assert isinstance(data['item_features'], sp.csr_matrix)
-        assert (data['item_features'].shape[0] == data['item_features'].shape[1]
-                == data['train'].shape[1])
+        assert (data['item_features'].shape[0] == data['item_features'].shape[1] ==
+                data['train'].shape[1])
 
         data = fetch_stackexchange(dataset,
                                    min_training_interactions=0,

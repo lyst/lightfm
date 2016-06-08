@@ -5,9 +5,8 @@ import numpy as np
 import scipy.sparse as sp
 
 from ._lightfm_fast import (CSRMatrix, FastLightFM,
-                            fit_logistic, predict_lightfm,
-                            predict_ranks,
-                            fit_warp, fit_bpr, fit_warp_kos)
+                            fit_bpr, fit_logistic, fit_warp,
+                            fit_warp_kos, predict_lightfm, predict_ranks)
 
 
 __all__ = ['LightFM']
@@ -181,8 +180,8 @@ class LightFM(object):
         """
 
         # Initialise item features.
-        self.item_embeddings = ((self.rng.rand(no_item_features, no_components) - 0.5)
-                                / no_components).astype(np.float32)
+        self.item_embeddings = ((self.rng.rand(no_item_features, no_components) - 0.5) /
+                                no_components).astype(np.float32)
         self.item_embedding_gradients = np.zeros_like(self.item_embeddings)
         self.item_embedding_momentum = np.zeros_like(self.item_embeddings)
         self.item_biases = np.zeros(no_item_features, dtype=np.float32)
@@ -190,8 +189,8 @@ class LightFM(object):
         self.item_bias_momentum = np.zeros_like(self.item_biases)
 
         # Initialise user features.
-        self.user_embeddings = ((self.rng.rand(no_user_features, no_components) - 0.5)
-                                / no_components).astype(np.float32)
+        self.user_embeddings = ((self.rng.rand(no_user_features, no_components) - 0.5) /
+                                no_components).astype(np.float32)
         self.user_embedding_gradients = np.zeros_like(self.user_embeddings)
         self.user_embedding_momentum = np.zeros_like(self.user_embeddings)
         self.user_biases = np.zeros(no_user_features, dtype=np.float32)
@@ -271,8 +270,7 @@ class LightFM(object):
                                  'matrices must be the same shape')
 
             if not (np.array_equal(interactions.row,
-                                   sample_weight.row)
-                    and
+                                   sample_weight.row) and
                     np.array_equal(interactions.col,
                                    sample_weight.col)):
                 raise ValueError('Sample weight and interaction matrix '
@@ -608,17 +606,18 @@ class LightFM(object):
                      item_features=None, user_features=None, num_threads=1):
         """
         Predict the rank of selected interactions. Computes recommendation rankings across all items
-        for every user in interactions and calculates the rank of all non-zero entries in the recommendation
-        ranking, with 0 meaning the top of the list (most recommended) and n_items - 1 being the end of the
-        list (least recommended).
+        for every user in interactions and calculates the rank of all non-zero entries
+        in the recommendation ranking, with 0 meaning the top of the list (most recommended)
+        and n_items - 1 being the end of the list (least recommended).
 
         Arguments
         ---------
         test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
              Non-zero entries denote the user-item pairs whose rank will be computed.
         train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
-             Non-zero entries denote the user-item pairs which will be excluded from rank computation.
-             Use to exclude training set interactions from being scored and ranked for evaluation.
+             Non-zero entries denote the user-item pairs which will be excluded from
+             rank computation. Use to exclude training set interactions from being scored
+             and ranked for evaluation.
         item_ids: np.int32 array of shape [n_pairs,]
              an array containing the item ids for the user-item pairs for which
              a prediction is to be computed.
@@ -632,7 +631,7 @@ class LightFM(object):
 
         Returns
         -------
-                                   
+
         np.float32 csr_matrix of shape [n_users, n_items]
             the [i, j]-th entry of the matrix will contain the rank of the j-th item
             in the sorted recommendations list for the i-th user. The degree

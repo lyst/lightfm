@@ -1,5 +1,4 @@
 import os
-import platform
 import subprocess
 import sys
 import textwrap
@@ -75,7 +74,6 @@ class Cythonize(Command):
 
     def run(self):
 
-        import Cython
         from Cython.Build import cythonize
 
         self.generate_pyx()
@@ -127,7 +125,6 @@ class PyTest(TestCommand):
         import pytest
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)
-
 
 
 use_openmp = not (sys.platform.startswith('darwin') or sys.platform.startswith('win'))
