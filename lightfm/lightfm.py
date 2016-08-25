@@ -6,7 +6,8 @@ import scipy.sparse as sp
 
 from ._lightfm_fast import (CSRMatrix, FastLightFM,
                             fit_bpr, fit_logistic, fit_warp,
-                            fit_warp_kos, predict_lightfm, predict_ranks)
+                            fit_warp_kos, predict_lightfm,
+                            predict_ranks)
 
 
 __all__ = ['LightFM']
@@ -538,7 +539,9 @@ class LightFM(object):
                          self.user_alpha,
                          num_threads)
 
-    def predict(self, user_ids, item_ids, item_features=None, user_features=None, num_threads=1):
+    def predict(self, user_ids, item_ids, item_features=None,
+                user_features=None, num_threads=1,
+                precompute_representations=True):
         """
         Compute the recommendation score for user-item pairs.
 
@@ -558,6 +561,9 @@ class LightFM(object):
         num_threads: int, optional
              Number of parallel computation threads to use. Should
              not be higher than the number of physical cores.
+        precompute_representations: boolean
+            if True, the representations are pre-computed for all items
+            and all users, instead of being computed once for each pair.
 
         Returns
         -------
@@ -598,7 +604,8 @@ class LightFM(object):
                         item_ids,
                         predictions,
                         lightfm_data,
-                        num_threads)
+                        num_threads,
+                        precompute_representations)
 
         return predictions
 
@@ -679,3 +686,81 @@ class LightFM(object):
                       num_threads)
 
         return ranks
+
+    def predict_score(self, test_interactions, train_interactions=None,
+                      item_features=None, user_features=None, num_threads=1,
+                      precompute_representations=True):
+        """
+        Score prediction accepting a test and train matrix as input.
+        Modelled upon predict_rank.
+
+        Arguments
+        ---------
+        test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
+             Non-zero entries denote the user-item pairs whose score will be computed.
+        train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
+             Non-zero entries denote the user-item pairs which will be excluded from
+             score computation. Use to exclude training set interactions from being scored
+             for evaluation.
+        item_ids: np.int32 array of shape [n_pairs,]
+             an array containing the item ids for the user-item pairs for which
+             a prediction is to be computed.
+        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+             Each row contains that user's weights over features.
+        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+             Each row contains that item's weights over features.
+        num_threads: int, optional
+             Number of parallel computation threads to use. Should
+             not be higher than the number of physical cores.
+
+        Returns
+        -------
+
+        np.float32 csr_matrix of shape [n_users, n_items]
+            the [i, j]-th entry of the matrix will contain the evaluation score of the j-th item
+            in the sorted recommendations list for the i-th user. The degree
+            of sparsity of this matrix will be equal to that of the input interactions
+            matrix.
+        """
+
+        n_users, n_items = test_interactions.shape
+
+        (user_features,
+         item_features) = self._construct_feature_matrices(n_users,
+                                                           n_items,
+                                                           user_features,
+                                                           item_features)
+
+        if not item_features.shape[1] == self.item_embeddings.shape[0]:
+            raise ValueError('Incorrect number of features in item_features')
+
+        if not user_features.shape[1] == self.user_embeddings.shape[0]:
+            raise ValueError('Incorrect number of features in user_features')
+
+        test_interactions = test_interactions.tocoo()
+        test_interactions = self._to_cython_dtype(test_interactions)
+
+        if train_interactions is None:
+            train_interactions = sp.coo_matrix((n_users, n_items),
+                                               dtype=CYTHON_DTYPE)
+        else:
+            train_interactions = train_interactions.tocoo()
+            train_interactions = self._to_cython_dtype(train_interactions)
+
+        test_set = (set(zip(test_interactions.row, test_interactions.col)) -
+                    set(zip(train_interactions.row, train_interactions.col)))
+        if len(test_set) > 0:
+            user_ids, item_ids = zip(*test_set)
+            user_ids = np.array(user_ids, dtype=np.int32)
+            item_ids = np.array(item_ids, dtype=np.int32)
+
+            scores = self.predict(
+                user_ids, item_ids, item_features, user_features,
+                num_threads,
+                precompute_representations=precompute_representations)
+            scores = sp.coo_matrix((scores, (user_ids, item_ids)),
+                                   shape=(n_users, n_items))
+
+            return scores.tocsr()
+        else:
+            return sp.csr_matrix((n_users, n_items), dtype=np.float32)
