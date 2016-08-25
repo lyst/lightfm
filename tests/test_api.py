@@ -58,7 +58,7 @@ def test_matrix_types():
                           item_features=item_features)
 
 
-def test_predict():
+def test_predict(num_threads=2):
 
     no_users, no_items = (10, 100)
 
@@ -75,6 +75,20 @@ def test_predict():
         scores_int = model.predict(uid,
                                    np.arange(no_items))
         assert np.allclose(scores_arr, scores_int)
+        scores_parallel = model.predict(np.repeat(uid, no_items),
+                                        np.arange(no_items),
+                                        num_threads=num_threads)
+        assert np.allclose(scores_parallel, scores_arr)
+        scores_no_prec = model.predict(np.repeat(uid, no_items),
+                                       np.arange(no_items),
+                                       num_threads=num_threads,
+                                       precompute_representations=False)
+        assert np.allclose(scores_parallel, scores_no_prec)
+        scores_no_prec_serial = model.predict(np.repeat(uid, no_items),
+                                              np.arange(no_items),
+                                              num_threads=1,
+                                              precompute_representations=False)
+        assert np.allclose(scores_parallel, scores_no_prec_serial)
 
 
 def test_input_dtypes():
@@ -278,3 +292,75 @@ def test_predict_ranks():
     # Wrong input dimensions
     with pytest.raises(ValueError):
         model.predict_rank(sp.csr_matrix((5, 5)), num_threads=2)
+
+
+def test_predict_scores(num_threads=2):
+
+    no_users, no_items = (10, 100)
+
+    train = sp.coo_matrix((no_users,
+                           no_items),
+                          dtype=np.float32)
+    train = sp.rand(no_users, no_items, format='csr')
+
+    model = LightFM()
+    model.fit_partial(train)
+
+    # Compute scores and check if results equal to model.predict
+    predict_input = sp.csr_matrix(np.ones((no_users, no_items)))
+    scores = model.predict_score(predict_input,
+                                 num_threads=num_threads).todense()
+    for uid in range(no_users):
+        scores_arr = model.predict(np.repeat(uid, no_items),
+                                   np.arange(no_items))
+        score_slice = np.array(scores)[uid, :]
+        assert np.array_equal(score_slice, scores_arr)
+
+    # check if precompute and parallelization work correctly
+    scores_serial = model.predict_score(predict_input,
+                                        num_threads=1).todense()
+    scores_no_prec = model.predict_score(predict_input,
+                                         num_threads=num_threads,
+                                         precompute_representations=False
+                                         ).todense()
+    scores_ser_no_prec = model.predict_score(predict_input,
+                                             num_threads=1,
+                                             precompute_representations=False
+                                             ).todense()
+    assert np.array_equal(scores, scores_serial)
+    assert np.array_equal(scores, scores_no_prec)
+    assert np.array_equal(scores, scores_ser_no_prec)
+
+    # Compute ranks and compares with ranks computed from scores
+    ranks = model.predict_rank(predict_input,
+                               num_threads=num_threads).todense()
+
+    def rank_scores(s):
+        # ranks from scores as in http://stackoverflow.com/a/14672797/5251962
+        u, v = np.unique(s, return_inverse=True)
+        return len(s) - 1 - (np.cumsum(np.bincount(v)) - 1)[v]
+
+    check_ranks = np.apply_along_axis(rank_scores, 1, scores)
+    assert np.array_equal(ranks, check_ranks)
+
+    # Train set exclusions. All scores should be zero
+    # if train interactions is dense.
+    scores = model.predict_score(predict_input,
+                                 train_interactions=predict_input).todense()
+    assert np.all(scores == 0)
+
+    # Make sure invariants hold when there are ties
+    model.user_embeddings = np.zeros_like(model.user_embeddings)
+    model.item_embeddings = np.zeros_like(model.item_embeddings)
+    model.user_biases = np.zeros_like(model.user_biases)
+    model.item_biases = np.zeros_like(model.item_biases)
+
+    scores = model.predict_score(predict_input,
+                                 num_threads=num_threads).todense()
+
+    assert np.all(scores.min(axis=1) == 0)
+    assert np.all(scores.max(axis=1) == 0)
+
+    # Wrong input dimensions
+    with pytest.raises(ValueError):
+        model.predict_score(sp.csr_matrix((5, 5)), num_threads=num_threads)
