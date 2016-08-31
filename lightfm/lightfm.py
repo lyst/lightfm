@@ -150,11 +150,11 @@ class LightFM(object):
         self.user_alpha = user_alpha
 
         if random_state is None:
-            self.rng = np.random.RandomState()
+            self.random_state = np.random.RandomState()
         elif isinstance(random_state, np.random.RandomState):
-            self.rng = random_state
+            self.random_state = random_state
         else:
-            self.rng = np.random.RandomState(random_state)
+            self.random_state = np.random.RandomState(random_state)
 
         self._reset_state()
 
@@ -180,7 +180,7 @@ class LightFM(object):
         """
 
         # Initialise item features.
-        self.item_embeddings = ((self.rng.rand(no_item_features, no_components) - 0.5) /
+        self.item_embeddings = ((self.random_state.rand(no_item_features, no_components) - 0.5) /
                                 no_components).astype(np.float32)
         self.item_embedding_gradients = np.zeros_like(self.item_embeddings)
         self.item_embedding_momentum = np.zeros_like(self.item_embeddings)
@@ -189,7 +189,7 @@ class LightFM(object):
         self.item_bias_momentum = np.zeros_like(self.item_biases)
 
         # Initialise user features.
-        self.user_embeddings = ((self.rng.rand(no_user_features, no_components) - 0.5) /
+        self.user_embeddings = ((self.random_state.rand(no_user_features, no_components) - 0.5) /
                                 no_components).astype(np.float32)
         self.user_embedding_gradients = np.zeros_like(self.user_embeddings)
         self.user_embedding_momentum = np.zeros_like(self.user_embeddings)
@@ -475,7 +475,7 @@ class LightFM(object):
 
         # Create shuffle indexes.
         shuffle_indices = np.arange(len(interactions.data), dtype=np.int32)
-        self.rng.shuffle(shuffle_indices)
+        self.random_state.shuffle(shuffle_indices)
 
         lightfm_data = self._get_lightfm_data()
 
@@ -494,7 +494,7 @@ class LightFM(object):
                      self.item_alpha,
                      self.user_alpha,
                      num_threads,
-                     self.rng)
+                     self.random_state)
         elif loss == 'bpr':
             fit_bpr(CSRMatrix(item_features),
                     CSRMatrix(user_features),
@@ -509,7 +509,7 @@ class LightFM(object):
                     self.item_alpha,
                     self.user_alpha,
                     num_threads,
-                    self.rng)
+                    self.random_state)
         elif loss == 'warp-kos':
             fit_warp_kos(CSRMatrix(item_features),
                          CSRMatrix(user_features),
@@ -523,7 +523,7 @@ class LightFM(object):
                          self.k,
                          self.n,
                          num_threads,
-                         self.rng)
+                         self.random_state)
         else:
             fit_logistic(CSRMatrix(item_features),
                          CSRMatrix(user_features),
@@ -612,6 +612,7 @@ class LightFM(object):
 
         Arguments
         ---------
+
         test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
              Non-zero entries denote the user-item pairs whose rank will be computed.
         train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
