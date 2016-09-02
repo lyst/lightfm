@@ -769,9 +769,9 @@ def test_random_state_advanced():
     model.fit_partial(train,
                       epochs=1)
 
-    rng_state = model.rng.get_state()[1].copy()
+    rng_state = model.random_state.get_state()[1].copy()
 
     model.fit_partial(train,
                       epochs=1)
 
-    assert not np.all(rng_state == model.rng.get_state()[1])
+    assert not np.all(rng_state == model.random_state.get_state()[1])
