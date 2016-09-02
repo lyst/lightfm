@@ -1,4 +1,4 @@
-from lightfm.sklearn_compat import SKLearnLightFM
+from lightfm.compat_sklearn import SKLearnLightFM
 
 def test_sklearn_api():
     model = SKLearnLightFM()

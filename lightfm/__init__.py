@@ -1,4 +1,7 @@
-from .lightfm import LightFM
+try:
+    from .compat_sklearn import SKLearnLightFM as LightFM
+except ImportError:
+    from .lightfm import LightFM
 
 __version__ = '1.9'
 
