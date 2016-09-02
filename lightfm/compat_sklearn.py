@@ -7,8 +7,8 @@ from sklearn.base import BaseEstimator
 
 def make_sklearn_LightFM():
     doc = """
-          LightFM recommender compatible with Scikit-Learn's BaseEstimator API.
-          """
+    LightFM recommender compatible with Scikit-Learn's BaseEstimator API.
+    """
     doc += LightFM.__doc__[LightFM.__doc__.find('.')+2:]
     return type('SKLearnLightFM', (LightFM, BaseEstimator), {'__doc__': doc})
 
