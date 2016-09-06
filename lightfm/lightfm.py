@@ -680,3 +680,51 @@ class LightFM(object):
                       num_threads)
 
         return ranks
+
+    def get_params(self, deep=True):
+        """Get parameters for this estimator.
+
+        Arguments
+        ---------
+
+        deep: boolean, optional
+            If True, will return the parameters for this estimator and
+            contained subobjects that are estimators.
+
+        Returns
+        -------
+
+        params : mapping of string to any
+            Parameter names mapped to their values.
+        """
+        params = {'loss': self.loss,
+                  'learning_schedule': self.learning_schedule,
+                  'no_components': self.no_components,
+                  'learning_rate': self.learning_rate,
+                  'k': self.k,
+                  'n': self.n,
+                  'rho': self.rho,
+                  'epsilon': self.epsilon,
+                  'max_sampled': self.max_sampled,
+                  'item_alpha': self.item_alpha,
+                  'user_alpha': self.user_alpha,
+                  'random_state': self.random_state}
+        return params
+
+    def set_params(self, **params):
+        """Set the parameters of this estimator.
+
+        Returns
+        -------
+
+        self
+        """
+        valid_params = self.get_params()
+        for key, value in params.items():
+            if key not in valid_params:
+                raise ValueError('Invalid parameter %s for estimator %s. '
+                                 'Check the list of available parameters '
+                                 'with `estimator.get_params().keys()`.' %
+                                 (key, self.__class__.__name__))
+            setattr(self, key, value)
+        return self

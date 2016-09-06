@@ -278,3 +278,12 @@ def test_predict_ranks():
     # Wrong input dimensions
     with pytest.raises(ValueError):
         model.predict_rank(sp.csr_matrix((5, 5)), num_threads=2)
+
+
+def test_sklearn_api():
+    model = LightFM()
+    params = model.get_params()
+    model.set_params(**params)
+    params['invalid_param'] = 666
+    with pytest.raises(ValueError):
+        model.set_params(**params)
