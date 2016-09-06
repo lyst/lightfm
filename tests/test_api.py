@@ -236,7 +236,7 @@ def test_predict_ranks():
     train = sp.coo_matrix((no_users,
                            no_items),
                           dtype=np.float32)
-    train = sp.rand(no_users, no_items, format='csr')
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
 
     model = LightFM()
     model.fit_partial(train)
