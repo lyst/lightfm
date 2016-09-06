@@ -283,6 +283,9 @@ def test_predict_ranks():
 def test_sklearn_api():
     model = LightFM()
     params = model.get_params()
+    model2 = LightFM(**params)
+    params2 = model2.get_params()
+    assert params == params2
     model.set_params(**params)
     params['invalid_param'] = 666
     with pytest.raises(ValueError):
