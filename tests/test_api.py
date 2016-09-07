@@ -3,13 +3,8 @@ import numpy as np
 import pytest
 
 import scipy.sparse as sp
-from scipy import stats
-from sklearn.grid_search import RandomizedSearchCV
-from sklearn.cross_validation import KFold
 
 from lightfm import LightFM
-from lightfm.datasets import fetch_movielens
-from lightfm.evaluation import precision_at_k
 
 
 def test_empty_matrix():
@@ -295,35 +290,3 @@ def test_sklearn_api():
     params['invalid_param'] = 666
     with pytest.raises(ValueError):
         model.set_params(**params)
-
-
-def test_sklearn_cv():
-    data = fetch_movielens(min_rating=5.0)
-    model = LightFM(loss='warp', random_state=42)
-
-    # Set distributions for hyperparameters
-    randint = stats.randint(low=1, high=65)
-    randint.random_state = 42
-    gamma = stats.gamma(a=1.2, loc=0, scale=0.13)
-    gamma.random_state = 42
-    distr = {'no_components': randint, 'learning_rate': gamma}
-
-    # Custom score function
-    def scorer(est, x, y=None):
-        return precision_at_k(est, x).mean()
-
-    # Custom CV which sets train_index = test_index
-    class CV(KFold):
-        def __iter__(self):
-            ind = np.arange(self.n)
-            for test_index in self._iter_test_masks():
-                train_index = np.logical_not(test_index)
-                train_index = ind[train_index]
-                yield train_index, train_index
-
-    cv = CV(n=data['train'].shape[0], random_state=42)
-    search = RandomizedSearchCV(estimator=model, param_distributions=distr,
-                                n_iter=10, scoring=scorer, random_state=42,
-                                cv=cv)
-    search.fit(data['train'])
-    assert search.best_params_['no_components'] == 39
