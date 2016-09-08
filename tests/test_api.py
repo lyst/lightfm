@@ -236,7 +236,7 @@ def test_predict_ranks():
     train = sp.coo_matrix((no_users,
                            no_items),
                           dtype=np.float32)
-    train = sp.rand(no_users, no_items, format='csr')
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
 
     model = LightFM()
     model.fit_partial(train)
@@ -278,3 +278,15 @@ def test_predict_ranks():
     # Wrong input dimensions
     with pytest.raises(ValueError):
         model.predict_rank(sp.csr_matrix((5, 5)), num_threads=2)
+
+
+def test_sklearn_api():
+    model = LightFM()
+    params = model.get_params()
+    model2 = LightFM(**params)
+    params2 = model2.get_params()
+    assert params == params2
+    model.set_params(**params)
+    params['invalid_param'] = 666
+    with pytest.raises(ValueError):
+        model.set_params(**params)

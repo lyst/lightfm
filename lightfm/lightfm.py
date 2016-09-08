@@ -150,11 +150,11 @@ class LightFM(object):
         self.user_alpha = user_alpha
 
         if random_state is None:
-            self.rng = np.random.RandomState()
+            self.random_state = np.random.RandomState()
         elif isinstance(random_state, np.random.RandomState):
-            self.rng = random_state
+            self.random_state = random_state
         else:
-            self.rng = np.random.RandomState(random_state)
+            self.random_state = np.random.RandomState(random_state)
 
         self._reset_state()
 
@@ -180,7 +180,7 @@ class LightFM(object):
         """
 
         # Initialise item features.
-        self.item_embeddings = ((self.rng.rand(no_item_features, no_components) - 0.5) /
+        self.item_embeddings = ((self.random_state.rand(no_item_features, no_components) - 0.5) /
                                 no_components).astype(np.float32)
         self.item_embedding_gradients = np.zeros_like(self.item_embeddings)
         self.item_embedding_momentum = np.zeros_like(self.item_embeddings)
@@ -189,7 +189,7 @@ class LightFM(object):
         self.item_bias_momentum = np.zeros_like(self.item_biases)
 
         # Initialise user features.
-        self.user_embeddings = ((self.rng.rand(no_user_features, no_components) - 0.5) /
+        self.user_embeddings = ((self.random_state.rand(no_user_features, no_components) - 0.5) /
                                 no_components).astype(np.float32)
         self.user_embedding_gradients = np.zeros_like(self.user_embeddings)
         self.user_embedding_momentum = np.zeros_like(self.user_embeddings)
@@ -475,7 +475,7 @@ class LightFM(object):
 
         # Create shuffle indexes.
         shuffle_indices = np.arange(len(interactions.data), dtype=np.int32)
-        self.rng.shuffle(shuffle_indices)
+        self.random_state.shuffle(shuffle_indices)
 
         lightfm_data = self._get_lightfm_data()
 
@@ -494,7 +494,7 @@ class LightFM(object):
                      self.item_alpha,
                      self.user_alpha,
                      num_threads,
-                     self.rng)
+                     self.random_state)
         elif loss == 'bpr':
             fit_bpr(CSRMatrix(item_features),
                     CSRMatrix(user_features),
@@ -509,7 +509,7 @@ class LightFM(object):
                     self.item_alpha,
                     self.user_alpha,
                     num_threads,
-                    self.rng)
+                    self.random_state)
         elif loss == 'warp-kos':
             fit_warp_kos(CSRMatrix(item_features),
                          CSRMatrix(user_features),
@@ -523,7 +523,7 @@ class LightFM(object):
                          self.k,
                          self.n,
                          num_threads,
-                         self.rng)
+                         self.random_state)
         else:
             fit_logistic(CSRMatrix(item_features),
                          CSRMatrix(user_features),
@@ -612,6 +612,7 @@ class LightFM(object):
 
         Arguments
         ---------
+
         test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
              Non-zero entries denote the user-item pairs whose rank will be computed.
         train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
@@ -679,3 +680,51 @@ class LightFM(object):
                       num_threads)
 
         return ranks
+
+    def get_params(self, deep=True):
+        """Get parameters for this estimator.
+
+        Arguments
+        ---------
+
+        deep: boolean, optional
+            If True, will return the parameters for this estimator and
+            contained subobjects that are estimators.
+
+        Returns
+        -------
+
+        params : mapping of string to any
+            Parameter names mapped to their values.
+        """
+        params = {'loss': self.loss,
+                  'learning_schedule': self.learning_schedule,
+                  'no_components': self.no_components,
+                  'learning_rate': self.learning_rate,
+                  'k': self.k,
+                  'n': self.n,
+                  'rho': self.rho,
+                  'epsilon': self.epsilon,
+                  'max_sampled': self.max_sampled,
+                  'item_alpha': self.item_alpha,
+                  'user_alpha': self.user_alpha,
+                  'random_state': self.random_state}
+        return params
+
+    def set_params(self, **params):
+        """Set the parameters of this estimator.
+
+        Returns
+        -------
+
+        self
+        """
+        valid_params = self.get_params()
+        for key, value in params.items():
+            if key not in valid_params:
+                raise ValueError('Invalid parameter %s for estimator %s. '
+                                 'Check the list of available parameters '
+                                 'with `estimator.get_params().keys()`.' %
+                                 (key, self.__class__.__name__))
+            setattr(self, key, value)
+        return self
