@@ -610,6 +610,9 @@ class LightFM(object):
         in the recommendation ranking, with 0 meaning the top of the list (most recommended)
         and n_items - 1 being the end of the list (least recommended).
 
+        Performs best when only a handful of interactions need to be evaluated per user. If you
+        need to compute predictions for many items for every user, use the predict method instead.
+
         Arguments
         ---------
 
