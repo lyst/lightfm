@@ -622,9 +622,6 @@ class LightFM(object):
              Non-zero entries denote the user-item pairs which will be excluded from
              rank computation. Use to exclude training set interactions from being scored
              and ranked for evaluation.
-        item_ids: np.int32 array of shape [n_pairs,]
-             an array containing the item ids for the user-item pairs for which
-             a prediction is to be computed.
         user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
              Each row contains that user's weights over features.
         item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
