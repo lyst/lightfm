@@ -5,6 +5,8 @@
 - added recall@k evaluation function
 ### Fixed
 - added >=0.17.0 scipy depdendency to setup.py
+- fixed segfaults on when duplicate entries are present in input COO matrices (thanks to Florian
+  Wilhelm for the bug report).
 
 ## [1.9][2016-05-25]
 ### Fixed
