@@ -473,6 +473,11 @@ class LightFM(object):
         Run an individual epoch.
         """
 
+        if loss in ('warp', 'bpr', 'warp-kos'):
+            # The CSR conversion needs to happen before shuffle indices are created.
+            # Calling .tocsr may result in a change in the data arrays of the COO matrix,
+            positives_lookup = CSRMatrix(self._get_positives_lookup_matrix(interactions))
+
         # Create shuffle indexes.
         shuffle_indices = np.arange(len(interactions.data), dtype=np.int32)
         self.random_state.shuffle(shuffle_indices)
@@ -483,7 +488,7 @@ class LightFM(object):
         if loss == 'warp':
             fit_warp(CSRMatrix(item_features),
                      CSRMatrix(user_features),
-                     CSRMatrix(self._get_positives_lookup_matrix(interactions)),
+                     positives_lookup,
                      interactions.row,
                      interactions.col,
                      interactions.data,
@@ -498,7 +503,7 @@ class LightFM(object):
         elif loss == 'bpr':
             fit_bpr(CSRMatrix(item_features),
                     CSRMatrix(user_features),
-                    CSRMatrix(self._get_positives_lookup_matrix(interactions)),
+                    positives_lookup,
                     interactions.row,
                     interactions.col,
                     interactions.data,
@@ -513,7 +518,7 @@ class LightFM(object):
         elif loss == 'warp-kos':
             fit_warp_kos(CSRMatrix(item_features),
                          CSRMatrix(user_features),
-                         CSRMatrix(self._get_positives_lookup_matrix(interactions)),
+                         positives_lookup,
                          interactions.row,
                          shuffle_indices,
                          lightfm_data,

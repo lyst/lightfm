@@ -58,6 +58,26 @@ def test_matrix_types():
                           item_features=item_features)
 
 
+def test_coo_with_duplicate_entries():
+    # Calling .tocsr on a COO matrix with duplicate entries
+    # changes its data arrays in-place, leading to out-of-bounds
+    # array accesses in the WARP code.
+    # Reported in https://github.com/lyst/lightfm/issues/117.
+
+    rows, cols = (1000, 100)
+    mat = sp.random(rows, cols)
+    mat.data[:] = 1
+
+    # Duplicate entries in the COO matrix
+    mat.data = np.concatenate((mat.data, mat.data[:1000]))
+    mat.row = np.concatenate((mat.row, mat.row[:1000]))
+    mat.col = np.concatenate((mat.col, mat.col[:1000]))
+
+    for loss in ('warp', 'bpr', 'warp-kos'):
+        model = LightFM(loss='warp')
+        model.fit(mat)
+
+
 def test_predict():
 
     no_users, no_items = (10, 100)
