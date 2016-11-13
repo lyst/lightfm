@@ -96,6 +96,13 @@ The `Movielens example <https://github.com/lyst/lightfm/blob/master/examples/mov
 
 The `Kaggle coupon purchase prediction <https://github.com/tdeboissiere/Kaggle/blob/master/Ponpare/ponpare_lightfm.ipynb>`_ example applies LightFM to predicting coupon purchases.
 
+Articles and tutorials on using LightFM
+---------------------------------------
+
+1. `Learning to Rank Sketchfab Models with LightFM <http://blog.ethanrosenthal.com/2016/11/07/implicit-mf-part-2/>`_
+2. `Metadata Embeddings for User and Item Cold-start Recommendations <http://building-babylon.net/2016/01/26/metadata-embeddings-for-user-and-item-cold-start-recommendations/>`_
+3. `Recommendation Systems - Learn Python for Data Science <https://www.youtube.com/watch?v=9gBC9R-msAk>`_
+
 Development
 -----------
 

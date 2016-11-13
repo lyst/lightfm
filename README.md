@@ -14,6 +14,11 @@ It also makes it possible to incorporate both item and user metadata into the tr
 
 For more details, see the [Documentation](http://lyst.github.io/lightfm/docs/home.html).
 
+## Articles and tutorials on using LightFM
+1. [Learning to Rank Sketchfab Models with LightFM](http://blog.ethanrosenthal.com/2016/11/07/implicit-mf-part-2/)
+2. [Metadata Embeddings for User and Item Cold-start Recommendations](http://building-babylon.net/2016/01/26/metadata-embeddings-for-user-and-item-cold-start-recommendations/)
+3. [Recommendation Systems - Learn Python for Data Science](https://www.youtube.com/watch?v=9gBC9R-msAk)
+
 ## Development
 Pull requests are welcome. To install for development:
 
