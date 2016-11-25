@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased][unreleased]
+## [1.10][2016-11-25]
 ### Added
 - added recall@k evaluation function
 ### Fixed

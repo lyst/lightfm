@@ -132,10 +132,10 @@ use_openmp = not (sys.platform.startswith('darwin') or sys.platform.startswith('
 
 setup(
     name='lightfm',
-    version='1.9',
+    version='1.10',
     description='LightFM recommendation model',
     url='https://github.com/lyst/lightfm',
-    download_url='https://github.com/lyst/lightfm/tarball/1.9',
+    download_url='https://github.com/lyst/lightfm/tarball/1.10',
     packages=['lightfm',
               'lightfm.datasets'],
     package_data={'': ['*.c']},
