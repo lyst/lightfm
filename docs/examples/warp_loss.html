@@ -35,7 +35,7 @@
         <link rel="prev" title="Item cold-start: recommending StackExchange questions" href="hybrid_crossvalidated.html"/> 
 
   
-  <script src="../_static/js/modernizr.min.js"></script>
+  <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -45,27 +45,17 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
+      <div class="wy-side-nav-search">
+        
 
-          
-            <a href="../index.html" class="icon icon-home"> LightFM
-          
+        
+          <a href="../index.html" class="icon icon-home"> LightFM
+        
 
-          
-          </a>
+        
+        </a>
 
-          
-            
-            
-              <div class="version">
-                1.9
-              </div>
-            
-          
-
-          
+        
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -74,23 +64,49 @@
   </form>
 </div>
 
-          
-        </div>
+        
+      </div>
 
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
           
-            
-            
-                <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../home.html">Home</a></li>
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../home.html">Home</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../home.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../home.html#using-with-docker">Using with Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#articles-and-tutorials-on-using-lightfm">Articles and tutorials on using LightFM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#development">Development</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a></li>
-<li class="toctree-l2"><a class="reference internal" href="learning_schedules.html">Learning rate schedules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hybrid_crossvalidated.html">Cold-start hybrid recommender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#getting-the-data">Getting the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#fitting-models">Fitting models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="learning_schedules.html">Learning rate schedules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="learning_schedules.html#preliminaries">Preliminaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="learning_schedules.html#experiment">Experiment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid_crossvalidated.html">Cold-start hybrid recommender</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hybrid_crossvalidated.html#a-pure-collaborative-filtering-model">A pure collaborative filtering model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hybrid_crossvalidated.html#a-hybrid-model">A hybrid model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hybrid_crossvalidated.html#bonus-tag-embeddings">Bonus: tag embeddings</a></li>
+</ul>
+</li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Learning-to-rank using WARP loss</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#preliminaries">Preliminaries</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#accuracy">Accuracy</a></li>
@@ -101,10 +117,10 @@
 </li>
 </ul>
 
-            
           
-        </div>
+        
       </div>
+      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -119,13 +135,7 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
- 
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
@@ -142,8 +152,7 @@
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+          <div role="main" class="document">
             
   <div class="section" id="learning-to-rank-using-the-warp-loss">
 <h1>Learning-to-rank using the WARP loss<a class="headerlink" href="#learning-to-rank-using-the-warp-loss" title="Permalink to this headline">¶</a></h1>
@@ -191,7 +200,7 @@ practical implications of using WARP in LightFM.</p>
 <div class="section" id="preliminaries">
 <h2>Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline">¶</a></h2>
 <p>Let&#8217;s first get the data. We&#8217;ll use the MovieLens 100K dataset.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -217,7 +226,7 @@ practical implications of using WARP in LightFM.</p>
 WARP and BPR losses. Let&#8217;s fit two models with equivalent
 hyperparameters and compare their accuracy across epochs. Whilst we&#8217;re
 fitting them, let&#8217;s also measure how much time each epoch takes.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">05</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">05</span>
 <span class="n">epochs</span> <span class="o">=</span> <span class="mi">70</span>
 <span class="n">num_components</span> <span class="o">=</span> <span class="mi">32</span>
 
@@ -256,7 +265,7 @@ results: a smarter way of selecting negative examples leads to higher
 quality rankings. Test accuracy decreases after the first 10 epochs,
 suggesting WARP starts overfitting and would benefit from regularization
 or early stopping.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">warp_auc</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bpr_auc</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;WARP AUC&#39;</span><span class="p">,</span> <span class="s1">&#39;BPR AUC&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
@@ -268,7 +277,7 @@ or early stopping.</p>
 <div class="section" id="fitting-speed">
 <h2>Fitting speed<a class="headerlink" href="#fitting-speed" title="Permalink to this headline">¶</a></h2>
 <p>What about model fitting speed?</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">warp_duration</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bpr_duration</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;WARP duration&#39;</span><span class="p">,</span> <span class="s1">&#39;BPR duration&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
@@ -287,7 +296,7 @@ Setting it to a low value and repeating the run shows that the run time
 actually decreases with every epoch: this is because no updates happen
 when a violating example cannot be found in the specified number of
 attempts.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="n">warp_model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="n">num_components</span><span class="p">,</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">warp_model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="n">num_components</span><span class="p">,</span>
                      <span class="n">max_sampled</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                     <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">,</span>
                     <span class="n">learning_schedule</span><span class="o">=</span><span class="s1">&#39;adagrad&#39;</span><span class="p">,</span>
@@ -322,7 +331,6 @@ attempts.</p>
 </div>
 
 
-           </div>
           </div>
           <footer>
   
@@ -339,10 +347,9 @@ attempts.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Lyst (Maciej Kula).
-
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
 </footer>
 

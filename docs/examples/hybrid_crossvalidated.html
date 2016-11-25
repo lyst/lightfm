@@ -36,7 +36,7 @@
         <link rel="prev" title="Using different learning schedules" href="learning_schedules.html"/> 
 
   
-  <script src="../_static/js/modernizr.min.js"></script>
+  <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -46,27 +46,17 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
+      <div class="wy-side-nav-search">
+        
 
-          
-            <a href="../index.html" class="icon icon-home"> LightFM
-          
+        
+          <a href="../index.html" class="icon icon-home"> LightFM
+        
 
-          
-          </a>
+        
+        </a>
 
-          
-            
-            
-              <div class="version">
-                1.9
-              </div>
-            
-          
-
-          
+        
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -75,37 +65,63 @@
   </form>
 </div>
 
-          
-        </div>
+        
+      </div>
 
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
           
-            
-            
-                <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../home.html">Home</a></li>
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../home.html">Home</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../home.html#pypi">PyPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../home.html#using-with-docker">Using with Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#articles-and-tutorials-on-using-lightfm">Articles and tutorials on using LightFM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../home.html#development">Development</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a></li>
-<li class="toctree-l2"><a class="reference internal" href="learning_schedules.html">Learning rate schedules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#getting-the-data">Getting the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#fitting-models">Fitting models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="learning_schedules.html">Learning rate schedules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="learning_schedules.html#preliminaries">Preliminaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="learning_schedules.html#experiment">Experiment</a></li>
+</ul>
+</li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Cold-start hybrid recommender</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#a-pure-collaborative-filtering-model">A pure collaborative filtering model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#a-hybrid-model">A hybrid model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bonus-tag-embeddings">Bonus: tag embeddings</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="warp_loss.html">Learning-to-rank using WARP loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="warp_loss.html">Learning-to-rank using WARP loss</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="warp_loss.html#preliminaries">Preliminaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="warp_loss.html#accuracy">Accuracy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="warp_loss.html#fitting-speed">Fitting speed</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-            
           
-        </div>
+        
       </div>
+      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -120,13 +136,7 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
- 
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
@@ -143,8 +153,7 @@
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+          <div role="main" class="document">
             
   <div class="section" id="item-cold-start-recommending-stackexchange-questions">
 <h1>Item cold-start: recommending StackExchange questions<a class="headerlink" href="#item-cold-start-recommending-stackexchange-questions" title="Permalink to this headline">¶</a></h1>
@@ -157,7 +166,7 @@ matrix, each user is a row, and each question is a column. Based on
 which users answered which questions in the training set, we&#8217;ll try to
 recommend new questions in the training set.</p>
 <p>Let&#8217;s start by loading the data. We&#8217;ll use the <code class="docutils literal"><span class="pre">datasets</span></code> module.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">lightfm.datasets</span> <span class="k">import</span> <span class="n">fetch_stackexchange</span>
 
@@ -171,12 +180,12 @@ recommend new questions in the training set.</p>
 </pre></div>
 </div>
 <p>Let&#8217;s examine the data:</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The dataset has </span><span class="si">%s</span><span class="s1"> users and </span><span class="si">%s</span><span class="s1"> items, &#39;</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The dataset has </span><span class="si">%s</span><span class="s1"> users and </span><span class="si">%s</span><span class="s1"> items, &#39;</span>
       <span class="s1">&#39;with </span><span class="si">%s</span><span class="s1"> interactions in the test and </span><span class="si">%s</span><span class="s1"> interactions in the training set.&#39;</span>
       <span class="o">%</span> <span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">test</span><span class="o">.</span><span class="n">getnnz</span><span class="p">(),</span> <span class="n">train</span><span class="o">.</span><span class="n">getnnz</span><span class="p">()))</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">The</span> <span class="n">dataset</span> <span class="n">has</span> <span class="mi">3221</span> <span class="n">users</span> <span class="ow">and</span> <span class="mi">72360</span> <span class="n">items</span><span class="p">,</span> <span class="k">with</span> <span class="mi">4307</span> <span class="n">interactions</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">test</span> <span class="ow">and</span> <span class="mi">57830</span> <span class="n">interactions</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">training</span> <span class="nb">set</span><span class="o">.</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">dataset</span> <span class="n">has</span> <span class="mi">3221</span> <span class="n">users</span> <span class="ow">and</span> <span class="mi">72360</span> <span class="n">items</span><span class="p">,</span> <span class="k">with</span> <span class="mi">4307</span> <span class="n">interactions</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">test</span> <span class="ow">and</span> <span class="mi">57830</span> <span class="n">interactions</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">training</span> <span class="nb">set</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>The training and test set are divided chronologically: the test set
@@ -190,7 +199,7 @@ not yet been answered to the expert users who can answer them.</p>
 <p>This is clearly a cold-start scenario, and so we can expect a
 traditional collaborative filtering model to do very poorly. Let&#8217;s check
 if that&#8217;s the case:</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="c1"># Import the model</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Import the model</span>
 <span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
 
 <span class="c1"># Set the number of threads; you can increase this</span>
@@ -209,7 +218,7 @@ if that&#8217;s the case:</p>
 <span class="o">%</span><span class="n">time</span> <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">NUM_EPOCHS</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="n">NUM_THREADS</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">CPU</span> <span class="n">times</span><span class="p">:</span> <span class="n">user</span> <span class="mf">12.9</span> <span class="n">s</span><span class="p">,</span> <span class="n">sys</span><span class="p">:</span> <span class="mi">8</span> <span class="n">ms</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="mf">12.9</span> <span class="n">s</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CPU</span> <span class="n">times</span><span class="p">:</span> <span class="n">user</span> <span class="mf">12.9</span> <span class="n">s</span><span class="p">,</span> <span class="n">sys</span><span class="p">:</span> <span class="mi">8</span> <span class="n">ms</span><span class="p">,</span> <span class="n">total</span><span class="p">:</span> <span class="mf">12.9</span> <span class="n">s</span>
 <span class="n">Wall</span> <span class="n">time</span><span class="p">:</span> <span class="mf">6.52</span> <span class="n">s</span>
 </pre></div>
 </div>
@@ -217,7 +226,7 @@ if that&#8217;s the case:</p>
 training set first. If it&#8217;s reasonably high, we can be sure that the
 model is not doing anything stupid and is fitting the training data
 well.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="c1"># Import the evaluation routines</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Import the evaluation routines</span>
 <span class="kn">from</span> <span class="nn">lightfm.evaluation</span> <span class="k">import</span> <span class="n">auc_score</span>
 
 <span class="c1"># Compute and print the AUC score</span>
@@ -225,12 +234,12 @@ well.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Collaborative filtering train AUC: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">train_auc</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">Collaborative</span> <span class="n">filtering</span> <span class="n">train</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.887519</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Collaborative</span> <span class="n">filtering</span> <span class="n">train</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.887519</span>
 </pre></div>
 </div>
 <p>Fantastic, the model is fitting the training set well. But what about
 the test set?</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="c1"># We pass in the train interactions to exclude them from predictions.</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># We pass in the train interactions to exclude them from predictions.</span>
 <span class="c1"># This is to simulate a recommender system where we do not</span>
 <span class="c1"># re-recommend things the user has already interacted with in the train</span>
 <span class="c1"># set.</span>
@@ -238,7 +247,7 @@ the test set?</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Collaborative filtering test AUC: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">test_auc</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">Collaborative</span> <span class="n">filtering</span> <span class="n">test</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.34728</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Collaborative</span> <span class="n">filtering</span> <span class="n">test</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.34728</span>
 </pre></div>
 </div>
 <p>This is terrible: we do worse than random! This is not very surprising:
@@ -247,14 +256,14 @@ model cannot compute reasonable representations of the test set items.</p>
 <p>The fact that we score them lower than other items (AUC &lt; 0.5) is due to
 estimated per-item biases, which can be confirmed by setting them to
 zero and re-evaluating the model.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="c1"># Set biases to zero</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Set biases to zero</span>
 <span class="n">model</span><span class="o">.</span><span class="n">item_biases</span> <span class="o">*=</span> <span class="mf">0.0</span>
 
 <span class="n">test_auc</span> <span class="o">=</span> <span class="n">auc_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">train_interactions</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="n">NUM_THREADS</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Collaborative filtering test AUC: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">test_auc</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">Collaborative</span> <span class="n">filtering</span> <span class="n">test</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.496266</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Collaborative</span> <span class="n">filtering</span> <span class="n">test</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.496266</span>
 </pre></div>
 </div>
 </div>
@@ -263,13 +272,13 @@ zero and re-evaluating the model.</p>
 <p>We can do much better by employing LightFM&#8217;s hybrid model capabilities.
 The StackExchange data comes with content information in the form of
 tags users apply to their questions:</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="n">item_features</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;item_features&#39;</span><span class="p">]</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">item_features</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;item_features&#39;</span><span class="p">]</span>
 <span class="n">tag_labels</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;item_feature_labels&#39;</span><span class="p">]</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There are </span><span class="si">%s</span><span class="s1"> distinct tags, with values like </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">item_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tag_labels</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">There</span> <span class="n">are</span> <span class="mi">1246</span> <span class="n">distinct</span> <span class="n">tags</span><span class="p">,</span> <span class="k">with</span> <span class="n">values</span> <span class="n">like</span> <span class="p">[</span><span class="s1">u&#39;bayesian&#39;</span><span class="p">,</span> <span class="s1">u&#39;prior&#39;</span><span class="p">,</span> <span class="s1">u&#39;elicitation&#39;</span><span class="p">]</span><span class="o">.</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">There</span> <span class="n">are</span> <span class="mi">1246</span> <span class="n">distinct</span> <span class="n">tags</span><span class="p">,</span> <span class="k">with</span> <span class="n">values</span> <span class="n">like</span> <span class="p">[</span><span class="s1">u&#39;bayesian&#39;</span><span class="p">,</span> <span class="s1">u&#39;prior&#39;</span><span class="p">,</span> <span class="s1">u&#39;elicitation&#39;</span><span class="p">]</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>We can use these features (instead of an identity feature matrix like in
@@ -277,7 +286,7 @@ a pure CF model) to estimate a model which will generalize better to
 unseen examples: it will simply use its representations of item features
 to infer representations of previously unseen questions.</p>
 <p>Let&#8217;s go ahead and fit a model of this type.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="c1"># Define a new model instance</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Define a new model instance</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">,</span>
                 <span class="n">item_alpha</span><span class="o">=</span><span class="n">ITEM_ALPHA</span><span class="p">,</span>
                 <span class="n">no_components</span><span class="o">=</span><span class="n">NUM_COMPONENTS</span><span class="p">)</span>
@@ -291,7 +300,7 @@ to infer representations of previously unseen questions.</p>
 </pre></div>
 </div>
 <p>As before, let&#8217;s sanity check the model on the training set.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="c1"># Don&#39;t forget the pass in the item features again!</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Don&#39;t forget the pass in the item features again!</span>
 <span class="n">train_auc</span> <span class="o">=</span> <span class="n">auc_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
                       <span class="n">train</span><span class="p">,</span>
                       <span class="n">item_features</span><span class="o">=</span><span class="n">item_features</span><span class="p">,</span>
@@ -299,14 +308,14 @@ to infer representations of previously unseen questions.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hybrid training set AUC: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">train_auc</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">Hybrid</span> <span class="n">training</span> <span class="nb">set</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.86049</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Hybrid</span> <span class="n">training</span> <span class="nb">set</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.86049</span>
 </pre></div>
 </div>
 <p>Note that the training set AUC is lower than in a pure CF model. This is
 fine: by using a lower-rank item feature matrix, we have effectively
 regularized the model, giving it less freedom to fit the training data.</p>
 <p>Despite this the model does much better on the test set:</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="n">test_auc</span> <span class="o">=</span> <span class="n">auc_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">test_auc</span> <span class="o">=</span> <span class="n">auc_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
                     <span class="n">test</span><span class="p">,</span>
                     <span class="n">train_interactions</span><span class="o">=</span><span class="n">train</span><span class="p">,</span>
                     <span class="n">item_features</span><span class="o">=</span><span class="n">item_features</span><span class="p">,</span>
@@ -314,7 +323,7 @@ regularized the model, giving it less freedom to fit the training data.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hybrid test set AUC: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">test_auc</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">Hybrid</span> <span class="n">test</span> <span class="nb">set</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.703039</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Hybrid</span> <span class="n">test</span> <span class="nb">set</span> <span class="n">AUC</span><span class="p">:</span> <span class="mf">0.703039</span>
 </pre></div>
 </div>
 <p>This is as expected: because items in the test set share tags with items
@@ -327,7 +336,7 @@ using the tag representations learned from training.</p>
 embeddings capture semantic characteristics of the tags. Like the
 word2vec model, we can use this property to explore semantic tag
 similarity:</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span class="k">def</span> <span class="nf">get_similar_tags</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">):</span>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_similar_tags</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">):</span>
     <span class="c1"># Define similarity as the cosine of the angle</span>
     <span class="c1"># between the tag latent vectors</span>
 
@@ -348,7 +357,7 @@ similarity:</p>
                                             <span class="n">tag_labels</span><span class="p">[</span><span class="n">get_similar_tags</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">)]))</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">bayesian</span><span class="p">:</span> <span class="p">[</span><span class="s1">u&#39;posterior&#39;</span> <span class="s1">u&#39;mcmc&#39;</span> <span class="s1">u&#39;bayes&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">bayesian</span><span class="p">:</span> <span class="p">[</span><span class="s1">u&#39;posterior&#39;</span> <span class="s1">u&#39;mcmc&#39;</span> <span class="s1">u&#39;bayes&#39;</span><span class="p">]</span>
 <span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">regression</span><span class="p">:</span> <span class="p">[</span><span class="s1">u&#39;multicollinearity&#39;</span> <span class="s1">u&#39;stepwise-regression&#39;</span> <span class="s1">u&#39;multiple-regression&#39;</span><span class="p">]</span>
 <span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">survival</span><span class="p">:</span> <span class="p">[</span><span class="s1">u&#39;cox-model&#39;</span> <span class="s1">u&#39;kaplan-meier&#39;</span> <span class="s1">u&#39;odds-ratio&#39;</span><span class="p">]</span>
 </pre></div>
@@ -357,7 +366,6 @@ similarity:</p>
 </div>
 
 
-           </div>
           </div>
           <footer>
   
@@ -376,10 +384,9 @@ similarity:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Lyst (Maciej Kula).
-
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 
 </footer>
 
