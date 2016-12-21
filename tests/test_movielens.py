@@ -117,11 +117,11 @@ def test_bpr_precision():
                                    train,
                                    test)
 
-    assert train_precision > 0.31
-    assert test_precision > 0.04
+    assert train_precision > 0.45
+    assert test_precision > 0.07
 
-    assert full_train_auc > 0.86
-    assert full_test_auc > 0.84
+    assert full_train_auc > 0.91
+    assert full_test_auc > 0.87
 
 
 def test_bpr_precision_multithreaded():
@@ -141,11 +141,11 @@ def test_bpr_precision_multithreaded():
                                    train,
                                    test)
 
-    assert train_precision > 0.31
-    assert test_precision > 0.04
+    assert train_precision > 0.45
+    assert test_precision > 0.07
 
-    assert full_train_auc > 0.86
-    assert full_test_auc > 0.84
+    assert full_train_auc > 0.91
+    assert full_test_auc > 0.87
 
 
 def test_warp_precision():
