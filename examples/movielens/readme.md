@@ -6,7 +6,7 @@ For some time, the recommender system literature focused on explicit feedback: t
 
 Focusing on ratings in this way ignored the importance of taking into account which movies the users chose to watch in the first place, and treating the absence of ratings as absence of information.
 
-But the things that we don't have ratings for aren't unknowns: we know the user didn't pick them. This reflects a user's conscious choice, and is a good source of information on what she thinks she might like. 
+But the things that we don't have ratings for aren't unknowns: we know the user didn't pick them. This reflects a user's conscious choice, and is a good source of information on what she thinks she might like.
 
 This sort of phenomenon is described as data which is missing-not-at-random in the literature: the ratings that are missing are more likely to be negative precisely because the user chooses which items to rate. When choosing a restaurant, you only go to places which you think you'll enjoy, and never go to places that you think you'll hate. What this leads to is that you're only going to be submitting ratings for things which, a priori, you expected to like; the things that you expect you will not like you will never rate.
 
@@ -42,22 +42,21 @@ This gives us a dictionary with the following fields:
 
 ```python
 for key, value in movielens.items():
-    print(key, value)
+    print(key, type(value), value.shape)
 ```
 
-    ('test', <943x1682 sparse matrix of type '<type 'numpy.int32'>'
-    	with 9430 stored elements in COOrdinate format>)
-    ('item_features', <1682x1682 sparse matrix of type '<type 'numpy.float32'>'
-    	with 1682 stored elements in Compressed Sparse Row format>)
-    ('train', <943x1682 sparse matrix of type '<type 'numpy.int32'>'
-    	with 90570 stored elements in COOrdinate format>)
-    ('item_labels', array([u'Toy Story (1995)', u'GoldenEye (1995)', u'Four Rooms (1995)', ...,
-           u'Sliding Doors (1998)', u'You So Crazy (1994)',
-           u'Scream of Stone (Schrei aus Stein) (1991)'], dtype=object))
-    ('item_feature_labels', array([u'Toy Story (1995)', u'GoldenEye (1995)', u'Four Rooms (1995)', ...,
-           u'Sliding Doors (1998)', u'You So Crazy (1994)',
-           u'Scream of Stone (Schrei aus Stein) (1991)'], dtype=object))
+    ('test', <class 'scipy.sparse.coo.coo_matrix'>, (943, 1682))
+    ('item_features', <class 'scipy.sparse.csr.csr_matrix'>, (1682, 1682))
+    ('train', <class 'scipy.sparse.coo.coo_matrix'>, (943, 1682))
+    ('item_labels', <type 'numpy.ndarray'>, (1682,))
+    ('item_feature_labels', <type 'numpy.ndarray'>, (1682,))
 
+
+
+```python
+train = movielens['train']
+test = movielens['test']
+```
 
 The `train` and `test` elements are the most important: they contain the raw rating data, split into a train and a test set. Each row represents a user, and each column an item. Entries are ratings from 1 to 5.
 
@@ -69,8 +68,11 @@ We'll use two metrics of accuracy: precision@k and ROC AUC. Both are ranking met
 
 
 ```python
-model = LightFM(learning_rate=0.05, loss='bpr')
+from lightfm import LightFM
+from lightfm.evaluation import precision_at_k
+from lightfm.evaluation import auc_score
 
+model = LightFM(learning_rate=0.05, loss='bpr')
 model.fit(train, epochs=10)
 
 train_precision = precision_at_k(model, train, k=10).mean()
@@ -83,8 +85,8 @@ print('Precision: train %.2f, test %.2f.' % (train_precision, test_precision))
 print('AUC: train %.2f, test %.2f.' % (train_auc, test_auc))
 ```
 
-    Precision: train 0.41, test 0.06.
-    AUC: train 0.83, test 0.81.
+    Precision: train 0.59, test 0.10.
+    AUC: train 0.90, test 0.86.
 
 
 The WARP model, on the other hand, optimises for precision@k---we should expect its performance to be better on precision.
@@ -106,7 +108,7 @@ print('AUC: train %.2f, test %.2f.' % (train_auc, test_auc))
 ```
 
     Precision: train 0.61, test 0.11.
-    AUC: train 0.91, test 0.88.
+    AUC: train 0.93, test 0.90.
 
 
-And that is exactly what we see: we get much higher precision@10 (but the AUC metric is also improved).
+And that is exactly what we see: we get slightly higher precision@10 (but the AUC metric is also improved).

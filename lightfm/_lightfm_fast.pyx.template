@@ -1083,8 +1083,8 @@ def fit_bpr(CSRMatrix item_features,
             positive_item_id = item_ids[row]
 
             while True:
-                negative_item_id = (rand_r(&random_states[{thread_num}])
-                                    % item_features.rows)
+                negative_item_id = item_ids[(rand_r(&random_states[{thread_num}])
+                                             % no_examples)]
                 if not in_positives(negative_item_id, user_id, interactions):
                     break
 
@@ -1117,7 +1117,7 @@ def fit_bpr(CSRMatrix item_features,
                                                                neg_it_repr,
                                                                lightfm.no_components)
 
-            warp_update(weight * sigmoid(positive_prediction - negative_prediction),
+            warp_update(weight * (1.0 - sigmoid(positive_prediction - negative_prediction)),
                         item_features,
                         user_features,
                         user_id,
