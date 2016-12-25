@@ -1,19 +1,19 @@
 .PHONY: examples
 examples:
 	jupyter nbconvert --to rst examples/quickstart/quickstart.ipynb
-	mv quickstart.rst doc/
+	mv examples/quickstart/quickstart.rst doc/
 	jupyter nbconvert --to rst examples/movielens/example.ipynb
-	mv example.rst doc/examples/movielens_implicit.rst
+	mv examples/movielens/example.rst doc/examples/movielens_implicit.rst
 	jupyter nbconvert --to rst examples/movielens/learning_schedules.ipynb
-	mv learning_schedules.rst doc/examples/
-	cp -r learning_schedules_files doc/examples/
-	rm -rf learning_schedules_files
+	mv examples/movielens/learning_schedules.rst doc/examples/
+	cp -r examples/movielens/learning_schedules_files doc/examples/
+	rm -rf examples/movielens/learning_schedules_files
 	jupyter nbconvert --to rst examples/stackexchange/hybrid_crossvalidated.ipynb
-	mv hybrid_crossvalidated.rst doc/examples/
+	mv examples/stackexchange/hybrid_crossvalidated.rst doc/examples/
 	jupyter nbconvert --to rst examples/movielens/warp_loss.ipynb
-	mv warp_loss.rst doc/examples/
-	cp -r warp_loss_files doc/examples/
-	rm -rf warp_loss_files
+	mv examples/movielens/warp_loss.rst doc/examples/
+	cp -r examples/movielens/warp_loss_files doc/examples/
+	rm -rf examples/movielens/warp_loss_files
 .PHONY: update-docs
 update-docs:
 	pip install -e . \

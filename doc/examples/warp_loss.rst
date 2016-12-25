@@ -17,7 +17,7 @@ the form of the k-OS WARP loss, also implemented in LightFM.
 
 Like the BPR model, WARP deals with (user, positive item, negative item)
 triplets. Unlike BPR, the negative items in the triplet are not chosen
-by random sampling: they are chosen from among those negative items which
+by random sampling: they are chosen from among those negatie items which
 would violate the desired item ranking given the state of the model.
 This approximates a form of active learning where the model selects
 those triplets that it cannot currently rank correctly.
@@ -90,6 +90,7 @@ fitting them, let's also measure how much time each epoch takes.
     warp_model = LightFM(no_components=num_components,
                         loss='warp',
                         learning_schedule='adagrad',
+                        max_sampled=100,
                         user_alpha=alpha,
                         item_alpha=alpha)
     

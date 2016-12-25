@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased][unreleased]
+### Fixed
+- incorrect calculation of BPR loss (thanks to @TimonVS for reporting this).
+
 ## [1.10][2016-11-25]
 ### Added
 - added recall@k evaluation function

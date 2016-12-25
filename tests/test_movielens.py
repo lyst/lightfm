@@ -473,7 +473,7 @@ def test_movielens_accuracy_sample_weights():
     # by the same amount should result in
     # roughly the same accuracy
 
-    scale = 1e-01
+    scale = 0.5
     weights = train.copy()
     weights.data = np.ones(train.getnnz(),
                            dtype=np.float32) * scale
