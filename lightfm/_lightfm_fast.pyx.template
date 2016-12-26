@@ -1051,7 +1051,7 @@ def fit_bpr(CSRMatrix item_features,
     Fit the model using the BPR loss.
     """
 
-    cdef int i, no_examples, user_id, positive_item_id
+    cdef int i, j, no_examples, user_id, positive_item_id
     cdef int negative_item_id, sampled, row
     cdef double positive_prediction, negative_prediction
     cdef flt weight
@@ -1082,7 +1082,7 @@ def fit_bpr(CSRMatrix item_features,
             user_id = user_ids[row]
             positive_item_id = item_ids[row]
 
-            while True:
+            for j in range(no_examples):
                 negative_item_id = item_ids[(rand_r(&random_states[{thread_num}])
                                              % no_examples)]
                 if not in_positives(negative_item_id, user_id, interactions):
