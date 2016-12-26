@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Learning-to-rank using the WARP loss &mdash; LightFM 1.9 documentation</title>
+  <title>Learning-to-rank using the WARP loss &mdash; LightFM 1.11 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="LightFM 1.9 documentation" href="../index.html"/>
+    <link rel="top" title="LightFM 1.11 documentation" href="../index.html"/>
         <link rel="up" title="Examples" href="../examples.html"/>
         <link rel="prev" title="Item cold-start: recommending StackExchange questions" href="hybrid_crossvalidated.html"/> 
 
@@ -170,7 +170,7 @@ paper</a> in
 the form of the k-OS WARP loss, also implemented in LightFM.</p>
 <p>Like the BPR model, WARP deals with (user, positive item, negative item)
 triplets. Unlike BPR, the negative items in the triplet are not chosen
-by random sampling: they are chosen from among those negative items which
+by random sampling: they are chosen from among those negatie items which
 would violate the desired item ranking given the state of the model.
 This approximates a form of active learning where the model selects
 those triplets that it cannot currently rank correctly.</p>
@@ -234,6 +234,7 @@ fitting them, let&#8217;s also measure how much time each epoch takes.</p>
 <span class="n">warp_model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="n">num_components</span><span class="p">,</span>
                     <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">,</span>
                     <span class="n">learning_schedule</span><span class="o">=</span><span class="s1">&#39;adagrad&#39;</span><span class="p">,</span>
+                    <span class="n">max_sampled</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
                     <span class="n">user_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
                     <span class="n">item_alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
 
@@ -368,7 +369,7 @@ attempts.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.9',
+            VERSION:'1.11',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

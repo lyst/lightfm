@@ -74,24 +74,22 @@ This gives us a dictionary with the following fields:
 .. code:: python
 
     for key, value in movielens.items():
-        print(key, value)
+        print(key, type(value), value.shape)
 
 
 .. parsed-literal::
 
-    ('test', <943x1682 sparse matrix of type '<type 'numpy.int32'>'
-    	with 9430 stored elements in COOrdinate format>)
-    ('item_features', <1682x1682 sparse matrix of type '<type 'numpy.float32'>'
-    	with 1682 stored elements in Compressed Sparse Row format>)
-    ('train', <943x1682 sparse matrix of type '<type 'numpy.int32'>'
-    	with 90570 stored elements in COOrdinate format>)
-    ('item_labels', array([u'Toy Story (1995)', u'GoldenEye (1995)', u'Four Rooms (1995)', ...,
-           u'Sliding Doors (1998)', u'You So Crazy (1994)',
-           u'Scream of Stone (Schrei aus Stein) (1991)'], dtype=object))
-    ('item_feature_labels', array([u'Toy Story (1995)', u'GoldenEye (1995)', u'Four Rooms (1995)', ...,
-           u'Sliding Doors (1998)', u'You So Crazy (1994)',
-           u'Scream of Stone (Schrei aus Stein) (1991)'], dtype=object))
+    ('test', <class 'scipy.sparse.coo.coo_matrix'>, (943, 1682))
+    ('item_features', <class 'scipy.sparse.csr.csr_matrix'>, (1682, 1682))
+    ('train', <class 'scipy.sparse.coo.coo_matrix'>, (943, 1682))
+    ('item_labels', <type 'numpy.ndarray'>, (1682,))
+    ('item_feature_labels', <type 'numpy.ndarray'>, (1682,))
 
+
+.. code:: python
+
+    train = movielens['train']
+    test = movielens['test']
 
 The ``train`` and ``test`` elements are the most important: they contain
 the raw rating data, split into a train and a test set. Each row
@@ -113,8 +111,11 @@ negative example.
 
 .. code:: python
 
-    model = LightFM(learning_rate=0.05, loss='bpr')
+    from lightfm import LightFM
+    from lightfm.evaluation import precision_at_k
+    from lightfm.evaluation import auc_score
     
+    model = LightFM(learning_rate=0.05, loss='bpr')
     model.fit(train, epochs=10)
     
     train_precision = precision_at_k(model, train, k=10).mean()
@@ -129,8 +130,8 @@ negative example.
 
 .. parsed-literal::
 
-    Precision: train 0.41, test 0.06.
-    AUC: train 0.83, test 0.81.
+    Precision: train 0.59, test 0.10.
+    AUC: train 0.90, test 0.86.
 
 
 The WARP model, on the other hand, optimises for precision@k---we should
@@ -155,8 +156,9 @@ expect its performance to be better on precision.
 .. parsed-literal::
 
     Precision: train 0.61, test 0.11.
-    AUC: train 0.91, test 0.88.
+    AUC: train 0.93, test 0.90.
 
 
-And that is exactly what we see: we get much higher precision@10 (but
-the AUC metric is also improved).
+And that is exactly what we see: we get slightly higher precision@10
+(but the AUC metric is also improved).
+
