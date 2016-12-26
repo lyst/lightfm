@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## [1.11][2016-12-26]
 ### Changed
 - negative samples in BPR are now drawn from the empirical distributions of positives. This improves accuracy slightly on the Movielens 100k dataset.
 
