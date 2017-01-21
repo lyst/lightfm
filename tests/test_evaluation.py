@@ -16,13 +16,13 @@ def _generate_data(num_users, num_items, density=0.1, test_fraction=0.2):
 
     for user_id in range(num_users):
         positives = np.random.choice(num_items,
-                                     size=density * num_items,
+                                     size=int(density * num_items),
                                      replace=False)
 
-        for item_id in positives[:(test_fraction * len(positives))]:
+        for item_id in positives[:int(test_fraction * len(positives))]:
             test[user_id, item_id] = 1.0
 
-        for item_id in positives[(test_fraction * len(positives)):]:
+        for item_id in positives[int(test_fraction * len(positives)):]:
             train[user_id, item_id] = 1.0
 
     return train.tocoo(), test.tocoo()
