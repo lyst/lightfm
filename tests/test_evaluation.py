@@ -182,6 +182,31 @@ def test_precision_at_k():
     assert np.allclose(precision.mean(), expected_mean_precision)
 
 
+def test_precision_at_k_with_ties():
+
+    no_users, no_items = (10, 100)
+
+    train, test = _generate_data(no_users, no_items)
+
+    model = LightFM(loss='bpr')
+    model.fit_partial(train)
+
+    # Make all predictions zero
+    model.user_embeddings = np.zeros_like(model.user_embeddings)
+    model.item_embeddings = np.zeros_like(model.item_embeddings)
+    model.user_biases = np.zeros_like(model.user_biases)
+    model.item_biases = np.zeros_like(model.item_biases)
+
+    k = 10
+
+    precision = evaluation.precision_at_k(model,
+                                          test,
+                                          k=k)
+
+    # Pessimistic precision with all ties
+    assert precision.mean() == 0.0
+
+
 def test_recall_at_k():
 
     no_users, no_items = (10, 100)
