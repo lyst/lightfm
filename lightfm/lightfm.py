@@ -315,6 +315,20 @@ class LightFM(object):
 
         return lightfm_data
 
+    def _check_finite(self):
+
+        for parameter in (self.item_embeddings,
+                          self.item_biases,
+                          self.user_embeddings,
+                          self.user_biases):
+            # A sum of an array that contains non-finite values
+            # will also be non-finite, and we avoid creating a
+            # large boolean temporary.
+            if not np.isfinite(np.sum(parameter)):
+                raise ValueError("Not all estimated parameters are finite, "
+                                 "your model may have diverged. Try decreasing "
+                                 "the learning rate.")
+
     def fit(self, interactions,
             user_features=None, item_features=None,
             sample_weight=None,
@@ -464,6 +478,8 @@ class LightFM(object):
                             sample_weight_data,
                             num_threads,
                             self.loss)
+
+            self._check_finite()
 
         return self
 
