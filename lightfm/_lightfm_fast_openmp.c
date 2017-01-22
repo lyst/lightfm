@@ -4684,12 +4684,12 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_fit_logistic(CYTHON_UN
                 #define unlikely(x) (x)
             #endif
             #ifdef _OPENMP
-            #pragma omp parallel private(__pyx_v_user_repr, __pyx_v_it_repr) private(__pyx_t_4, __pyx_t_9, __pyx_t_3, __pyx_t_6, __pyx_t_5, __pyx_t_8, __pyx_t_2, __pyx_t_7, __pyx_t_1) num_threads(__pyx_v_num_threads)
+            #pragma omp parallel private(__pyx_v_it_repr, __pyx_v_user_repr) private(__pyx_t_4, __pyx_t_9, __pyx_t_3, __pyx_t_6, __pyx_t_5, __pyx_t_8, __pyx_t_2, __pyx_t_7, __pyx_t_1) num_threads(__pyx_v_num_threads)
             #endif /* _OPENMP */
             {
                 /* Initialize private variables to invalid values */
-                __pyx_v_user_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
                 __pyx_v_it_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
+                __pyx_v_user_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
 
                 /* "lightfm/_lightfm_fast_openmp.pyx":701
  *     with nogil, parallel(num_threads=num_threads):
@@ -4723,20 +4723,20 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_fit_logistic(CYTHON_UN
                     if (__pyx_t_3 > 0)
                     {
                         #ifdef _OPENMP
-                        #pragma omp for lastprivate(__pyx_v_y_row) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_y) lastprivate(__pyx_v_row) lastprivate(__pyx_v_weight) lastprivate(__pyx_v_prediction) lastprivate(__pyx_v_loss) lastprivate(__pyx_v_item_id) lastprivate(__pyx_v_user_id)
+                        #pragma omp for lastprivate(__pyx_v_y_row) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_item_id) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_row) lastprivate(__pyx_v_prediction) lastprivate(__pyx_v_weight) lastprivate(__pyx_v_y) lastprivate(__pyx_v_loss)
                         #endif /* _OPENMP */
                         for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_3; __pyx_t_2++){
                             {
                                 __pyx_v_i = 0 + 1 * __pyx_t_2;
                                 /* Initialize private variables to invalid values */
                                 __pyx_v_y_row = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt)__PYX_NAN());
-                                __pyx_v_y = ((int)0xbad0bad0);
-                                __pyx_v_row = ((int)0xbad0bad0);
-                                __pyx_v_weight = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt)__PYX_NAN());
-                                __pyx_v_prediction = ((double)__PYX_NAN());
-                                __pyx_v_loss = ((double)__PYX_NAN());
                                 __pyx_v_item_id = ((int)0xbad0bad0);
                                 __pyx_v_user_id = ((int)0xbad0bad0);
+                                __pyx_v_row = ((int)0xbad0bad0);
+                                __pyx_v_prediction = ((double)__PYX_NAN());
+                                __pyx_v_weight = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt)__PYX_NAN());
+                                __pyx_v_y = ((int)0xbad0bad0);
+                                __pyx_v_loss = ((double)__PYX_NAN());
 
                                 /* "lightfm/_lightfm_fast_openmp.pyx":706
  *         for i in prange(no_examples):
@@ -5368,13 +5368,13 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_2fit_warp(CYTHON_UNUSE
                 #define unlikely(x) (x)
             #endif
             #ifdef _OPENMP
-            #pragma omp parallel private(__pyx_v_neg_it_repr, __pyx_v_pos_it_repr, __pyx_v_user_repr) private(__pyx_t_13, __pyx_t_15, __pyx_t_12, __pyx_t_14, __pyx_t_11, __pyx_t_9, __pyx_t_16, __pyx_t_18, __pyx_t_10, __pyx_t_17) num_threads(__pyx_v_num_threads)
+            #pragma omp parallel private(__pyx_v_user_repr, __pyx_v_pos_it_repr, __pyx_v_neg_it_repr) private(__pyx_t_13, __pyx_t_12, __pyx_t_14, __pyx_t_11, __pyx_t_9, __pyx_t_16, __pyx_t_18, __pyx_t_15, __pyx_t_10, __pyx_t_17) num_threads(__pyx_v_num_threads)
             #endif /* _OPENMP */
             {
                 /* Initialize private variables to invalid values */
-                __pyx_v_neg_it_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
-                __pyx_v_pos_it_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
                 __pyx_v_user_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
+                __pyx_v_pos_it_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
+                __pyx_v_neg_it_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
 
                 /* "lightfm/_lightfm_fast_openmp.pyx":796
  *     with nogil, parallel(num_threads=num_threads):
@@ -5417,21 +5417,21 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_2fit_warp(CYTHON_UNUSE
                     if (__pyx_t_11 > 0)
                     {
                         #ifdef _OPENMP
-                        #pragma omp for lastprivate(__pyx_v_negative_prediction) lastprivate(__pyx_v_negative_item_id) lastprivate(__pyx_v_loss) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_row) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_positive_item_id) lastprivate(__pyx_v_sampled) lastprivate(__pyx_v_positive_prediction) lastprivate(__pyx_v_weight)
+                        #pragma omp for lastprivate(__pyx_v_loss) lastprivate(__pyx_v_positive_prediction) lastprivate(__pyx_v_weight) lastprivate(__pyx_v_sampled) lastprivate(__pyx_v_positive_item_id) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_negative_item_id) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_row) lastprivate(__pyx_v_negative_prediction)
                         #endif /* _OPENMP */
                         for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_11; __pyx_t_10++){
                             {
                                 __pyx_v_i = 0 + 1 * __pyx_t_10;
                                 /* Initialize private variables to invalid values */
-                                __pyx_v_negative_prediction = ((double)__PYX_NAN());
-                                __pyx_v_negative_item_id = ((int)0xbad0bad0);
                                 __pyx_v_loss = ((double)__PYX_NAN());
-                                __pyx_v_user_id = ((int)0xbad0bad0);
-                                __pyx_v_row = ((int)0xbad0bad0);
-                                __pyx_v_positive_item_id = ((int)0xbad0bad0);
-                                __pyx_v_sampled = ((int)0xbad0bad0);
                                 __pyx_v_positive_prediction = ((double)__PYX_NAN());
                                 __pyx_v_weight = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt)__PYX_NAN());
+                                __pyx_v_sampled = ((int)0xbad0bad0);
+                                __pyx_v_positive_item_id = ((int)0xbad0bad0);
+                                __pyx_v_user_id = ((int)0xbad0bad0);
+                                __pyx_v_negative_item_id = ((int)0xbad0bad0);
+                                __pyx_v_row = ((int)0xbad0bad0);
+                                __pyx_v_negative_prediction = ((double)__PYX_NAN());
 
                                 /* "lightfm/_lightfm_fast_openmp.pyx":801
  * 
@@ -6219,14 +6219,14 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_4fit_warp_kos(CYTHON_U
                 #define unlikely(x) (x)
             #endif
             #ifdef _OPENMP
-            #pragma omp parallel private(__pyx_v_pos_it_repr, __pyx_v_neg_it_repr, __pyx_v_pos_pairs, __pyx_v_user_repr) private(__pyx_t_13, __pyx_t_12, __pyx_t_20, __pyx_t_14, __pyx_t_11, __pyx_t_16, __pyx_t_9, __pyx_t_17, __pyx_t_18, __pyx_t_19, __pyx_t_10, __pyx_t_15) num_threads(__pyx_v_num_threads)
+            #pragma omp parallel private(__pyx_v_user_repr, __pyx_v_pos_pairs, __pyx_v_pos_it_repr, __pyx_v_neg_it_repr) private(__pyx_t_13, __pyx_t_12, __pyx_t_20, __pyx_t_14, __pyx_t_19, __pyx_t_17, __pyx_t_11, __pyx_t_16, __pyx_t_9, __pyx_t_18, __pyx_t_10, __pyx_t_15) num_threads(__pyx_v_num_threads)
             #endif /* _OPENMP */
             {
                 /* Initialize private variables to invalid values */
+                __pyx_v_user_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
+                __pyx_v_pos_pairs = ((struct __pyx_t_7lightfm_20_lightfm_fast_openmp_Pair *)1);
                 __pyx_v_pos_it_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
                 __pyx_v_neg_it_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
-                __pyx_v_pos_pairs = ((struct __pyx_t_7lightfm_20_lightfm_fast_openmp_Pair *)1);
-                __pyx_v_user_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
 
                 /* "lightfm/_lightfm_fast_openmp.pyx":922
  *     with nogil, parallel(num_threads=num_threads):
@@ -6278,26 +6278,26 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_4fit_warp_kos(CYTHON_U
                     if (__pyx_t_11 > 0)
                     {
                         #ifdef _OPENMP
-                        #pragma omp for lastprivate(__pyx_v_no_positives) lastprivate(__pyx_v_loss) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_positive_item_id) lastprivate(__pyx_v_j) lastprivate(__pyx_v_sampled) lastprivate(__pyx_v_row) lastprivate(__pyx_v_sampled_positive_item_id) lastprivate(__pyx_v_positive_prediction) lastprivate(__pyx_v_user_pids_start) lastprivate(__pyx_v_negative_prediction) lastprivate(__pyx_v_user_pids_stop) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_negative_item_id) lastprivate(__pyx_v_sampled_positive_prediction)
+                        #pragma omp for lastprivate(__pyx_v_negative_item_id) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_row) lastprivate(__pyx_v_positive_prediction) lastprivate(__pyx_v_user_pids_stop) lastprivate(__pyx_v_j) lastprivate(__pyx_v_sampled) lastprivate(__pyx_v_no_positives) lastprivate(__pyx_v_sampled_positive_item_id) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_positive_item_id) lastprivate(__pyx_v_negative_prediction) lastprivate(__pyx_v_sampled_positive_prediction) lastprivate(__pyx_v_loss) lastprivate(__pyx_v_user_pids_start)
                         #endif /* _OPENMP */
                         for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_11; __pyx_t_10++){
                             {
                                 __pyx_v_i = 0 + 1 * __pyx_t_10;
                                 /* Initialize private variables to invalid values */
-                                __pyx_v_no_positives = ((int)0xbad0bad0);
-                                __pyx_v_loss = ((double)__PYX_NAN());
+                                __pyx_v_negative_item_id = ((int)0xbad0bad0);
                                 __pyx_v_user_id = ((int)0xbad0bad0);
-                                __pyx_v_positive_item_id = ((int)0xbad0bad0);
+                                __pyx_v_row = ((int)0xbad0bad0);
+                                __pyx_v_positive_prediction = ((double)__PYX_NAN());
+                                __pyx_v_user_pids_stop = ((int)0xbad0bad0);
                                 __pyx_v_j = ((int)0xbad0bad0);
                                 __pyx_v_sampled = ((int)0xbad0bad0);
-                                __pyx_v_row = ((int)0xbad0bad0);
+                                __pyx_v_no_positives = ((int)0xbad0bad0);
                                 __pyx_v_sampled_positive_item_id = ((int)0xbad0bad0);
-                                __pyx_v_positive_prediction = ((double)__PYX_NAN());
-                                __pyx_v_user_pids_start = ((int)0xbad0bad0);
+                                __pyx_v_positive_item_id = ((int)0xbad0bad0);
                                 __pyx_v_negative_prediction = ((double)__PYX_NAN());
-                                __pyx_v_user_pids_stop = ((int)0xbad0bad0);
-                                __pyx_v_negative_item_id = ((int)0xbad0bad0);
                                 __pyx_v_sampled_positive_prediction = ((double)__PYX_NAN());
+                                __pyx_v_loss = ((double)__PYX_NAN());
+                                __pyx_v_user_pids_start = ((int)0xbad0bad0);
 
                                 /* "lightfm/_lightfm_fast_openmp.pyx":928
  * 
@@ -7177,7 +7177,7 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_6fit_bpr(CYTHON_UNUSED
                 #define unlikely(x) (x)
             #endif
             #ifdef _OPENMP
-            #pragma omp parallel private(__pyx_v_neg_it_repr, __pyx_v_user_repr, __pyx_v_pos_it_repr) private(__pyx_t_13, __pyx_t_15, __pyx_t_12, __pyx_t_18, __pyx_t_20, __pyx_t_14, __pyx_t_11, __pyx_t_9, __pyx_t_16, __pyx_t_19, __pyx_t_21, __pyx_t_10, __pyx_t_17) num_threads(__pyx_v_num_threads)
+            #pragma omp parallel private(__pyx_v_neg_it_repr, __pyx_v_user_repr, __pyx_v_pos_it_repr) private(__pyx_t_13, __pyx_t_19, __pyx_t_12, __pyx_t_18, __pyx_t_20, __pyx_t_14, __pyx_t_11, __pyx_t_9, __pyx_t_16, __pyx_t_15, __pyx_t_21, __pyx_t_10, __pyx_t_17) num_threads(__pyx_v_num_threads)
             #endif /* _OPENMP */
             {
                 /* Initialize private variables to invalid values */
@@ -7226,20 +7226,20 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_6fit_bpr(CYTHON_UNUSED
                     if (__pyx_t_11 > 0)
                     {
                         #ifdef _OPENMP
-                        #pragma omp for lastprivate(__pyx_v_negative_item_id) lastprivate(__pyx_v_negative_prediction) lastprivate(__pyx_v_row) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_weight) lastprivate(__pyx_v_positive_item_id) lastprivate(__pyx_v_positive_prediction) lastprivate(__pyx_v_j) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i)
+                        #pragma omp for lastprivate(__pyx_v_j) lastprivate(__pyx_v_negative_item_id) lastprivate(__pyx_v_positive_prediction) lastprivate(__pyx_v_negative_prediction) firstprivate(__pyx_v_i) lastprivate(__pyx_v_i) lastprivate(__pyx_v_row) lastprivate(__pyx_v_weight) lastprivate(__pyx_v_positive_item_id) lastprivate(__pyx_v_user_id)
                         #endif /* _OPENMP */
                         for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_11; __pyx_t_10++){
                             {
                                 __pyx_v_i = 0 + 1 * __pyx_t_10;
                                 /* Initialize private variables to invalid values */
+                                __pyx_v_j = ((int)0xbad0bad0);
                                 __pyx_v_negative_item_id = ((int)0xbad0bad0);
+                                __pyx_v_positive_prediction = ((double)__PYX_NAN());
                                 __pyx_v_negative_prediction = ((double)__PYX_NAN());
                                 __pyx_v_row = ((int)0xbad0bad0);
-                                __pyx_v_user_id = ((int)0xbad0bad0);
                                 __pyx_v_weight = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt)__PYX_NAN());
                                 __pyx_v_positive_item_id = ((int)0xbad0bad0);
-                                __pyx_v_positive_prediction = ((double)__PYX_NAN());
-                                __pyx_v_j = ((int)0xbad0bad0);
+                                __pyx_v_user_id = ((int)0xbad0bad0);
 
                                 /* "lightfm/_lightfm_fast_openmp.pyx":1079
  * 
@@ -8058,14 +8058,14 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_10predict_ranks(CYTHON
                 #define unlikely(x) (x)
             #endif
             #ifdef _OPENMP
-            #pragma omp parallel private(__pyx_v_user_repr, __pyx_v_item_ids, __pyx_v_it_repr, __pyx_v_predictions) private(__pyx_t_5, __pyx_t_3, __pyx_t_10, __pyx_t_6, __pyx_t_9, __pyx_t_2, __pyx_t_8, __pyx_t_7, __pyx_t_4, __pyx_t_1, __pyx_t_11) num_threads(__pyx_v_num_threads)
+            #pragma omp parallel private(__pyx_v_user_repr, __pyx_v_it_repr, __pyx_v_predictions, __pyx_v_item_ids) private(__pyx_t_5, __pyx_t_3, __pyx_t_10, __pyx_t_6, __pyx_t_9, __pyx_t_2, __pyx_t_8, __pyx_t_7, __pyx_t_4, __pyx_t_1, __pyx_t_11) num_threads(__pyx_v_num_threads)
             #endif /* _OPENMP */
             {
                 /* Initialize private variables to invalid values */
                 __pyx_v_user_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
-                __pyx_v_item_ids = ((int *)1);
                 __pyx_v_it_repr = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
                 __pyx_v_predictions = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt *)1);
+                __pyx_v_item_ids = ((int *)1);
 
                 /* "lightfm/_lightfm_fast_openmp.pyx":1219
  *     with nogil, parallel(num_threads=num_threads):
@@ -8117,17 +8117,17 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_10predict_ranks(CYTHON
                     if (__pyx_t_3 > 0)
                     {
                         #ifdef _OPENMP
-                        #pragma omp for lastprivate(__pyx_v_prediction) lastprivate(__pyx_v_row_stop) lastprivate(__pyx_v_i) lastprivate(__pyx_v_item_id) firstprivate(__pyx_v_user_id) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_row_start)
+                        #pragma omp for firstprivate(__pyx_v_user_id) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_row_start) lastprivate(__pyx_v_i) lastprivate(__pyx_v_row_stop) lastprivate(__pyx_v_prediction) lastprivate(__pyx_v_item_id)
                         #endif /* _OPENMP */
                         for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_3; __pyx_t_2++){
                             {
                                 __pyx_v_user_id = 0 + 1 * __pyx_t_2;
                                 /* Initialize private variables to invalid values */
-                                __pyx_v_prediction = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt)__PYX_NAN());
-                                __pyx_v_row_stop = ((int)0xbad0bad0);
-                                __pyx_v_i = ((int)0xbad0bad0);
-                                __pyx_v_item_id = ((int)0xbad0bad0);
                                 __pyx_v_row_start = ((int)0xbad0bad0);
+                                __pyx_v_i = ((int)0xbad0bad0);
+                                __pyx_v_row_stop = ((int)0xbad0bad0);
+                                __pyx_v_prediction = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt)__PYX_NAN());
+                                __pyx_v_item_id = ((int)0xbad0bad0);
 
                                 /* "lightfm/_lightfm_fast_openmp.pyx":1226
  *         for user_id in prange(test_interactions.rows):
@@ -8294,7 +8294,7 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_10predict_ranks(CYTHON
  *                                                           lightfm.no_components)
  * 
  *                 for i in range(row_stop - row_start):             # <<<<<<<<<<<<<<
- *                     if item_id != item_ids[i] and prediction > predictions[i]:
+ *                     if item_id != item_ids[i] and prediction >= predictions[i]:
  *                         ranks[row_start + i] += 1.0
  */
                                   __pyx_t_8 = (__pyx_v_row_stop - __pyx_v_row_start);
@@ -8304,7 +8304,7 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_10predict_ranks(CYTHON
                                     /* "lightfm/_lightfm_fast_openmp.pyx":1278
  * 
  *                 for i in range(row_stop - row_start):
- *                     if item_id != item_ids[i] and prediction > predictions[i]:             # <<<<<<<<<<<<<<
+ *                     if item_id != item_ids[i] and prediction >= predictions[i]:             # <<<<<<<<<<<<<<
  *                         ranks[row_start + i] += 1.0
  * 
  */
@@ -8314,14 +8314,14 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_10predict_ranks(CYTHON
                                       __pyx_t_4 = __pyx_t_10;
                                       goto __pyx_L25_bool_binop_done;
                                     }
-                                    __pyx_t_10 = ((__pyx_v_prediction > (__pyx_v_predictions[__pyx_v_i])) != 0);
+                                    __pyx_t_10 = ((__pyx_v_prediction >= (__pyx_v_predictions[__pyx_v_i])) != 0);
                                     __pyx_t_4 = __pyx_t_10;
                                     __pyx_L25_bool_binop_done:;
                                     if (__pyx_t_4) {
 
                                       /* "lightfm/_lightfm_fast_openmp.pyx":1279
  *                 for i in range(row_stop - row_start):
- *                     if item_id != item_ids[i] and prediction > predictions[i]:
+ *                     if item_id != item_ids[i] and prediction >= predictions[i]:
  *                         ranks[row_start + i] += 1.0             # <<<<<<<<<<<<<<
  * 
  *         free(user_repr)
@@ -8332,7 +8332,7 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_10predict_ranks(CYTHON
                                       /* "lightfm/_lightfm_fast_openmp.pyx":1278
  * 
  *                 for i in range(row_stop - row_start):
- *                     if item_id != item_ids[i] and prediction > predictions[i]:             # <<<<<<<<<<<<<<
+ *                     if item_id != item_ids[i] and prediction >= predictions[i]:             # <<<<<<<<<<<<<<
  *                         ranks[row_start + i] += 1.0
  * 
  */
@@ -8585,18 +8585,18 @@ static PyObject *__pyx_pf_7lightfm_20_lightfm_fast_openmp_12calculate_auc_from_r
                     if (__pyx_t_3 > 0)
                     {
                         #ifdef _OPENMP
-                        #pragma omp for lastprivate(__pyx_v_num_positives) lastprivate(__pyx_v_i) firstprivate(__pyx_v_user_id) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_row_start) lastprivate(__pyx_v_row_stop) lastprivate(__pyx_v_rank) lastprivate(__pyx_v_num_negatives)
+                        #pragma omp for lastprivate(__pyx_v_num_positives) firstprivate(__pyx_v_user_id) lastprivate(__pyx_v_user_id) lastprivate(__pyx_v_row_stop) lastprivate(__pyx_v_i) lastprivate(__pyx_v_rank) lastprivate(__pyx_v_num_negatives) lastprivate(__pyx_v_row_start)
                         #endif /* _OPENMP */
                         for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_3; __pyx_t_2++){
                             {
                                 __pyx_v_user_id = 0 + 1 * __pyx_t_2;
                                 /* Initialize private variables to invalid values */
                                 __pyx_v_num_positives = ((int)0xbad0bad0);
-                                __pyx_v_i = ((int)0xbad0bad0);
-                                __pyx_v_row_start = ((int)0xbad0bad0);
                                 __pyx_v_row_stop = ((int)0xbad0bad0);
+                                __pyx_v_i = ((int)0xbad0bad0);
                                 __pyx_v_rank = ((__pyx_t_7lightfm_20_lightfm_fast_openmp_flt)__PYX_NAN());
                                 __pyx_v_num_negatives = ((int)0xbad0bad0);
+                                __pyx_v_row_start = ((int)0xbad0bad0);
 
                                 /* "lightfm/_lightfm_fast_openmp.pyx":1298
  *         for user_id in prange(ranks.rows):

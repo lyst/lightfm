@@ -8025,7 +8025,7 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_10predict_ranks(CYT
  *                                                           lightfm.no_components)
  * 
  *                 for i in range(row_stop - row_start):             # <<<<<<<<<<<<<<
- *                     if item_id != item_ids[i] and prediction > predictions[i]:
+ *                     if item_id != item_ids[i] and prediction >= predictions[i]:
  *                         ranks[row_start + i] += 1.0
  */
             __pyx_t_7 = (__pyx_v_row_stop - __pyx_v_row_start);
@@ -8035,7 +8035,7 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_10predict_ranks(CYT
               /* "lightfm/_lightfm_fast_no_openmp.pyx":1275
  * 
  *                 for i in range(row_stop - row_start):
- *                     if item_id != item_ids[i] and prediction > predictions[i]:             # <<<<<<<<<<<<<<
+ *                     if item_id != item_ids[i] and prediction >= predictions[i]:             # <<<<<<<<<<<<<<
  *                         ranks[row_start + i] += 1.0
  * 
  */
@@ -8045,14 +8045,14 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_10predict_ranks(CYT
                 __pyx_t_3 = __pyx_t_9;
                 goto __pyx_L19_bool_binop_done;
               }
-              __pyx_t_9 = ((__pyx_v_prediction > (__pyx_v_predictions[__pyx_v_i])) != 0);
+              __pyx_t_9 = ((__pyx_v_prediction >= (__pyx_v_predictions[__pyx_v_i])) != 0);
               __pyx_t_3 = __pyx_t_9;
               __pyx_L19_bool_binop_done:;
               if (__pyx_t_3) {
 
                 /* "lightfm/_lightfm_fast_no_openmp.pyx":1276
  *                 for i in range(row_stop - row_start):
- *                     if item_id != item_ids[i] and prediction > predictions[i]:
+ *                     if item_id != item_ids[i] and prediction >= predictions[i]:
  *                         ranks[row_start + i] += 1.0             # <<<<<<<<<<<<<<
  * 
  *         free(user_repr)
@@ -8063,7 +8063,7 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_10predict_ranks(CYT
                 /* "lightfm/_lightfm_fast_no_openmp.pyx":1275
  * 
  *                 for i in range(row_stop - row_start):
- *                     if item_id != item_ids[i] and prediction > predictions[i]:             # <<<<<<<<<<<<<<
+ *                     if item_id != item_ids[i] and prediction >= predictions[i]:             # <<<<<<<<<<<<<<
  *                         ranks[row_start + i] += 1.0
  * 
  */

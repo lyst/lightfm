@@ -284,7 +284,9 @@ def test_predict_ranks():
     assert np.all(np.squeeze(np.array(ranks.max(axis=1))) ==
                   no_items - 1 - np.squeeze(np.array(train.getnnz(axis=1))))
 
-    # Make sure invariants hold when there are ties
+    # Make sure ranks are computed pessimistically when
+    # there are ties (that is, equal predictions for every
+    # item will assign maximum rank to each).
     model.user_embeddings = np.zeros_like(model.user_embeddings)
     model.item_embeddings = np.zeros_like(model.item_embeddings)
     model.user_biases = np.zeros_like(model.user_biases)
@@ -292,8 +294,8 @@ def test_predict_ranks():
 
     ranks = model.predict_rank(rank_input, num_threads=2).todense()
 
-    assert np.all(ranks.min(axis=1) == 0)
-    assert np.all(ranks.max(axis=1) == 0)
+    assert np.all(ranks.min(axis=1) == 99)
+    assert np.all(ranks.max(axis=1) == 99)
 
     # Wrong input dimensions
     with pytest.raises(ValueError):

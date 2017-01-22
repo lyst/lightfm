@@ -1272,7 +1272,7 @@ def predict_ranks(CSRMatrix item_features,
                                                           lightfm.no_components)
 
                 for i in range(row_stop - row_start):
-                    if item_id != item_ids[i] and prediction > predictions[i]:
+                    if item_id != item_ids[i] and prediction >= predictions[i]:
                         ranks[row_start + i] += 1.0
 
         free(user_repr)
