@@ -302,6 +302,22 @@ def test_predict_ranks():
         model.predict_rank(sp.csr_matrix((5, 5)), num_threads=2)
 
 
+def test_exception_on_divergence():
+
+    no_users, no_items = (1000, 1000)
+
+    train = sp.coo_matrix((no_users,
+                           no_items),
+                          dtype=np.float32)
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
+
+    model = LightFM(learning_rate=10000000.0,
+                    loss='warp')
+
+    with pytest.raises(ValueError):
+        model.fit(train, epochs=10)
+
+
 def test_sklearn_api():
     model = LightFM()
     params = model.get_params()
