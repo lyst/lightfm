@@ -2,6 +2,7 @@
 #cython: boundscheck=False, wraparound=False, cdivision=True, initializedcheck=False
 
 import numpy as np
+import threading
 
 cimport cython.operator.dereference as deref
 from libc.stdlib cimport free, malloc
@@ -10,6 +11,10 @@ from libc.stdlib cimport free, malloc
 
 
 ctypedef float flt
+
+# Allow sequential code blocks in a parallel setting.
+# Used for applying full regularization in parallel blocks.
+THREAD_LOCK = threading.Lock()
 
 
 cdef flt MAX_REG_SCALE = 1000000.0
@@ -671,6 +676,21 @@ cdef void regularize(FastLightFM lightfm,
     lightfm.user_scale = 1.0
 
 
+cdef void locked_regularize(FastLightFM lightfm,
+                            double item_alpha,
+                            double user_alpha) with gil:
+    """
+    Apply accumulated L2 regularization to all features. Acquire a lock
+    to prevent multiple threads from performing this operation.
+    """
+
+    with THREAD_LOCK:
+        if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+            regularize(lightfm,
+                       item_alpha,
+                       user_alpha)
+
+
 def fit_logistic(CSRMatrix item_features,
                  CSRMatrix user_features,
                  int[::1] user_ids,
@@ -749,9 +769,9 @@ def fit_logistic(CSRMatrix item_features,
                    user_alpha)
 
             if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
-                regularize(lightfm,
-                           item_alpha,
-                           user_alpha)
+                locked_regularize(lightfm,
+                                  item_alpha,
+                                  user_alpha)
 
         free(user_repr)
         free(it_repr)
@@ -879,9 +899,9 @@ def fit_warp(CSRMatrix item_features,
                     break
 
             if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
-                regularize(lightfm,
-                           item_alpha,
-                           user_alpha)
+                locked_regularize(lightfm,
+                                  item_alpha,
+                                  user_alpha)
 
         free(user_repr)
         free(pos_it_repr)
@@ -1037,9 +1057,9 @@ def fit_warp_kos(CSRMatrix item_features,
                     break
 
             if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
-                regularize(lightfm,
-                           item_alpha,
-                           user_alpha)
+                locked_regularize(lightfm,
+                                  item_alpha,
+                                  user_alpha)
 
         free(user_repr)
         free(pos_it_repr)
@@ -1149,9 +1169,14 @@ def fit_bpr(CSRMatrix item_features,
                         user_alpha)
 
             if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
-                regularize(lightfm,
-                           item_alpha,
-                           user_alpha)
+                with gil:
+                    THREAD_LOCK.acquire()
+                    # Another thread might have done the work already.
+                    if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+                        regularize(lightfm,
+                                   item_alpha,
+                                   user_alpha)
+                    THREAD_LOCK.release()
 
         free(user_repr)
         free(pos_it_repr)
@@ -1350,7 +1375,6 @@ def calculate_auc_from_rank(CSRMatrix ranks,
                 # Number of negatives that rank above the current item
                 # over the total number of negatives: the probability
                 # of rank inversion.
-                # print(row_start, row_stop, ranks.data[row_stop + i], 1.0 - rank, num_negatives)
                 auc[user_id] += 1.0 - rank / num_negatives
 
             if num_positives != 0:

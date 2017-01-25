@@ -636,7 +636,8 @@ def test_movielens_excessive_regularization():
                         loss=loss,
                         random_state=SEED)
         model.fit_partial(train,
-                          epochs=10)
+                          epochs=10,
+                          num_threads=4)
 
         train_predictions = model.predict(train.row,
                                           train.col)
