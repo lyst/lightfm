@@ -12,6 +12,9 @@ from libc.stdlib cimport free, malloc
 ctypedef float flt
 
 
+cdef flt MAX_REG_SCALE = 1000000.0
+
+
 cdef extern from "math.h" nogil:
     double sqrt(double)
     double exp(double)
@@ -523,8 +526,8 @@ cdef inline void update(double loss,
 
     # Update the scaling factors for lazy regularization, using the average learning rate
     # of features updated for this example.
-    lightfm.item_scale *= (1 - item_alpha * avg_learning_rate)
-    lightfm.user_scale *= (1 - user_alpha * avg_learning_rate)
+    lightfm.item_scale *= (1.0 + item_alpha * avg_learning_rate)
+    lightfm.user_scale *= (1.0 + user_alpha * avg_learning_rate)
 
 
 cdef void warp_update(double loss,
@@ -638,8 +641,8 @@ cdef void warp_update(double loss,
 
     # Update the scaling factors for lazy regularization, using the average learning rate
     # of features updated for this example.
-    lightfm.item_scale *= (1 - item_alpha * avg_learning_rate)
-    lightfm.user_scale *= (1 - user_alpha * avg_learning_rate)
+    lightfm.item_scale *= (1.0 + item_alpha * avg_learning_rate)
+    lightfm.user_scale *= (1.0 + user_alpha * avg_learning_rate)
 
 
 cdef void regularize(FastLightFM lightfm,
@@ -655,14 +658,14 @@ cdef void regularize(FastLightFM lightfm,
 
     for i in range(no_features):
         for j in range(lightfm.no_components):
-            lightfm.item_features[i, j] *= lightfm.item_scale
+            lightfm.item_features[i, j] /= lightfm.item_scale
 
-        lightfm.item_biases[i] *= lightfm.item_scale
+        lightfm.item_biases[i] /= lightfm.item_scale
 
     for i in range(no_users):
         for j in range(lightfm.no_components):
-            lightfm.user_features[i, j] *= lightfm.user_scale
-        lightfm.user_biases[i] *= lightfm.user_scale
+            lightfm.user_features[i, j] /= lightfm.user_scale
+        lightfm.user_biases[i] /= lightfm.user_scale
 
     lightfm.item_scale = 1.0
     lightfm.user_scale = 1.0
@@ -744,6 +747,11 @@ def fit_logistic(CSRMatrix item_features,
                    lightfm,
                    item_alpha,
                    user_alpha)
+
+            if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+                regularize(lightfm,
+                           item_alpha,
+                           user_alpha)
 
         free(user_repr)
         free(it_repr)
@@ -869,6 +877,11 @@ def fit_warp(CSRMatrix item_features,
                                 item_alpha,
                                 user_alpha)
                     break
+
+            if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+                regularize(lightfm,
+                           item_alpha,
+                           user_alpha)
 
         free(user_repr)
         free(pos_it_repr)
@@ -1023,6 +1036,11 @@ def fit_warp_kos(CSRMatrix item_features,
                                 user_alpha)
                     break
 
+            if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+                regularize(lightfm,
+                           item_alpha,
+                           user_alpha)
+
         free(user_repr)
         free(pos_it_repr)
         free(neg_it_repr)
@@ -1129,6 +1147,11 @@ def fit_bpr(CSRMatrix item_features,
                         lightfm,
                         item_alpha,
                         user_alpha)
+
+            if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+                regularize(lightfm,
+                           item_alpha,
+                           user_alpha)
 
         free(user_repr)
         free(pos_it_repr)
