@@ -1,4 +1,7 @@
-from .lightfm import LightFM
+try:
+    __LIGHTFM_SETUP__
+except NameError:
+    from .lightfm import LightFM
 
 __version__ = '1.11'
 
