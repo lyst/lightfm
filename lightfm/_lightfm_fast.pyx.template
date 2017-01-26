@@ -2,7 +2,6 @@
 #cython: boundscheck=False, wraparound=False, cdivision=True, initializedcheck=False
 
 import numpy as np
-import threading
 
 cimport cython.operator.dereference as deref
 from libc.stdlib cimport free, malloc
@@ -14,7 +13,7 @@ ctypedef float flt
 
 # Allow sequential code blocks in a parallel setting.
 # Used for applying full regularization in parallel blocks.
-THREAD_LOCK = threading.Lock()
+{lock_init}
 
 
 cdef flt MAX_REG_SCALE = 1000000.0
@@ -678,17 +677,18 @@ cdef void regularize(FastLightFM lightfm,
 
 cdef void locked_regularize(FastLightFM lightfm,
                             double item_alpha,
-                            double user_alpha) with gil:
+                            double user_alpha) nogil:
     """
     Apply accumulated L2 regularization to all features. Acquire a lock
     to prevent multiple threads from performing this operation.
     """
 
-    with THREAD_LOCK:
-        if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
-            regularize(lightfm,
-                       item_alpha,
-                       user_alpha)
+    {lock_acquire}
+    if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+        regularize(lightfm,
+                   item_alpha,
+                   user_alpha)
+    {lock_release}
 
 
 def fit_logistic(CSRMatrix item_features,
@@ -1169,14 +1169,9 @@ def fit_bpr(CSRMatrix item_features,
                         user_alpha)
 
             if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
-                with gil:
-                    THREAD_LOCK.acquire()
-                    # Another thread might have done the work already.
-                    if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
-                        regularize(lightfm,
-                                   item_alpha,
-                                   user_alpha)
-                    THREAD_LOCK.release()
+                locked_regularize(lightfm,
+                                  item_alpha,
+                                  user_alpha)
 
         free(user_repr)
         free(pos_it_repr)
