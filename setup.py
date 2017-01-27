@@ -6,6 +6,10 @@ import textwrap
 from setuptools import Command, Extension, setup
 from setuptools.command.test import test as TestCommand
 
+# Import version even when extensions are not yet built
+__builtins__.__LIGHTFM_SETUP__ = True
+from lightfm import __version__ as version  # NOQA
+
 
 def define_extensions(use_openmp):
 
@@ -143,10 +147,10 @@ use_openmp = not (sys.platform.startswith('darwin') or sys.platform.startswith('
 
 setup(
     name='lightfm',
-    version='1.11',
+    version=version,
     description='LightFM recommendation model',
     url='https://github.com/lyst/lightfm',
-    download_url='https://github.com/lyst/lightfm/tarball/1.11',
+    download_url='https://github.com/lyst/lightfm/tarball/{}'.format(version),
     packages=['lightfm',
               'lightfm.datasets'],
     package_data={'': ['*.c']},
