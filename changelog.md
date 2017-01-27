@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## [1.12][2017-01-26]
 ### Changed
 - Ranks are now computed pessimistically: when two items are tied, the positive item is assumed to have higher rank. This will lead to zero precision scores for models that predict all zeros, for example.
 - The model will raise a ValueError if, during fitting, any of the parameters become non-finite (NaN or +/- infinity).
