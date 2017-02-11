@@ -1,7 +1,12 @@
+machine:
+  python:
+    version: 3.5.1
+
 dependencies:
   pre:
     - pip install numpy
-    - pip install scipy
+    - pip install scipy:
+        timeout: 1800
     - pip install scikit-learn
 test:
   pre:
