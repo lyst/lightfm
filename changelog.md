@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased][unreleased]
+### Fixed
+- recall_at_k and precision_at_k now work correctly at k=1 (thanks to Zank Bennett).
+
 ## [1.12][2017-01-26]
 ### Changed
 - Ranks are now computed pessimistically: when two items are tied, the positive item is assumed to have higher rank. This will lead to zero precision scores for models that predict all zeros, for example.
