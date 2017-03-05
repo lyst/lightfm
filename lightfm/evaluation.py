@@ -62,11 +62,7 @@ def precision_at_k(model, test_interactions, train_interactions=None,
                                item_features=item_features,
                                num_threads=num_threads)
 
-    k_inds = ranks.data < k
-    other_inds = ranks.data >= k
-
-    ranks.data[k_inds] = 1.0
-    ranks.data[other_inds] = 0.0
+    ranks.data = np.less(ranks.data, k, ranks.data)
 
     precision = np.squeeze(np.array(ranks.sum(axis=1))) / k
 
@@ -123,8 +119,7 @@ def recall_at_k(model, test_interactions, train_interactions=None,
                                item_features=item_features,
                                num_threads=num_threads)
 
-    ranks.data[ranks.data < k] = 1.0
-    ranks.data[ranks.data >= k] = 0.0
+    ranks.data = np.less(ranks.data, k, ranks.data)
 
     retrieved = np.squeeze(test_interactions.getnnz(axis=1))
     hit = np.squeeze(np.array(ranks.sum(axis=1)))
