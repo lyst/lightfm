@@ -62,8 +62,11 @@ def precision_at_k(model, test_interactions, train_interactions=None,
                                item_features=item_features,
                                num_threads=num_threads)
 
-    ranks.data[ranks.data < k] = 1.0
-    ranks.data[ranks.data >= k] = 0.0
+    k_inds = ranks.data < k
+    other_inds = ranks.data >= k
+
+    ranks.data[k_inds] = 1.0
+    ranks.data[other_inds] = 0.0
 
     precision = np.squeeze(np.array(ranks.sum(axis=1))) / k
 
