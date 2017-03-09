@@ -539,7 +539,8 @@ class LightFM(object):
                     self.item_alpha,
                     self.user_alpha,
                     num_threads,
-                    self.random_state)
+                    self.random_state,
+                    ordered)
         elif loss == 'warp-kos':
             fit_warp_kos(CSRMatrix(item_features),
                          CSRMatrix(user_features),
@@ -553,7 +554,8 @@ class LightFM(object):
                          self.k,
                          self.n,
                          num_threads,
-                         self.random_state)
+                         self.random_state,
+                         ordered)
         else:
             fit_logistic(CSRMatrix(item_features),
                          CSRMatrix(user_features),
