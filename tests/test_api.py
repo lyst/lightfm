@@ -57,6 +57,10 @@ def test_matrix_types():
                           user_features=user_features,
                           item_features=item_features)
 
+            model.predict_rank(train,
+                               user_features=user_features,
+                               item_features=item_features)
+
 
 def test_coo_with_duplicate_entries():
     # Calling .tocsr on a COO matrix with duplicate entries
