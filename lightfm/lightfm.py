@@ -236,6 +236,9 @@ class LightFM(object):
         if self.item_embeddings is not None:
             assert self.item_embeddings.shape[0] >= item_features.shape[1]
 
+        user_features = self._to_cython_dtype(user_features)
+        item_features = self._to_cython_dtype(item_features)
+
         return user_features, item_features
 
     def _get_positives_lookup_matrix(self, interactions):
@@ -445,8 +448,6 @@ class LightFM(object):
                                                            user_features,
                                                            item_features)
 
-        user_features = self._to_cython_dtype(user_features)
-        item_features = self._to_cython_dtype(item_features)
         sample_weight = (self._to_cython_dtype(sample_weight)
                          if sample_weight is not None else
                          np.ones(interactions.getnnz(),
@@ -605,9 +606,6 @@ class LightFM(object):
                                                            n_items,
                                                            user_features,
                                                            item_features)
-
-        user_features = self._to_cython_dtype(user_features)
-        item_features = self._to_cython_dtype(item_features)
 
         lightfm_data = self._get_lightfm_data()
 
