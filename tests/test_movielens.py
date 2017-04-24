@@ -393,6 +393,39 @@ def test_movielens_genre_accuracy():
     assert roc_auc_score(test.data, test_predictions) > 0.69
 
 
+def test_get_representations():
+
+    model = LightFM(random_state=SEED)
+    model.fit_partial(train,
+                      epochs=10)
+
+    num_users, num_items = train.shape
+
+    for (item_features, user_features) in ((None, None),
+                                           ((sp.identity(num_items) +
+                                             sp.random(num_items, num_items)),
+                                            (sp.identity(num_users) +
+                                             sp.random(num_users, num_users)))):
+
+        test_predictions = model.predict(test.row,
+                                         test.col,
+                                         user_features=user_features,
+                                         item_features=item_features)
+
+        item_biases, item_latent = model.get_item_representations(item_features)
+        user_biases, user_latent = model.get_user_representations(user_features)
+
+        assert item_latent.dtype == np.float32
+        assert user_latent.dtype == np.float32
+
+        predictions = ((user_latent[test.row] *
+                        item_latent[test.col]).sum(axis=1) +
+                       user_biases[test.row] +
+                       item_biases[test.col])
+
+        assert np.allclose(test_predictions, predictions, atol=0.000001)
+
+
 def test_movielens_both_accuracy():
     """
     Accuracy with both genre metadata and item-specific

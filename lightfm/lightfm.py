@@ -700,8 +700,61 @@ class LightFM(object):
 
         return ranks
 
+    def get_item_representations(self, features=None):
+        """
+        Get the latent representations for items given model and features.
+
+        Arguments
+        ---------
+
+        features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+             Each row contains that item's weights over features.
+             An identity matrix will be used if not supplied.
+
+        Returns
+        -------
+
+        (item_biases, item_embeddings): (np.float32 array of shape n_items
+                                         np.float32 array of shape [n_items, num_components]
+            Biases and latent representations for items.
+        """
+
+        if features is None:
+            return self.item_biases, self.item_embeddings
+
+        features = sp.csr_matrix(features, dtype=CYTHON_DTYPE)
+
+        return features * self.item_biases, features * self.item_embeddings
+
+    def get_user_representations(self, features=None):
+        """
+        Get the latent representations for users given model and features.
+
+        Arguments
+        ---------
+
+        features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+             Each row contains that user's weights over features.
+             An identity matrix will be used if not supplied.
+
+        Returns
+        -------
+
+        (user_biases, user_embeddings): (np.float32 array of shape n_users
+                                         np.float32 array of shape [n_users, num_components]
+            Biases and latent representations for users.
+        """
+
+        if features is None:
+            return self.user_biases, self.user_embeddings
+
+        features = sp.csr_matrix(features, dtype=CYTHON_DTYPE)
+
+        return features * self.user_biases, features * self.user_embeddings
+
     def get_params(self, deep=True):
-        """Get parameters for this estimator.
+        """
+        Get parameters for this estimator.
 
         Arguments
         ---------
@@ -716,6 +769,7 @@ class LightFM(object):
         params : mapping of string to any
             Parameter names mapped to their values.
         """
+
         params = {'loss': self.loss,
                   'learning_schedule': self.learning_schedule,
                   'no_components': self.no_components,
@@ -728,22 +782,28 @@ class LightFM(object):
                   'item_alpha': self.item_alpha,
                   'user_alpha': self.user_alpha,
                   'random_state': self.random_state}
+
         return params
 
     def set_params(self, **params):
-        """Set the parameters of this estimator.
+        """
+        Set the parameters of this estimator.
 
         Returns
         -------
 
         self
         """
+
         valid_params = self.get_params()
+
         for key, value in params.items():
             if key not in valid_params:
                 raise ValueError('Invalid parameter %s for estimator %s. '
                                  'Check the list of available parameters '
                                  'with `estimator.get_params().keys()`.' %
                                  (key, self.__class__.__name__))
+
             setattr(self, key, value)
+
         return self
