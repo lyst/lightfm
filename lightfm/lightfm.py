@@ -707,7 +707,7 @@ class LightFM(object):
         Arguments
         ---------
 
-        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+        features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
              Each row contains that item's weights over features.
              An identity matrix will be used if not supplied.
 
@@ -733,7 +733,7 @@ class LightFM(object):
         Arguments
         ---------
 
-        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+        features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
              Each row contains that user's weights over features.
              An identity matrix will be used if not supplied.
 
