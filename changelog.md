@@ -1,6 +1,8 @@
 # Changelog
 
 ## [unreleased][unreleased]
+### Added
+- added get_{user/item}_representations functions to facilitate extracting the latent representations out of the model.
 ### Fixed
 - recall_at_k and precision_at_k now work correctly at k=1 (thanks to Zank Bennett).
 
