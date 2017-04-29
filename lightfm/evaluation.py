@@ -1,13 +1,13 @@
+# coding=utf-8
 """
-Module containing evaluation functions suitable for judging the performance of a fitted
-LightFM model.
+Module containing evaluation functions suitable for judging the performance of 
+a fitted LightFM model.
 """
 
 import numpy as np
 
 from ._lightfm_fast import (CSRMatrix,
                             calculate_auc_from_rank)
-
 
 __all__ = ['precision_at_k',
            'recall_at_k',
@@ -19,8 +19,8 @@ def precision_at_k(model, test_interactions, train_interactions=None,
                    k=10, user_features=None, item_features=None,
                    preserve_rows=False, num_threads=1):
     """
-    Measure the precision at k metric for a model: the fraction of known positives in the first k
-    positions of the ranked list of results.
+    Measure the precision at k metric for a model: the fraction of known 
+    positives in the first k positions of the ranked list of results.
     A perfect score is 1.0.
 
     Parameters
@@ -32,7 +32,7 @@ def precision_at_k(model, test_interactions, train_interactions=None,
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
          Non-zero entries representing known positives in the train set. These
-         will be omitted from the score calulations to avoid re-recommending
+         will be omitted from the score calculations to avoid re-recommending
          known positives.
     k: integer, optional
          The k parameter.
@@ -41,9 +41,10 @@ def precision_at_k(model, test_interactions, train_interactions=None,
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
          Each row contains that item's weights over features.
     preserve_rows: boolean, optional
-         When False (default), the number of rows in the output will be equal to
-         the number of users with interactions in the evaluation set. When True,
-         the number of rows in the output will be equal to the number of users.
+         When False (default), the number of rows in the output will be equal
+         to the number of users with interactions in the evaluation set.
+         When True, the number of rows in the output will be equal to the
+         number of users.
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
@@ -52,8 +53,8 @@ def precision_at_k(model, test_interactions, train_interactions=None,
     -------
 
     np.array of shape [n_users with interactions or n_users,]
-         Numpy array containing precision@k scores for each user. If there are no interactions
-         for a given user the returned precision will be 0.
+         Numpy array containing precision@k scores for each user. If there are 
+         no interactions for a given user the returned precision will be 0.
     """
 
     ranks = model.predict_rank(test_interactions,
@@ -76,9 +77,9 @@ def recall_at_k(model, test_interactions, train_interactions=None,
                 k=10, user_features=None, item_features=None,
                 preserve_rows=False, num_threads=1):
     """
-    Measure the recall at k metric for a model: the number of positive items in the first k
-    positions of the ranked list of results divided by the number of positive items
-    in the test period. A perfect score is 1.0.
+    Measure the recall at k metric for a model: the number of positive items in
+    the first k positions of the ranked list of results divided by the number 
+    of positive items in the test period. A perfect score is 1.0.
 
     Parameters
     ----------
@@ -89,7 +90,7 @@ def recall_at_k(model, test_interactions, train_interactions=None,
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
          Non-zero entries representing known positives in the train set. These
-         will be omitted from the score calulations to avoid re-recommending
+         will be omitted from the score calculations to avoid re-recommending
          known positives.
     k: integer, optional
          The k parameter.
@@ -98,9 +99,10 @@ def recall_at_k(model, test_interactions, train_interactions=None,
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
          Each row contains that item's weights over features.
     preserve_rows: boolean, optional
-         When False (default), the number of rows in the output will be equal to
-         the number of users with interactions in the evaluation set. When True,
-         the number of rows in the output will be equal to the number of users.
+         When False (default), the number of rows in the output will be equal
+         to the number of users with interactions in the evaluation set.
+         When True, the number of rows in the output will be equal to the
+         number of users.
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
@@ -109,8 +111,9 @@ def recall_at_k(model, test_interactions, train_interactions=None,
     -------
 
     np.array of shape [n_users with interactions or n_users,]
-         Numpy array containing recall@k scores for each user. If there are no interactions
-         for a given user having items in the test period, the returned recall will be 0.
+         Numpy array containing recall@k scores for each user. If there are no 
+         interactions for a given user having items in the test period, the 
+         returned recall will be 0.
     """
 
     ranks = model.predict_rank(test_interactions,
@@ -135,8 +138,9 @@ def auc_score(model, test_interactions, train_interactions=None,
               user_features=None, item_features=None,
               preserve_rows=False, num_threads=1):
     """
-    Measure the ROC AUC metric for a model: the probability that a randomly chosen positive
-    example has a higher score than a randomly chosen negative example.
+    Measure the ROC AUC metric for a model: the probability that a randomly 
+    chosen positive example has a higher score than a randomly chosen negative 
+    example.
     A perfect score is 1.0.
 
     Parameters
@@ -148,16 +152,17 @@ def auc_score(model, test_interactions, train_interactions=None,
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
          Non-zero entries representing known positives in the train set. These
-         will be omitted from the score calulations to avoid re-recommending
+         will be omitted from the score calculations to avoid re-recommending
          known positives.
     user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
          Each row contains that user's weights over features.
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
          Each row contains that item's weights over features.
     preserve_rows: boolean, optional
-         When False (default), the number of rows in the output will be equal to
-         the number of users with interactions in the evaluation set. When True,
-         the number of rows in the output will be equal to the number of users.
+         When False (default), the number of rows in the output will be equal
+         to the number of users with interactions in the evaluation set.
+         When True, the number of rows in the output will be equal to the 
+         number of users.
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
@@ -166,8 +171,8 @@ def auc_score(model, test_interactions, train_interactions=None,
     -------
 
     np.array of shape [n_users with interactions or n_users,]
-         Numpy array containing AUC scores for each user. If there are no interactions for a given
-         user the returned AUC will be 0.5.
+         Numpy array containing AUC scores for each user. If there are no
+         interactions for a given user the returned AUC will be 0.5.
     """
 
     ranks = model.predict_rank(test_interactions,
@@ -175,12 +180,14 @@ def auc_score(model, test_interactions, train_interactions=None,
                                user_features=user_features,
                                item_features=item_features,
                                num_threads=num_threads)
+
     assert np.all(ranks.data >= 0)
 
     auc = np.zeros(ranks.shape[0], dtype=np.float32)
 
     if train_interactions is not None:
-        num_train_positives = (np.squeeze(np.array(train_interactions.getnnz(axis=1))
+        num_train_positives = (np.squeeze(np.array(train_interactions
+                                                   .getnnz(axis=1))
                                           .astype(np.int32)))
     else:
         num_train_positives = np.zeros(test_interactions.shape[0],
@@ -217,16 +224,17 @@ def reciprocal_rank(model, test_interactions, train_interactions=None,
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
          Non-zero entries representing known positives in the train set. These
-         will be omitted from the score calulations to avoid re-recommending
+         will be omitted from the score calculations to avoid re-recommending
          known positives.
     user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
          Each row contains that user's weights over features.
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
          Each row contains that item's weights over features.
     preserve_rows: boolean, optional
-         When False (default), the number of rows in the output will be equal to
-         the number of users with interactions in the evaluation set. When True,
-         the number of rows in the output will be equal to the number of users.
+         When False (default), the number of rows in the output will be equal
+         to the number of users with interactions in the evaluation set.
+         When True, the number of rows in the output will be equal to the 
+         number of users.
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
@@ -236,7 +244,8 @@ def reciprocal_rank(model, test_interactions, train_interactions=None,
 
     np.array of shape [n_users with interactions or n_users,]
          Numpy array containing reciprocal rank scores for each user.
-         If there are no interactions for a given user the returned value will be 0.0.
+         If there are no interactions for a given user the returned value will 
+         be 0.0.
     """
 
     ranks = model.predict_rank(test_interactions,
