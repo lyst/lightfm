@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Module containing evaluation functions suitable for judging the performance of 
+Module containing evaluation functions suitable for judging the performance of
 a fitted LightFM model.
 """
 
@@ -19,7 +19,7 @@ def precision_at_k(model, test_interactions, train_interactions=None,
                    k=10, user_features=None, item_features=None,
                    preserve_rows=False, num_threads=1):
     """
-    Measure the precision at k metric for a model: the fraction of known 
+    Measure the precision at k metric for a model: the fraction of known
     positives in the first k positions of the ranked list of results.
     A perfect score is 1.0.
 
@@ -53,7 +53,7 @@ def precision_at_k(model, test_interactions, train_interactions=None,
     -------
 
     np.array of shape [n_users with interactions or n_users,]
-         Numpy array containing precision@k scores for each user. If there are 
+         Numpy array containing precision@k scores for each user. If there are
          no interactions for a given user the returned precision will be 0.
     """
 
@@ -78,7 +78,7 @@ def recall_at_k(model, test_interactions, train_interactions=None,
                 preserve_rows=False, num_threads=1):
     """
     Measure the recall at k metric for a model: the number of positive items in
-    the first k positions of the ranked list of results divided by the number 
+    the first k positions of the ranked list of results divided by the number
     of positive items in the test period. A perfect score is 1.0.
 
     Parameters
@@ -111,8 +111,8 @@ def recall_at_k(model, test_interactions, train_interactions=None,
     -------
 
     np.array of shape [n_users with interactions or n_users,]
-         Numpy array containing recall@k scores for each user. If there are no 
-         interactions for a given user having items in the test period, the 
+         Numpy array containing recall@k scores for each user. If there are no
+         interactions for a given user having items in the test period, the
          returned recall will be 0.
     """
 
@@ -138,8 +138,8 @@ def auc_score(model, test_interactions, train_interactions=None,
               user_features=None, item_features=None,
               preserve_rows=False, num_threads=1):
     """
-    Measure the ROC AUC metric for a model: the probability that a randomly 
-    chosen positive example has a higher score than a randomly chosen negative 
+    Measure the ROC AUC metric for a model: the probability that a randomly
+    chosen positive example has a higher score than a randomly chosen negative
     example.
     A perfect score is 1.0.
 
@@ -161,7 +161,7 @@ def auc_score(model, test_interactions, train_interactions=None,
     preserve_rows: boolean, optional
          When False (default), the number of rows in the output will be equal
          to the number of users with interactions in the evaluation set.
-         When True, the number of rows in the output will be equal to the 
+         When True, the number of rows in the output will be equal to the
          number of users.
     num_threads: int, optional
          Number of parallel computation threads to use. Should
@@ -233,7 +233,7 @@ def reciprocal_rank(model, test_interactions, train_interactions=None,
     preserve_rows: boolean, optional
          When False (default), the number of rows in the output will be equal
          to the number of users with interactions in the evaluation set.
-         When True, the number of rows in the output will be equal to the 
+         When True, the number of rows in the output will be equal to the
          number of users.
     num_threads: int, optional
          Number of parallel computation threads to use. Should
@@ -244,7 +244,7 @@ def reciprocal_rank(model, test_interactions, train_interactions=None,
 
     np.array of shape [n_users with interactions or n_users,]
          Numpy array containing reciprocal rank scores for each user.
-         If there are no interactions for a given user the returned value will 
+         If there are no interactions for a given user the returned value will
          be 0.0.
     """
 

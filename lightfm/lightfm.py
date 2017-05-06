@@ -64,7 +64,7 @@ class LightFM(object):
     user_embeddings: np.float32 array of shape [n_user_features, n_components]
          Contains the estimated latent vectors for user features. The [i, j]-th
          entry gives the value of the j-th component for the i-th user feature.
-         In the simplest case where the user feature matrix is an identity 
+         In the simplest case where the user feature matrix is an identity
          matrix, the i-th row will represent the i-th user latent vector.
     item_biases: np.float32 array of shape [n_item_features,]
          Contains the biases for item_features.
@@ -99,7 +99,7 @@ class LightFM(object):
     References
     ----------
 
-    .. [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from 
+    .. [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from
            implicit feedback."
            Proceedings of the Twenty-Fifth Conference on Uncertainty in
            Artificial Intelligence. AUAI Press, 2009.
@@ -107,7 +107,7 @@ class LightFM(object):
            to large vocabulary image annotation." IJCAI. Vol. 11. 2011.
     .. [3] Weston, Jason, Hector Yee, and Ron J. Weiss. "Learning to rank
            recommendations with the k-order statistic loss."
-           Proceedings of the 7th ACM conference on Recommender systems. ACM, 
+           Proceedings of the 7th ACM conference on Recommender systems. ACM,
            2013.
     .. [4] Duchi, John, Elad Hazan, and Yoram Singer. "Adaptive subgradient
            methods for online learning and stochastic optimization."
@@ -279,8 +279,8 @@ class LightFM(object):
 
             if not (np.array_equal(interactions.row,
                                    sample_weight.row) and
-                        np.array_equal(interactions.col,
-                                       sample_weight.col)):
+                    np.array_equal(interactions.col,
+                                   sample_weight.col)):
                 raise ValueError('Sample weight and interaction matrix '
                                  'entries must be in the same order')
 
@@ -575,7 +575,7 @@ class LightFM(object):
         ---------
 
         user_ids: integer or np.int32 array of shape [n_pairs,]
-             single user id or an array containing the user ids for the 
+             single user id or an array containing the user ids for the
              user-item pairs for which a prediction is to be computed
         item_ids: np.int32 array of shape [n_pairs,]
              an array containing the item ids for the user-item pairs for which
@@ -632,10 +632,10 @@ class LightFM(object):
     def predict_rank(self, test_interactions, train_interactions=None,
                      item_features=None, user_features=None, num_threads=1):
         """
-        Predict the rank of selected interactions. Computes recommendation 
+        Predict the rank of selected interactions. Computes recommendation
         rankings across all items for every user in interactions and calculates
         the rank of all non-zero entries in the recommendation ranking, with 0
-        meaning the top of the list (most recommended) and n_items - 1 being 
+        meaning the top of the list (most recommended) and n_items - 1 being
         the end of the list (least recommended).
 
         Performs best when only a handful of interactions need to be evaluated
@@ -725,7 +725,7 @@ class LightFM(object):
         Returns
         -------
 
-        (item_biases, item_embeddings): 
+        (item_biases, item_embeddings):
                 (np.float32 array of shape n_items,
                  np.float32 array of shape [n_items, num_components]
             Biases and latent representations for items.
@@ -783,18 +783,18 @@ class LightFM(object):
             Parameter names mapped to their values.
         """
 
-        params = {'loss':              self.loss,
+        params = {'loss': self.loss,
                   'learning_schedule': self.learning_schedule,
-                  'no_components':     self.no_components,
-                  'learning_rate':     self.learning_rate,
-                  'k':                 self.k,
-                  'n':                 self.n,
-                  'rho':               self.rho,
-                  'epsilon':           self.epsilon,
-                  'max_sampled':       self.max_sampled,
-                  'item_alpha':        self.item_alpha,
-                  'user_alpha':        self.user_alpha,
-                  'random_state':      self.random_state}
+                  'no_components': self.no_components,
+                  'learning_rate': self.learning_rate,
+                  'k': self.k,
+                  'n': self.n,
+                  'rho': self.rho,
+                  'epsilon': self.epsilon,
+                  'max_sampled': self.max_sampled,
+                  'item_alpha': self.item_alpha,
+                  'user_alpha': self.user_alpha,
+                  'random_state': self.random_state}
 
         return params
 

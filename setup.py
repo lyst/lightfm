@@ -142,8 +142,7 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
-use_openmp = (not (sys.platform.startswith('darwin')
-                   or sys.platform.startswith('win')))
+use_openmp = not sys.platform.startswith('darwin') and not sys.platform.startswith('win')
 
 setup(
     name='lightfm',
