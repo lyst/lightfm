@@ -1,3 +1,4 @@
+# coding=utf-8
 import os
 import subprocess
 import sys
@@ -12,7 +13,6 @@ from lightfm import __version__ as version  # NOQA
 
 
 def define_extensions(use_openmp):
-
     compile_args = ['-ffast-math']
 
     # There are problems with illegal ASM instructions
@@ -49,7 +49,6 @@ class Cythonize(Command):
         pass
 
     def generate_pyx(self):
-
         openmp_import = textwrap.dedent("""
              from cython.parallel import parallel, prange
              cimport openmp
@@ -84,11 +83,11 @@ class Cythonize(Command):
 
         for variant, template_params in params:
             with open(os.path.join(file_dir,
-                                   '_lightfm_fast_{}.pyx'.format(variant)), 'w') as fl:
+                                   '_lightfm_fast_{}.pyx'.format(variant)),
+                      'w') as fl:
                 fl.write(template.format(**template_params))
 
     def run(self):
-
         from Cython.Build import cythonize
 
         self.generate_pyx()
@@ -114,13 +113,14 @@ class Clean(Command):
         pass
 
     def run(self):
-
         pth = os.path.dirname(os.path.abspath(__file__))
 
         subprocess.call(['rm', '-rf', os.path.join(pth, 'build')])
         subprocess.call(['rm', '-rf', os.path.join(pth, 'lightfm.egg-info')])
-        subprocess.call(['find', pth, '-name', 'lightfm*.pyc', '-type', 'f', '-delete'])
-        subprocess.call(['rm', os.path.join(pth, 'lightfm', '_lightfm_fast.so')])
+        subprocess.call(
+            ['find', pth, '-name', 'lightfm*.pyc', '-type', 'f', '-delete'])
+        subprocess.call(
+            ['rm', os.path.join(pth, 'lightfm', '_lightfm_fast.so')])
 
 
 class PyTest(TestCommand):
@@ -142,8 +142,7 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
-use_openmp = not (sys.platform.startswith('darwin') or sys.platform.startswith('win'))
-
+use_openmp = not sys.platform.startswith('darwin') and not sys.platform.startswith('win')
 
 setup(
     name='lightfm',

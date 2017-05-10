@@ -1,3 +1,4 @@
+# coding=utf-8
 from __future__ import print_function
 
 import numpy as np
@@ -8,9 +9,7 @@ from ._lightfm_fast import (CSRMatrix, FastLightFM,
                             fit_bpr, fit_logistic, fit_warp,
                             fit_warp_kos, predict_lightfm, predict_ranks)
 
-
 __all__ = ['LightFM']
-
 
 CYTHON_DTYPE = np.float32
 
@@ -25,18 +24,18 @@ class LightFM(object):
     no_components: int, optional
         the dimensionality of the feature latent embeddings.
     k: int, optional
-         for k-OS training, the k-th positive example will be selected from the n positive
-         examples sampled for every user.
+        for k-OS training, the k-th positive example will be selected from the
+        n positive examples sampled for every user.
     n: int, optional
-         for k-OS training, maximum number of positives sampled for each update.
+        for k-OS training, maximum number of positives sampled for each update.
     learning_schedule: string, optional
-         one of ('adagrad', 'adadelta').
+        one of ('adagrad', 'adadelta').
     loss: string, optional
-         one of  ('logistic', 'bpr', 'warp', 'warp-kos'): the loss function to use.
+        one of  ('logistic', 'bpr', 'warp', 'warp-kos'): the loss function.
     learning_rate: float, optional
-         initial learning rate for the adagrad learning schedule.
+        initial learning rate for the adagrad learning schedule.
     rho: float, optional
-         moving average coefficient for the adadelta learning schedule.
+        moving average coefficient for the adadelta learning schedule.
     epsilon: float, optional
         conditioning parameter for the adadelta learning schedule.
     item_alpha: float, optional
@@ -44,28 +43,29 @@ class LightFM(object):
     user_alpha: float, optional
         L2 penalty on user features.
     max_sampled: int, optional
-        maximum number of negative samples used during WARP fitting. It requires
-        a lot of sampling to find negative triplets for users that are already
-        well represented by the model; this can lead to very long training times
-        and overfitting. Setting this to a higher number will generally lead
-        to longer training times, but may in some cases improve accuracy.
+        maximum number of negative samples used during WARP fitting.
+        It requires a lot of sampling to find negative triplets for users that
+        are already well represented by the model; this can lead to very long
+        training times and overfitting. Setting this to a higher number will
+        generally lead to longer training times, but may in some cases improve
+        accuracy.
     random_state: int seed, RandomState instance, or None
-        The seed of the pseudo random number generator to use when shuffling the data and
-        initializing the parameters.
+        The seed of the pseudo random number generator to use when shuffling
+        the data and initializing the parameters.
 
     Attributes
     ----------
 
     item_embeddings: np.float32 array of shape [n_item_features, n_components]
-         Contains the estimated latent vectors for item features. The [i, j]-th entry
-         gives the value of the j-th component for the i-th item feature. In the simplest
-         case where the item feature matrix is an identity matrix, the i-th row
-         will represent the i-th item latent vector.
+         Contains the estimated latent vectors for item features. The [i, j]-th
+         entry gives the value of the j-th component for the i-th item feature.
+         In the simplest case where the item feature matrix is an identity
+         matrix, the i-th row will represent the i-th item latent vector.
     user_embeddings: np.float32 array of shape [n_user_features, n_components]
-         Contains the estimated latent vectors for user features. The [i, j]-th entry
-         gives the value of the j-th component for the i-th user feature. In the simplest
-         case where the user feature matrix is an identity matrix, the i-th row
-         will represent the i-th user latent vector.
+         Contains the estimated latent vectors for user features. The [i, j]-th
+         entry gives the value of the j-th component for the i-th user feature.
+         In the simplest case where the user feature matrix is an identity
+         matrix, the i-th row will represent the i-th user latent vector.
     item_biases: np.float32 array of shape [n_item_features,]
          Contains the biases for item_features.
     user_biases: np.float32 array of shape [n_user_features,]
@@ -87,8 +87,9 @@ class LightFM(object):
       examples until rank violating one is found. Useful when only
       positive interactions are present and optimising the top of
       the recommendation list (precision@k) is desired.
-    - k-OS WARP: k-th order statistic loss [3]_. A modification of WARP that uses the k-th
-      positive example for any given user as a basis for pairwise updates.
+    - k-OS WARP: k-th order statistic loss [3]_. A modification of WARP that
+      uses the k-th positive example for any given user as a basis for pairwise
+      updates.
 
     Two learning rate schedules are available:
 
@@ -98,16 +99,18 @@ class LightFM(object):
     References
     ----------
 
-    .. [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from implicit feedback."
-           Proceedings of the Twenty-Fifth Conference on Uncertainty in Artificial
-           Intelligence. AUAI Press, 2009.
-    .. [2] Weston, Jason, Samy Bengio, and Nicolas Usunier. "Wsabie: Scaling up to large
-           vocabulary image annotation." IJCAI. Vol. 11. 2011.
-    .. [3] Weston, Jason, Hector Yee, and Ron J. Weiss. "Learning to rank recommendations with
-           the k-order statistic loss."
-           Proceedings of the 7th ACM conference on Recommender systems. ACM, 2013.
-    .. [4] Duchi, John, Elad Hazan, and Yoram Singer. "Adaptive subgradient methods
-           for online learning and stochastic optimization."
+    .. [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from
+           implicit feedback."
+           Proceedings of the Twenty-Fifth Conference on Uncertainty in
+           Artificial Intelligence. AUAI Press, 2009.
+    .. [2] Weston, Jason, Samy Bengio, and Nicolas Usunier. "Wsabie: Scaling up
+           to large vocabulary image annotation." IJCAI. Vol. 11. 2011.
+    .. [3] Weston, Jason, Hector Yee, and Ron J. Weiss. "Learning to rank
+           recommendations with the k-order statistic loss."
+           Proceedings of the 7th ACM conference on Recommender systems. ACM,
+           2013.
+    .. [4] Duchi, John, Elad Hazan, and Yoram Singer. "Adaptive subgradient
+           methods for online learning and stochastic optimization."
            The Journal of Machine Learning Research 12 (2011): 2121-2159.
     .. [5] Zeiler, Matthew D. "ADADELTA: An adaptive learning rate method."
            arXiv preprint arXiv:1212.5701 (2012).
@@ -180,8 +183,9 @@ class LightFM(object):
         """
 
         # Initialise item features.
-        self.item_embeddings = ((self.random_state.rand(no_item_features, no_components) - 0.5) /
-                                no_components).astype(np.float32)
+        self.item_embeddings = (
+            (self.random_state.rand(no_item_features, no_components) - 0.5) /
+            no_components).astype(np.float32)
         self.item_embedding_gradients = np.zeros_like(self.item_embeddings)
         self.item_embedding_momentum = np.zeros_like(self.item_embeddings)
         self.item_biases = np.zeros(no_item_features, dtype=np.float32)
@@ -189,8 +193,9 @@ class LightFM(object):
         self.item_bias_momentum = np.zeros_like(self.item_biases)
 
         # Initialise user features.
-        self.user_embeddings = ((self.random_state.rand(no_user_features, no_components) - 0.5) /
-                                no_components).astype(np.float32)
+        self.user_embeddings = (
+            (self.random_state.rand(no_user_features, no_components) - 0.5) /
+            no_components).astype(np.float32)
         self.user_embedding_gradients = np.zeros_like(self.user_embeddings)
         self.user_embedding_momentum = np.zeros_like(self.user_embeddings)
         self.user_biases = np.zeros(no_user_features, dtype=np.float32)
@@ -329,8 +334,8 @@ class LightFM(object):
             # large boolean temporary.
             if not np.isfinite(np.sum(parameter)):
                 raise ValueError("Not all estimated parameters are finite, "
-                                 "your model may have diverged. Try decreasing "
-                                 "the learning rate.")
+                                 "your model may have diverged. Try decreasing"
+                                 " the learning rate.")
 
     def fit(self, interactions,
             user_features=None, item_features=None,
@@ -355,7 +360,7 @@ class LightFM(object):
              interactions from the interactions matrix.
              Its row and col arrays must be the same as
              those of the interactions matrix. For memory
-             efficiency its ssible to use the same arrays
+             efficiency its possible to use the same arrays
              for both weights and interaction matrices.
              Defaults to weight 1.0 for all interactions.
              Not implemented for the k-OS loss.
@@ -394,7 +399,7 @@ class LightFM(object):
         Fit the model.
 
         Fit the model. Unlike fit, repeated calls to this method will
-        cause trainig to resume from the current model state.
+        cause training to resume from the current model state.
 
         Arguments
         ---------
@@ -412,7 +417,7 @@ class LightFM(object):
              interactions from the interactions matrix.
              Its row and col arrays must be the same as
              those of the interactions matrix. For memory
-             efficiency its ssible to use the same arrays
+             efficiency its possible to use the same arrays
              for both weights and interaction matrices.
              Defaults to weight 1.0 for all interactions.
              Not implemented for the k-OS loss.
@@ -493,7 +498,8 @@ class LightFM(object):
         if loss in ('warp', 'bpr', 'warp-kos'):
             # The CSR conversion needs to happen before shuffle indices are created.
             # Calling .tocsr may result in a change in the data arrays of the COO matrix,
-            positives_lookup = CSRMatrix(self._get_positives_lookup_matrix(interactions))
+            positives_lookup = CSRMatrix(
+                self._get_positives_lookup_matrix(interactions))
 
         # Create shuffle indexes.
         shuffle_indices = np.arange(len(interactions.data), dtype=np.int32)
@@ -560,7 +566,8 @@ class LightFM(object):
                          self.user_alpha,
                          num_threads)
 
-    def predict(self, user_ids, item_ids, item_features=None, user_features=None, num_threads=1):
+    def predict(self, user_ids, item_ids, item_features=None,
+                user_features=None, num_threads=1):
         """
         Compute the recommendation score for user-item pairs.
 
@@ -568,8 +575,8 @@ class LightFM(object):
         ---------
 
         user_ids: integer or np.int32 array of shape [n_pairs,]
-             single user id or an array containing the user ids for the user-item pairs for which
-             a prediction is to be computed
+             single user id or an array containing the user ids for the
+             user-item pairs for which a prediction is to be computed
         item_ids: np.int32 array of shape [n_pairs,]
              an array containing the item ids for the user-item pairs for which
              a prediction is to be computed.
@@ -585,7 +592,8 @@ class LightFM(object):
         -------
 
         np.float32 array of shape [n_pairs,]
-            Numpy array containig the recommendation scores for pairs defined by the inputs.
+            Numpy array containing the recommendation scores for pairs defined
+            by the inputs.
         """
 
         if not isinstance(user_ids, np.ndarray):
@@ -624,39 +632,42 @@ class LightFM(object):
     def predict_rank(self, test_interactions, train_interactions=None,
                      item_features=None, user_features=None, num_threads=1):
         """
-        Predict the rank of selected interactions. Computes recommendation rankings across all items
-        for every user in interactions and calculates the rank of all non-zero entries
-        in the recommendation ranking, with 0 meaning the top of the list (most recommended)
-        and n_items - 1 being the end of the list (least recommended).
+        Predict the rank of selected interactions. Computes recommendation
+        rankings across all items for every user in interactions and calculates
+        the rank of all non-zero entries in the recommendation ranking, with 0
+        meaning the top of the list (most recommended) and n_items - 1 being
+        the end of the list (least recommended).
 
-        Performs best when only a handful of interactions need to be evaluated per user. If you
-        need to compute predictions for many items for every user, use the predict method instead.
+        Performs best when only a handful of interactions need to be evaluated
+        per user. If you need to compute predictions for many items for every
+        user, use the predict method instead.
 
         Arguments
         ---------
 
         test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
-             Non-zero entries denote the user-item pairs whose rank will be computed.
+             Non-zero entries denote the user-item pairs
+             whose rank will be computed.
         train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
-             Non-zero entries denote the user-item pairs which will be excluded from
-             rank computation. Use to exclude training set interactions from being scored
-             and ranked for evaluation.
+             Non-zero entries denote the user-item pairs which will be excluded
+             from rank computation. Use to exclude training set interactions
+             from being scored and ranked for evaluation.
         user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
              Each row contains that user's weights over features.
         item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
              Each row contains that item's weights over features.
         num_threads: int, optional
-             Number of parallel computation threads to use. Should
-             not be higher than the number of physical cores.
+             Number of parallel computation threads to use.
+             Should not be higher than the number of physical cores.
 
         Returns
         -------
 
         np.float32 csr_matrix of shape [n_users, n_items]
-            the [i, j]-th entry of the matrix will contain the rank of the j-th item
-            in the sorted recommendations list for the i-th user. The degree
-            of sparsity of this matrix will be equal to that of the input interactions
-            matrix.
+            the [i, j]-th entry of the matrix will contain the rank of the j-th
+            item in the sorted recommendations list for the i-th user.
+            The degree of sparsity of this matrix will be equal to that of the
+            input interactions matrix.
         """
 
         n_users, n_items = test_interactions.shape
@@ -714,8 +725,9 @@ class LightFM(object):
         Returns
         -------
 
-        (item_biases, item_embeddings): (np.float32 array of shape n_items
-                                         np.float32 array of shape [n_items, num_components]
+        (item_biases, item_embeddings):
+                (np.float32 array of shape n_items,
+                 np.float32 array of shape [n_items, num_components]
             Biases and latent representations for items.
         """
 
@@ -740,8 +752,9 @@ class LightFM(object):
         Returns
         -------
 
-        (user_biases, user_embeddings): (np.float32 array of shape n_users
-                                         np.float32 array of shape [n_users, num_components]
+        (user_biases, user_embeddings):
+                (np.float32 array of shape n_users
+                 np.float32 array of shape [n_users, num_components]
             Biases and latent representations for users.
         """
 
