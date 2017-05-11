@@ -332,3 +332,21 @@ def test_sklearn_api():
     params['invalid_param'] = 666
     with pytest.raises(ValueError):
         model.set_params(**params)
+
+
+def test_predict_not_fitte():
+
+    model = LightFM()
+
+    with pytest.raises(ValueError):
+        model.predict(np.arange(10),
+                      np.arange(10))
+
+    with pytest.raises(ValueError):
+        model.predict_rank(1)
+
+    with pytest.raises(ValueError):
+        model.get_user_representations()
+
+    with pytest.raises(ValueError):
+        model.get_item_representations()

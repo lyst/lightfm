@@ -6,6 +6,7 @@
 ### Fixed
 - recall_at_k and precision_at_k now work correctly at k=1 (thanks to Zank Bennett).
 - Moved Movielens data to data release to prevent grouplens server flakiness from affecting users.
+- Fix segfault when trying to predict from a model that has not been fitted.
 
 ## [1.12][2017-01-26]
 ### Changed
