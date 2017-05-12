@@ -177,6 +177,25 @@ class LightFM(object):
         self.user_bias_gradients = None
         self.user_bias_momentum = None
 
+    def _check_initialized(self):
+
+        for var in (self.item_embeddings,
+                    self.item_embedding_gradients,
+                    self.item_embedding_momentum,
+                    self.item_biases,
+                    self.item_bias_gradients,
+                    self.item_bias_momentum,
+                    self.user_embeddings,
+                    self.user_embedding_gradients,
+                    self.user_embedding_momentum,
+                    self.user_biases,
+                    self.user_bias_gradients,
+                    self.user_bias_momentum):
+
+            if var is None:
+                raise ValueError('You must fit the model before '
+                                 'trying to obtain predictions.')
+
     def _initialize(self, no_components, no_item_features, no_user_features):
         """
         Initialise internal latent representations.
@@ -596,6 +615,8 @@ class LightFM(object):
             by the inputs.
         """
 
+        self._check_initialized()
+
         if not isinstance(user_ids, np.ndarray):
             user_ids = np.repeat(np.int32(user_ids), len(item_ids))
 
@@ -670,6 +691,8 @@ class LightFM(object):
             input interactions matrix.
         """
 
+        self._check_initialized()
+
         n_users, n_items = test_interactions.shape
 
         (user_features,
@@ -731,6 +754,8 @@ class LightFM(object):
             Biases and latent representations for items.
         """
 
+        self._check_initialized()
+
         if features is None:
             return self.item_biases, self.item_embeddings
 
@@ -757,6 +782,8 @@ class LightFM(object):
                  np.float32 array of shape [n_users, num_components]
             Biases and latent representations for users.
         """
+
+        self._check_initialized()
 
         if features is None:
             return self.user_biases, self.user_embeddings
