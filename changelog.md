@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased][unreleased]
+## [1.13][2017-05-20]
 ### Added
 - added get_{user/item}_representations functions to facilitate extracting the latent representations out of the model.
 ### Fixed
