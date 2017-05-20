@@ -8,9 +8,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Item cold-start: recommending StackExchange questions &mdash; LightFM 1.11 documentation</title>
+  <title>Item cold-start: recommending StackExchange questions &mdash; LightFM 1.13 documentation</title>
   
 
+  
+  
   
   
 
@@ -30,33 +32,47 @@
   
 
   
-    <link rel="top" title="LightFM 1.11 documentation" href="../index.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="LightFM 1.13 documentation" href="../index.html"/>
         <link rel="up" title="Examples" href="../examples.html"/>
         <link rel="next" title="Learning-to-rank using the WARP loss" href="warp_loss.html"/>
         <link rel="prev" title="Using different learning schedules" href="learning_schedules.html"/> 
 
   
-  <script src="_static/js/modernizr.min.js"></script>
+  <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-nav-search">
-        
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
 
-        
-          <a href="../index.html" class="icon icon-home"> LightFM
-        
+          
+            <a href="../index.html" class="icon icon-home"> LightFM
+          
 
-        
-        </a>
+          
+          </a>
 
-        
+          
+            
+            
+              <div class="version">
+                1.13
+              </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -65,96 +81,98 @@
   </form>
 </div>
 
-        
-      </div>
+          
+        </div>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-          
+            
+            
+              
+            
+            
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../home.html">Home</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../home.html#quickstart">Quickstart</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../home.html#installation">Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../home.html#pypi">PyPI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../home.html#using-with-docker">Using with Docker</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../home.html#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../home.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../home.html#articles-and-tutorials-on-using-lightfm">Articles and tutorials on using LightFM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../home.html#how-to-cite">How to cite</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../home.html#development">Development</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
-<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#getting-the-data">Getting the data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="movielens_implicit.html#fitting-models">Fitting models</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="learning_schedules.html">Learning rate schedules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="learning_schedules.html#preliminaries">Preliminaries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="learning_schedules.html#experiment">Experiment</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning_schedules.html">Learning rate schedules</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Cold-start hybrid recommender</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#a-pure-collaborative-filtering-model">A pure collaborative filtering model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#a-hybrid-model">A hybrid model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bonus-tag-embeddings">Bonus: tag embeddings</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="warp_loss.html">Learning-to-rank using WARP loss</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="warp_loss.html#preliminaries">Preliminaries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="warp_loss.html#accuracy">Accuracy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="warp_loss.html#fitting-speed">Fitting speed</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="warp_loss.html">Learning-to-rank using WARP loss</a></li>
 </ul>
 </li>
 </ul>
 
+            
           
-        
+        </div>
       </div>
-      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">LightFM</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">LightFM</a>
+        
       </nav>
 
 
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../examples.html">Examples</a> &raquo;</li>
-      
-    <li>Item cold-start: recommending StackExchange questions</li>
+        
+      <li>Item cold-start: recommending StackExchange questions</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-            <a href="../_sources/examples/hybrid_crossvalidated.txt" rel="nofollow"> View page source</a>
+            
+            <a href="../_sources/examples/hybrid_crossvalidated.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
-          <div role="main" class="document">
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="item-cold-start-recommending-stackexchange-questions">
 <h1>Item cold-start: recommending StackExchange questions<a class="headerlink" href="#item-cold-start-recommending-stackexchange-questions" title="Permalink to this headline">¶</a></h1>
@@ -208,7 +226,7 @@ if that&#8217;s the case:</p>
 <span class="n">NUM_THREADS</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">NUM_COMPONENTS</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">ITEM_ALPHA</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span>
+<span class="n">ITEM_ALPHA</span> <span class="o">=</span> <span class="mf">1e-6</span>
 
 <span class="c1"># Let&#39;s fit a WARP model: these generally have the best performance.</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">,</span>
@@ -279,7 +297,7 @@ tags users apply to their questions:</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There are </span><span class="si">%s</span><span class="s1"> distinct tags, with values like </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">item_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tag_labels</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">There</span> <span class="n">are</span> <span class="mi">1246</span> <span class="n">distinct</span> <span class="n">tags</span><span class="p">,</span> <span class="k">with</span> <span class="n">values</span> <span class="n">like</span> <span class="p">[</span><span class="s1">u&#39;bayesian&#39;</span><span class="p">,</span> <span class="s1">u&#39;prior&#39;</span><span class="p">,</span> <span class="s1">u&#39;elicitation&#39;</span><span class="p">]</span><span class="o">.</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">There</span> <span class="n">are</span> <span class="mi">1246</span> <span class="n">distinct</span> <span class="n">tags</span><span class="p">,</span> <span class="k">with</span> <span class="n">values</span> <span class="n">like</span> <span class="p">[</span><span class="sa">u</span><span class="s1">&#39;bayesian&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;prior&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;elicitation&#39;</span><span class="p">]</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>We can use these features (instead of an identity feature matrix like in
@@ -352,30 +370,34 @@ similarity:</p>
     <span class="k">return</span> <span class="n">most_similar</span>
 
 
-<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">u&#39;bayesian&#39;</span><span class="p">,</span> <span class="s1">u&#39;regression&#39;</span><span class="p">,</span> <span class="s1">u&#39;survival&#39;</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="sa">u</span><span class="s1">&#39;bayesian&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;survival&#39;</span><span class="p">):</span>
     <span class="n">tag_id</span> <span class="o">=</span> <span class="n">tag_labels</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Most similar tags for </span><span class="si">%s</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tag_labels</span><span class="p">[</span><span class="n">tag_id</span><span class="p">],</span>
                                             <span class="n">tag_labels</span><span class="p">[</span><span class="n">get_similar_tags</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">)]))</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">bayesian</span><span class="p">:</span> <span class="p">[</span><span class="s1">u&#39;posterior&#39;</span> <span class="s1">u&#39;mcmc&#39;</span> <span class="s1">u&#39;bayes&#39;</span><span class="p">]</span>
-<span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">regression</span><span class="p">:</span> <span class="p">[</span><span class="s1">u&#39;multicollinearity&#39;</span> <span class="s1">u&#39;stepwise-regression&#39;</span> <span class="s1">u&#39;multiple-regression&#39;</span><span class="p">]</span>
-<span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">survival</span><span class="p">:</span> <span class="p">[</span><span class="s1">u&#39;cox-model&#39;</span> <span class="s1">u&#39;kaplan-meier&#39;</span> <span class="s1">u&#39;odds-ratio&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">bayesian</span><span class="p">:</span> <span class="p">[</span><span class="sa">u</span><span class="s1">&#39;posterior&#39;</span> <span class="sa">u</span><span class="s1">&#39;mcmc&#39;</span> <span class="sa">u</span><span class="s1">&#39;bayes&#39;</span><span class="p">]</span>
+<span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">regression</span><span class="p">:</span> <span class="p">[</span><span class="sa">u</span><span class="s1">&#39;multicollinearity&#39;</span> <span class="sa">u</span><span class="s1">&#39;stepwise-regression&#39;</span> <span class="sa">u</span><span class="s1">&#39;multiple-regression&#39;</span><span class="p">]</span>
+<span class="n">Most</span> <span class="n">similar</span> <span class="n">tags</span> <span class="k">for</span> <span class="n">survival</span><span class="p">:</span> <span class="p">[</span><span class="sa">u</span><span class="s1">&#39;cox-model&#39;</span> <span class="sa">u</span><span class="s1">&#39;kaplan-meier&#39;</span> <span class="sa">u</span><span class="s1">&#39;odds-ratio&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 
 
+           </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="warp_loss.html" class="btn btn-neutral float-right" title="Learning-to-rank using the WARP loss" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="warp_loss.html" class="btn btn-neutral float-right" title="Learning-to-rank using the WARP loss" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="learning_schedules.html" class="btn btn-neutral" title="Using different learning schedules" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="learning_schedules.html" class="btn btn-neutral" title="Using different learning schedules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -385,9 +407,10 @@ similarity:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, Lyst (Maciej Kula).
+
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -405,10 +428,11 @@ similarity:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.11',
+            VERSION:'1.13',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
