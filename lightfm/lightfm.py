@@ -352,9 +352,16 @@ class LightFM(object):
             # will also be non-finite, and we avoid creating a
             # large boolean temporary.
             if not np.isfinite(np.sum(parameter)):
-                raise ValueError("Not all estimated parameters are finite, "
-                                 "your model may have diverged. Try decreasing"
-                                 " the learning rate.")
+                raise ValueError("Not all estimated parameters are finite,"
+                                 " your model may have diverged. Try decreasing"
+                                 " the learning rate or normalising feature values"
+                                 " and sample weights")
+
+    def _check_input_finite(self, data):
+
+        if not np.isfinite(np.sum(data)):
+            raise ValueError('Not all input values are finite. '
+                             'Check the input for NaNs and infinite values.')
 
     def fit(self, interactions,
             user_features=None, item_features=None,
@@ -477,6 +484,10 @@ class LightFM(object):
                          np.ones(interactions.getnnz(),
                                  dtype=CYTHON_DTYPE))
 
+        for input_data in (user_features.data,
+                           item_features.data,
+                           sample_weight):
+            self._check_input_finite(input_data)
         if self.item_embeddings is None:
             # Initialise latent factors only if this is the first call
             # to fit_partial.
