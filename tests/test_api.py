@@ -310,9 +310,6 @@ def test_exception_on_divergence():
 
     no_users, no_items = (1000, 1000)
 
-    train = sp.coo_matrix((no_users,
-                           no_items),
-                          dtype=np.float32)
     train = sp.rand(no_users, no_items, format='csr', random_state=42)
 
     model = LightFM(learning_rate=10000000.0,
@@ -334,7 +331,7 @@ def test_sklearn_api():
         model.set_params(**params)
 
 
-def test_predict_not_fitte():
+def test_predict_not_fitted():
 
     model = LightFM()
 
@@ -350,3 +347,21 @@ def test_predict_not_fitte():
 
     with pytest.raises(ValueError):
         model.get_item_representations()
+
+
+def test_nan_features():
+
+    no_users, no_items = (1000, 1000)
+
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
+
+    features = sp.identity(no_items)
+    features.data *= np.nan
+
+    model = LightFM(loss='warp')
+
+    with pytest.raises(ValueError):
+        model.fit(train,
+                  epochs=10,
+                  user_features=features,
+                  item_features=features)

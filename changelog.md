@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased][unreleased]
+### Added
+- added additional input checks for non-normal inputs (NaNs, infinites)
+
 ## [1.13][2017-05-20]
 ### Added
 - added get_{user/item}_representations functions to facilitate extracting the latent representations out of the model.
