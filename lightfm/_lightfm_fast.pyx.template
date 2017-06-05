@@ -181,6 +181,18 @@ cdef class CSRMatrix:
 
         return self.indptr[row + 1]
 
+    cdef flt get_entry(self, int row, int col) nogil:
+        """
+        Return the entry at the coordinate
+        """
+        start_idx = self.get_row_start(row)
+        stop_idx = self.get_row_end(row)
+
+        for i in range(start_idx, stop_idx):
+          if self.indices[i] == col:
+            return self.data[i]
+        return 0.0
+
 
 cdef class FastLightFM:
     """
@@ -794,7 +806,8 @@ def fit_warp(CSRMatrix item_features,
              double item_alpha,
              double user_alpha,
              int num_threads,
-             random_state):
+             random_state,
+             bint ordered=False):
     """
     Fit the model using the WARP loss.
     """
@@ -802,6 +815,7 @@ def fit_warp(CSRMatrix item_features,
     cdef int i, no_examples, user_id, positive_item_id, gamma
     cdef int negative_item_id, sampled, row
     cdef double positive_prediction, negative_prediction
+    cdef flt positive_true, negative_true
     cdef double loss, MAX_LOSS
     cdef flt weight
     cdef flt *user_repr
@@ -852,6 +866,8 @@ def fit_warp(CSRMatrix item_features,
                                                                pos_it_repr,
                                                                lightfm.no_components)
 
+            positive_true = interactions.get_entry(user_id, positive_item_id)
+
             sampled = 0
 
             while sampled < lightfm.max_sampled:
@@ -876,7 +892,14 @@ def fit_warp(CSRMatrix item_features,
 
                     # Sample again if the sample negative is actually a positive
                     if in_positives(negative_item_id, user_id, interactions):
-                        continue
+                        if ordered:
+                            # Allow negative_items from interaction items 
+                            # only if they are ordinally lower than our positive_item
+                            negative_true = interactions.get_entry(user_id, negative_item_id)
+                            if negative_true >= positive_true:
+                                continue
+                        else:
+                            continue
 
                     loss = weight * log(floor((item_features.rows - 1) / sampled))
 
@@ -924,7 +947,8 @@ def fit_warp_kos(CSRMatrix item_features,
                  int k,
                  int n,
                  int num_threads,
-                 random_state):
+                 random_state,
+                 bint ordered=False):
     """
     Fit the model using the WARP loss.
     """
@@ -933,6 +957,7 @@ def fit_warp_kos(CSRMatrix item_features,
     cdef int negative_item_id, sampled, row, sampled_positive_item_id
     cdef int user_pids_start, user_pids_stop, no_positives, POS_SAMPLES
     cdef double positive_prediction, negative_prediction
+    cdef flt positive_true, negative_true
     cdef double loss, MAX_LOSS, sampled_positive_prediction
     cdef flt *user_repr
     cdef flt *pos_it_repr
@@ -1010,6 +1035,8 @@ def fit_warp_kos(CSRMatrix item_features,
                                    lightfm.item_scale,
                                    pos_it_repr)
 
+            positive_true = data.get_entry(user_id, positive_item_id)
+
             # Move on to the WARP step
             sampled = 0
 
@@ -1033,8 +1060,16 @@ def fit_warp_kos(CSRMatrix item_features,
 
                 if negative_prediction > positive_prediction - 1:
 
+                    # Sample again if the sample negative is actually a positive
                     if in_positives(negative_item_id, user_id, data):
-                        continue
+                        if ordered:
+                            # Allow negative_items from interaction items 
+                            # only if they are ordinally lower than our positive_item
+                            negative_true = data.get_entry(user_id, negative_item_id)
+                            if negative_true >= positive_true:
+                                continue
+                        else:
+                            continue
 
                     loss = log(floor((item_features.rows - 1) / sampled))
 
@@ -1084,7 +1119,8 @@ def fit_bpr(CSRMatrix item_features,
             double item_alpha,
             double user_alpha,
             int num_threads,
-            random_state):
+            random_state,
+            bint ordered=False):
     """
     Fit the model using the BPR loss.
     """
@@ -1092,6 +1128,7 @@ def fit_bpr(CSRMatrix item_features,
     cdef int i, j, no_examples, user_id, positive_item_id
     cdef int negative_item_id, sampled, row
     cdef double positive_prediction, negative_prediction
+    cdef flt positive_true, negative_true
     cdef flt weight
     cdef unsigned int[::1] random_states
     cdef flt *user_repr
@@ -1119,12 +1156,20 @@ def fit_bpr(CSRMatrix item_features,
             weight = sample_weight[row]
             user_id = user_ids[row]
             positive_item_id = item_ids[row]
+            positive_true = interactions.get_entry(user_id, positive_item_id)
 
             for j in range(no_examples):
                 negative_item_id = item_ids[(rand_r(&random_states[{thread_num}])
                                              % no_examples)]
                 if not in_positives(negative_item_id, user_id, interactions):
                     break
+                else:
+                    if ordered:
+                        # Allow negative_items from interaction items 
+                        # only if they are ordinally lower than our positive_item
+                        negative_true = interactions.get_entry(user_id, negative_item_id)
+                        if negative_true < positive_true:
+                            break
 
             compute_representation(user_features,
                                    lightfm.user_features,
@@ -1301,6 +1346,8 @@ def predict_ranks(CSRMatrix item_features,
             for item_id in range(test_interactions.cols):
 
                 if in_positives(item_id, user_id, train_interactions):
+                    # TODO: something could be done here if using ordinal interactions 
+                    # This depends on how we want to evaluate (so it's not necessary)
                     continue
 
                 compute_representation(item_features,

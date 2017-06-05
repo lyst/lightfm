@@ -366,7 +366,8 @@ class LightFM(object):
     def fit(self, interactions,
             user_features=None, item_features=None,
             sample_weight=None,
-            epochs=1, num_threads=1, verbose=False):
+            epochs=1, ordered=False,
+            num_threads=1, verbose=False):
         """
         Fit the model.
 
@@ -392,6 +393,8 @@ class LightFM(object):
              Not implemented for the k-OS loss.
         epochs: int, optional
              number of epochs to run
+        ordered: bool, optional
+            Whether or not to consider the entries of the interaction matrix ordered
         num_threads: int, optional
              Number of parallel computation threads to use. Should
              not be higher than the number of physical cores.
@@ -414,13 +417,15 @@ class LightFM(object):
                                 item_features=item_features,
                                 sample_weight=sample_weight,
                                 epochs=epochs,
+                                ordered=ordered,
                                 num_threads=num_threads,
                                 verbose=verbose)
 
     def fit_partial(self, interactions,
                     user_features=None, item_features=None,
                     sample_weight=None,
-                    epochs=1, num_threads=1, verbose=False):
+                    epochs=1, ordered=False,
+                    num_threads=1, verbose=False):
         """
         Fit the model.
 
@@ -449,6 +454,8 @@ class LightFM(object):
              Not implemented for the k-OS loss.
         epochs: int, optional
              number of epochs to run
+        ordered: bool, optional
+            Whether or not to consider the entries of the interaction matrix ordered
         num_threads: int, optional
              Number of parallel computation threads to use. Should
              not be higher than the number of physical cores.
@@ -513,14 +520,15 @@ class LightFM(object):
                             interactions,
                             sample_weight_data,
                             num_threads,
-                            self.loss)
+                            self.loss,
+                            ordered)
 
             self._check_finite()
 
         return self
 
     def _run_epoch(self, item_features, user_features, interactions,
-                   sample_weight, num_threads, loss):
+                   sample_weight, num_threads, loss, ordered):
         """
         Run an individual epoch.
         """
@@ -552,7 +560,8 @@ class LightFM(object):
                      self.item_alpha,
                      self.user_alpha,
                      num_threads,
-                     self.random_state)
+                     self.random_state,
+                     ordered)
         elif loss == 'bpr':
             fit_bpr(CSRMatrix(item_features),
                     CSRMatrix(user_features),
@@ -567,7 +576,8 @@ class LightFM(object):
                     self.item_alpha,
                     self.user_alpha,
                     num_threads,
-                    self.random_state)
+                    self.random_state,
+                    ordered)
         elif loss == 'warp-kos':
             fit_warp_kos(CSRMatrix(item_features),
                          CSRMatrix(user_features),
@@ -581,7 +591,8 @@ class LightFM(object):
                          self.k,
                          self.n,
                          num_threads,
-                         self.random_state)
+                         self.random_state,
+                         ordered)
         else:
             fit_logistic(CSRMatrix(item_features),
                          CSRMatrix(user_features),
