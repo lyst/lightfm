@@ -4,6 +4,8 @@ environment:
   matrix:
     - PYTHON_VERSION: 2.7
       MINICONDA: C:\Miniconda-x64
+    - PYTHON_VERSION: 3.6
+      MINICONDA: C:\Miniconda36-x64
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
@@ -25,3 +27,11 @@ install:
 test_script:
   # Run the project tests
   - py.test tests/ -x
+
+after_test:
+  # Build wheels
+  - python setup.py bdist_wheel
+
+artifacts:
+  # Archive the generated packages in the ci.appveyor.com build report.
+  - path: dist\*
