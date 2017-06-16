@@ -1,11 +1,24 @@
-os:
-  - osx
+matrix:
+  include:
+    - os: osx
+      language: generic
+      env: PYTHON_VERSION=2.7
+    - os: osx
+      language: generic
+      env: PYTHON_VERSION=3.3
+    - os: osx
+      language: generic
+      env: PYTHON_VERSION=3.4
+    - os: osx
+      language: generic
+      env: PYTHON_VERSION=3.5
+    - os: osx
+      language: generic
+      env: PYTHON_VERSION=3.6
 before_install:
-  - pip install numpy
-  - pip install scipy
-  - pip install requests
-  - pip install scikit-learn
-  - pip install pytest
+  - ./.travis/install.sh
 install:
   - pip install -e .
 script: py.test tests/
+after_success:
+  - python setup.py bdist_wheel
