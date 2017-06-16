@@ -21,8 +21,8 @@ matrix:
 before_install:
   - ./.travis/install.sh
 install:
-  - pip install pytest
-  - pip install -e .
-script: py.test tests/
+  - PATH="$HOME/miniconda/bin:$PATH" pip install -e .
+script:
+  - PATH="$HOME/miniconda/bin:$PATH" py.test tests/
 after_success:
-  - python setup.py bdist_wheel
+  - PATH="$HOME/miniconda/bin:$PATH" python setup.py bdist_wheel
