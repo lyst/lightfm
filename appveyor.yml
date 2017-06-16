@@ -10,6 +10,14 @@ environment:
       MINICONDA: C:\Miniconda35-x64
     - PYTHON_VERSION: 3.6
       MINICONDA: C:\Miniconda36-x64
+    - PYTHON_VERSION: 2.7
+      MINICONDA: C:\Miniconda
+    - PYTHON_VERSION: 3.4
+      MINICONDA: C:\Miniconda3
+    - PYTHON_VERSION: 3.5
+      MINICONDA: C:\Miniconda35
+    - PYTHON_VERSION: 3.6
+      MINICONDA: C:\Miniconda36
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
@@ -30,7 +38,7 @@ install:
 
 test_script:
   # Run the project tests
-  # - py.test tests/ -x
+  - py.test tests/ -x
 
 after_test:
   # Build wheels
