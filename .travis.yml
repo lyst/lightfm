@@ -21,6 +21,7 @@ matrix:
 before_install:
   - ./.travis/install.sh
 install:
+  - pip install pytest
   - pip install -e .
 script: py.test tests/
 after_success:
