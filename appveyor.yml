@@ -30,7 +30,7 @@ install:
 
 test_script:
   # Run the project tests
-  - py.test tests/ -x
+  # - py.test tests/ -x
 
 after_test:
   # Build wheels
@@ -51,6 +51,6 @@ deploy:
     secure: z01U7iCCHEkD7Z8fk2rJlQ==
   region: us-west-2
   unzip: false
-  folder: APPVEYOR_REPO_COMMIT
+  folder: $(APPVEYOR_REPO_BRANCH)_$(APPVEYOR_REPO_COMMIT)
   set_public: false
   artifact: wheels
