@@ -1,5 +1,8 @@
 matrix:
   include:
+    - os: linux
+      language: generic
+      env: PYTHON_VERSION=2.7
     - os: osx
       language: generic
       env: PYTHON_VERSION=2.7
