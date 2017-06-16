@@ -13,7 +13,7 @@ export PATH="$HOME/miniconda/bin:$PATH"
 rm ~/miniconda.sh
 
 # Set up the right Python version
-conda install python=$PYTHON_VERSION
+conda install -y python=$PYTHON_VERSION
 
 # Install dependencies
-conda install numpy scipy requests scikit-learn pytest
+conda install -y numpy scipy requests scikit-learn pytest
