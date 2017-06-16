@@ -39,3 +39,18 @@ after_test:
 artifacts:
   # Archive the generated packages in the ci.appveyor.com build report.
   - path: dist\*
+    name: wheels
+
+deploy:
+  provider: S3
+  access_key_id:
+    secure: NsyWqGYsBwD4ceFfkIuXOD/LYYvF2OGKmEMR3+4vmKI=
+  secret_access_key:
+    secure: T3A9VfCUi8B5UETIyE13tRFvrP66tm/tGtnEQfDgiwwdTpl25oi0mmkeokKlWxoU
+  bucket:
+    secure: z01U7iCCHEkD7Z8fk2rJlQ==
+  region: us-west-2
+  unzip: false
+  folder: APPVEYOR_REPO_COMMIT
+  set_public: false
+  artifact: wheels
