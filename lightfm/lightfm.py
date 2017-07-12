@@ -486,6 +486,7 @@ class LightFM(object):
 
         for input_data in (user_features.data,
                            item_features.data,
+                           interactions.data,
                            sample_weight):
             self._check_input_finite(input_data)
         if self.item_embeddings is None:

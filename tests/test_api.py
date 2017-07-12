@@ -365,3 +365,16 @@ def test_nan_features():
                   epochs=10,
                   user_features=features,
                   item_features=features)
+
+
+def test_nan_interactions():
+
+    no_users, no_items = (1000, 1000)
+
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
+    train.data *= np.nan
+
+    model = LightFM(loss='warp')
+
+    with pytest.raises(ValueError):
+        model.fit(train)
