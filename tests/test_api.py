@@ -180,7 +180,7 @@ def test_feature_inference_fails():
                       user_features=user_features,
                       item_features=item_features)
 
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         model.predict(np.array([no_features], dtype=np.int32),
                       np.array([no_features], dtype=np.int32))
 
