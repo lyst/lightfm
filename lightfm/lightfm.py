@@ -16,7 +16,46 @@ CYTHON_DTYPE = np.float32
 
 class LightFM(object):
     """
-    A hybrid recommender model.
+    A hybrid latent representation recommender model.
+
+    The model learns embeddings (latent representations in a high-dimensional
+    space) for users and items in a way that encodes user preferences over items.
+    When multiplied together, these representations produce scores for every item
+    for a given user; items scored highly are more likely to be interesting to
+    the user.
+
+    The user and item representations are expressed in terms of representations
+    of their features: an embedding is estimated for every feature, and these
+    features are then summed together to arrive at representations for users and
+    items. For example, if the movie 'Wizard of Oz' is described by the following
+    features: 'musical fantasy', 'Judy Garland', and 'Wizard of Oz', then its
+    embedding will be given by taking the features' embeddings and adding them
+    together. The same applies to user features.
+
+    The embeddings are learned through `stochastic gradient
+    descent <http://cs231n.github.io/optimization-1/>`_ methods.
+
+    Four loss functions are available:
+
+    - logistic: useful when both positive (1) and negative (-1) interactions
+      are present.
+    - BPR: Bayesian Personalised Ranking [1]_ pairwise loss. Maximises the
+      prediction difference between a positive example and a randomly
+      chosen negative example. Useful when only positive interactions
+      are present and optimising ROC AUC is desired.
+    - WARP: Weighted Approximate-Rank Pairwise [2]_ loss. Maximises
+      the rank of positive examples by repeatedly sampling negative
+      examples until rank violating one is found. Useful when only
+      positive interactions are present and optimising the top of
+      the recommendation list (precision@k) is desired.
+    - k-OS WARP: k-th order statistic loss [3]_. A modification of WARP that
+      uses the k-th positive example for any given user as a basis for pairwise
+      updates.
+
+    Two learning rate schedules are available:
+
+    - adagrad: [4]_
+    - adadelta: [5]_
 
     Parameters
     ----------
@@ -74,27 +113,31 @@ class LightFM(object):
     Notes
     -----
 
-    Four loss functions are available:
+    Users' and items' latent representations are expressed in terms of their
+    features' representations. If no feature matrices are provided to the
+    :func:`lightfm.LightFM.fit` or :func:`lightfm.LightFM.predict` methods, they are
+    implicitly assumed to be identity matrices: that is, each user and item
+    are characterised by one feature that is unique to that user (or item).
+    In this case, LightFM reduces to a traditional collaborative filtering
+    matrix factorization method.
 
-    - logistic: useful when both positive (1) and negative (-1) interactions
-      are present.
-    - BPR: Bayesian Personalised Ranking [1]_ pairwise loss. Maximises the
-      prediction difference between a positive example and a randomly
-      chosen negative example. Useful when only positive interactions
-      are present and optimising ROC AUC is desired.
-    - WARP: Weighted Approximate-Rank Pairwise [2]_ loss. Maximises
-      the rank of positive examples by repeatedly sampling negative
-      examples until rank violating one is found. Useful when only
-      positive interactions are present and optimising the top of
-      the recommendation list (precision@k) is desired.
-    - k-OS WARP: k-th order statistic loss [3]_. A modification of WARP that
-      uses the k-th positive example for any given user as a basis for pairwise
-      updates.
+    When a feature matrix is provided, it should be of shape
+    ``(num_<users/items> x num_features)``. An embedding will then be estimated
+    for every feature: that is, there will be ``num_features`` embeddings.
+    To obtain the representation for user i, the model will look up the i-th
+    row of the feature matrix to find the features with non-zero weights in
+    that row; the embeddings for these features will then be added together
+    to arrive at the user representation. For example, if user 10 has weight 1
+    in the 5th column of the user feature matrix, and weight 3 in the 20th
+    column, that user's representation will be found by adding together
+    the embedding for the 5th and the 20th features (multiplying the latter
+    by 3). The same goes for items.
 
-    Two learning rate schedules are available:
-
-    - adagrad: [4]_
-    - adadelta: [5]_
+    Note: when supplying feature matrices, an implicit identity feature
+    matrix will no longer be used. This may result in a less expressive model:
+    because no per-user features are estiamated, the model may underfit. To
+    combat this, include per-user (per-item) features (that is, an identity
+    matrix) as part of the feature matrix you supply.
 
     References
     ----------
@@ -255,10 +298,22 @@ class LightFM(object):
         # If we already have embeddings, verify that
         # we have them for all the supplied features
         if self.user_embeddings is not None:
-            assert self.user_embeddings.shape[0] >= user_features.shape[1]
+            if not self.user_embeddings.shape[0] >= user_features.shape[1]:
+                raise ValueError('The user feature matrix specifies more '
+                                 'features than there are estimated '
+                                 'feature embeddings: {} vs {}.'.format(
+                                     self.user_embeddings.shape[0],
+                                     user_features.shape[1]
+                                 ))
 
         if self.item_embeddings is not None:
-            assert self.item_embeddings.shape[0] >= item_features.shape[1]
+            if not self.item_embeddings.shape[0] >= item_features.shape[1]:
+                raise ValueError('The user feature matrix specifies more '
+                                 'features than there are estimated '
+                                 'feature embeddings: {} vs {}.'.format(
+                                     self.item_embeddings.shape[0],
+                                     item_features.shape[1]
+                                 ))
 
         user_features = self._to_cython_dtype(user_features)
         item_features = self._to_cython_dtype(item_features)
@@ -370,6 +425,9 @@ class LightFM(object):
         """
         Fit the model.
 
+        For details on how to use feature matrices, see the documentation
+        on the :class:`lightfm.LightFM` class.
+
         Arguments
         ---------
 
@@ -426,6 +484,9 @@ class LightFM(object):
 
         Fit the model. Unlike fit, repeated calls to this method will
         cause training to resume from the current model state.
+
+        For details on how to use feature matrices, see the documentation
+        on the :class:`lightfm.LightFM` class.
 
         Arguments
         ---------
@@ -602,6 +663,9 @@ class LightFM(object):
         """
         Compute the recommendation score for user-item pairs.
 
+        For details on how to use feature matrices, see the documentation
+        on the :class:`lightfm.LightFM` class.
+
         Arguments
         ---------
 
@@ -674,6 +738,9 @@ class LightFM(object):
         Performs best when only a handful of interactions need to be evaluated
         per user. If you need to compute predictions for many items for every
         user, use the predict method instead.
+
+        For details on how to use feature matrices, see the documentation
+        on the :class:`lightfm.LightFM` class.
 
         Arguments
         ---------
