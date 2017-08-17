@@ -10,11 +10,11 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
 
 ENV PATH /opt/conda/bin:$PATH
 
-RUN conda install pytest jupyter
+RUN conda install pytest jupyter scikit-learn
 
 ENV PYTHONDONTWRITEBYTECODE 1
 
 ADD . /home/lightfm/
 WORKDIR /home/
 
-RUN pip install lightfm
+RUN cd lightfm && pip install -e .

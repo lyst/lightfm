@@ -36,7 +36,7 @@ On many systems it may be more convenient to try LightFM out in a Docker contain
 
 The container should now be ready for use. You can then:
 
-1. Run tests by running ``docker-compose run lightfm py.test -x tests/``
+1. Run tests by running ``docker-compose run lightfm py.test -x lightfm/tests/``
 2. Run the movielens example by running ``docker-compose run lightfm jupyter notebook examples/movielens/example.ipynb --ip=0.0.0.0``. The notebook will be accessible at port 8888 of your container's IP address.
 
 Usage
