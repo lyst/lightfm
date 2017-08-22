@@ -2,9 +2,42 @@
 
 ## [unreleased][unreleased]
 ### Added
+- added additional input checks for non-normal inputs (NaNs, infinites) for features
+- added additional input checks for non-normal inputs (NaNs, infinites) for interactions
+### Changed
+- LightFM model now raises a ValueError (instead of assertion) when the number of supplied
+  features exceeds the number of estimated feature embeddings.
+
+## [1.13][2017-05-20]
+### Added
+- added get_{user/item}_representations functions to facilitate extracting the latent representations out of the model.
+### Fixed
+- recall_at_k and precision_at_k now work correctly at k=1 (thanks to Zank Bennett).
+- Moved Movielens data to data release to prevent grouplens server flakiness from affecting users.
+- Fix segfault when trying to predict from a model that has not been fitted.
+
+## [1.12][2017-01-26]
+### Changed
+- Ranks are now computed pessimistically: when two items are tied, the positive item is assumed to have higher rank. This will lead to zero precision scores for models that predict all zeros, for example.
+- The model will raise a ValueError if, during fitting, any of the parameters become non-finite (NaN or +/- infinity).
+- Added mid-epoch regularization when a lot of regularization is used. This reduces the likelihood of numerical instability at high regularization rates.
+
+
+## [1.11][2016-12-26]
+### Changed
+- negative samples in BPR are now drawn from the empirical distributions of positives. This improves accuracy slightly on the Movielens 100k dataset.
+
+### Fixed
+- incorrect calculation of BPR loss (thanks to @TimonVS for reporting this).
+
+
+## [1.10][2016-11-25]
+### Added
 - added recall@k evaluation function
 ### Fixed
 - added >=0.17.0 scipy depdendency to setup.py
+- fixed segfaults on when duplicate entries are present in input COO matrices (thanks to Florian
+  Wilhelm for the bug report).
 
 ## [1.9][2016-05-25]
 ### Fixed

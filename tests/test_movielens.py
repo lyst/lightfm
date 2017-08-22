@@ -3,8 +3,11 @@ import pickle
 import numpy as np
 
 import scipy.sparse as sp
+from scipy import stats
 
 from sklearn.metrics import roc_auc_score
+from sklearn.grid_search import RandomizedSearchCV
+from sklearn.cross_validation import KFold
 
 from lightfm import LightFM
 from lightfm.datasets import fetch_movielens
@@ -114,11 +117,11 @@ def test_bpr_precision():
                                    train,
                                    test)
 
-    assert train_precision > 0.31
-    assert test_precision > 0.04
+    assert train_precision > 0.45
+    assert test_precision > 0.07
 
-    assert full_train_auc > 0.86
-    assert full_test_auc > 0.84
+    assert full_train_auc > 0.91
+    assert full_test_auc > 0.87
 
 
 def test_bpr_precision_multithreaded():
@@ -138,11 +141,11 @@ def test_bpr_precision_multithreaded():
                                    train,
                                    test)
 
-    assert train_precision > 0.31
-    assert test_precision > 0.04
+    assert train_precision > 0.45
+    assert test_precision > 0.07
 
-    assert full_train_auc > 0.86
-    assert full_test_auc > 0.84
+    assert full_train_auc > 0.91
+    assert full_test_auc > 0.87
 
 
 def test_warp_precision():
@@ -240,7 +243,7 @@ def test_warp_precision_multithreaded():
     assert train_precision > 0.45
     assert test_precision > 0.07
 
-    assert full_train_auc > 0.94
+    assert full_train_auc > 0.9
     assert full_test_auc > 0.9
 
 
@@ -292,7 +295,7 @@ def test_warp_precision_adadelta_multithreaded():
     assert train_precision > 0.45
     assert test_precision > 0.07
 
-    assert full_train_auc > 0.94
+    assert full_train_auc > 0.9
     assert full_test_auc > 0.9
 
 
@@ -390,6 +393,39 @@ def test_movielens_genre_accuracy():
     assert roc_auc_score(test.data, test_predictions) > 0.69
 
 
+def test_get_representations():
+
+    model = LightFM(random_state=SEED)
+    model.fit_partial(train,
+                      epochs=10)
+
+    num_users, num_items = train.shape
+
+    for (item_features, user_features) in ((None, None),
+                                           ((sp.identity(num_items) +
+                                             sp.random(num_items, num_items)),
+                                            (sp.identity(num_users) +
+                                             sp.random(num_users, num_users)))):
+
+        test_predictions = model.predict(test.row,
+                                         test.col,
+                                         user_features=user_features,
+                                         item_features=item_features)
+
+        item_biases, item_latent = model.get_item_representations(item_features)
+        user_biases, user_latent = model.get_user_representations(user_features)
+
+        assert item_latent.dtype == np.float32
+        assert user_latent.dtype == np.float32
+
+        predictions = ((user_latent[test.row] *
+                        item_latent[test.col]).sum(axis=1) +
+                       user_biases[test.row] +
+                       item_biases[test.col])
+
+        assert np.allclose(test_predictions, predictions, atol=0.000001)
+
+
 def test_movielens_both_accuracy():
     """
     Accuracy with both genre metadata and item-specific
@@ -470,7 +506,7 @@ def test_movielens_accuracy_sample_weights():
     # by the same amount should result in
     # roughly the same accuracy
 
-    scale = 1e-01
+    scale = 0.5
     weights = train.copy()
     weights.data = np.ones(train.getnnz(),
                            dtype=np.float32) * scale
@@ -622,21 +658,27 @@ def test_hogwild_accuracy():
 
 def test_movielens_excessive_regularization():
 
-    # Should perform poorly with high regularization
-    model = LightFM(no_components=10,
-                    item_alpha=1.0,
-                    user_alpha=1.0,
-                    random_state=SEED)
-    model.fit_partial(train,
-                      epochs=10)
+    for loss in ('logistic', 'warp', 'bpr', 'warp-kos'):
 
-    train_predictions = model.predict(train.row,
-                                      train.col)
-    test_predictions = model.predict(test.row,
-                                     test.col)
+        # Should perform poorly with high regularization.
+        # Check that regularization does not accumulate
+        # until it reaches infinity.
+        model = LightFM(no_components=10,
+                        item_alpha=1.0,
+                        user_alpha=1.0,
+                        loss=loss,
+                        random_state=SEED)
+        model.fit_partial(train,
+                          epochs=10,
+                          num_threads=4)
 
-    assert roc_auc_score(train.data, train_predictions) < 0.6
-    assert roc_auc_score(test.data, test_predictions) < 0.6
+        train_predictions = model.predict(train.row,
+                                          train.col)
+        test_predictions = model.predict(test.row,
+                                         test.col)
+
+        assert roc_auc_score(train.data, train_predictions) < 0.65
+        assert roc_auc_score(test.data, test_predictions) < 0.65
 
 
 def test_overfitting():
@@ -769,9 +811,41 @@ def test_random_state_advanced():
     model.fit_partial(train,
                       epochs=1)
 
-    rng_state = model.rng.get_state()[1].copy()
+    rng_state = model.random_state.get_state()[1].copy()
 
     model.fit_partial(train,
                       epochs=1)
 
-    assert not np.all(rng_state == model.rng.get_state()[1])
+    assert not np.all(rng_state == model.random_state.get_state()[1])
+
+
+def test_sklearn_cv():
+
+    model = LightFM(loss='warp', random_state=42)
+
+    # Set distributions for hyperparameters
+    randint = stats.randint(low=1, high=65)
+    randint.random_state = 42
+    gamma = stats.gamma(a=1.2, loc=0, scale=0.13)
+    gamma.random_state = 42
+    distr = {'no_components': randint, 'learning_rate': gamma}
+
+    # Custom score function
+    def scorer(est, x, y=None):
+        return precision_at_k(est, x).mean()
+
+    # Custom CV which sets train_index = test_index
+    class CV(KFold):
+        def __iter__(self):
+            ind = np.arange(self.n)
+            for test_index in self._iter_test_masks():
+                train_index = np.logical_not(test_index)
+                train_index = ind[train_index]
+                yield train_index, train_index
+
+    cv = CV(n=train.shape[0], random_state=42)
+    search = RandomizedSearchCV(estimator=model, param_distributions=distr,
+                                n_iter=10, scoring=scorer, random_state=42,
+                                cv=cv)
+    search.fit(train)
+    assert search.best_params_['no_components'] == 52

@@ -57,6 +57,30 @@ def test_matrix_types():
                           user_features=user_features,
                           item_features=item_features)
 
+            model.predict_rank(train,
+                               user_features=user_features,
+                               item_features=item_features)
+
+
+def test_coo_with_duplicate_entries():
+    # Calling .tocsr on a COO matrix with duplicate entries
+    # changes its data arrays in-place, leading to out-of-bounds
+    # array accesses in the WARP code.
+    # Reported in https://github.com/lyst/lightfm/issues/117.
+
+    rows, cols = (1000, 100)
+    mat = sp.random(rows, cols)
+    mat.data[:] = 1
+
+    # Duplicate entries in the COO matrix
+    mat.data = np.concatenate((mat.data, mat.data[:1000]))
+    mat.row = np.concatenate((mat.row, mat.row[:1000]))
+    mat.col = np.concatenate((mat.col, mat.col[:1000]))
+
+    for loss in ('warp', 'bpr', 'warp-kos'):
+        model = LightFM(loss='warp')
+        model.fit(mat)
+
 
 def test_predict():
 
@@ -156,7 +180,7 @@ def test_feature_inference_fails():
                       user_features=user_features,
                       item_features=item_features)
 
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         model.predict(np.array([no_features], dtype=np.int32),
                       np.array([no_features], dtype=np.int32))
 
@@ -236,7 +260,7 @@ def test_predict_ranks():
     train = sp.coo_matrix((no_users,
                            no_items),
                           dtype=np.float32)
-    train = sp.rand(no_users, no_items, format='csr')
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
 
     model = LightFM()
     model.fit_partial(train)
@@ -264,7 +288,9 @@ def test_predict_ranks():
     assert np.all(np.squeeze(np.array(ranks.max(axis=1))) ==
                   no_items - 1 - np.squeeze(np.array(train.getnnz(axis=1))))
 
-    # Make sure invariants hold when there are ties
+    # Make sure ranks are computed pessimistically when
+    # there are ties (that is, equal predictions for every
+    # item will assign maximum rank to each).
     model.user_embeddings = np.zeros_like(model.user_embeddings)
     model.item_embeddings = np.zeros_like(model.item_embeddings)
     model.user_biases = np.zeros_like(model.user_biases)
@@ -272,9 +298,83 @@ def test_predict_ranks():
 
     ranks = model.predict_rank(rank_input, num_threads=2).todense()
 
-    assert np.all(ranks.min(axis=1) == 0)
-    assert np.all(ranks.max(axis=1) == 0)
+    assert np.all(ranks.min(axis=1) == 99)
+    assert np.all(ranks.max(axis=1) == 99)
 
     # Wrong input dimensions
     with pytest.raises(ValueError):
         model.predict_rank(sp.csr_matrix((5, 5)), num_threads=2)
+
+
+def test_exception_on_divergence():
+
+    no_users, no_items = (1000, 1000)
+
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
+
+    model = LightFM(learning_rate=10000000.0,
+                    loss='warp')
+
+    with pytest.raises(ValueError):
+        model.fit(train, epochs=10)
+
+
+def test_sklearn_api():
+    model = LightFM()
+    params = model.get_params()
+    model2 = LightFM(**params)
+    params2 = model2.get_params()
+    assert params == params2
+    model.set_params(**params)
+    params['invalid_param'] = 666
+    with pytest.raises(ValueError):
+        model.set_params(**params)
+
+
+def test_predict_not_fitted():
+
+    model = LightFM()
+
+    with pytest.raises(ValueError):
+        model.predict(np.arange(10),
+                      np.arange(10))
+
+    with pytest.raises(ValueError):
+        model.predict_rank(1)
+
+    with pytest.raises(ValueError):
+        model.get_user_representations()
+
+    with pytest.raises(ValueError):
+        model.get_item_representations()
+
+
+def test_nan_features():
+
+    no_users, no_items = (1000, 1000)
+
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
+
+    features = sp.identity(no_items)
+    features.data *= np.nan
+
+    model = LightFM(loss='warp')
+
+    with pytest.raises(ValueError):
+        model.fit(train,
+                  epochs=10,
+                  user_features=features,
+                  item_features=features)
+
+
+def test_nan_interactions():
+
+    no_users, no_items = (1000, 1000)
+
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
+    train.data *= np.nan
+
+    model = LightFM(loss='warp')
+
+    with pytest.raises(ValueError):
+        model.fit(train)

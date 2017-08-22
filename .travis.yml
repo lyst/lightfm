@@ -1,8 +1,6 @@
 os:
   - osx
 before_install:
-  - brew tap homebrew/python
-  - brew install python
   - pip install numpy
   - pip install scipy
   - pip install requests

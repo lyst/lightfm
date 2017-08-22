@@ -16,13 +16,13 @@ def _generate_data(num_users, num_items, density=0.1, test_fraction=0.2):
 
     for user_id in range(num_users):
         positives = np.random.choice(num_items,
-                                     size=density * num_items,
+                                     size=int(density * num_items),
                                      replace=False)
 
-        for item_id in positives[:(test_fraction * len(positives))]:
+        for item_id in positives[:int(test_fraction * len(positives))]:
             test[user_id, item_id] = 1.0
 
-        for item_id in positives[(test_fraction * len(positives)):]:
+        for item_id in positives[int(test_fraction * len(positives)):]:
             train[user_id, item_id] = 1.0
 
     return train.tocoo(), test.tocoo()
@@ -151,35 +151,62 @@ def test_precision_at_k():
     train, test = _generate_data(no_users, no_items)
 
     model = LightFM(loss='bpr')
+
+    # We want a high precision to catch the k=1 case
+    model.fit_partial(test)
+
+    for k in (10, 5, 1):
+
+        # Without omitting train interactions
+        precision = evaluation.precision_at_k(model,
+                                              test,
+                                              k=k)
+        expected_mean_precision = _precision_at_k(model,
+                                                  test,
+                                                  k)
+
+        assert np.allclose(precision.mean(), expected_mean_precision)
+        assert len(precision) == (test.getnnz(axis=1) > 0).sum()
+        assert len(evaluation.precision_at_k(model,
+                                             train,
+                                             preserve_rows=True)) == test.shape[0]
+
+        # With omitting train interactions
+        precision = evaluation.precision_at_k(model,
+                                              test,
+                                              k=k,
+                                              train_interactions=train)
+        expected_mean_precision = _precision_at_k(model,
+                                                  test,
+                                                  k,
+                                                  train=train)
+
+        assert np.allclose(precision.mean(), expected_mean_precision)
+
+
+def test_precision_at_k_with_ties():
+
+    no_users, no_items = (10, 100)
+
+    train, test = _generate_data(no_users, no_items)
+
+    model = LightFM(loss='bpr')
     model.fit_partial(train)
+
+    # Make all predictions zero
+    model.user_embeddings = np.zeros_like(model.user_embeddings)
+    model.item_embeddings = np.zeros_like(model.item_embeddings)
+    model.user_biases = np.zeros_like(model.user_biases)
+    model.item_biases = np.zeros_like(model.item_biases)
 
     k = 10
 
-    # Without omitting train interactions
     precision = evaluation.precision_at_k(model,
                                           test,
                                           k=k)
-    expected_mean_precision = _precision_at_k(model,
-                                              test,
-                                              k)
 
-    assert np.allclose(precision.mean(), expected_mean_precision)
-    assert len(precision) == (test.getnnz(axis=1) > 0).sum()
-    assert len(evaluation.precision_at_k(model,
-                                         train,
-                                         preserve_rows=True)) == test.shape[0]
-
-    # With omitting train interactions
-    precision = evaluation.precision_at_k(model,
-                                          test,
-                                          k=k,
-                                          train_interactions=train)
-    expected_mean_precision = _precision_at_k(model,
-                                              test,
-                                              k,
-                                              train=train)
-
-    assert np.allclose(precision.mean(), expected_mean_precision)
+    # Pessimistic precision with all ties
+    assert precision.mean() == 0.0
 
 
 def test_recall_at_k():
@@ -189,35 +216,35 @@ def test_recall_at_k():
     train, test = _generate_data(no_users, no_items)
 
     model = LightFM(loss='bpr')
-    model.fit_partial(train)
+    model.fit_partial(test)
 
-    k = 10
+    for k in (10, 5, 1):
 
-    # Without omitting train interactions
-    recall = evaluation.recall_at_k(model,
-                                    test,
-                                    k=k)
-    expected_mean_recall = _recall_at_k(model,
+        # Without omitting train interactions
+        recall = evaluation.recall_at_k(model,
                                         test,
-                                        k)
+                                        k=k)
+        expected_mean_recall = _recall_at_k(model,
+                                            test,
+                                            k)
 
-    assert np.allclose(recall.mean(), expected_mean_recall)
-    assert len(recall) == (test.getnnz(axis=1) > 0).sum()
-    assert len(evaluation.recall_at_k(model,
-                                      train,
-                                      preserve_rows=True)) == test.shape[0]
+        assert np.allclose(recall.mean(), expected_mean_recall)
+        assert len(recall) == (test.getnnz(axis=1) > 0).sum()
+        assert len(evaluation.recall_at_k(model,
+                                          train,
+                                          preserve_rows=True)) == test.shape[0]
 
-    # With omitting train interactions
-    recall = evaluation.recall_at_k(model,
-                                    test,
-                                    k=k,
-                                    train_interactions=train)
-    expected_mean_recall = _recall_at_k(model,
+        # With omitting train interactions
+        recall = evaluation.recall_at_k(model,
                                         test,
-                                        k,
-                                        train=train)
+                                        k=k,
+                                        train_interactions=train)
+        expected_mean_recall = _recall_at_k(model,
+                                            test,
+                                            k,
+                                            train=train)
 
-    assert np.allclose(recall.mean(), expected_mean_recall)
+        assert np.allclose(recall.mean(), expected_mean_recall)
 
 
 def test_auc_score():

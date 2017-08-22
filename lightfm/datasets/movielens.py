@@ -157,7 +157,9 @@ def fetch_movielens(data_home=None, indicator_features=True, genre_features=Fals
                          'or genre_features must be True')
 
     zip_path = _common.get_data(data_home,
-                                'http://files.grouplens.org/datasets/movielens/ml-100k.zip',
+                                ('https://github.com/maciejkula/'
+                                 'lightfm_datasets/releases/'
+                                 'download/v0.1.0/movielens.zip'),
                                 'movielens100k',
                                 'movielens.zip',
                                 download_if_missing)

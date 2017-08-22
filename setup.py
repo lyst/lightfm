@@ -1,3 +1,4 @@
+# coding=utf-8
 import os
 import subprocess
 import sys
@@ -6,9 +7,12 @@ import textwrap
 from setuptools import Command, Extension, setup
 from setuptools.command.test import test as TestCommand
 
+# Import version even when extensions are not yet built
+__builtins__.__LIGHTFM_SETUP__ = True
+from lightfm import __version__ as version  # NOQA
+
 
 def define_extensions(use_openmp):
-
     compile_args = ['-ffast-math']
 
     # There are problems with illegal ASM instructions
@@ -45,20 +49,30 @@ class Cythonize(Command):
         pass
 
     def generate_pyx(self):
-
         openmp_import = textwrap.dedent("""
              from cython.parallel import parallel, prange
              cimport openmp
         """)
 
+        lock_init = textwrap.dedent("""
+             cdef openmp.omp_lock_t THREAD_LOCK
+             openmp.omp_init_lock(&THREAD_LOCK)
+        """)
+
         params = (('no_openmp', dict(openmp_import='',
                                      nogil_block='with nogil:',
                                      range_block='range',
-                                     thread_num='0')),
+                                     thread_num='0',
+                                     lock_init='',
+                                     lock_acquire='',
+                                     lock_release='')),
                   ('openmp', dict(openmp_import=openmp_import,
                                   nogil_block='with nogil, parallel(num_threads=num_threads):',
                                   range_block='prange',
-                                  thread_num='openmp.omp_get_thread_num()')))
+                                  thread_num='openmp.omp_get_thread_num()',
+                                  lock_init=lock_init,
+                                  lock_acquire='openmp.omp_set_lock(&THREAD_LOCK)',
+                                  lock_release='openmp.omp_unset_lock(&THREAD_LOCK)')))
 
         file_dir = os.path.join(os.path.dirname(__file__),
                                 'lightfm')
@@ -69,11 +83,11 @@ class Cythonize(Command):
 
         for variant, template_params in params:
             with open(os.path.join(file_dir,
-                                   '_lightfm_fast_{}.pyx'.format(variant)), 'w') as fl:
+                                   '_lightfm_fast_{}.pyx'.format(variant)),
+                      'w') as fl:
                 fl.write(template.format(**template_params))
 
     def run(self):
-
         from Cython.Build import cythonize
 
         self.generate_pyx()
@@ -99,13 +113,14 @@ class Clean(Command):
         pass
 
     def run(self):
-
         pth = os.path.dirname(os.path.abspath(__file__))
 
         subprocess.call(['rm', '-rf', os.path.join(pth, 'build')])
         subprocess.call(['rm', '-rf', os.path.join(pth, 'lightfm.egg-info')])
-        subprocess.call(['find', pth, '-name', 'lightfm*.pyc', '-type', 'f', '-delete'])
-        subprocess.call(['rm', os.path.join(pth, 'lightfm', '_lightfm_fast.so')])
+        subprocess.call(
+            ['find', pth, '-name', 'lightfm*.pyc', '-type', 'f', '-delete'])
+        subprocess.call(
+            ['rm', os.path.join(pth, 'lightfm', '_lightfm_fast.so')])
 
 
 class PyTest(TestCommand):
@@ -127,15 +142,14 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
-use_openmp = not (sys.platform.startswith('darwin') or sys.platform.startswith('win'))
-
+use_openmp = not sys.platform.startswith('darwin') and not sys.platform.startswith('win')
 
 setup(
     name='lightfm',
-    version='1.9',
+    version=version,
     description='LightFM recommendation model',
     url='https://github.com/lyst/lightfm',
-    download_url='https://github.com/lyst/lightfm/tarball/1.9',
+    download_url='https://github.com/lyst/lightfm/tarball/{}'.format(version),
     packages=['lightfm',
               'lightfm.datasets'],
     package_data={'': ['*.c']},

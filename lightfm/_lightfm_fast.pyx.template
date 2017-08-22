@@ -11,6 +11,13 @@ from libc.stdlib cimport free, malloc
 
 ctypedef float flt
 
+# Allow sequential code blocks in a parallel setting.
+# Used for applying full regularization in parallel blocks.
+{lock_init}
+
+
+cdef flt MAX_REG_SCALE = 1000000.0
+
 
 cdef extern from "math.h" nogil:
     double sqrt(double)
@@ -523,8 +530,8 @@ cdef inline void update(double loss,
 
     # Update the scaling factors for lazy regularization, using the average learning rate
     # of features updated for this example.
-    lightfm.item_scale *= (1 - item_alpha * avg_learning_rate)
-    lightfm.user_scale *= (1 - user_alpha * avg_learning_rate)
+    lightfm.item_scale *= (1.0 + item_alpha * avg_learning_rate)
+    lightfm.user_scale *= (1.0 + user_alpha * avg_learning_rate)
 
 
 cdef void warp_update(double loss,
@@ -638,8 +645,8 @@ cdef void warp_update(double loss,
 
     # Update the scaling factors for lazy regularization, using the average learning rate
     # of features updated for this example.
-    lightfm.item_scale *= (1 - item_alpha * avg_learning_rate)
-    lightfm.user_scale *= (1 - user_alpha * avg_learning_rate)
+    lightfm.item_scale *= (1.0 + item_alpha * avg_learning_rate)
+    lightfm.user_scale *= (1.0 + user_alpha * avg_learning_rate)
 
 
 cdef void regularize(FastLightFM lightfm,
@@ -655,17 +662,33 @@ cdef void regularize(FastLightFM lightfm,
 
     for i in range(no_features):
         for j in range(lightfm.no_components):
-            lightfm.item_features[i, j] *= lightfm.item_scale
+            lightfm.item_features[i, j] /= lightfm.item_scale
 
-        lightfm.item_biases[i] *= lightfm.item_scale
+        lightfm.item_biases[i] /= lightfm.item_scale
 
     for i in range(no_users):
         for j in range(lightfm.no_components):
-            lightfm.user_features[i, j] *= lightfm.user_scale
-        lightfm.user_biases[i] *= lightfm.user_scale
+            lightfm.user_features[i, j] /= lightfm.user_scale
+        lightfm.user_biases[i] /= lightfm.user_scale
 
     lightfm.item_scale = 1.0
     lightfm.user_scale = 1.0
+
+
+cdef void locked_regularize(FastLightFM lightfm,
+                            double item_alpha,
+                            double user_alpha) nogil:
+    """
+    Apply accumulated L2 regularization to all features. Acquire a lock
+    to prevent multiple threads from performing this operation.
+    """
+
+    {lock_acquire}
+    if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+        regularize(lightfm,
+                   item_alpha,
+                   user_alpha)
+    {lock_release}
 
 
 def fit_logistic(CSRMatrix item_features,
@@ -744,6 +767,11 @@ def fit_logistic(CSRMatrix item_features,
                    lightfm,
                    item_alpha,
                    user_alpha)
+
+            if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+                locked_regularize(lightfm,
+                                  item_alpha,
+                                  user_alpha)
 
         free(user_repr)
         free(it_repr)
@@ -869,6 +897,11 @@ def fit_warp(CSRMatrix item_features,
                                 item_alpha,
                                 user_alpha)
                     break
+
+            if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+                locked_regularize(lightfm,
+                                  item_alpha,
+                                  user_alpha)
 
         free(user_repr)
         free(pos_it_repr)
@@ -1023,6 +1056,11 @@ def fit_warp_kos(CSRMatrix item_features,
                                 user_alpha)
                     break
 
+            if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+                locked_regularize(lightfm,
+                                  item_alpha,
+                                  user_alpha)
+
         free(user_repr)
         free(pos_it_repr)
         free(neg_it_repr)
@@ -1051,7 +1089,7 @@ def fit_bpr(CSRMatrix item_features,
     Fit the model using the BPR loss.
     """
 
-    cdef int i, no_examples, user_id, positive_item_id
+    cdef int i, j, no_examples, user_id, positive_item_id
     cdef int negative_item_id, sampled, row
     cdef double positive_prediction, negative_prediction
     cdef flt weight
@@ -1082,9 +1120,9 @@ def fit_bpr(CSRMatrix item_features,
             user_id = user_ids[row]
             positive_item_id = item_ids[row]
 
-            while True:
-                negative_item_id = (rand_r(&random_states[{thread_num}])
-                                    % item_features.rows)
+            for j in range(no_examples):
+                negative_item_id = item_ids[(rand_r(&random_states[{thread_num}])
+                                             % no_examples)]
                 if not in_positives(negative_item_id, user_id, interactions):
                     break
 
@@ -1117,7 +1155,7 @@ def fit_bpr(CSRMatrix item_features,
                                                                neg_it_repr,
                                                                lightfm.no_components)
 
-            warp_update(weight * sigmoid(positive_prediction - negative_prediction),
+            warp_update(weight * (1.0 - sigmoid(positive_prediction - negative_prediction)),
                         item_features,
                         user_features,
                         user_id,
@@ -1129,6 +1167,11 @@ def fit_bpr(CSRMatrix item_features,
                         lightfm,
                         item_alpha,
                         user_alpha)
+
+            if lightfm.item_scale > MAX_REG_SCALE or lightfm.user_scale > MAX_REG_SCALE:
+                locked_regularize(lightfm,
+                                  item_alpha,
+                                  user_alpha)
 
         free(user_repr)
         free(pos_it_repr)
@@ -1272,7 +1315,7 @@ def predict_ranks(CSRMatrix item_features,
                                                           lightfm.no_components)
 
                 for i in range(row_stop - row_start):
-                    if item_id != item_ids[i] and prediction > predictions[i]:
+                    if item_id != item_ids[i] and prediction >= predictions[i]:
                         ranks[row_start + i] += 1.0
 
         free(user_repr)
@@ -1327,7 +1370,6 @@ def calculate_auc_from_rank(CSRMatrix ranks,
                 # Number of negatives that rank above the current item
                 # over the total number of negatives: the probability
                 # of rank inversion.
-                # print(row_start, row_stop, ranks.data[row_stop + i], 1.0 - rank, num_negatives)
                 auc[user_id] += 1.0 - rank / num_negatives
 
             if num_positives != 0:

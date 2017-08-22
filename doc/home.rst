@@ -96,6 +96,36 @@ The `Movielens example <https://github.com/lyst/lightfm/blob/master/examples/mov
 
 The `Kaggle coupon purchase prediction <https://github.com/tdeboissiere/Kaggle/blob/master/Ponpare/ponpare_lightfm.ipynb>`_ example applies LightFM to predicting coupon purchases.
 
+Articles and tutorials on using LightFM
+---------------------------------------
+
+1. `Learning to Rank Sketchfab Models with LightFM <http://blog.ethanrosenthal.com/2016/11/07/implicit-mf-part-2/>`_
+2. `Metadata Embeddings for User and Item Cold-start Recommendations <http://building-babylon.net/2016/01/26/metadata-embeddings-for-user-and-item-cold-start-recommendations/>`_
+3. `Recommendation Systems - Learn Python for Data Science <https://www.youtube.com/watch?v=9gBC9R-msAk>`_
+
+
+How to cite
+-----------
+
+Please cite LightFM if it helps your research. You can use the following BibTeX entry.::
+
+    @inproceedings{DBLP:conf/recsys/Kula15,
+      author    = {Maciej Kula},
+      editor    = {Toine Bogers and
+                   Marijn Koolen},
+      title     = {Metadata Embeddings for User and Item Cold-start Recommendations},
+      booktitle = {Proceedings of the 2nd Workshop on New Trends on Content-Based Recommender
+                   Systems co-located with 9th {ACM} Conference on Recommender Systems
+                   (RecSys 2015), Vienna, Austria, September 16-20, 2015.},
+      series    = {{CEUR} Workshop Proceedings},
+      volume    = {1448},
+      pages     = {14--21},
+      publisher = {CEUR-WS.org},
+      year      = {2015},
+      url       = {http://ceur-ws.org/Vol-1448/paper4.pdf},
+    }
+
+
 Development
 -----------
 

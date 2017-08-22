@@ -1,5 +1,8 @@
-from .lightfm import LightFM
+try:
+    __LIGHTFM_SETUP__
+except NameError:
+    from .lightfm import LightFM
 
-__version__ = '1.9'
+__version__ = '1.13'
 
 __all__ = ['LightFM', 'datasets', 'evaluation']
