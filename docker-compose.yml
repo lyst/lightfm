@@ -1,8 +1,8 @@
 lightfm:
   build: .
-  volumes:
-    - .:/home/lightfm/
+  # Uncomment this to mount your local version
+  # of the LightFM code.
+  # volumes:
+  #   - .:/home/lightfm/
   ports:
   - "8888:8888"
-  expose:
-    - "8888"
