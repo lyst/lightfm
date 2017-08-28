@@ -8,6 +8,9 @@ import scipy.sparse as sp
 from ._lightfm_fast import (CSRMatrix, FastLightFM,
                             fit_bpr, fit_logistic, fit_warp,
                             fit_warp_kos, predict_lightfm, predict_ranks)
+from skopt import forest_minimize
+
+from .evaluation import precision_at_k, auc_score
 
 __all__ = ['LightFM']
 
@@ -926,3 +929,185 @@ class LightFM(object):
             setattr(self, key, value)
 
         return self
+
+
+    def get_optimal_hyperparameters(self, interactions, space=None,\
+        k_value=5, calls=250, num_threads=1, evaluation='precision_at_k',\
+        split_count=1):
+
+        """
+        Get optimal hyperparameters for this estimator
+
+        Arguments
+        ---------
+
+        space: list of tuples, optional
+            list of tuples containing hyperparameter search space 
+            min-max values 
+            if None, search occurs on example space below 
+
+            eg. space = [(1, 100), #epochs
+                         (5, 40),  #components
+                         (10**-4, 1), #learning_rate
+                         (10**-5, 10**-3), #item_alpha
+                         (10**-5, 10**-3), #user_alpha
+                        ]
+
+        k_value: int, optional
+            for k in precision_at_k evaluation. Required only if 
+            evaluation='precision_at_k'
+
+        calls: int, optional
+            number of optimisation calls to make
+
+        num_threads: int, optional
+            Number of parallel computation threads to use. Should
+            not be higher than the number of physical cores.
+
+        evaluation: string, optional
+            evaluation method to be used for objective function
+            one of ('auc', 'precision_at_k')
+
+        split: int, optional
+            number of interactions to shift from training-interactions
+            to test interactions while creating train/test split
+
+        Returns
+        ---------
+
+        Dictionary with keys as parameter name and value as coresponding
+        optimal hyperparameter value
+
+        Notes
+        -------
+        This method uses forest_minimize method from scikit-optimise library
+        and by using AUC/precision_at_k score as objective function, finds 
+        optimal hyperparameters for LightFM object from search space range 
+        where maximum value of objective function is obtained.
+
+        References
+        ---------
+        [1] Rosenthal, Ethan "Learning to Rank Sketchfab Models with LightFM"
+        
+        """
+
+        if not space:
+            space = [(1, 100), #epochs (for fitting)
+                     (5, 40),  #components
+                     (10**-4, 1), #learning_rate
+                     (10**-5, 10**-3), #item_alpha
+                     (10**-5, 10**-3), #user_alpha
+                    ]
+
+
+        def train_test_split(interactions, split_count=1, fraction=1.0):
+            """
+            Arguments
+            ------
+            interactions : scipy.sparse matrix
+                Interactions between users and items.
+            split_count : int
+                Number of user-item-interactions per user to move
+                from training to test set.
+            fractions : float
+                Fraction of users to split off some of their
+                interactions into test set. If None, then all
+                users are considered.
+
+
+            """
+            train = interactions.copy().tocoo()
+            test = sp.lil_matrix(train.shape)
+
+            select_users = np.where(np.bincount(train.row) >= split_count * 2)[0]
+            test_users = np.random.permutation(select_users)\
+            [:int((np.floor(fraction*(np.unique(train.row)).shape[0])))]
+
+
+            if (fraction < 1 and test_users.shape[0] == 0):
+                print('Not enough users for {} fraction, setting fraction to 1'\
+                    .format(fraction))
+                test_users = np.where(np.bincount(train.row) >= split_count * 2)[0]
+                fraction = 1
+
+            if (test_users.shape[0] == 0 and fraction == 1):
+                while(test_users.shape[0] == 0 and split_count >= 2):
+                    print(('No user with {} interactions, setting split_count to {}'\
+                        +' and fraction to 1')\
+                          .format(2*split_count, split_count - 1))
+                    split_count -= 1
+                    test_users = np.where(np.bincount(train.row) >= split_count * 2)[0]
+
+            if test_users.shape[0] ==0:
+                print('No user has more than one interaction, cannot split data')
+                return None
+
+            train = train.tolil()
+
+            for user in test_users:
+                test_interactions = np.random.permutation(interactions.getrow(user).indices)\
+                [:((split_count))]
+                train[user, test_interactions] = 0.
+                test[user, test_interactions] = interactions[user, test_interactions]
+
+            return train.tocsr(), test.tocsr()
+
+        train_interactions, test_interactions = train_test_split(interactions=interactions,\
+            split_count=split_count)
+
+
+        def obective(params):
+            
+            epochs, no_components, learning_rate, item_alpha,\
+            user_alpha = params
+
+            #replicates other hyperparameters from self object
+            model = LightFM(loss=self.loss, k=self.k, n=self.n,\
+                learning_schedule=self.learning_schedule, rho=self.rho,\
+                epsilon=self.epsilon, max_sampled=self.max_sampled,
+                random_state=self.random_state)
+
+            #sets input params as hyperparameters
+            model.no_components = no_components
+            model.learning_rate = learning_rate
+            model.item_alpha = item_alpha
+            model.user_alpha = user_alpha
+
+            #fit model with train_interactions
+            model.fit(interactions=train_interactions, epochs=epochs,\
+              num_threads=num_threads)
+
+            #evaluate performance
+            if evaluation=='precision_at_k':
+                score = precision_at_k(model=model, test_interactions=test_interactions,\
+                    k=k_value, num_threads=num_threads)
+            elif evaluation=='auc':
+                score = auc_score(model=model, test_interactions=test_interactions,\
+                    num_threads=num_threads)
+
+            mean_score = np.mean(score)
+            out = -mean_score
+
+            # handles overfitting cases
+            if np.abs(out + 1) < 0.01 or out < -1.0:
+                return 0.0
+            else:
+                return out
+
+        res_fm = forest_minimize(objective, space, n_calls=calls, \
+            random_state=0, verbose=False)
+
+
+        params = ['epochs', 'no_components',
+        'learning_rate', 'item_alpha', 'user_alpha']
+
+        return dict(zip(params, res_fm.x))
+
+
+
+
+
+
+
+        
+
