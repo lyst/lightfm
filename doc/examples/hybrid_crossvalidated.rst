@@ -62,7 +62,7 @@ if that's the case:
     from lightfm import LightFM
     
     # Set the number of threads; you can increase this
-    # ify you have more physical cores available.
+    # if you have more physical cores available.
     NUM_THREADS = 2
     NUM_COMPONENTS = 30
     NUM_EPOCHS = 3
