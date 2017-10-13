@@ -21,5 +21,5 @@ def test_random_train_test_split(test_percentage):
 
     train, test = random_train_test_split(data, test_percentage=test_percentage)
 
-    assert test.nnz / data.nnz == test_percentage
+    assert test.nnz / float(data.nnz) == test_percentage
     _assert_disjoint(train, test)
