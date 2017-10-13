@@ -11,6 +11,7 @@ Contents
    Quickstart <quickstart>
    LightFM model <lightfm>
    Model evaluation <lightfm.evaluation>
+   Cross validation <cross_validation>
    Datasets <datasets>
    Examples <examples>
 
