@@ -4,6 +4,7 @@
 ### Added
 - added additional input checks for non-normal inputs (NaNs, infinites) for features
 - added additional input checks for non-normal inputs (NaNs, infinites) for interactions
+- cross validation module with dataset splitting utilities
 ### Changed
 - LightFM model now raises a ValueError (instead of assertion) when the number of supplied
   features exceeds the number of estimated feature embeddings.
