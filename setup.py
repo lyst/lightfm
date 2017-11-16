@@ -147,7 +147,7 @@ class PyTest(TestCommand):
 use_openmp = not sys.platform.startswith('darwin') and not sys.platform.startswith('win')
 
 setup(
-    name='gousto_lightfm',
+    name='goustolightfm',
     version=version,
     description='LightFM recommendation model',
     url='https://github.com/lyst/lightfm',
