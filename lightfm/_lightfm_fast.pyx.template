@@ -859,6 +859,7 @@ def fit_warp(CSRMatrix item_features,
                 sampled = sampled + 1
                 negative_item_id = (rand_r(&random_states[{thread_num}])
                                     % item_features.rows)
+                print("Negative item id sampled")
 
                 compute_representation(item_features,
                                        lightfm.item_features,
