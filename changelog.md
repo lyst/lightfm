@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased][unreleased]
+## [1.14][2017-11-18]
 ### Added
 - added additional input checks for non-normal inputs (NaNs, infinites) for features
 - added additional input checks for non-normal inputs (NaNs, infinites) for interactions
