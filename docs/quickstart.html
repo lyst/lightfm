@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quickstart &mdash; LightFM 1.13 documentation</title>
+  <title>Quickstart &mdash; LightFM 1.14 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.13 documentation" href="index.html"/>
+    <link rel="top" title="LightFM 1.14 documentation" href="index.html"/>
         <link rel="next" title="LightFM" href="lightfm.html"/>
         <link rel="prev" title="Welcome to LightFM’s documentation!" href="home.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.13
+                1.14
               </div>
             
           
@@ -95,6 +95,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
@@ -162,7 +163,7 @@
             
   <div class="section" id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<p>In this example, we&#8217;ll build an implicit feedback recommender using the
+<p>In this example, we’ll build an implicit feedback recommender using the
 Movielens 100k dataset (<a class="reference external" href="http://grouplens.org/datasets/movielens/100k/">http://grouplens.org/datasets/movielens/100k/</a>).</p>
 <p>The code behind this example is available as a <a class="reference external" href="https://github.com/lyst/lightfm/tree/master/examples/quickstart/quickstart.ipynb">Jupyter
 notebook</a></p>
@@ -180,7 +181,7 @@ sparse matrices suitable for further calculation. In particular, it
 prepares the sparse user-item matrices, containing positive entries
 where a user interacted with a product, and zeros otherwise.</p>
 <p>We have two such matrices, a training and a testing set. Both have
-around 1000 users and 1700 items. We&#8217;ll train the model on the train
+around 1000 users and 1700 items. We’ll train the model on the train
 matrix but test it on the test matrix.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">]))</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]))</span>
@@ -196,16 +197,16 @@ matrix but test it on the test matrix.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
 </pre></div>
 </div>
-<p>We&#8217;re going to use the WARP (Weighted Approximate-Rank Pairwise) model.
+<p>We’re going to use the WARP (Weighted Approximate-Rank Pairwise) model.
 WARP is an implicit feedback model: all interactions in the training
 matrix are treated as positive signals, and products that users did not
 interact with they implicitly do not like. The goal of the model is to
 score these implicit positives highly while assigining low scores to
 implicit negatives.</p>
 <p>Model training is accomplished via SGD (stochastic gradient descent).
-This means that for every pass through the data &#8212; an epoch &#8212; the
-model learns to fit the data more and more closely. We&#8217;ll run it for 10
-epochs in this example. We can also run it on multiple cores, so we&#8217;ll
+This means that for every pass through the data — an epoch — the
+model learns to fit the data more and more closely. We’ll run it for 10
+epochs in this example. We can also run it on multiple cores, so we’ll
 set that to 2. (The dataset in this example is too small for that to
 make a difference, but it will matter on bigger datasets.)</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">)</span>
@@ -219,7 +220,7 @@ make a difference, but it will matter on bigger datasets.)</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">lightfm</span><span class="o">.</span><span class="n">lightfm</span><span class="o">.</span><span class="n">LightFM</span> <span class="n">at</span> <span class="mh">0x7f978c58ea50</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>Done! We should now evaluate the model to see how well it&#8217;s doing. We&#8217;re
+<p>Done! We should now evaluate the model to see how well it’s doing. We’re
 most interested in how good the ranking produced by the model is.
 Precision&#64;k is one suitable metric, expressing the percentage of top k
 items in the ranking the user has actually interacted with. <code class="docutils literal"><span class="pre">lightfm</span></code>
@@ -227,7 +228,7 @@ implements a number of metrics in the <code class="docutils literal"><span class
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lightfm.evaluation</span> <span class="k">import</span> <span class="n">precision_at_k</span>
 </pre></div>
 </div>
-<p>We&#8217;ll measure precision in both the train and the test set.</p>
+<p>We’ll measure precision in both the train and the test set.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Train precision: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">precision_at_k</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test precision: </span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">precision_at_k</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
@@ -341,7 +342,7 @@ predictions for into the <code class="docutils literal"><span class="pre">predic
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.13',
+            VERSION:'1.14',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

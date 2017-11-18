@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Model evaluation &mdash; LightFM 1.13 documentation</title>
+  <title>Model evaluation &mdash; LightFM 1.14 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.13 documentation" href="index.html"/>
-        <link rel="next" title="Datasets" href="datasets.html"/>
+    <link rel="top" title="LightFM 1.14 documentation" href="index.html"/>
+        <link rel="next" title="Cross-validation" href="cross_validation.html"/>
         <link rel="prev" title="LightFM" href="lightfm.html"/> 
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.13
+                1.14
               </div>
             
           
@@ -95,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
@@ -166,7 +167,7 @@
 a fitted LightFM model.</p>
 <dl class="function">
 <dt id="lightfm.evaluation.precision_at_k">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">precision_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.evaluation.precision_at_k" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lightfm.evaluation.</code><code class="descname">precision_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#precision_at_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.precision_at_k" title="Permalink to this definition">¶</a></dt>
 <dd><p>Measure the precision at k metric for a model: the fraction of known
 positives in the first k positions of the ranked list of results.
 A perfect score is 1.0.</p>
@@ -175,19 +176,19 @@ A perfect score is 1.0.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>model</strong> (<em>LightFM instance</em>) &#8211; the model to be evaluated</li>
-<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) &#8211; Non-zero entries representing known positives in the evaluation set.</li>
-<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) &#8211; Non-zero entries representing known positives in the train set. These
+<li><strong>model</strong> (<em>LightFM instance</em>) – the model to be evaluated</li>
+<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</li>
+<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
 will be omitted from the score calculations to avoid re-recommending
 known positives.</li>
-<li><strong>k</strong> (<em>integer</em><em>, </em><em>optional</em>) &#8211; The k parameter.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) &#8211; Each row contains that user&#8217;s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) &#8211; Each row contains that item&#8217;s weights over features.</li>
-<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; When False (default), the number of rows in the output will be equal
+<li><strong>k</strong> (<em>integer</em><em>, </em><em>optional</em>) – The k parameter.</li>
+<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
+<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
+<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
 to the number of users with interactions in the evaluation set.
 When True, the number of rows in the output will be equal to the
 number of users.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; Number of parallel computation threads to use. Should
+<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
 not be higher than the number of physical cores.</li>
 </ul>
 </td>
@@ -205,7 +206,7 @@ no interactions for a given user the returned precision will be 0.</p>
 
 <dl class="function">
 <dt id="lightfm.evaluation.recall_at_k">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">recall_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.evaluation.recall_at_k" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lightfm.evaluation.</code><code class="descname">recall_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#recall_at_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.recall_at_k" title="Permalink to this definition">¶</a></dt>
 <dd><p>Measure the recall at k metric for a model: the number of positive items in
 the first k positions of the ranked list of results divided by the number
 of positive items in the test period. A perfect score is 1.0.</p>
@@ -214,19 +215,19 @@ of positive items in the test period. A perfect score is 1.0.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>model</strong> (<em>LightFM instance</em>) &#8211; the model to be evaluated</li>
-<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) &#8211; Non-zero entries representing known positives in the evaluation set.</li>
-<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) &#8211; Non-zero entries representing known positives in the train set. These
+<li><strong>model</strong> (<em>LightFM instance</em>) – the model to be evaluated</li>
+<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</li>
+<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
 will be omitted from the score calculations to avoid re-recommending
 known positives.</li>
-<li><strong>k</strong> (<em>integer</em><em>, </em><em>optional</em>) &#8211; The k parameter.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) &#8211; Each row contains that user&#8217;s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) &#8211; Each row contains that item&#8217;s weights over features.</li>
-<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; When False (default), the number of rows in the output will be equal
+<li><strong>k</strong> (<em>integer</em><em>, </em><em>optional</em>) – The k parameter.</li>
+<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
+<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
+<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
 to the number of users with interactions in the evaluation set.
 When True, the number of rows in the output will be equal to the
 number of users.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; Number of parallel computation threads to use. Should
+<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
 not be higher than the number of physical cores.</li>
 </ul>
 </td>
@@ -245,7 +246,7 @@ returned recall will be 0.</p>
 
 <dl class="function">
 <dt id="lightfm.evaluation.auc_score">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">auc_score</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.evaluation.auc_score" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lightfm.evaluation.</code><code class="descname">auc_score</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#auc_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.auc_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Measure the ROC AUC metric for a model: the probability that a randomly
 chosen positive example has a higher score than a randomly chosen negative
 example.
@@ -255,18 +256,18 @@ A perfect score is 1.0.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>model</strong> (<em>LightFM instance</em>) &#8211; the model to be evaluated</li>
-<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) &#8211; Non-zero entries representing known positives in the evaluation set.</li>
-<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) &#8211; Non-zero entries representing known positives in the train set. These
+<li><strong>model</strong> (<em>LightFM instance</em>) – the model to be evaluated</li>
+<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</li>
+<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
 will be omitted from the score calculations to avoid re-recommending
 known positives.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) &#8211; Each row contains that user&#8217;s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) &#8211; Each row contains that item&#8217;s weights over features.</li>
-<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; When False (default), the number of rows in the output will be equal
+<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
+<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
+<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
 to the number of users with interactions in the evaluation set.
 When True, the number of rows in the output will be equal to the
 number of users.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; Number of parallel computation threads to use. Should
+<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
 not be higher than the number of physical cores.</li>
 </ul>
 </td>
@@ -284,7 +285,7 @@ interactions for a given user the returned AUC will be 0.5.</p>
 
 <dl class="function">
 <dt id="lightfm.evaluation.reciprocal_rank">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">reciprocal_rank</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.evaluation.reciprocal_rank" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lightfm.evaluation.</code><code class="descname">reciprocal_rank</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#reciprocal_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.reciprocal_rank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Measure the reciprocal rank metric for a model: 1 / the rank of the highest
 ranked positive example. A perfect score is 1.0.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -292,18 +293,18 @@ ranked positive example. A perfect score is 1.0.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>model</strong> (<em>LightFM instance</em>) &#8211; the model to be evaluated</li>
-<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) &#8211; Non-zero entries representing known positives in the evaluation set.</li>
-<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) &#8211; Non-zero entries representing known positives in the train set. These
+<li><strong>model</strong> (<em>LightFM instance</em>) – the model to be evaluated</li>
+<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</li>
+<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
 will be omitted from the score calculations to avoid re-recommending
 known positives.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) &#8211; Each row contains that user&#8217;s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) &#8211; Each row contains that item&#8217;s weights over features.</li>
-<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; When False (default), the number of rows in the output will be equal
+<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
+<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
+<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
 to the number of users with interactions in the evaluation set.
 When True, the number of rows in the output will be equal to the
 number of users.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; Number of parallel computation threads to use. Should
+<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
 not be higher than the number of physical cores.</li>
 </ul>
 </td>
@@ -332,7 +333,7 @@ be 0.0.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="datasets.html" class="btn btn-neutral float-right" title="Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="cross_validation.html" class="btn btn-neutral float-right" title="Cross-validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="lightfm.html" class="btn btn-neutral" title="LightFM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -366,7 +367,7 @@ be 0.0.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.13',
+            VERSION:'1.14',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

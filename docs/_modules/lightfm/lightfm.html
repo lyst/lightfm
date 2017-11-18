@@ -1,0 +1,1156 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lightfm.lightfm &mdash; LightFM 1.14 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="LightFM 1.14 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> LightFM
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.14
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../home.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cross_validation.html">Cross validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">LightFM</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>lightfm.lightfm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lightfm.lightfm</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding=utf-8</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+
+<span class="kn">from</span> <span class="nn">._lightfm_fast</span> <span class="k">import</span> <span class="p">(</span><span class="n">CSRMatrix</span><span class="p">,</span> <span class="n">FastLightFM</span><span class="p">,</span>
+                            <span class="n">fit_bpr</span><span class="p">,</span> <span class="n">fit_logistic</span><span class="p">,</span> <span class="n">fit_warp</span><span class="p">,</span>
+                            <span class="n">fit_warp_kos</span><span class="p">,</span> <span class="n">predict_lightfm</span><span class="p">,</span> <span class="n">predict_ranks</span><span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LightFM&#39;</span><span class="p">]</span>
+
+<span class="n">CYTHON_DTYPE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span>
+
+
+<div class="viewcode-block" id="LightFM"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM">[docs]</a><span class="k">class</span> <span class="nc">LightFM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A hybrid latent representation recommender model.</span>
+
+<span class="sd">    The model learns embeddings (latent representations in a high-dimensional</span>
+<span class="sd">    space) for users and items in a way that encodes user preferences over items.</span>
+<span class="sd">    When multiplied together, these representations produce scores for every item</span>
+<span class="sd">    for a given user; items scored highly are more likely to be interesting to</span>
+<span class="sd">    the user.</span>
+
+<span class="sd">    The user and item representations are expressed in terms of representations</span>
+<span class="sd">    of their features: an embedding is estimated for every feature, and these</span>
+<span class="sd">    features are then summed together to arrive at representations for users and</span>
+<span class="sd">    items. For example, if the movie &#39;Wizard of Oz&#39; is described by the following</span>
+<span class="sd">    features: &#39;musical fantasy&#39;, &#39;Judy Garland&#39;, and &#39;Wizard of Oz&#39;, then its</span>
+<span class="sd">    embedding will be given by taking the features&#39; embeddings and adding them</span>
+<span class="sd">    together. The same applies to user features.</span>
+
+<span class="sd">    The embeddings are learned through `stochastic gradient</span>
+<span class="sd">    descent &lt;http://cs231n.github.io/optimization-1/&gt;`_ methods.</span>
+
+<span class="sd">    Four loss functions are available:</span>
+
+<span class="sd">    - logistic: useful when both positive (1) and negative (-1) interactions</span>
+<span class="sd">      are present.</span>
+<span class="sd">    - BPR: Bayesian Personalised Ranking [1]_ pairwise loss. Maximises the</span>
+<span class="sd">      prediction difference between a positive example and a randomly</span>
+<span class="sd">      chosen negative example. Useful when only positive interactions</span>
+<span class="sd">      are present and optimising ROC AUC is desired.</span>
+<span class="sd">    - WARP: Weighted Approximate-Rank Pairwise [2]_ loss. Maximises</span>
+<span class="sd">      the rank of positive examples by repeatedly sampling negative</span>
+<span class="sd">      examples until rank violating one is found. Useful when only</span>
+<span class="sd">      positive interactions are present and optimising the top of</span>
+<span class="sd">      the recommendation list (precision@k) is desired.</span>
+<span class="sd">    - k-OS WARP: k-th order statistic loss [3]_. A modification of WARP that</span>
+<span class="sd">      uses the k-th positive example for any given user as a basis for pairwise</span>
+<span class="sd">      updates.</span>
+
+<span class="sd">    Two learning rate schedules are available:</span>
+
+<span class="sd">    - adagrad: [4]_</span>
+<span class="sd">    - adadelta: [5]_</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    no_components: int, optional</span>
+<span class="sd">        the dimensionality of the feature latent embeddings.</span>
+<span class="sd">    k: int, optional</span>
+<span class="sd">        for k-OS training, the k-th positive example will be selected from the</span>
+<span class="sd">        n positive examples sampled for every user.</span>
+<span class="sd">    n: int, optional</span>
+<span class="sd">        for k-OS training, maximum number of positives sampled for each update.</span>
+<span class="sd">    learning_schedule: string, optional</span>
+<span class="sd">        one of (&#39;adagrad&#39;, &#39;adadelta&#39;).</span>
+<span class="sd">    loss: string, optional</span>
+<span class="sd">        one of  (&#39;logistic&#39;, &#39;bpr&#39;, &#39;warp&#39;, &#39;warp-kos&#39;): the loss function.</span>
+<span class="sd">    learning_rate: float, optional</span>
+<span class="sd">        initial learning rate for the adagrad learning schedule.</span>
+<span class="sd">    rho: float, optional</span>
+<span class="sd">        moving average coefficient for the adadelta learning schedule.</span>
+<span class="sd">    epsilon: float, optional</span>
+<span class="sd">        conditioning parameter for the adadelta learning schedule.</span>
+<span class="sd">    item_alpha: float, optional</span>
+<span class="sd">        L2 penalty on item features</span>
+<span class="sd">    user_alpha: float, optional</span>
+<span class="sd">        L2 penalty on user features.</span>
+<span class="sd">    max_sampled: int, optional</span>
+<span class="sd">        maximum number of negative samples used during WARP fitting.</span>
+<span class="sd">        It requires a lot of sampling to find negative triplets for users that</span>
+<span class="sd">        are already well represented by the model; this can lead to very long</span>
+<span class="sd">        training times and overfitting. Setting this to a higher number will</span>
+<span class="sd">        generally lead to longer training times, but may in some cases improve</span>
+<span class="sd">        accuracy.</span>
+<span class="sd">    random_state: int seed, RandomState instance, or None</span>
+<span class="sd">        The seed of the pseudo random number generator to use when shuffling</span>
+<span class="sd">        the data and initializing the parameters.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    item_embeddings: np.float32 array of shape [n_item_features, n_components]</span>
+<span class="sd">         Contains the estimated latent vectors for item features. The [i, j]-th</span>
+<span class="sd">         entry gives the value of the j-th component for the i-th item feature.</span>
+<span class="sd">         In the simplest case where the item feature matrix is an identity</span>
+<span class="sd">         matrix, the i-th row will represent the i-th item latent vector.</span>
+<span class="sd">    user_embeddings: np.float32 array of shape [n_user_features, n_components]</span>
+<span class="sd">         Contains the estimated latent vectors for user features. The [i, j]-th</span>
+<span class="sd">         entry gives the value of the j-th component for the i-th user feature.</span>
+<span class="sd">         In the simplest case where the user feature matrix is an identity</span>
+<span class="sd">         matrix, the i-th row will represent the i-th user latent vector.</span>
+<span class="sd">    item_biases: np.float32 array of shape [n_item_features,]</span>
+<span class="sd">         Contains the biases for item_features.</span>
+<span class="sd">    user_biases: np.float32 array of shape [n_user_features,]</span>
+<span class="sd">         Contains the biases for user_features.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Users&#39; and items&#39; latent representations are expressed in terms of their</span>
+<span class="sd">    features&#39; representations. If no feature matrices are provided to the</span>
+<span class="sd">    :func:`lightfm.LightFM.fit` or :func:`lightfm.LightFM.predict` methods, they are</span>
+<span class="sd">    implicitly assumed to be identity matrices: that is, each user and item</span>
+<span class="sd">    are characterised by one feature that is unique to that user (or item).</span>
+<span class="sd">    In this case, LightFM reduces to a traditional collaborative filtering</span>
+<span class="sd">    matrix factorization method.</span>
+
+<span class="sd">    When a feature matrix is provided, it should be of shape</span>
+<span class="sd">    ``(num_&lt;users/items&gt; x num_features)``. An embedding will then be estimated</span>
+<span class="sd">    for every feature: that is, there will be ``num_features`` embeddings.</span>
+<span class="sd">    To obtain the representation for user i, the model will look up the i-th</span>
+<span class="sd">    row of the feature matrix to find the features with non-zero weights in</span>
+<span class="sd">    that row; the embeddings for these features will then be added together</span>
+<span class="sd">    to arrive at the user representation. For example, if user 10 has weight 1</span>
+<span class="sd">    in the 5th column of the user feature matrix, and weight 3 in the 20th</span>
+<span class="sd">    column, that user&#39;s representation will be found by adding together</span>
+<span class="sd">    the embedding for the 5th and the 20th features (multiplying the latter</span>
+<span class="sd">    by 3). The same goes for items.</span>
+
+<span class="sd">    Note: when supplying feature matrices, an implicit identity feature</span>
+<span class="sd">    matrix will no longer be used. This may result in a less expressive model:</span>
+<span class="sd">    because no per-user features are estiamated, the model may underfit. To</span>
+<span class="sd">    combat this, include per-user (per-item) features (that is, an identity</span>
+<span class="sd">    matrix) as part of the feature matrix you supply.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    .. [1] Rendle, Steffen, et al. &quot;BPR: Bayesian personalized ranking from</span>
+<span class="sd">           implicit feedback.&quot;</span>
+<span class="sd">           Proceedings of the Twenty-Fifth Conference on Uncertainty in</span>
+<span class="sd">           Artificial Intelligence. AUAI Press, 2009.</span>
+<span class="sd">    .. [2] Weston, Jason, Samy Bengio, and Nicolas Usunier. &quot;Wsabie: Scaling up</span>
+<span class="sd">           to large vocabulary image annotation.&quot; IJCAI. Vol. 11. 2011.</span>
+<span class="sd">    .. [3] Weston, Jason, Hector Yee, and Ron J. Weiss. &quot;Learning to rank</span>
+<span class="sd">           recommendations with the k-order statistic loss.&quot;</span>
+<span class="sd">           Proceedings of the 7th ACM conference on Recommender systems. ACM,</span>
+<span class="sd">           2013.</span>
+<span class="sd">    .. [4] Duchi, John, Elad Hazan, and Yoram Singer. &quot;Adaptive subgradient</span>
+<span class="sd">           methods for online learning and stochastic optimization.&quot;</span>
+<span class="sd">           The Journal of Machine Learning Research 12 (2011): 2121-2159.</span>
+<span class="sd">    .. [5] Zeiler, Matthew D. &quot;ADADELTA: An adaptive learning rate method.&quot;</span>
+<span class="sd">           arXiv preprint arXiv:1212.5701 (2012).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no_components</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">learning_schedule</span><span class="o">=</span><span class="s1">&#39;adagrad&#39;</span><span class="p">,</span>
+                 <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;logistic&#39;</span><span class="p">,</span>
+                 <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                 <span class="n">item_alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">user_alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">max_sampled</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">assert</span> <span class="n">item_alpha</span> <span class="o">&gt;=</span> <span class="mf">0.0</span>
+        <span class="k">assert</span> <span class="n">user_alpha</span> <span class="o">&gt;=</span> <span class="mf">0.0</span>
+        <span class="k">assert</span> <span class="n">no_components</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">rho</span> <span class="o">&lt;</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">epsilon</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">learning_schedule</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;adagrad&#39;</span><span class="p">,</span> <span class="s1">&#39;adadelta&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">loss</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;logistic&#39;</span><span class="p">,</span> <span class="s1">&#39;warp&#39;</span><span class="p">,</span> <span class="s1">&#39;bpr&#39;</span><span class="p">,</span> <span class="s1">&#39;warp-kos&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">max_sampled</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_sampled must be a positive integer&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_schedule</span> <span class="o">=</span> <span class="n">learning_schedule</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">no_components</span> <span class="o">=</span> <span class="n">no_components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_sampled</span> <span class="o">=</span> <span class="n">max_sampled</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_alpha</span> <span class="o">=</span> <span class="n">item_alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_alpha</span> <span class="o">=</span> <span class="n">user_alpha</span>
+
+        <span class="k">if</span> <span class="n">random_state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_state</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_reset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_embedding_gradients</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_embedding_momentum</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_biases</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_bias_gradients</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_bias_momentum</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_embedding_gradients</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_embedding_momentum</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_biases</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_bias_gradients</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_bias_momentum</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_check_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">item_embedding_gradients</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">item_embedding_momentum</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">item_biases</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">item_bias_gradients</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">item_bias_momentum</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">user_embedding_gradients</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">user_embedding_momentum</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">user_biases</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">user_bias_gradients</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">user_bias_momentum</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="n">var</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;You must fit the model before &#39;</span>
+                                 <span class="s1">&#39;trying to obtain predictions.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no_components</span><span class="p">,</span> <span class="n">no_item_features</span><span class="p">,</span> <span class="n">no_user_features</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise internal latent representations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Initialise item features.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">no_item_features</span><span class="p">,</span> <span class="n">no_components</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span>
+            <span class="n">no_components</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_embedding_gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_embedding_momentum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_biases</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">no_item_features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_bias_gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_biases</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_bias_momentum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_biases</span><span class="p">)</span>
+
+        <span class="c1"># Initialise user features.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">no_user_features</span><span class="p">,</span> <span class="n">no_components</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span>
+            <span class="n">no_components</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_embedding_gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_embedding_momentum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_biases</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">no_user_features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_bias_gradients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_biases</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_bias_momentum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_biases</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_schedule</span> <span class="o">==</span> <span class="s1">&#39;adagrad&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item_embedding_gradients</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item_bias_gradients</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_embedding_gradients</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_bias_gradients</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_construct_feature_matrices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_users</span><span class="p">,</span> <span class="n">n_items</span><span class="p">,</span> <span class="n">user_features</span><span class="p">,</span>
+                                    <span class="n">item_features</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">user_features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">user_features</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">n_users</span><span class="p">,</span>
+                                        <span class="n">dtype</span><span class="o">=</span><span class="n">CYTHON_DTYPE</span><span class="p">,</span>
+                                        <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">user_features</span> <span class="o">=</span> <span class="n">user_features</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">item_features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">item_features</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">n_items</span><span class="p">,</span>
+                                        <span class="n">dtype</span><span class="o">=</span><span class="n">CYTHON_DTYPE</span><span class="p">,</span>
+                                        <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">item_features</span> <span class="o">=</span> <span class="n">item_features</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">n_users</span> <span class="o">&gt;</span> <span class="n">user_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Number of user feature rows does not equal &#39;</span>
+                            <span class="s1">&#39;the number of users&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">n_items</span> <span class="o">&gt;</span> <span class="n">item_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Number of item feature rows does not equal &#39;</span>
+                            <span class="s1">&#39;the number of items&#39;</span><span class="p">)</span>
+
+        <span class="c1"># If we already have embeddings, verify that</span>
+        <span class="c1"># we have them for all the supplied features</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">user_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The user feature matrix specifies more &#39;</span>
+                                 <span class="s1">&#39;features than there are estimated &#39;</span>
+                                 <span class="s1">&#39;feature embeddings: </span><span class="si">{}</span><span class="s1"> vs </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">user_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                                 <span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">item_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The user feature matrix specifies more &#39;</span>
+                                 <span class="s1">&#39;features than there are estimated &#39;</span>
+                                 <span class="s1">&#39;feature embeddings: </span><span class="si">{}</span><span class="s1"> vs </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">item_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                                 <span class="p">))</span>
+
+        <span class="n">user_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_cython_dtype</span><span class="p">(</span><span class="n">user_features</span><span class="p">)</span>
+        <span class="n">item_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_cython_dtype</span><span class="p">(</span><span class="n">item_features</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">user_features</span><span class="p">,</span> <span class="n">item_features</span>
+
+    <span class="k">def</span> <span class="nf">_get_positives_lookup_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interactions</span><span class="p">):</span>
+
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">interactions</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mat</span><span class="o">.</span><span class="n">has_sorted_indices</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mat</span><span class="o">.</span><span class="n">sorted_indices</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mat</span>
+
+    <span class="k">def</span> <span class="nf">_to_cython_dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mat</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">mat</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">CYTHON_DTYPE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mat</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">CYTHON_DTYPE</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mat</span>
+
+    <span class="k">def</span> <span class="nf">_process_sample_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span> <span class="n">sample_weight</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">sample_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">==</span> <span class="s1">&#39;warp-kos&#39;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;k-OS loss with sample weights &#39;</span>
+                                          <span class="s1">&#39;not implemented.&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_weight</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Sample_weight must be a COO matrix.&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">sample_weight</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">interactions</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Sample weight and interactions &#39;</span>
+                                 <span class="s1">&#39;matrices must be the same shape&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">interactions</span><span class="o">.</span><span class="n">row</span><span class="p">,</span>
+                                   <span class="n">sample_weight</span><span class="o">.</span><span class="n">row</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">interactions</span><span class="o">.</span><span class="n">col</span><span class="p">,</span>
+                                   <span class="n">sample_weight</span><span class="o">.</span><span class="n">col</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Sample weight and interaction matrix &#39;</span>
+                                 <span class="s1">&#39;entries must be in the same order&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">sample_weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">CYTHON_DTYPE</span><span class="p">:</span>
+                <span class="n">sample_weight_data</span> <span class="o">=</span> <span class="n">sample_weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">CYTHON_DTYPE</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sample_weight_data</span> <span class="o">=</span> <span class="n">sample_weight</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equiv</span><span class="p">(</span><span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">):</span>
+                <span class="c1"># Re-use interactions data if they are all</span>
+                <span class="c1"># ones</span>
+                <span class="n">sample_weight_data</span> <span class="o">=</span> <span class="n">interactions</span><span class="o">.</span><span class="n">data</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Otherwise allocate a new array of ones</span>
+                <span class="n">sample_weight_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                                                  <span class="n">dtype</span><span class="o">=</span><span class="n">CYTHON_DTYPE</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sample_weight_data</span>
+
+    <span class="k">def</span> <span class="nf">_get_lightfm_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">lightfm_data</span> <span class="o">=</span> <span class="n">FastLightFM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">item_embedding_gradients</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">item_embedding_momentum</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">item_biases</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">item_bias_gradients</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">item_bias_momentum</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">user_embedding_gradients</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">user_embedding_momentum</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">user_biases</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">user_bias_gradients</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">user_bias_momentum</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">no_components</span><span class="p">,</span>
+                                   <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_schedule</span> <span class="o">==</span> <span class="s1">&#39;adadelta&#39;</span><span class="p">),</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span>
+                                   <span class="bp">self</span><span class="o">.</span><span class="n">max_sampled</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lightfm_data</span>
+
+    <span class="k">def</span> <span class="nf">_check_finite</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">item_biases</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">user_biases</span><span class="p">):</span>
+            <span class="c1"># A sum of an array that contains non-finite values</span>
+            <span class="c1"># will also be non-finite, and we avoid creating a</span>
+            <span class="c1"># large boolean temporary.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">parameter</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not all estimated parameters are finite,&quot;</span>
+                                 <span class="s2">&quot; your model may have diverged. Try decreasing&quot;</span>
+                                 <span class="s2">&quot; the learning rate or normalising feature values&quot;</span>
+                                 <span class="s2">&quot; and sample weights&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_input_finite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Not all input values are finite. &#39;</span>
+                             <span class="s1">&#39;Check the input for NaNs and infinite values.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LightFM.fit"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span>
+            <span class="n">user_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">item_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">sample_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fit the model.</span>
+
+<span class="sd">        For details on how to use feature matrices, see the documentation</span>
+<span class="sd">        on the :class:`lightfm.LightFM` class.</span>
+
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        interactions: np.float32 coo_matrix of shape [n_users, n_items]</span>
+<span class="sd">             the matrix containing</span>
+<span class="sd">             user-item interactions. Will be converted to</span>
+<span class="sd">             numpy.float32 dtype if it is not of that type.</span>
+<span class="sd">        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional</span>
+<span class="sd">             Each row contains that user&#39;s weights over features.</span>
+<span class="sd">        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional</span>
+<span class="sd">             Each row contains that item&#39;s weights over features.</span>
+<span class="sd">        sample_weight: np.float32 coo_matrix of shape [n_users, n_items], optional</span>
+<span class="sd">             matrix with entries expressing weights of individual</span>
+<span class="sd">             interactions from the interactions matrix.</span>
+<span class="sd">             Its row and col arrays must be the same as</span>
+<span class="sd">             those of the interactions matrix. For memory</span>
+<span class="sd">             efficiency its possible to use the same arrays</span>
+<span class="sd">             for both weights and interaction matrices.</span>
+<span class="sd">             Defaults to weight 1.0 for all interactions.</span>
+<span class="sd">             Not implemented for the k-OS loss.</span>
+<span class="sd">        epochs: int, optional</span>
+<span class="sd">             number of epochs to run</span>
+<span class="sd">        num_threads: int, optional</span>
+<span class="sd">             Number of parallel computation threads to use. Should</span>
+<span class="sd">             not be higher than the number of physical cores.</span>
+<span class="sd">        verbose: bool, optional</span>
+<span class="sd">             whether to print progress messages.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        LightFM instance</span>
+<span class="sd">            the fitted model</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Discard old results, if any</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_state</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_partial</span><span class="p">(</span><span class="n">interactions</span><span class="p">,</span>
+                                <span class="n">user_features</span><span class="o">=</span><span class="n">user_features</span><span class="p">,</span>
+                                <span class="n">item_features</span><span class="o">=</span><span class="n">item_features</span><span class="p">,</span>
+                                <span class="n">sample_weight</span><span class="o">=</span><span class="n">sample_weight</span><span class="p">,</span>
+                                <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
+                                <span class="n">num_threads</span><span class="o">=</span><span class="n">num_threads</span><span class="p">,</span>
+                                <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LightFM.fit_partial"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM.fit_partial">[docs]</a>    <span class="k">def</span> <span class="nf">fit_partial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span>
+                    <span class="n">user_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">item_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">sample_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fit the model.</span>
+
+<span class="sd">        Fit the model. Unlike fit, repeated calls to this method will</span>
+<span class="sd">        cause training to resume from the current model state.</span>
+
+<span class="sd">        For details on how to use feature matrices, see the documentation</span>
+<span class="sd">        on the :class:`lightfm.LightFM` class.</span>
+
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        interactions: np.float32 coo_matrix of shape [n_users, n_items]</span>
+<span class="sd">             the matrix containing</span>
+<span class="sd">             user-item interactions. Will be converted to</span>
+<span class="sd">             numpy.float32 dtype if it is not of that type.</span>
+<span class="sd">        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional</span>
+<span class="sd">             Each row contains that user&#39;s weights over features.</span>
+<span class="sd">        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional</span>
+<span class="sd">             Each row contains that item&#39;s weights over features.</span>
+<span class="sd">        sample_weight: np.float32 coo_matrix of shape [n_users, n_items], optional</span>
+<span class="sd">             matrix with entries expressing weights of individual</span>
+<span class="sd">             interactions from the interactions matrix.</span>
+<span class="sd">             Its row and col arrays must be the same as</span>
+<span class="sd">             those of the interactions matrix. For memory</span>
+<span class="sd">             efficiency its possible to use the same arrays</span>
+<span class="sd">             for both weights and interaction matrices.</span>
+<span class="sd">             Defaults to weight 1.0 for all interactions.</span>
+<span class="sd">             Not implemented for the k-OS loss.</span>
+<span class="sd">        epochs: int, optional</span>
+<span class="sd">             number of epochs to run</span>
+<span class="sd">        num_threads: int, optional</span>
+<span class="sd">             Number of parallel computation threads to use. Should</span>
+<span class="sd">             not be higher than the number of physical cores.</span>
+<span class="sd">        verbose: bool, optional</span>
+<span class="sd">             whether to print progress messages.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        LightFM instance</span>
+<span class="sd">            the fitted model</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># We need this in the COO format.</span>
+        <span class="c1"># If that&#39;s already true, this is a no-op.</span>
+        <span class="n">interactions</span> <span class="o">=</span> <span class="n">interactions</span><span class="o">.</span><span class="n">tocoo</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">interactions</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">CYTHON_DTYPE</span><span class="p">:</span>
+            <span class="n">interactions</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">CYTHON_DTYPE</span><span class="p">)</span>
+
+        <span class="n">sample_weight_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_sample_weight</span><span class="p">(</span><span class="n">interactions</span><span class="p">,</span>
+                                                         <span class="n">sample_weight</span><span class="p">)</span>
+
+        <span class="n">n_users</span><span class="p">,</span> <span class="n">n_items</span> <span class="o">=</span> <span class="n">interactions</span><span class="o">.</span><span class="n">shape</span>
+        <span class="p">(</span><span class="n">user_features</span><span class="p">,</span>
+         <span class="n">item_features</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_feature_matrices</span><span class="p">(</span><span class="n">n_users</span><span class="p">,</span>
+                                                           <span class="n">n_items</span><span class="p">,</span>
+                                                           <span class="n">user_features</span><span class="p">,</span>
+                                                           <span class="n">item_features</span><span class="p">)</span>
+
+        <span class="n">sample_weight</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_cython_dtype</span><span class="p">(</span><span class="n">sample_weight</span><span class="p">)</span>
+                         <span class="k">if</span> <span class="n">sample_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span>
+                         <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">interactions</span><span class="o">.</span><span class="n">getnnz</span><span class="p">(),</span>
+                                 <span class="n">dtype</span><span class="o">=</span><span class="n">CYTHON_DTYPE</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">input_data</span> <span class="ow">in</span> <span class="p">(</span><span class="n">user_features</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                           <span class="n">item_features</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                           <span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                           <span class="n">sample_weight</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_input_finite</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Initialise latent factors only if this is the first call</span>
+            <span class="c1"># to fit_partial.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no_components</span><span class="p">,</span>
+                             <span class="n">item_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                             <span class="n">user_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># Check that the dimensionality of the feature matrices has</span>
+        <span class="c1"># not changed between runs.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">item_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Incorrect number of features in item_features&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Incorrect number of features in user_features&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Epoch </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">epoch</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_epoch</span><span class="p">(</span><span class="n">item_features</span><span class="p">,</span>
+                            <span class="n">user_features</span><span class="p">,</span>
+                            <span class="n">interactions</span><span class="p">,</span>
+                            <span class="n">sample_weight_data</span><span class="p">,</span>
+                            <span class="n">num_threads</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_finite</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="nf">_run_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_features</span><span class="p">,</span> <span class="n">user_features</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span>
+                   <span class="n">sample_weight</span><span class="p">,</span> <span class="n">num_threads</span><span class="p">,</span> <span class="n">loss</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run an individual epoch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">loss</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;warp&#39;</span><span class="p">,</span> <span class="s1">&#39;bpr&#39;</span><span class="p">,</span> <span class="s1">&#39;warp-kos&#39;</span><span class="p">):</span>
+            <span class="c1"># The CSR conversion needs to happen before shuffle indices are created.</span>
+            <span class="c1"># Calling .tocsr may result in a change in the data arrays of the COO matrix,</span>
+            <span class="n">positives_lookup</span> <span class="o">=</span> <span class="n">CSRMatrix</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_positives_lookup_matrix</span><span class="p">(</span><span class="n">interactions</span><span class="p">))</span>
+
+        <span class="c1"># Create shuffle indexes.</span>
+        <span class="n">shuffle_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">shuffle_indices</span><span class="p">)</span>
+
+        <span class="n">lightfm_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lightfm_data</span><span class="p">()</span>
+
+        <span class="c1"># Call the estimation routines.</span>
+        <span class="k">if</span> <span class="n">loss</span> <span class="o">==</span> <span class="s1">&#39;warp&#39;</span><span class="p">:</span>
+            <span class="n">fit_warp</span><span class="p">(</span><span class="n">CSRMatrix</span><span class="p">(</span><span class="n">item_features</span><span class="p">),</span>
+                     <span class="n">CSRMatrix</span><span class="p">(</span><span class="n">user_features</span><span class="p">),</span>
+                     <span class="n">positives_lookup</span><span class="p">,</span>
+                     <span class="n">interactions</span><span class="o">.</span><span class="n">row</span><span class="p">,</span>
+                     <span class="n">interactions</span><span class="o">.</span><span class="n">col</span><span class="p">,</span>
+                     <span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                     <span class="n">sample_weight</span><span class="p">,</span>
+                     <span class="n">shuffle_indices</span><span class="p">,</span>
+                     <span class="n">lightfm_data</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">item_alpha</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">user_alpha</span><span class="p">,</span>
+                     <span class="n">num_threads</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s1">&#39;bpr&#39;</span><span class="p">:</span>
+            <span class="n">fit_bpr</span><span class="p">(</span><span class="n">CSRMatrix</span><span class="p">(</span><span class="n">item_features</span><span class="p">),</span>
+                    <span class="n">CSRMatrix</span><span class="p">(</span><span class="n">user_features</span><span class="p">),</span>
+                    <span class="n">positives_lookup</span><span class="p">,</span>
+                    <span class="n">interactions</span><span class="o">.</span><span class="n">row</span><span class="p">,</span>
+                    <span class="n">interactions</span><span class="o">.</span><span class="n">col</span><span class="p">,</span>
+                    <span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                    <span class="n">sample_weight</span><span class="p">,</span>
+                    <span class="n">shuffle_indices</span><span class="p">,</span>
+                    <span class="n">lightfm_data</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">item_alpha</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">user_alpha</span><span class="p">,</span>
+                    <span class="n">num_threads</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s1">&#39;warp-kos&#39;</span><span class="p">:</span>
+            <span class="n">fit_warp_kos</span><span class="p">(</span><span class="n">CSRMatrix</span><span class="p">(</span><span class="n">item_features</span><span class="p">),</span>
+                         <span class="n">CSRMatrix</span><span class="p">(</span><span class="n">user_features</span><span class="p">),</span>
+                         <span class="n">positives_lookup</span><span class="p">,</span>
+                         <span class="n">interactions</span><span class="o">.</span><span class="n">row</span><span class="p">,</span>
+                         <span class="n">shuffle_indices</span><span class="p">,</span>
+                         <span class="n">lightfm_data</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">item_alpha</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">user_alpha</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
+                         <span class="n">num_threads</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fit_logistic</span><span class="p">(</span><span class="n">CSRMatrix</span><span class="p">(</span><span class="n">item_features</span><span class="p">),</span>
+                         <span class="n">CSRMatrix</span><span class="p">(</span><span class="n">user_features</span><span class="p">),</span>
+                         <span class="n">interactions</span><span class="o">.</span><span class="n">row</span><span class="p">,</span>
+                         <span class="n">interactions</span><span class="o">.</span><span class="n">col</span><span class="p">,</span>
+                         <span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                         <span class="n">sample_weight</span><span class="p">,</span>
+                         <span class="n">shuffle_indices</span><span class="p">,</span>
+                         <span class="n">lightfm_data</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">item_alpha</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">user_alpha</span><span class="p">,</span>
+                         <span class="n">num_threads</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LightFM.predict"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_ids</span><span class="p">,</span> <span class="n">item_ids</span><span class="p">,</span> <span class="n">item_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">user_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the recommendation score for user-item pairs.</span>
+
+<span class="sd">        For details on how to use feature matrices, see the documentation</span>
+<span class="sd">        on the :class:`lightfm.LightFM` class.</span>
+
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        user_ids: integer or np.int32 array of shape [n_pairs,]</span>
+<span class="sd">             single user id or an array containing the user ids for the</span>
+<span class="sd">             user-item pairs for which a prediction is to be computed</span>
+<span class="sd">        item_ids: np.int32 array of shape [n_pairs,]</span>
+<span class="sd">             an array containing the item ids for the user-item pairs for which</span>
+<span class="sd">             a prediction is to be computed.</span>
+<span class="sd">        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional</span>
+<span class="sd">             Each row contains that user&#39;s weights over features.</span>
+<span class="sd">        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional</span>
+<span class="sd">             Each row contains that item&#39;s weights over features.</span>
+<span class="sd">        num_threads: int, optional</span>
+<span class="sd">             Number of parallel computation threads to use. Should</span>
+<span class="sd">             not be higher than the number of physical cores.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        np.float32 array of shape [n_pairs,]</span>
+<span class="sd">            Numpy array containing the recommendation scores for pairs defined</span>
+<span class="sd">            by the inputs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_initialized</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">user_ids</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">user_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">user_ids</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">item_ids</span><span class="p">))</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">item_ids</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">user_ids</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+            <span class="n">user_ids</span> <span class="o">=</span> <span class="n">user_ids</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item_ids</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+            <span class="n">item_ids</span> <span class="o">=</span> <span class="n">item_ids</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+        <span class="n">n_users</span> <span class="o">=</span> <span class="n">user_ids</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">n_items</span> <span class="o">=</span> <span class="n">item_ids</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="p">(</span><span class="n">user_features</span><span class="p">,</span>
+         <span class="n">item_features</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_feature_matrices</span><span class="p">(</span><span class="n">n_users</span><span class="p">,</span>
+                                                           <span class="n">n_items</span><span class="p">,</span>
+                                                           <span class="n">user_features</span><span class="p">,</span>
+                                                           <span class="n">item_features</span><span class="p">)</span>
+
+        <span class="n">lightfm_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lightfm_data</span><span class="p">()</span>
+
+        <span class="n">predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">user_ids</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="n">predict_lightfm</span><span class="p">(</span><span class="n">CSRMatrix</span><span class="p">(</span><span class="n">item_features</span><span class="p">),</span>
+                        <span class="n">CSRMatrix</span><span class="p">(</span><span class="n">user_features</span><span class="p">),</span>
+                        <span class="n">user_ids</span><span class="p">,</span>
+                        <span class="n">item_ids</span><span class="p">,</span>
+                        <span class="n">predictions</span><span class="p">,</span>
+                        <span class="n">lightfm_data</span><span class="p">,</span>
+                        <span class="n">num_threads</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">predictions</span></div>
+
+<div class="viewcode-block" id="LightFM.predict_rank"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM.predict_rank">[docs]</a>    <span class="k">def</span> <span class="nf">predict_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_interactions</span><span class="p">,</span> <span class="n">train_interactions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">item_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Predict the rank of selected interactions. Computes recommendation</span>
+<span class="sd">        rankings across all items for every user in interactions and calculates</span>
+<span class="sd">        the rank of all non-zero entries in the recommendation ranking, with 0</span>
+<span class="sd">        meaning the top of the list (most recommended) and n_items - 1 being</span>
+<span class="sd">        the end of the list (least recommended).</span>
+
+<span class="sd">        Performs best when only a handful of interactions need to be evaluated</span>
+<span class="sd">        per user. If you need to compute predictions for many items for every</span>
+<span class="sd">        user, use the predict method instead.</span>
+
+<span class="sd">        For details on how to use feature matrices, see the documentation</span>
+<span class="sd">        on the :class:`lightfm.LightFM` class.</span>
+
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        test_interactions: np.float32 csr_matrix of shape [n_users, n_items]</span>
+<span class="sd">             Non-zero entries denote the user-item pairs</span>
+<span class="sd">             whose rank will be computed.</span>
+<span class="sd">        train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional</span>
+<span class="sd">             Non-zero entries denote the user-item pairs which will be excluded</span>
+<span class="sd">             from rank computation. Use to exclude training set interactions</span>
+<span class="sd">             from being scored and ranked for evaluation.</span>
+<span class="sd">        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional</span>
+<span class="sd">             Each row contains that user&#39;s weights over features.</span>
+<span class="sd">        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional</span>
+<span class="sd">             Each row contains that item&#39;s weights over features.</span>
+<span class="sd">        num_threads: int, optional</span>
+<span class="sd">             Number of parallel computation threads to use.</span>
+<span class="sd">             Should not be higher than the number of physical cores.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        np.float32 csr_matrix of shape [n_users, n_items]</span>
+<span class="sd">            the [i, j]-th entry of the matrix will contain the rank of the j-th</span>
+<span class="sd">            item in the sorted recommendations list for the i-th user.</span>
+<span class="sd">            The degree of sparsity of this matrix will be equal to that of the</span>
+<span class="sd">            input interactions matrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_initialized</span><span class="p">()</span>
+
+        <span class="n">n_users</span><span class="p">,</span> <span class="n">n_items</span> <span class="o">=</span> <span class="n">test_interactions</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="p">(</span><span class="n">user_features</span><span class="p">,</span>
+         <span class="n">item_features</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_feature_matrices</span><span class="p">(</span><span class="n">n_users</span><span class="p">,</span>
+                                                           <span class="n">n_items</span><span class="p">,</span>
+                                                           <span class="n">user_features</span><span class="p">,</span>
+                                                           <span class="n">item_features</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">item_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Incorrect number of features in item_features&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Incorrect number of features in user_features&#39;</span><span class="p">)</span>
+
+        <span class="n">test_interactions</span> <span class="o">=</span> <span class="n">test_interactions</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+        <span class="n">test_interactions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_cython_dtype</span><span class="p">(</span><span class="n">test_interactions</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">train_interactions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_interactions</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">n_users</span><span class="p">,</span> <span class="n">n_items</span><span class="p">),</span>
+                                               <span class="n">dtype</span><span class="o">=</span><span class="n">CYTHON_DTYPE</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">train_interactions</span> <span class="o">=</span> <span class="n">train_interactions</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+            <span class="n">train_interactions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_cython_dtype</span><span class="p">(</span><span class="n">train_interactions</span><span class="p">)</span>
+
+        <span class="n">ranks</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">test_interactions</span><span class="o">.</span><span class="n">data</span><span class="p">),</span>
+                               <span class="n">test_interactions</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span>
+                               <span class="n">test_interactions</span><span class="o">.</span><span class="n">indptr</span><span class="p">),</span>
+                              <span class="n">shape</span><span class="o">=</span><span class="n">test_interactions</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="n">lightfm_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lightfm_data</span><span class="p">()</span>
+
+        <span class="n">predict_ranks</span><span class="p">(</span><span class="n">CSRMatrix</span><span class="p">(</span><span class="n">item_features</span><span class="p">),</span>
+                      <span class="n">CSRMatrix</span><span class="p">(</span><span class="n">user_features</span><span class="p">),</span>
+                      <span class="n">CSRMatrix</span><span class="p">(</span><span class="n">test_interactions</span><span class="p">),</span>
+                      <span class="n">CSRMatrix</span><span class="p">(</span><span class="n">train_interactions</span><span class="p">),</span>
+                      <span class="n">ranks</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                      <span class="n">lightfm_data</span><span class="p">,</span>
+                      <span class="n">num_threads</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ranks</span></div>
+
+<div class="viewcode-block" id="LightFM.get_item_representations"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM.get_item_representations">[docs]</a>    <span class="k">def</span> <span class="nf">get_item_representations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the latent representations for items given model and features.</span>
+
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        features: np.float32 csr_matrix of shape [n_items, n_item_features], optional</span>
+<span class="sd">             Each row contains that item&#39;s weights over features.</span>
+<span class="sd">             An identity matrix will be used if not supplied.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        (item_biases, item_embeddings):</span>
+<span class="sd">                (np.float32 array of shape n_items,</span>
+<span class="sd">                 np.float32 array of shape [n_items, num_components]</span>
+<span class="sd">            Biases and latent representations for items.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_initialized</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_biases</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">CYTHON_DTYPE</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_biases</span><span class="p">,</span> <span class="n">features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span></div>
+
+<div class="viewcode-block" id="LightFM.get_user_representations"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM.get_user_representations">[docs]</a>    <span class="k">def</span> <span class="nf">get_user_representations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the latent representations for users given model and features.</span>
+
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        features: np.float32 csr_matrix of shape [n_users, n_user_features], optional</span>
+<span class="sd">             Each row contains that user&#39;s weights over features.</span>
+<span class="sd">             An identity matrix will be used if not supplied.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        (user_biases, user_embeddings):</span>
+<span class="sd">                (np.float32 array of shape n_users</span>
+<span class="sd">                 np.float32 array of shape [n_users, num_components]</span>
+<span class="sd">            Biases and latent representations for users.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_initialized</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_biases</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">CYTHON_DTYPE</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_biases</span><span class="p">,</span> <span class="n">features</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_embeddings</span></div>
+
+<div class="viewcode-block" id="LightFM.get_params"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM.get_params">[docs]</a>    <span class="k">def</span> <span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get parameters for this estimator.</span>
+
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        deep: boolean, optional</span>
+<span class="sd">            If True, will return the parameters for this estimator and</span>
+<span class="sd">            contained subobjects that are estimators.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        params : mapping of string to any</span>
+<span class="sd">            Parameter names mapped to their values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;loss&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span>
+                  <span class="s1">&#39;learning_schedule&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_schedule</span><span class="p">,</span>
+                  <span class="s1">&#39;no_components&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_components</span><span class="p">,</span>
+                  <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span>
+                  <span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+                  <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
+                  <span class="s1">&#39;rho&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span>
+                  <span class="s1">&#39;epsilon&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span>
+                  <span class="s1">&#39;max_sampled&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_sampled</span><span class="p">,</span>
+                  <span class="s1">&#39;item_alpha&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_alpha</span><span class="p">,</span>
+                  <span class="s1">&#39;user_alpha&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_alpha</span><span class="p">,</span>
+                  <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">params</span></div>
+
+<div class="viewcode-block" id="LightFM.set_params"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM.set_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the parameters of this estimator.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">valid_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_params</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid parameter </span><span class="si">%s</span><span class="s1"> for estimator </span><span class="si">%s</span><span class="s1">. &#39;</span>
+                                 <span class="s1">&#39;Check the list of available parameters &#39;</span>
+                                 <span class="s1">&#39;with `estimator.get_params().keys()`.&#39;</span> <span class="o">%</span>
+                                 <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Lyst (Maciej Kula).
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.14',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

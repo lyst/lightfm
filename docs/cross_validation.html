@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; LightFM 1.14 documentation</title>
+  <title>Cross-validation &mdash; LightFM 1.14 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="LightFM 1.14 documentation" href="index.html"/>
-        <link rel="next" title="An implicit feedback recommender for the Movielens dataset" href="examples/movielens_implicit.html"/>
-        <link rel="prev" title="Datasets" href="datasets.html"/> 
+        <link rel="next" title="Datasets" href="datasets.html"/>
+        <link rel="prev" title="Model evaluation" href="lightfm.evaluation.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -95,15 +95,9 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cross validation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html">Movielens implicit feedback recommender</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/learning_schedules.html">Learning rate schedules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/hybrid_crossvalidated.html">Cold-start hybrid recommender</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/warp_loss.html">Learning-to-rank using WARP loss</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 
             
@@ -148,13 +142,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Examples</li>
+      <li>Cross-validation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/cross_validation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -167,36 +161,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<p>All the examples can be viewed (and run) as Jupyter notebooks in the <a class="reference external" href="https://github.com/lyst/lightfm/tree/master/examples">examples directory</a> of the LightFM repository.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/movielens_implicit.html">Movielens implicit feedback recommender</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html#implicit-feedback">Implicit feedback</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html#getting-the-data">Getting the data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html#fitting-models">Fitting models</a></li>
+  <div class="section" id="module-lightfm.cross_validation">
+<span id="cross-validation"></span><h1>Cross-validation<a class="headerlink" href="#module-lightfm.cross_validation" title="Permalink to this headline">¶</a></h1>
+<p>Dataset splitting functions.</p>
+<dl class="function">
+<dt id="lightfm.cross_validation.random_train_test_split">
+<code class="descclassname">lightfm.cross_validation.</code><code class="descname">random_train_test_split</code><span class="sig-paren">(</span><em>interactions</em>, <em>test_percentage=0.2</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/cross_validation.html#random_train_test_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.cross_validation.random_train_test_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly split interactions between training and testing.</p>
+<p>This function takes an interaction set and splits it into
+two disjoint sets, a training set and a test set. Note that
+no effort is made to make sure that all items and users with
+interactions in the test set also have interactions in the
+training set; this may lead to a partial cold-start problem
+in the test set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>interactions</strong> (<em>a scipy sparse matrix containing interactions</em>) – The interactions to split.</li>
+<li><strong>test_percentage</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of interactions to place in the test set.</li>
+<li><strong>random_state</strong> (<em>np.random.RandomState</em><em>, </em><em>optional</em>) – The random state used for the shuffle.</li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples/learning_schedules.html">Learning rate schedules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/learning_schedules.html#preliminaries">Preliminaries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/learning_schedules.html#experiment">Experiment</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples/hybrid_crossvalidated.html">Cold-start hybrid recommender</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/hybrid_crossvalidated.html#a-pure-collaborative-filtering-model">A pure collaborative filtering model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/hybrid_crossvalidated.html#a-hybrid-model">A hybrid model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/hybrid_crossvalidated.html#bonus-tag-embeddings">Bonus: tag embeddings</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples/warp_loss.html">Learning-to-rank using WARP loss</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/warp_loss.html#preliminaries">Preliminaries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/warp_loss.html#accuracy">Accuracy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/warp_loss.html#fitting-speed">Fitting speed</a></li>
-</ul>
-</li>
-</ul>
-</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(train, test)</strong> –            scipy.sparse.COOMatrix)
+A tuple of (train data, test data)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(scipy.sparse.COOMatrix,</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -209,10 +208,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="examples/movielens_implicit.html" class="btn btn-neutral float-right" title="An implicit feedback recommender for the Movielens dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="datasets.html" class="btn btn-neutral float-right" title="Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="datasets.html" class="btn btn-neutral" title="Datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lightfm.evaluation.html" class="btn btn-neutral" title="Model evaluation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

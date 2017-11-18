@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Item cold-start: recommending StackExchange questions &mdash; LightFM 1.13 documentation</title>
+  <title>Item cold-start: recommending StackExchange questions &mdash; LightFM 1.14 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="LightFM 1.13 documentation" href="../index.html"/>
+    <link rel="top" title="LightFM 1.14 documentation" href="../index.html"/>
         <link rel="up" title="Examples" href="../examples.html"/>
         <link rel="next" title="Learning-to-rank using the WARP loss" href="warp_loss.html"/>
         <link rel="prev" title="Using different learning schedules" href="learning_schedules.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.13
+                1.14
               </div>
             
           
@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cross_validation.html">Cross validation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a></li>
@@ -176,15 +177,15 @@
             
   <div class="section" id="item-cold-start-recommending-stackexchange-questions">
 <h1>Item cold-start: recommending StackExchange questions<a class="headerlink" href="#item-cold-start-recommending-stackexchange-questions" title="Permalink to this headline">¶</a></h1>
-<p>In this example we&#8217;ll use the StackExchange dataset to explore
+<p>In this example we’ll use the StackExchange dataset to explore
 recommendations under item-cold start. Data dumps from the StackExchange
 network are available at <a class="reference external" href="https://archive.org/details/stackexchange">https://archive.org/details/stackexchange</a>, and
-we&#8217;ll use one of them &#8212; for stats.stackexchange.com &#8212; here.</p>
+we’ll use one of them — for stats.stackexchange.com — here.</p>
 <p>The consists of users answering questions: in the user-item interaction
 matrix, each user is a row, and each question is a column. Based on
-which users answered which questions in the training set, we&#8217;ll try to
+which users answered which questions in the training set, we’ll try to
 recommend new questions in the training set.</p>
-<p>Let&#8217;s start by loading the data. We&#8217;ll use the <code class="docutils literal"><span class="pre">datasets</span></code> module.</p>
+<p>Let’s start by loading the data. We’ll use the <code class="docutils literal"><span class="pre">datasets</span></code> module.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">lightfm.datasets</span> <span class="k">import</span> <span class="n">fetch_stackexchange</span>
@@ -198,7 +199,7 @@ recommend new questions in the training set.</p>
 <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Let&#8217;s examine the data:</p>
+<p>Let’s examine the data:</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The dataset has </span><span class="si">%s</span><span class="s1"> users and </span><span class="si">%s</span><span class="s1"> items, &#39;</span>
       <span class="s1">&#39;with </span><span class="si">%s</span><span class="s1"> interactions in the test and </span><span class="si">%s</span><span class="s1"> interactions in the training set.&#39;</span>
       <span class="o">%</span> <span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">test</span><span class="o">.</span><span class="n">getnnz</span><span class="p">(),</span> <span class="n">train</span><span class="o">.</span><span class="n">getnnz</span><span class="p">()))</span>
@@ -216,13 +217,13 @@ not yet been answered to the expert users who can answer them.</p>
 <div class="section" id="a-pure-collaborative-filtering-model">
 <h2>A pure collaborative filtering model<a class="headerlink" href="#a-pure-collaborative-filtering-model" title="Permalink to this headline">¶</a></h2>
 <p>This is clearly a cold-start scenario, and so we can expect a
-traditional collaborative filtering model to do very poorly. Let&#8217;s check
-if that&#8217;s the case:</p>
+traditional collaborative filtering model to do very poorly. Let’s check
+if that’s the case:</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Import the model</span>
 <span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
 
 <span class="c1"># Set the number of threads; you can increase this</span>
-<span class="c1"># ify you have more physical cores available.</span>
+<span class="c1"># if you have more physical cores available.</span>
 <span class="n">NUM_THREADS</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">NUM_COMPONENTS</span> <span class="o">=</span> <span class="mi">30</span>
 <span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">3</span>
@@ -241,8 +242,8 @@ if that&#8217;s the case:</p>
 <span class="n">Wall</span> <span class="n">time</span><span class="p">:</span> <span class="mf">6.52</span> <span class="n">s</span>
 </pre></div>
 </div>
-<p>As a means of sanity checking, let&#8217;s calculate the model&#8217;s AUC on the
-training set first. If it&#8217;s reasonably high, we can be sure that the
+<p>As a means of sanity checking, let’s calculate the model’s AUC on the
+training set first. If it’s reasonably high, we can be sure that the
 model is not doing anything stupid and is fitting the training data
 well.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Import the evaluation routines</span>
@@ -288,7 +289,7 @@ zero and re-evaluating the model.</p>
 </div>
 <div class="section" id="a-hybrid-model">
 <h2>A hybrid model<a class="headerlink" href="#a-hybrid-model" title="Permalink to this headline">¶</a></h2>
-<p>We can do much better by employing LightFM&#8217;s hybrid model capabilities.
+<p>We can do much better by employing LightFM’s hybrid model capabilities.
 The StackExchange data comes with content information in the form of
 tags users apply to their questions:</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">item_features</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;item_features&#39;</span><span class="p">]</span>
@@ -304,7 +305,7 @@ tags users apply to their questions:</p>
 a pure CF model) to estimate a model which will generalize better to
 unseen examples: it will simply use its representations of item features
 to infer representations of previously unseen questions.</p>
-<p>Let&#8217;s go ahead and fit a model of this type.</p>
+<p>Let’s go ahead and fit a model of this type.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Define a new model instance</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">,</span>
                 <span class="n">item_alpha</span><span class="o">=</span><span class="n">ITEM_ALPHA</span><span class="p">,</span>
@@ -318,7 +319,7 @@ to infer representations of previously unseen questions.</p>
                 <span class="n">num_threads</span><span class="o">=</span><span class="n">NUM_THREADS</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>As before, let&#8217;s sanity check the model on the training set.</p>
+<p>As before, let’s sanity check the model on the training set.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Don&#39;t forget the pass in the item features again!</span>
 <span class="n">train_auc</span> <span class="o">=</span> <span class="n">auc_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
                       <span class="n">train</span><span class="p">,</span>
@@ -428,7 +429,7 @@ similarity:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.13',
+            VERSION:'1.14',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

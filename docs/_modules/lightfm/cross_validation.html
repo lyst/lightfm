@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lightfm.cross_validation &mdash; LightFM 1.14 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="LightFM 1.14 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> LightFM
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.14
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../home.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cross_validation.html">Cross validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">LightFM</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>lightfm.cross_validation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lightfm.cross_validation</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding=utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Dataset splitting functions.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
+
+
+<span class="k">def</span> <span class="nf">_shuffle</span><span class="p">(</span><span class="n">uids</span><span class="p">,</span> <span class="n">iids</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">random_state</span><span class="p">):</span>
+
+    <span class="n">shuffle_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">uids</span><span class="p">))</span>
+    <span class="n">random_state</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">shuffle_indices</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">uids</span><span class="p">[</span><span class="n">shuffle_indices</span><span class="p">],</span>
+            <span class="n">iids</span><span class="p">[</span><span class="n">shuffle_indices</span><span class="p">],</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">shuffle_indices</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="random_train_test_split"><a class="viewcode-back" href="../../cross_validation.html#lightfm.cross_validation.random_train_test_split">[docs]</a><span class="k">def</span> <span class="nf">random_train_test_split</span><span class="p">(</span><span class="n">interactions</span><span class="p">,</span>
+                            <span class="n">test_percentage</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                            <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Randomly split interactions between training and testing.</span>
+
+<span class="sd">    This function takes an interaction set and splits it into</span>
+<span class="sd">    two disjoint sets, a training set and a test set. Note that</span>
+<span class="sd">    no effort is made to make sure that all items and users with</span>
+<span class="sd">    interactions in the test set also have interactions in the</span>
+<span class="sd">    training set; this may lead to a partial cold-start problem</span>
+<span class="sd">    in the test set.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    interactions: a scipy sparse matrix containing interactions</span>
+<span class="sd">        The interactions to split.</span>
+<span class="sd">    test_percentage: float, optional</span>
+<span class="sd">        The fraction of interactions to place in the test set.</span>
+<span class="sd">    random_state: np.random.RandomState, optional</span>
+<span class="sd">        The random state used for the shuffle.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    (train, test): (scipy.sparse.COOMatrix,</span>
+<span class="sd">                    scipy.sparse.COOMatrix)</span>
+<span class="sd">         A tuple of (train data, test data)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sp</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">interactions</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Interactions must be a scipy.sparse matrix.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">random_state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">random_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">()</span>
+
+    <span class="n">interactions</span> <span class="o">=</span> <span class="n">interactions</span><span class="o">.</span><span class="n">tocoo</span><span class="p">()</span>
+
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">interactions</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">uids</span><span class="p">,</span> <span class="n">iids</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">interactions</span><span class="o">.</span><span class="n">row</span><span class="p">,</span>
+                        <span class="n">interactions</span><span class="o">.</span><span class="n">col</span><span class="p">,</span>
+                        <span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">uids</span><span class="p">,</span> <span class="n">iids</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">_shuffle</span><span class="p">(</span><span class="n">uids</span><span class="p">,</span> <span class="n">iids</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+
+    <span class="n">cutoff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">test_percentage</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">uids</span><span class="p">))</span>
+
+    <span class="n">train_idx</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">)</span>
+    <span class="n">test_idx</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">cutoff</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">train</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span>
+                           <span class="p">(</span><span class="n">uids</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span>
+                            <span class="n">iids</span><span class="p">[</span><span class="n">train_idx</span><span class="p">])),</span>
+                          <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
+                          <span class="n">dtype</span><span class="o">=</span><span class="n">interactions</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="n">test_idx</span><span class="p">],</span>
+                          <span class="p">(</span><span class="n">uids</span><span class="p">[</span><span class="n">test_idx</span><span class="p">],</span>
+                           <span class="n">iids</span><span class="p">[</span><span class="n">test_idx</span><span class="p">])),</span>
+                         <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
+                         <span class="n">dtype</span><span class="o">=</span><span class="n">interactions</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Lyst (Maciej Kula).
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.14',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

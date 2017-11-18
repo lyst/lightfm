@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to LightFM’s documentation! &mdash; LightFM 1.13 documentation</title>
+  <title>Welcome to LightFM’s documentation! &mdash; LightFM 1.14 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.13 documentation" href="#"/>
+    <link rel="top" title="LightFM 1.14 documentation" href="#"/>
         <link rel="next" title="Welcome to LightFM’s documentation!" href="home.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                1.13
+                1.14
               </div>
             
           
@@ -94,6 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
@@ -140,7 +141,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Welcome to LightFM&#8217;s documentation!</li>
+      <li>Welcome to LightFM’s documentation!</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -160,20 +161,20 @@
            <div itemprop="articleBody">
             
   <div class="section" id="welcome-to-lightfm-s-documentation">
-<h1>Welcome to LightFM&#8217;s documentation!<a class="headerlink" href="#welcome-to-lightfm-s-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>Welcome to LightFM’s documentation!<a class="headerlink" href="#welcome-to-lightfm-s-documentation" title="Permalink to this headline">¶</a></h1>
 <p>LightFM is a Python implementation of a number of popular recommendation algorithms for both implicit and explicit feedback.</p>
 <p>It also makes it possible to incorporate both item and user metadata into the traditional matrix factorization algorithms. It represents each user and item as the sum of the latent representations of their features, thus allowing recommendations to generalise to new items (via item features) and to new users (via user features).</p>
 <p>The details of the approach are described in the LightFM paper, available on <a class="reference external" href="http://arxiv.org/abs/1507.08439">arXiv</a>.</p>
 <div class="section" id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
-<p>Jump straight to the <a class="reference internal" href="quickstart.html"><span class="doc">Movielens quickstart</span></a> if you&#8217;re impatient.</p>
+<p>Jump straight to the <a class="reference internal" href="quickstart.html"><span class="doc">Movielens quickstart</span></a> if you’re impatient.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="pypi">
 <h3>PyPI<a class="headerlink" href="#pypi" title="Permalink to this headline">¶</a></h3>
 <p>Install from pypi using pip: <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lightfm</span></code>. Everything should work out-of-the box on Linux, OSX using Homebrew Python, and Windows using Miniconda.</p>
-<p>Note for OSX and Windows users: LightFM will by default not use OpenMP on OSX and Windows, and so all model fitting will be single-threaded. This is due to the fact that Clang (and Miniconda) does not support OpenMP, and installing an OpenMP-enabled version of gcc is complicated and labour-intensive. If you&#8217;d like to use the multi-threading capabilities of LightFM on these platforms, you should try using it via Docker as described in the next secion.</p>
+<p>Note for OSX and Windows users: LightFM will by default not use OpenMP on OSX and Windows, and so all model fitting will be single-threaded. This is due to the fact that Clang (and Miniconda) does not support OpenMP, and installing an OpenMP-enabled version of gcc is complicated and labour-intensive. If you’d like to use the multi-threading capabilities of LightFM on these platforms, you should try using it via Docker as described in the next secion.</p>
 <p>Building with the default Python distribution included in OSX is also not supported; please try the version from Homebrew or Anaconda.</p>
 </div>
 <div class="section" id="using-with-docker">
@@ -186,8 +187,8 @@
 </ol>
 <p>The container should now be ready for use. You can then:</p>
 <ol class="arabic simple">
-<li>Run tests by running <code class="docutils literal"><span class="pre">docker-compose</span> <span class="pre">run</span> <span class="pre">lightfm</span> <span class="pre">py.test</span> <span class="pre">-x</span> <span class="pre">tests/</span></code></li>
-<li>Run the movielens example by running <code class="docutils literal"><span class="pre">docker-compose</span> <span class="pre">run</span> <span class="pre">lightfm</span> <span class="pre">jupyter</span> <span class="pre">notebook</span> <span class="pre">examples/movielens/example.ipynb</span> <span class="pre">--ip=0.0.0.0</span></code>. The notebook will be accessible at port 8888 of your container&#8217;s IP address.</li>
+<li>Run tests by running <code class="docutils literal"><span class="pre">docker-compose</span> <span class="pre">run</span> <span class="pre">lightfm</span> <span class="pre">py.test</span> <span class="pre">-x</span> <span class="pre">lightfm/tests/</span></code></li>
+<li>Run the movielens example by running <code class="docutils literal"><span class="pre">docker-compose</span> <span class="pre">run</span> <span class="pre">--service-ports</span> <span class="pre">lightfm</span> <span class="pre">jupyter</span> <span class="pre">notebook</span> <span class="pre">lightfm/examples/movielens/example.ipynb</span> <span class="pre">--allow-root</span> <span class="pre">--ip=&quot;0.0.0.0&quot;</span> <span class="pre">--port=8888</span> <span class="pre">--no-browser</span></code>. The notebook will be accessible at port 8888 of your container’s IP address.</li>
 </ol>
 </div>
 </div>
@@ -276,7 +277,7 @@
 <li>Install it for development using pip: <code class="docutils literal"><span class="pre">cd</span> <span class="pre">lightfm</span> <span class="pre">&amp;&amp;</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code></li>
 <li>You can run tests by running <code class="docutils literal"><span class="pre">python</span> <span class="pre">setupy.py</span> <span class="pre">test</span></code>.</li>
 </ol>
-<p>When making changes to the <code class="docutils literal"><span class="pre">.pyx</span></code> extension files, you&#8217;ll need to run <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">cythonize</span></code> in order to produce the extension <code class="docutils literal"><span class="pre">.c</span></code> files before running <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code>.</p>
+<p>When making changes to the <code class="docutils literal"><span class="pre">.pyx</span></code> extension files, you’ll need to run <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">cythonize</span></code> in order to produce the extension <code class="docutils literal"><span class="pre">.c</span></code> files before running <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code>.</p>
 </div>
 </div>
 <div class="section" id="contents">
@@ -296,6 +297,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples/movielens_implicit.html">Movielens implicit feedback recommender</a></li>
@@ -358,7 +360,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.13',
+            VERSION:'1.14',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

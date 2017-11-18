@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Datasets &mdash; LightFM 1.13 documentation</title>
+  <title>Datasets &mdash; LightFM 1.14 documentation</title>
   
 
   
@@ -35,9 +35,9 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.13 documentation" href="index.html"/>
+    <link rel="top" title="LightFM 1.14 documentation" href="index.html"/>
         <link rel="next" title="Examples" href="examples.html"/>
-        <link rel="prev" title="Model evaluation" href="lightfm.evaluation.html"/> 
+        <link rel="prev" title="Cross-validation" href="cross_validation.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.13
+                1.14
               </div>
             
           
@@ -95,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
@@ -164,7 +165,7 @@
 <h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="lightfm.datasets.movielens.fetch_movielens">
-<code class="descclassname">lightfm.datasets.movielens.</code><code class="descname">fetch_movielens</code><span class="sig-paren">(</span><em>data_home=None</em>, <em>indicator_features=True</em>, <em>genre_features=False</em>, <em>min_rating=0.0</em>, <em>download_if_missing=True</em><span class="sig-paren">)</span><a class="headerlink" href="#lightfm.datasets.movielens.fetch_movielens" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lightfm.datasets.movielens.</code><code class="descname">fetch_movielens</code><span class="sig-paren">(</span><em>data_home=None</em>, <em>indicator_features=True</em>, <em>genre_features=False</em>, <em>min_rating=0.0</em>, <em>download_if_missing=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/datasets/movielens.html#fetch_movielens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.datasets.movielens.fetch_movielens" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch the <a class="reference external" href="http://grouplens.org/datasets/movielens/100k/">Movielens 100k dataset</a>.</p>
 <p>The dataset contains 100,000 interactions from 1000 users on 1700 movies,
 and is exhaustively described in its
@@ -174,16 +175,16 @@ and is exhaustively described in its
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>data_home</strong> (<em>path</em><em>, </em><em>optional</em>) &#8211; Path to the directory in which the downloaded data should be placed.
+<li><strong>data_home</strong> (<em>path</em><em>, </em><em>optional</em>) – Path to the directory in which the downloaded data should be placed.
 Defaults to <code class="docutils literal"><span class="pre">~/lightfm_data/</span></code>.</li>
-<li><strong>indicator_features</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Use an [n_users, n_users] identity matrix for item features. When True with genre_features,
+<li><strong>indicator_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use an [n_users, n_users] identity matrix for item features. When True with genre_features,
 indicator and genre features are concatenated into a single feature matrix of shape
 [n_users, n_users + n_genres].</li>
-<li><strong>genre_features</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Use a [n_users, n_genres] matrix for item features. When True with item_indicator_features,
+<li><strong>genre_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use a [n_users, n_genres] matrix for item features. When True with item_indicator_features,
 indicator and genre features are concatenated into a single feature matrix of shape
 [n_users, n_users + n_genres].</li>
-<li><strong>min_rating</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; Minimum rating to include in the interaction matrix.</li>
-<li><strong>download_if_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Download the data if not present. Raises an IOError if False and data is missing.</li>
+<li><strong>min_rating</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum rating to include in the interaction matrix.</li>
+<li><strong>download_if_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – Download the data if not present. Raises an IOError if False and data is missing.</li>
 </ul>
 </td>
 </tr>
@@ -196,11 +197,11 @@ indicator and genre features are concatenated into a single feature matrix of sh
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><strong>train</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) &#8211; Contains training set interactions.</li>
-<li><strong>test</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) &#8211; Contains testing set interactions.</li>
-<li><strong>item_features</strong> (<em>sp.csr_matrix of shape [n_items, n_item_features]</em>) &#8211; Contains item features.</li>
-<li><strong>item_feature_labels</strong> (<em>np.array of strings of shape [n_item_features,]</em>) &#8211; Labels of item features.</li>
-<li><strong>item_labels</strong> (<em>np.array of strings of shape [n_items,]</em>) &#8211; Items&#8217; titles.</li>
+<li><strong>train</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains training set interactions.</li>
+<li><strong>test</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains testing set interactions.</li>
+<li><strong>item_features</strong> (<em>sp.csr_matrix of shape [n_items, n_item_features]</em>) – Contains item features.</li>
+<li><strong>item_feature_labels</strong> (<em>np.array of strings of shape [n_item_features,]</em>) – Labels of item features.</li>
+<li><strong>item_labels</strong> (<em>np.array of strings of shape [n_items,]</em>) – Items’ titles.</li>
 </ul>
 </td>
 </tr>
@@ -223,7 +224,7 @@ indicator and genre features are concatenated into a single feature matrix of sh
         <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lightfm.evaluation.html" class="btn btn-neutral" title="Model evaluation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="cross_validation.html" class="btn btn-neutral" title="Cross-validation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -254,7 +255,7 @@ indicator and genre features are concatenated into a single feature matrix of sh
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.13',
+            VERSION:'1.14',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

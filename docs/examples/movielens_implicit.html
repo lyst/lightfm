@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>An implicit feedback recommender for the Movielens dataset &mdash; LightFM 1.13 documentation</title>
+  <title>An implicit feedback recommender for the Movielens dataset &mdash; LightFM 1.14 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="LightFM 1.13 documentation" href="../index.html"/>
+    <link rel="top" title="LightFM 1.14 documentation" href="../index.html"/>
         <link rel="up" title="Examples" href="../examples.html"/>
         <link rel="next" title="Using different learning schedules" href="learning_schedules.html"/>
         <link rel="prev" title="Examples" href="../examples.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.13
+                1.14
               </div>
             
           
@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cross_validation.html">Cross validation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Movielens implicit feedback recommender</a><ul>
@@ -184,15 +185,15 @@ ratings users have given to movies they watched.</p>
 <p>Focusing on ratings in this way ignored the importance of taking into
 account which movies the users chose to watch in the first place, and
 treating the absence of ratings as absence of information.</p>
-<p>But the things that we don&#8217;t have ratings for aren&#8217;t unknowns: we know
-the user didn&#8217;t pick them. This reflects a user&#8217;s conscious choice, and
+<p>But the things that we don’t have ratings for aren’t unknowns: we know
+the user didn’t pick them. This reflects a user’s conscious choice, and
 is a good source of information on what she thinks she might like.</p>
 <p>This sort of phenomenon is described as data which is
 missing-not-at-random in the literature: the ratings that are missing
 are more likely to be negative precisely because the user chooses which
 items to rate. When choosing a restaurant, you only go to places which
-you think you&#8217;ll enjoy, and never go to places that you think you&#8217;ll
-hate. What this leads to is that you&#8217;re only going to be submitting
+you think you’ll enjoy, and never go to places that you think you’ll
+hate. What this leads to is that you’re only going to be submitting
 ratings for things which, a priori, you expected to like; the things
 that you expect you will not like you will never rate.</p>
 <p>This observation has led to the development of models that are suitable
@@ -211,11 +212,11 @@ are present and optimising the top of the recommendation list
 </ul>
 <p>This example shows how to estimate these models on the Movielens
 dataset.</p>
-<p>[1] Rendle, Steffen, et al. &#8220;BPR: Bayesian personalized ranking from
-implicit feedback.&#8221; Proceedings of the Twenty-Fifth Conference on
+<p>[1] Rendle, Steffen, et al. “BPR: Bayesian personalized ranking from
+implicit feedback.” Proceedings of the Twenty-Fifth Conference on
 Uncertainty in Artificial Intelligence. AUAI Press, 2009.</p>
-<p>[2] Weston, Jason, Samy Bengio, and Nicolas Usunier. &#8220;Wsabie: Scaling up
-to large vocabulary image annotation.&#8221; IJCAI. Vol. 11. 2011.</p>
+<p>[2] Weston, Jason, Samy Bengio, and Nicolas Usunier. “Wsabie: Scaling up
+to large vocabulary image annotation.” IJCAI. Vol. 11. 2011.</p>
 </div>
 <div class="section" id="getting-the-data">
 <h2>Getting the data<a class="headerlink" href="#getting-the-data" title="Permalink to this headline">¶</a></h2>
@@ -223,7 +224,7 @@ to large vocabulary image annotation.&#8221; IJCAI. Vol. 11. 2011.</p>
 data</a>. This is a
 classic small recommender dataset, consisting of around 950 users, 1700
 movies, and 100,000 ratings. The ratings are on a scale from 1 to 5, but
-we&#8217;ll all treat them as implicit positive feedback in this example.</p>
+we’ll all treat them as implicit positive feedback in this example.</p>
 <p>Fortunately, this is one of the functions provided by LightFM itself.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -255,12 +256,12 @@ to 5.</p>
 </div>
 <div class="section" id="fitting-models">
 <h2>Fitting models<a class="headerlink" href="#fitting-models" title="Permalink to this headline">¶</a></h2>
-<p>Now let&#8217;s train a BPR model and look at its accuracy.</p>
-<p>We&#8217;ll use two metrics of accuracy: precision&#64;k and ROC AUC. Both are
-ranking metrics: to compute them, we&#8217;ll be constructing recommendation
+<p>Now let’s train a BPR model and look at its accuracy.</p>
+<p>We’ll use two metrics of accuracy: precision&#64;k and ROC AUC. Both are
+ranking metrics: to compute them, we’ll be constructing recommendation
 lists for all of our users, and checking the ranking of known positive
-movies. For precision at k we&#8217;ll be looking at whether they are within
-the first k results on the list; for AUC, we&#8217;ll be calculating the
+movies. For precision at k we’ll be looking at whether they are within
+the first k results on the list; for AUC, we’ll be calculating the
 probability that any known positive is higher on the list than a random
 negative example.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
@@ -284,7 +285,7 @@ negative example.</p>
 <span class="n">AUC</span><span class="p">:</span> <span class="n">train</span> <span class="mf">0.90</span><span class="p">,</span> <span class="n">test</span> <span class="mf">0.86</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>The WARP model, on the other hand, optimises for <a class="reference external" href="mailto:precision&#37;&#52;&#48;k---we">precision<span>&#64;</span>k---we</a> should
+<p>The WARP model, on the other hand, optimises for <a class="reference external" href="mailto:precision&#37;&#52;&#48;k---we">precision<span>&#64;</span>k—we</a> should
 expect its performance to be better on precision.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">)</span>
 
@@ -353,7 +354,7 @@ expect its performance to be better on precision.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.13',
+            VERSION:'1.14',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

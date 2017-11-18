@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Using different learning schedules &mdash; LightFM 1.13 documentation</title>
+  <title>Using different learning schedules &mdash; LightFM 1.14 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="LightFM 1.13 documentation" href="../index.html"/>
+    <link rel="top" title="LightFM 1.14 documentation" href="../index.html"/>
         <link rel="up" title="Examples" href="../examples.html"/>
         <link rel="next" title="Item cold-start: recommending StackExchange questions" href="hybrid_crossvalidated.html"/>
         <link rel="prev" title="An implicit feedback recommender for the Movielens dataset" href="movielens_implicit.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.13
+                1.14
               </div>
             
           
@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cross_validation.html">Cross validation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a></li>
@@ -181,7 +182,7 @@ best learning schedule will differ based on the problem at hand.</p>
 <p>This example tries both at the Movielens 100k dataset.</p>
 <div class="section" id="preliminaries">
 <h2>Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline">¶</a></h2>
-<p>Let&#8217;s first get the data and define the evaluations functions.</p>
+<p>Let’s first get the data and define the evaluations functions.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">data</span>
 
@@ -203,7 +204,7 @@ best learning schedule will differ based on the problem at hand.</p>
 </div>
 <div class="section" id="experiment">
 <h2>Experiment<a class="headerlink" href="#experiment" title="Permalink to this headline">¶</a></h2>
-<p>To evaluate the performance of both learning schedules, let&#8217;s create two
+<p>To evaluate the performance of both learning schedules, let’s create two
 models and run each for a number of epochs, measuring the ROC AUC on the
 test set at the end of each epoch.</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1e-3</span>
@@ -327,7 +328,7 @@ converging to a better final solution.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.13',
+            VERSION:'1.14',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
