@@ -8,6 +8,8 @@
 ### Changed
 - LightFM model now raises a ValueError (instead of assertion) when the number of supplied
   features exceeds the number of estimated feature embeddings.
+- Warn and delete downloaded file when Movielens download is corrputed. This happens in the wild
+  cofuses users terribly.
 
 ## [1.13][2017-05-20]
 ### Added
