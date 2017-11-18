@@ -1,4 +1,5 @@
 import itertools
+import os
 import zipfile
 
 import numpy as np
@@ -165,8 +166,16 @@ def fetch_movielens(data_home=None, indicator_features=True, genre_features=Fals
                                 download_if_missing)
 
     # Load raw data
-    (train_raw, test_raw,
-     item_metadata_raw, genres_raw) = _read_raw_data(zip_path)
+    try:
+        (train_raw, test_raw,
+         item_metadata_raw, genres_raw) = _read_raw_data(zip_path)
+    except zipfile.BadZipFile:
+        # Download was corrupted, get rid of the partially
+        # downloaded file so that we re-download on the
+        # next try.
+        os.unlink(zip_path)
+        raise ValueError('Corrupted Movielens download. Check your '
+                         'internet connection and try again.')
 
     # Figure out the dimensions
     num_users, num_items = _get_dimensions(_parse(train_raw),
