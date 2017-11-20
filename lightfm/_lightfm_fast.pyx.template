@@ -800,7 +800,7 @@ def fit_warp(CSRMatrix item_features,
     """
 
     cdef int i, no_examples, user_id, positive_item_id, gamma
-    cdef int negative_item_id, sampled, row
+    cdef int negative_item_ix, negative_item_id, sampled, row
     cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS
     cdef flt weight
@@ -808,6 +808,7 @@ def fit_warp(CSRMatrix item_features,
     cdef flt *pos_it_repr
     cdef flt *neg_it_repr
     cdef unsigned int[::1] random_states
+    cdef unsigned int[::1] menu_recipe_ids
 
     random_states = random_state.randint(0,
                                          np.iinfo(np.int32).max,
@@ -815,6 +816,9 @@ def fit_warp(CSRMatrix item_features,
 
     no_examples = Y.shape[0]
     MAX_LOSS = 10.0
+
+    # Placeholder for range block in which we cycle through menus
+    menu_recipe_ids = np.arange(22, dtype=np.uint32)
 
     {nogil_block}
 
@@ -857,8 +861,9 @@ def fit_warp(CSRMatrix item_features,
             while sampled < lightfm.max_sampled:
 
                 sampled = sampled + 1
-                negative_item_id = (rand_r(&random_states[{thread_num}])
-                                    % item_features.rows)
+                negative_item_ix = (rand_r(&random_states[{thread_num}])
+                                    % len(menu_recipe_ids))
+                negative_item_id = item_ids[negative_item_ix]
 
                 compute_representation(item_features,
                                        lightfm.item_features,
