@@ -109,6 +109,7 @@ class LightFM(object):
          Contains the biases for item_features.
     user_biases: np.float32 array of shape [n_user_features,]
          Contains the biases for user_features.
+    loss_value: Value of the loss function after most recent epoch (None if loss is bpr).
 
     Notes
     -----
@@ -195,6 +196,8 @@ class LightFM(object):
         self.item_alpha = item_alpha
         self.user_alpha = user_alpha
 
+        self.loss_value = None
+
         if random_state is None:
             self.random_state = np.random.RandomState()
         elif isinstance(random_state, np.random.RandomState):
@@ -219,6 +222,8 @@ class LightFM(object):
         self.user_biases = None
         self.user_bias_gradients = None
         self.user_bias_momentum = None
+
+        self.loss_value = None
 
     def _check_initialized(self):
 
@@ -601,20 +606,20 @@ class LightFM(object):
 
         # Call the estimation routines.
         if loss == 'warp':
-            fit_warp(CSRMatrix(item_features),
-                     CSRMatrix(user_features),
-                     positives_lookup,
-                     interactions.row,
-                     interactions.col,
-                     interactions.data,
-                     sample_weight,
-                     shuffle_indices,
-                     lightfm_data,
-                     self.learning_rate,
-                     self.item_alpha,
-                     self.user_alpha,
-                     num_threads,
-                     self.random_state)
+            self.loss_value = fit_warp(CSRMatrix(item_features),
+                                       CSRMatrix(user_features),
+                                       positives_lookup,
+                                       interactions.row,
+                                       interactions.col,
+                                       interactions.data,
+                                       sample_weight,
+                                       shuffle_indices,
+                                       lightfm_data,
+                                       self.learning_rate,
+                                       self.item_alpha,
+                                       self.user_alpha,
+                                       num_threads,
+                                       self.random_state)
         elif loss == 'bpr':
             fit_bpr(CSRMatrix(item_features),
                     CSRMatrix(user_features),
@@ -630,33 +635,34 @@ class LightFM(object):
                     self.user_alpha,
                     num_threads,
                     self.random_state)
+            self.loss_value = None
         elif loss == 'warp-kos':
-            fit_warp_kos(CSRMatrix(item_features),
-                         CSRMatrix(user_features),
-                         positives_lookup,
-                         interactions.row,
-                         shuffle_indices,
-                         lightfm_data,
-                         self.learning_rate,
-                         self.item_alpha,
-                         self.user_alpha,
-                         self.k,
-                         self.n,
-                         num_threads,
-                         self.random_state)
+            self.loss_value = fit_warp_kos(CSRMatrix(item_features),
+                                           CSRMatrix(user_features),
+                                           positives_lookup,
+                                           interactions.row,
+                                           shuffle_indices,
+                                           lightfm_data,
+                                           self.learning_rate,
+                                           self.item_alpha,
+                                           self.user_alpha,
+                                           self.k,
+                                           self.n,
+                                           num_threads,
+                                           self.random_state)
         else:
-            fit_logistic(CSRMatrix(item_features),
-                         CSRMatrix(user_features),
-                         interactions.row,
-                         interactions.col,
-                         interactions.data,
-                         sample_weight,
-                         shuffle_indices,
-                         lightfm_data,
-                         self.learning_rate,
-                         self.item_alpha,
-                         self.user_alpha,
-                         num_threads)
+            self.loss_value = fit_logistic(CSRMatrix(item_features),
+                                           CSRMatrix(user_features),
+                                           interactions.row,
+                                           interactions.col,
+                                           interactions.data,
+                                           sample_weight,
+                                           shuffle_indices,
+                                           lightfm_data,
+                                           self.learning_rate,
+                                           self.item_alpha,
+                                           self.user_alpha,
+                                           num_threads)
 
     def predict(self, user_ids, item_ids, item_features=None,
                 user_features=None, num_threads=1):
