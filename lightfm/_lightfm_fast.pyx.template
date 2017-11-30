@@ -1073,7 +1073,7 @@ def fit_warp_kos(CSRMatrix item_features,
     regularize(lightfm,
                item_alpha,
                user_alpha)
-    
+
     return loss
 
 
@@ -1186,8 +1186,6 @@ def fit_bpr(CSRMatrix item_features,
     regularize(lightfm,
                item_alpha,
                user_alpha)
-
-    return loss
 
 
 def predict_lightfm(CSRMatrix item_features,
