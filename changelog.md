@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased][unreleased]
+### Fixed
+- Fixed error message when item features have the wrong dimensions.
+
 ## [1.14][2017-11-18]
 ### Added
 - added additional input checks for non-normal inputs (NaNs, infinites) for features
