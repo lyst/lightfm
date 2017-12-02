@@ -308,7 +308,7 @@ class LightFM(object):
 
         if self.item_embeddings is not None:
             if not self.item_embeddings.shape[0] >= item_features.shape[1]:
-                raise ValueError('The user feature matrix specifies more '
+                raise ValueError('The item feature matrix specifies more '
                                  'features than there are estimated '
                                  'feature embeddings: {} vs {}.'.format(
                                      self.item_embeddings.shape[0],
