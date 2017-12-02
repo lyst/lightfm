@@ -2,11 +2,11 @@ os:
   - osx
 before_install:
   - brew install python
-  - pip install numpy
-  - pip install scipy
-  - pip install requests
-  - pip install scikit-learn
-  - pip install pytest
+  - pip2 install numpy
+  - pip2 install scipy
+  - pip2 install requests
+  - pip2 install scikit-learn
+  - pip2 install pytest
 install:
-  - pip install -e .
+  - pip2 install -e .
 script: py.test tests/
