@@ -9,6 +9,7 @@
 | Windows (OpenMP disabled) |[![Appveyor](https://ci.appveyor.com/api/projects/status/6cqpqb6969i1h4p7/branch/master?svg=true)](https://ci.appveyor.com/project/maciejkula/lightfm/branch/master)|
 
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/lightfm-rec/Lobby) [![PyPI](https://img.shields.io/pypi/v/lightfm.svg)](https://pypi.python.org/pypi/lightfm/)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/lightfm/badges/version.svg)](https://anaconda.org/conda-forge/lightfm)
 
 LightFM is a Python implementation of a number of popular recommendation algorithms for both implicit and explicit feedback, including efficient implementation of BPR and WARP ranking losses. It's easy to use, fast (via multithreaded model estimation), and produces high quality results.
 
@@ -17,6 +18,16 @@ It also makes it possible to incorporate both item and user metadata into the tr
 For more details, see the [Documentation](http://lyst.github.io/lightfm/docs/home.html).
 
 Need help? Contact me via [email](mailto:lightfm@zoho.com), [Twitter](https://twitter.com/Maciej_Kula), or [Gitter](https://gitter.im/lightfm-rec/Lobby).
+
+## Installation
+Install from `pip`:
+```
+pip install lightfm
+```
+or Conda:
+```
+conda install -c conda-forge lightfm
+```
 
 ## Quickstart
 Fitting an implicit feedback model on the MovieLens 100k dataset is very easy:
