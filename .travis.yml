@@ -1,7 +1,7 @@
 os:
   - osx
 before_install:
-  - brew install python
+  - brew install python --force
   - pip2 install numpy
   - pip2 install scipy
   - pip2 install requests
