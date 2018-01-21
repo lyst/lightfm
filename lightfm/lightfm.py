@@ -696,12 +696,20 @@ class LightFM(object):
         if not isinstance(user_ids, np.ndarray):
             user_ids = np.repeat(np.int32(user_ids), len(item_ids))
 
+        if isinstance(item_ids, (list, tuple)):
+            item_ids = np.array(item_ids, dtype=np.int32)
+
         assert len(user_ids) == len(item_ids)
 
         if user_ids.dtype != np.int32:
             user_ids = user_ids.astype(np.int32)
         if item_ids.dtype != np.int32:
             item_ids = item_ids.astype(np.int32)
+
+        if user_ids.min() < 0 or item_ids.min() < 0:
+            raise ValueError('User or item ids cannot be negative. '
+                             'Check your inputs for negative numbers '
+                             'or very large numbers that can overflow.')
 
         n_users = user_ids.max() + 1
         n_items = item_ids.max() + 1

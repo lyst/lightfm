@@ -378,3 +378,19 @@ def test_nan_interactions():
 
     with pytest.raises(ValueError):
         model.fit(train)
+
+
+def test_overflow_predict():
+
+    no_users, no_items = (1000, 1000)
+
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
+
+    model = LightFM(loss='warp')
+
+    model.fit(train)
+
+    with pytest.raises((ValueError, OverflowError)):
+        print(model.predict(1231241241231241414,
+                            np.arange(no_items),
+                            user_features=sp.identity(no_users)))
