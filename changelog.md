@@ -3,6 +3,7 @@
 ## [unreleased][unreleased]
 ### Fixed
 - Fixed error message when item features have the wrong dimensions.
+- Predict now checks for overflow in inputs to predict.
 
 ## [1.14][2017-11-18]
 ### Added
