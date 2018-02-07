@@ -394,3 +394,14 @@ def test_overflow_predict():
         print(model.predict(1231241241231241414,
                             np.arange(no_items),
                             user_features=sp.identity(no_users)))
+
+
+def test_warp_few_items():
+
+    no_users, no_items = (1000, 2)
+
+    train = sp.rand(no_users, no_items, format='csr', random_state=42)
+
+    model = LightFM(loss='warp', max_sampled=10)
+
+    model.fit(train)

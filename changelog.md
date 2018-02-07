@@ -4,6 +4,8 @@
 ### Fixed
 - Fixed error message when item features have the wrong dimensions.
 - Predict now checks for overflow in inputs to predict.
+- WARP fitting is now numerically stable when there are very few items to
+  draw negative samples from (< max_sampled).
 
 ## [1.14][2017-11-18]
 ### Added

@@ -878,7 +878,7 @@ def fit_warp(CSRMatrix item_features,
                     if in_positives(negative_item_id, user_id, interactions):
                         continue
 
-                    loss = weight * log(floor((item_features.rows - 1) / sampled))
+                    loss = weight * log(max(1.0, floor((item_features.rows - 1) / sampled)))
 
                     # Clip gradients for numerical stability.
                     if loss > MAX_LOSS:
