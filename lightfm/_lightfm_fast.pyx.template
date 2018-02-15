@@ -859,6 +859,9 @@ def fit_warp(CSRMatrix item_features,
                 sampled = sampled + 1
                 negative_item_id = (rand_r(&random_states[{thread_num}])
                                     % item_features.rows)
+                # Sample again if the sample negative is actually a positive
+                if in_positives(negative_item_id, user_id, interactions):
+                    continue
 
                 compute_representation(item_features,
                                        lightfm.item_features,
@@ -873,11 +876,6 @@ def fit_warp(CSRMatrix item_features,
                                                                    lightfm.no_components)
 
                 if negative_prediction > positive_prediction - 1:
-
-                    # Sample again if the sample negative is actually a positive
-                    if in_positives(negative_item_id, user_id, interactions):
-                        continue
-
                     loss = weight * log(max(1.0, floor((item_features.rows - 1) / sampled)))
 
                     # Clip gradients for numerical stability.
@@ -1018,6 +1016,8 @@ def fit_warp_kos(CSRMatrix item_features,
                 sampled = sampled + 1
                 negative_item_id = (rand_r(&random_states[{thread_num}])
                                     % item_features.rows)
+                if in_positives(negative_item_id, user_id, data):
+                    continue
 
                 compute_representation(item_features,
                                        lightfm.item_features,
@@ -1032,10 +1032,6 @@ def fit_warp_kos(CSRMatrix item_features,
                                                                    lightfm.no_components)
 
                 if negative_prediction > positive_prediction - 1:
-
-                    if in_positives(negative_item_id, user_id, data):
-                        continue
-
                     loss = log(floor((item_features.rows - 1) / sampled))
 
                     # Clip gradients for numerical stability.
