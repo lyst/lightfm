@@ -932,6 +932,7 @@ def fit_warp_kos(CSRMatrix item_features,
     cdef int i, j, no_examples, user_id, positive_item_id, gamma
     cdef int negative_item_id, sampled, row, sampled_positive_item_id
     cdef int user_pids_start, user_pids_stop, no_positives, POS_SAMPLES
+    cdef int no_all_positives, no_all_negatives
     cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS, sampled_positive_prediction
     cdef flt *user_repr
@@ -1036,7 +1037,9 @@ def fit_warp_kos(CSRMatrix item_features,
                     if in_positives(negative_item_id, user_id, data):
                         continue
 
-                    loss = log(floor((item_features.rows - 1) / sampled))
+                    no_all_positives = user_pids_stop - user_pids_start
+                    no_all_negatives = item_features.rows - no_all_positives
+                    loss = log(floor(no_all_negatives / sampled))
 
                     # Clip gradients for numerical stability.
                     if loss > MAX_LOSS:
