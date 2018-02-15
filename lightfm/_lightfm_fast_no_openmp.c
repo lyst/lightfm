@@ -6982,7 +6982,7 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_2fit_warp(CYTHON_UN
  * 
  *             while sampled < lightfm.max_sampled:             # <<<<<<<<<<<<<<
  * 
- *                 sampled = sampled + 1
+ *                 negative_item_id = (rand_r(&random_states[0])
  */
           while (1) {
             __pyx_t_15 = ((__pyx_v_sampled < __pyx_v_lightfm->max_sampled) != 0);
@@ -6991,23 +6991,14 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_2fit_warp(CYTHON_UN
             /* "lightfm/_lightfm_fast_no_openmp.pyx":859
  *             while sampled < lightfm.max_sampled:
  * 
- *                 sampled = sampled + 1             # <<<<<<<<<<<<<<
- *                 negative_item_id = (rand_r(&random_states[0])
- *                                     % item_features.rows)
- */
-            __pyx_v_sampled = (__pyx_v_sampled + 1);
-
-            /* "lightfm/_lightfm_fast_no_openmp.pyx":860
- * 
- *                 sampled = sampled + 1
  *                 negative_item_id = (rand_r(&random_states[0])             # <<<<<<<<<<<<<<
  *                                     % item_features.rows)
  *                 # Sample again if the sample negative is actually a positive
  */
             __pyx_t_17 = 0;
 
-            /* "lightfm/_lightfm_fast_no_openmp.pyx":861
- *                 sampled = sampled + 1
+            /* "lightfm/_lightfm_fast_no_openmp.pyx":860
+ * 
  *                 negative_item_id = (rand_r(&random_states[0])
  *                                     % item_features.rows)             # <<<<<<<<<<<<<<
  *                 # Sample again if the sample negative is actually a positive
@@ -7015,36 +7006,45 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_2fit_warp(CYTHON_UN
  */
             __pyx_v_negative_item_id = (__pyx_f_7lightfm_23_lightfm_fast_no_openmp_rand_r((&(*((unsigned int *) ( /* dim=0 */ ((char *) (((unsigned int *) __pyx_v_random_states.data) + __pyx_t_17)) ))))) % __pyx_v_item_features->rows);
 
-            /* "lightfm/_lightfm_fast_no_openmp.pyx":863
+            /* "lightfm/_lightfm_fast_no_openmp.pyx":862
  *                                     % item_features.rows)
  *                 # Sample again if the sample negative is actually a positive
  *                 if in_positives(negative_item_id, user_id, interactions):             # <<<<<<<<<<<<<<
  *                     continue
- * 
+ *                 sampled = sampled + 1
  */
             __pyx_t_15 = (__pyx_f_7lightfm_23_lightfm_fast_no_openmp_in_positives(__pyx_v_negative_item_id, __pyx_v_user_id, __pyx_v_interactions) != 0);
             if (__pyx_t_15) {
 
-              /* "lightfm/_lightfm_fast_no_openmp.pyx":864
+              /* "lightfm/_lightfm_fast_no_openmp.pyx":863
  *                 # Sample again if the sample negative is actually a positive
  *                 if in_positives(negative_item_id, user_id, interactions):
  *                     continue             # <<<<<<<<<<<<<<
+ *                 sampled = sampled + 1
  * 
- *                 compute_representation(item_features,
  */
               goto __pyx_L9_continue;
 
-              /* "lightfm/_lightfm_fast_no_openmp.pyx":863
+              /* "lightfm/_lightfm_fast_no_openmp.pyx":862
  *                                     % item_features.rows)
  *                 # Sample again if the sample negative is actually a positive
  *                 if in_positives(negative_item_id, user_id, interactions):             # <<<<<<<<<<<<<<
  *                     continue
- * 
+ *                 sampled = sampled + 1
  */
             }
 
-            /* "lightfm/_lightfm_fast_no_openmp.pyx":866
+            /* "lightfm/_lightfm_fast_no_openmp.pyx":864
+ *                 if in_positives(negative_item_id, user_id, interactions):
  *                     continue
+ *                 sampled = sampled + 1             # <<<<<<<<<<<<<<
+ * 
+ *                 compute_representation(item_features,
+ */
+            __pyx_v_sampled = (__pyx_v_sampled + 1);
+
+            /* "lightfm/_lightfm_fast_no_openmp.pyx":866
+ *                 sampled = sampled + 1
  * 
  *                 compute_representation(item_features,             # <<<<<<<<<<<<<<
  *                                        lightfm.item_features,
@@ -7991,7 +7991,7 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_4fit_warp_kos(CYTHO
  * 
  *             while sampled < lightfm.max_sampled:             # <<<<<<<<<<<<<<
  * 
- *                 sampled = sampled + 1
+ *                 negative_item_id = (rand_r(&random_states[0])
  */
           while (1) {
             __pyx_t_13 = ((__pyx_v_sampled < __pyx_v_lightfm->max_sampled) != 0);
@@ -8000,23 +8000,14 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_4fit_warp_kos(CYTHO
             /* "lightfm/_lightfm_fast_no_openmp.pyx":1016
  *             while sampled < lightfm.max_sampled:
  * 
- *                 sampled = sampled + 1             # <<<<<<<<<<<<<<
- *                 negative_item_id = (rand_r(&random_states[0])
- *                                     % item_features.rows)
- */
-            __pyx_v_sampled = (__pyx_v_sampled + 1);
-
-            /* "lightfm/_lightfm_fast_no_openmp.pyx":1017
- * 
- *                 sampled = sampled + 1
  *                 negative_item_id = (rand_r(&random_states[0])             # <<<<<<<<<<<<<<
  *                                     % item_features.rows)
  *                 if in_positives(negative_item_id, user_id, data):
  */
             __pyx_t_19 = 0;
 
-            /* "lightfm/_lightfm_fast_no_openmp.pyx":1018
- *                 sampled = sampled + 1
+            /* "lightfm/_lightfm_fast_no_openmp.pyx":1017
+ * 
  *                 negative_item_id = (rand_r(&random_states[0])
  *                                     % item_features.rows)             # <<<<<<<<<<<<<<
  *                 if in_positives(negative_item_id, user_id, data):
@@ -8024,36 +8015,45 @@ static PyObject *__pyx_pf_7lightfm_23_lightfm_fast_no_openmp_4fit_warp_kos(CYTHO
  */
             __pyx_v_negative_item_id = (__pyx_f_7lightfm_23_lightfm_fast_no_openmp_rand_r((&(*((unsigned int *) ( /* dim=0 */ ((char *) (((unsigned int *) __pyx_v_random_states.data) + __pyx_t_19)) ))))) % __pyx_v_item_features->rows);
 
-            /* "lightfm/_lightfm_fast_no_openmp.pyx":1019
+            /* "lightfm/_lightfm_fast_no_openmp.pyx":1018
  *                 negative_item_id = (rand_r(&random_states[0])
  *                                     % item_features.rows)
  *                 if in_positives(negative_item_id, user_id, data):             # <<<<<<<<<<<<<<
  *                     continue
- * 
+ *                 sampled = sampled + 1
  */
             __pyx_t_13 = (__pyx_f_7lightfm_23_lightfm_fast_no_openmp_in_positives(__pyx_v_negative_item_id, __pyx_v_user_id, __pyx_v_data) != 0);
             if (__pyx_t_13) {
 
-              /* "lightfm/_lightfm_fast_no_openmp.pyx":1020
+              /* "lightfm/_lightfm_fast_no_openmp.pyx":1019
  *                                     % item_features.rows)
  *                 if in_positives(negative_item_id, user_id, data):
  *                     continue             # <<<<<<<<<<<<<<
+ *                 sampled = sampled + 1
  * 
- *                 compute_representation(item_features,
  */
               goto __pyx_L11_continue;
 
-              /* "lightfm/_lightfm_fast_no_openmp.pyx":1019
+              /* "lightfm/_lightfm_fast_no_openmp.pyx":1018
  *                 negative_item_id = (rand_r(&random_states[0])
  *                                     % item_features.rows)
  *                 if in_positives(negative_item_id, user_id, data):             # <<<<<<<<<<<<<<
  *                     continue
- * 
+ *                 sampled = sampled + 1
  */
             }
 
-            /* "lightfm/_lightfm_fast_no_openmp.pyx":1022
+            /* "lightfm/_lightfm_fast_no_openmp.pyx":1020
+ *                 if in_positives(negative_item_id, user_id, data):
  *                     continue
+ *                 sampled = sampled + 1             # <<<<<<<<<<<<<<
+ * 
+ *                 compute_representation(item_features,
+ */
+            __pyx_v_sampled = (__pyx_v_sampled + 1);
+
+            /* "lightfm/_lightfm_fast_no_openmp.pyx":1022
+ *                 sampled = sampled + 1
  * 
  *                 compute_representation(item_features,             # <<<<<<<<<<<<<<
  *                                        lightfm.item_features,
