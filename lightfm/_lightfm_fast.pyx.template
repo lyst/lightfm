@@ -829,7 +829,11 @@ def fit_warp(CSRMatrix item_features,
             user_id = user_ids[row]
             positive_item_id = item_ids[row]
 
-            if not Y[row] > 0:
+            no_all_positives = (interactions.get_row_end(user_id) -
+                                interactions.get_row_start(user_id))
+            no_all_negatives = item_features.rows - no_all_positives
+
+            if not Y[row] > 0 or no_all_negatives == 0:
                 continue
 
             weight = sample_weight[row]
@@ -877,9 +881,6 @@ def fit_warp(CSRMatrix item_features,
                                                                    lightfm.no_components)
 
                 if negative_prediction > positive_prediction - 1:
-                    no_all_positives = (interactions.get_row_end(user_id) -
-                                        interactions.get_row_start(user_id))
-                    no_all_negatives = item_features.rows - no_all_positives
                     loss = weight * log(max(1.0, floor(no_all_negatives / sampled)))
 
                     # Clip gradients for numerical stability.
@@ -972,7 +973,10 @@ def fit_warp_kos(CSRMatrix item_features,
             user_pids_start = data.get_row_start(user_id)
             user_pids_stop = data.get_row_end(user_id)
 
-            if user_pids_stop == user_pids_start:
+            no_all_positives = user_pids_stop - user_pids_start
+            no_all_negatives = item_features.rows - no_all_positives
+
+            if no_all_positives == 0 or no_all_negatives == 0:
                 continue
 
             # Sample k-th positive item
@@ -1037,8 +1041,6 @@ def fit_warp_kos(CSRMatrix item_features,
                                                                    lightfm.no_components)
 
                 if negative_prediction > positive_prediction - 1:
-                    no_all_positives = user_pids_stop - user_pids_start
-                    no_all_negatives = item_features.rows - no_all_positives
                     loss = log(floor(no_all_negatives / sampled))
 
                     # Clip gradients for numerical stability.
