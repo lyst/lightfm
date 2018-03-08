@@ -121,13 +121,13 @@ def fetch_movielens(data_home=None, indicator_features=True, genre_features=Fals
         Path to the directory in which the downloaded data should be placed.
         Defaults to ``~/lightfm_data/``.
     indicator_features: bool, optional
-        Use an [n_users, n_users] identity matrix for item features. When True with genre_features,
+        Use an [n_items, n_items] identity matrix for item features. When True with genre_features,
         indicator and genre features are concatenated into a single feature matrix of shape
-        [n_users, n_users + n_genres].
+        [n_items, n_items + n_genres].
     genre_features: bool, optional
-        Use a [n_users, n_genres] matrix for item features. When True with item_indicator_features,
+        Use a [n_items, n_genres] matrix for item features. When True with item_indicator_features,
         indicator and genre features are concatenated into a single feature matrix of shape
-        [n_users, n_users + n_genres].
+        [n_items, n_items + n_genres].
     min_rating: float, optional
         Minimum rating to include in the interaction matrix.
     download_if_missing: bool, optional
