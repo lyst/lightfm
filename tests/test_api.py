@@ -405,3 +405,40 @@ def test_warp_few_items():
     model = LightFM(loss='warp', max_sampled=10)
 
     model.fit(train)
+
+
+def test_model_should_carry_learned_values_to_new_model():
+    no_components = 2
+    item_feature_names = list('abc')
+    user_feature_names = list('uvxy')
+    no_item_features = len(item_feature_names)
+    no_user_features = len(user_feature_names)
+
+    old_model = LightFM(
+        no_components=no_components,
+        item_feature_names=item_feature_names,
+        user_feature_names=user_feature_names)
+
+    # initialize the model to get some numbers into the embeddings and biases
+    old_model._initialize(
+        no_components=no_components,
+        no_item_features=no_item_features,
+        no_user_features=no_user_features)
+
+    # biases are initialized as zeros, so some some values to be able to assert
+    # that the copy correctly
+    old_model.item_biases = np.array([.1, .3, .7])
+
+    # create a new model, add some features and shuffle the order of them a bit
+    item_feature_names = list('dcab')
+    user_feature_names = list('yzuvx')
+
+    new_model = LightFM.from_model(
+        old_model,
+        item_feature_names=item_feature_names,
+        user_feature_names=user_feature_names)
+
+    # the item feature named 'c' has
+    # index 1 in new_model, and index 2 in old_model
+    assert (new_model.item_embeddings[1] == old_model.item_embeddings[2]).all()
+    assert (new_model.user_embeddings[0] == old_model.user_embeddings[3]).all()

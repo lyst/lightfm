@@ -164,7 +164,9 @@ class LightFM(object):
                  loss='logistic',
                  learning_rate=0.05, rho=0.95, epsilon=1e-6,
                  item_alpha=0.0, user_alpha=0.0, max_sampled=10,
-                 random_state=None):
+                 random_state=None,
+                 item_feature_names=None,
+                 user_feature_names=None):
 
         assert item_alpha >= 0.0
         assert user_alpha >= 0.0
@@ -201,6 +203,16 @@ class LightFM(object):
             self.random_state = random_state
         else:
             self.random_state = np.random.RandomState(random_state)
+
+        if item_feature_names:
+            self.item_feature_names = np.array(item_feature_names)
+        else:
+            self.item_feature_names = []
+
+        if user_feature_names:
+            self.user_feature_names = np.array(user_feature_names)
+        else:
+            self.user_feature_names = []
 
         self._reset_state()
 
@@ -934,3 +946,34 @@ class LightFM(object):
             setattr(self, key, value)
 
         return self
+
+    @staticmethod
+    def from_model(old_model, item_feature_names, user_feature_names):
+        old_model._check_initialized()
+        new_model = LightFM(
+            no_components=old_model.no_components,
+            item_feature_names=item_feature_names,
+            user_feature_names=user_feature_names
+            )
+        new_model._initialize(
+            no_components=new_model.no_components,
+            no_user_features=len(user_feature_names),
+            no_item_features=len(item_feature_names))
+
+        # copy item feature embeddings and biases from old model to new model
+        for item_feature_name in new_model.item_feature_names:
+            if item_feature_name in old_model.item_feature_names:
+                old_idx = np.where(old_model.item_feature_names == item_feature_name)[0][0]
+                new_idx = np.where(new_model.item_feature_names == item_feature_name)[0][0]
+                new_model.item_embeddings[new_idx] = old_model.item_embeddings[old_idx]
+                new_model.item_biases[new_idx] = old_model.item_biases[old_idx]
+
+        # copy user feature embeddings and biases from old model to new model
+        for user_feature_name in new_model.user_feature_names:
+            if user_feature_name in old_model.user_feature_names:
+                old_idx = np.where(old_model.user_feature_names == user_feature_name)[0][0]
+                new_idx = np.where(new_model.user_feature_names == user_feature_name)[0][0]
+                new_model.user_embeddings[new_idx] = old_model.user_embeddings[old_idx]
+                new_model.user_biases[new_idx] = old_model.user_biases[old_idx]
+
+        return new_model
