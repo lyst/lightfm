@@ -540,15 +540,10 @@ class LightFM(object):
                                                            user_features,
                                                            item_features)
 
-        sample_weight = (self._to_cython_dtype(sample_weight)
-                         if sample_weight is not None else
-                         np.ones(interactions.getnnz(),
-                                 dtype=CYTHON_DTYPE))
-
         for input_data in (user_features.data,
                            item_features.data,
                            interactions.data,
-                           sample_weight):
+                           sample_weight_data):
             self._check_input_finite(input_data)
         if self.item_embeddings is None:
             # Initialise latent factors only if this is the first call
