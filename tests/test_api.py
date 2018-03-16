@@ -39,6 +39,7 @@ def test_matrix_types():
             train = mattype((no_users,
                              no_items),
                             dtype=dtype)
+            weights = train.tocoo()
 
             user_features = mattype((no_users,
                                      no_features),
@@ -49,6 +50,7 @@ def test_matrix_types():
 
             model = LightFM()
             model.fit_partial(train,
+                              sample_weight=weights,
                               user_features=user_features,
                               item_features=item_features)
 
