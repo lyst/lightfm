@@ -953,8 +953,8 @@ class LightFM(object):
         new_model = LightFM(
             no_components=old_model.no_components,
             item_feature_names=item_feature_names,
-            user_feature_names=user_feature_names
-            )
+            user_feature_names=user_feature_names)
+
         new_model._initialize(
             no_components=new_model.no_components,
             no_user_features=len(user_feature_names),
