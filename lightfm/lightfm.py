@@ -947,11 +947,10 @@ class LightFM(object):
 
         return self
 
-    @staticmethod
-    def from_model(old_model, item_feature_names, user_feature_names):
-        old_model._check_initialized()
+    def resize(self, item_feature_names, user_feature_names):
+        self._check_initialized()
         new_model = LightFM(
-            no_components=old_model.no_components,
+            no_components=self.no_components,
             item_feature_names=item_feature_names,
             user_feature_names=user_feature_names)
 
@@ -962,18 +961,18 @@ class LightFM(object):
 
         # copy item feature embeddings and biases from old model to new model
         for item_feature_name in new_model.item_feature_names:
-            if item_feature_name in old_model.item_feature_names:
-                old_idx = np.where(old_model.item_feature_names == item_feature_name)[0][0]
+            if item_feature_name in self.item_feature_names:
+                old_idx = np.where(self.item_feature_names == item_feature_name)[0][0]
                 new_idx = np.where(new_model.item_feature_names == item_feature_name)[0][0]
-                new_model.item_embeddings[new_idx] = old_model.item_embeddings[old_idx]
-                new_model.item_biases[new_idx] = old_model.item_biases[old_idx]
+                new_model.item_embeddings[new_idx] = self.item_embeddings[old_idx]
+                new_model.item_biases[new_idx] = self.item_biases[old_idx]
 
         # copy user feature embeddings and biases from old model to new model
         for user_feature_name in new_model.user_feature_names:
-            if user_feature_name in old_model.user_feature_names:
-                old_idx = np.where(old_model.user_feature_names == user_feature_name)[0][0]
+            if user_feature_name in self.user_feature_names:
+                old_idx = np.where(self.user_feature_names == user_feature_name)[0][0]
                 new_idx = np.where(new_model.user_feature_names == user_feature_name)[0][0]
-                new_model.user_embeddings[new_idx] = old_model.user_embeddings[old_idx]
-                new_model.user_biases[new_idx] = old_model.user_biases[old_idx]
+                new_model.user_embeddings[new_idx] = self.user_embeddings[old_idx]
+                new_model.user_biases[new_idx] = self.user_biases[old_idx]
 
         return new_model

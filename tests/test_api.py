@@ -433,8 +433,7 @@ def test_model_should_carry_learned_values_to_new_model():
     item_feature_names = list('dcab')
     user_feature_names = list('yzuvx')
 
-    new_model = LightFM.from_model(
-        old_model,
+    new_model = old_model.resize(
         item_feature_names=item_feature_names,
         user_feature_names=user_feature_names)
 
