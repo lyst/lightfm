@@ -204,15 +204,15 @@ class LightFM(object):
         else:
             self.random_state = np.random.RandomState(random_state)
 
-        if item_feature_names:
+        if item_feature_names is None:
+            self.item_feature_names = np.array([])
+        else:
             self.item_feature_names = np.array(item_feature_names)
-        else:
-            self.item_feature_names = []
 
-        if user_feature_names:
-            self.user_feature_names = np.array(user_feature_names)
+        if user_feature_names is None:
+            self.user_feature_names = np.array([])
         else:
-            self.user_feature_names = []
+            self.user_feature_names = np.array(user_feature_names)
 
         self._reset_state()
 
@@ -949,6 +949,12 @@ class LightFM(object):
 
     def resize(self, item_feature_names, user_feature_names):
         self._check_initialized()
+        if (self.item_feature_names.size == 0 or self.user_feature_names.size == 0):
+            raise ValueError(
+                'In order to resize a model, you need to set '
+                '`item_feature_names` and `user_feature_names`'
+                'on the model you are copying from.')
+
         new_model = LightFM(
             no_components=self.no_components,
             item_feature_names=item_feature_names,
