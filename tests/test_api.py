@@ -407,7 +407,8 @@ def test_warp_few_items():
     model.fit(train)
 
 
-def test_model_should_carry_learned_values_to_new_model():
+def _setup_models():
+    """Helper method to setup an old model, and create a new model from it."""
     no_components = 2
     item_feature_names = list('abc')
     user_feature_names = list('uvxy')
@@ -437,7 +438,20 @@ def test_model_should_carry_learned_values_to_new_model():
         item_feature_names=item_feature_names,
         user_feature_names=user_feature_names)
 
+    return old_model, new_model
+
+
+def test_model_should_carry_learned_values_to_new_model():
+    old_model, new_model = _setup_models()
+
     # the item feature named 'c' has
     # index 1 in new_model, and index 2 in old_model
     assert (new_model.item_embeddings[1] == old_model.item_embeddings[2]).all()
     assert (new_model.user_embeddings[0] == old_model.user_embeddings[3]).all()
+
+
+def test_hyperparameters_should_copy_from_old_to_new_model():
+    old_model, new_model = _setup_models()
+    params = old_model.get_params()
+    for param, value in params.items():
+        assert getattr(old_model, param) == getattr(new_model, param)

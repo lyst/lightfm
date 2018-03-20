@@ -959,6 +959,9 @@ class LightFM(object):
             no_user_features=len(user_feature_names),
             no_item_features=len(item_feature_names))
 
+        params = self.get_params()
+        new_model.set_params(**params)
+
         # copy item feature embeddings and biases from old model to new model
         for item_feature_name in new_model.item_feature_names:
             if item_feature_name in self.item_feature_names:
