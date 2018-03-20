@@ -801,6 +801,7 @@ def fit_warp(CSRMatrix item_features,
 
     cdef int i, no_examples, user_id, positive_item_id, gamma
     cdef int negative_item_id, sampled, row
+    cdef int no_all_positives, no_all_negatives
     cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS
     cdef flt weight
@@ -828,7 +829,11 @@ def fit_warp(CSRMatrix item_features,
             user_id = user_ids[row]
             positive_item_id = item_ids[row]
 
-            if not Y[row] > 0:
+            no_all_positives = (interactions.get_row_end(user_id) -
+                                interactions.get_row_start(user_id))
+            no_all_negatives = item_features.rows - no_all_positives
+
+            if not Y[row] > 0 or no_all_negatives == 0:
                 continue
 
             weight = sample_weight[row]
@@ -856,9 +861,12 @@ def fit_warp(CSRMatrix item_features,
 
             while sampled < lightfm.max_sampled:
 
-                sampled = sampled + 1
                 negative_item_id = (rand_r(&random_states[{thread_num}])
                                     % item_features.rows)
+                # Sample again if the sample negative is actually a positive
+                if in_positives(negative_item_id, user_id, interactions):
+                    continue
+                sampled = sampled + 1
 
                 compute_representation(item_features,
                                        lightfm.item_features,
@@ -873,12 +881,7 @@ def fit_warp(CSRMatrix item_features,
                                                                    lightfm.no_components)
 
                 if negative_prediction > positive_prediction - 1:
-
-                    # Sample again if the sample negative is actually a positive
-                    if in_positives(negative_item_id, user_id, interactions):
-                        continue
-
-                    loss = weight * log(max(1.0, floor((item_features.rows - 1) / sampled)))
+                    loss = weight * log(max(1.0, floor(no_all_negatives / sampled)))
 
                     # Clip gradients for numerical stability.
                     if loss > MAX_LOSS:
@@ -932,6 +935,7 @@ def fit_warp_kos(CSRMatrix item_features,
     cdef int i, j, no_examples, user_id, positive_item_id, gamma
     cdef int negative_item_id, sampled, row, sampled_positive_item_id
     cdef int user_pids_start, user_pids_stop, no_positives, POS_SAMPLES
+    cdef int no_all_positives, no_all_negatives
     cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS, sampled_positive_prediction
     cdef flt *user_repr
@@ -969,7 +973,10 @@ def fit_warp_kos(CSRMatrix item_features,
             user_pids_start = data.get_row_start(user_id)
             user_pids_stop = data.get_row_end(user_id)
 
-            if user_pids_stop == user_pids_start:
+            no_all_positives = user_pids_stop - user_pids_start
+            no_all_negatives = item_features.rows - no_all_positives
+
+            if no_all_positives == 0 or no_all_negatives == 0:
                 continue
 
             # Sample k-th positive item
@@ -1015,9 +1022,11 @@ def fit_warp_kos(CSRMatrix item_features,
 
             while sampled < lightfm.max_sampled:
 
-                sampled = sampled + 1
                 negative_item_id = (rand_r(&random_states[{thread_num}])
                                     % item_features.rows)
+                if in_positives(negative_item_id, user_id, data):
+                    continue
+                sampled = sampled + 1
 
                 compute_representation(item_features,
                                        lightfm.item_features,
@@ -1032,11 +1041,7 @@ def fit_warp_kos(CSRMatrix item_features,
                                                                    lightfm.no_components)
 
                 if negative_prediction > positive_prediction - 1:
-
-                    if in_positives(negative_item_id, user_id, data):
-                        continue
-
-                    loss = log(floor((item_features.rows - 1) / sampled))
+                    loss = log(floor(no_all_negatives / sampled))
 
                     # Clip gradients for numerical stability.
                     if loss > MAX_LOSS:
