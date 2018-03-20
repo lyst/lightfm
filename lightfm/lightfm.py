@@ -968,20 +968,31 @@ class LightFM(object):
         params = self.get_params()
         new_model.set_params(**params)
 
+        parameter_names = [
+            'embeddings',
+            'embedding_gradients',
+            'embedding_momentum',
+            'biases',
+            'bias_gradients',
+            'bias_momentum'
+        ]
+
         # copy item feature embeddings and biases from old model to new model
         for item_feature_name in new_model.item_feature_names:
             if item_feature_name in self.item_feature_names:
                 old_idx = np.where(self.item_feature_names == item_feature_name)[0][0]
                 new_idx = np.where(new_model.item_feature_names == item_feature_name)[0][0]
-                new_model.item_embeddings[new_idx] = self.item_embeddings[old_idx]
-                new_model.item_biases[new_idx] = self.item_biases[old_idx]
+                for param_name in parameter_names:
+                    param_name = 'item_' + param_name
+                    getattr(new_model, param_name)[new_idx] = getattr(self, param_name)[old_idx]
 
         # copy user feature embeddings and biases from old model to new model
         for user_feature_name in new_model.user_feature_names:
             if user_feature_name in self.user_feature_names:
                 old_idx = np.where(self.user_feature_names == user_feature_name)[0][0]
                 new_idx = np.where(new_model.user_feature_names == user_feature_name)[0][0]
-                new_model.user_embeddings[new_idx] = self.user_embeddings[old_idx]
-                new_model.user_biases[new_idx] = self.user_biases[old_idx]
+                for param_name in parameter_names:
+                    param_name = 'user_' + param_name
+                    getattr(new_model, param_name)[new_idx] = getattr(self, param_name)[old_idx]
 
         return new_model
