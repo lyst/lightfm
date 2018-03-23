@@ -78,3 +78,8 @@ def test_should_raise_if_feature_names_are_nonunique():
             item_feature_names=np.array(list('abc')),
             user_feature_names=np.array(list('xyzz'))
         )
+    with pytest.raises(ValueError):
+        _setup_model(
+            item_feature_names=np.array(list('abcc')),
+            user_feature_names=np.array(list('xyz'))
+        )
