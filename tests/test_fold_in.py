@@ -39,7 +39,8 @@ def _setup_model(
 def test_model_should_carry_learned_values_to_new_model():
     old_model = _setup_model()
     new_model = old_model.resize(
-        item_feature_names=list('dcab'), user_feature_names=list('yzuvx'))
+        item_feature_names=np.array(list('dcab')),
+        user_feature_names=np.array(list('yzuvx')))
 
     # the item feature named 'c' has
     # index 1 in new_model, and index 2 in old_model
@@ -67,5 +68,13 @@ def test_should_raise_if_copying_from_model_without_feature_names():
     )
     with pytest.raises(ValueError):
         old_model.resize(
-            item_feature_names=list('abc'),
-            user_feature_names=list('xyz'))
+            item_feature_names=np.array(list('abc')),
+            user_feature_names=np.array(list('xyz')))
+
+
+def test_should_raise_if_feature_names_are_nonunique():
+    with pytest.raises(ValueError):
+        _setup_model(
+            item_feature_names=np.array(list('abc')),
+            user_feature_names=np.array(list('xyzz'))
+        )

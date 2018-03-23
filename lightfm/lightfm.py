@@ -91,6 +91,10 @@ class LightFM(object):
     random_state: int seed, RandomState instance, or None
         The seed of the pseudo random number generator to use when shuffling
         the data and initializing the parameters.
+    item_feature_names: np.ndarray of shape [n_item_features,].
+        Each item should be the unique ID of an item feature.
+    user_feature_names: np.ndarray of shape [n_user_features,].
+        Each item should be the unique ID of a user feature.
 
     Attributes
     ----------
@@ -214,6 +218,8 @@ class LightFM(object):
         else:
             self.user_feature_names = np.array(user_feature_names)
 
+        self._check_feature_names()
+
         self._reset_state()
 
     def _reset_state(self):
@@ -250,6 +256,12 @@ class LightFM(object):
             if var is None:
                 raise ValueError('You must fit the model before '
                                  'trying to obtain predictions.')
+
+    def _check_feature_names(self):
+        if self.item_feature_names.size != np.unique(self.item_feature_names).size:
+            raise ValueError('`item_feature_names` must be unqiue.')
+        if self.user_feature_names.size != np.unique(self.user_feature_names).size:
+            raise ValueError('`user_feature_names` must be unqiue.')
 
     def _initialize(self, no_components, no_item_features, no_user_features):
         """
@@ -948,6 +960,23 @@ class LightFM(object):
         return self
 
     def resize(self, item_feature_names, user_feature_names):
+        """Resize a model to add new item features and/or user features.
+
+        Arguments
+        ---------
+
+        item_feature_names: np.ndarray of shape [n_item_features,]
+             Each item should be the unique ID of an item feature.
+        user_feature_names: np.ndarray of shape [n_user_features,]
+             Each item should be the unique ID of a user feature.
+
+        Returns
+        -------
+
+        lightfm.LightFM array of shape [n_pairs,]
+            Returns a new model with parameters and hyperparameters
+            copied from the calling model.
+        """
         self._check_initialized()
         if (self.item_feature_names.size == 0 or self.user_feature_names.size == 0):
             raise ValueError(
@@ -962,8 +991,8 @@ class LightFM(object):
 
         new_model._initialize(
             no_components=new_model.no_components,
-            no_user_features=len(user_feature_names),
-            no_item_features=len(item_feature_names))
+            no_user_features=user_feature_names.size,
+            no_item_features=item_feature_names.size)
 
         params = self.get_params()
         new_model.set_params(**params)
