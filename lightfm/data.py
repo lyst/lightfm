@@ -51,7 +51,7 @@ class IncrementalCOOMatrix(object):
         return len(self.data)
 
 
-class ImplicitInteractions(object):
+class Dataset(object):
 
     def __init__(self, user_identity_features=True, item_identity_features=True):
 
@@ -183,8 +183,54 @@ class ImplicitInteractions(object):
 
         features = IncrementalCOOMatrix(self.user_features_shape(), np.float32)
 
+        if self._user_identity_features:
+            for (user_id, user_idx) in self._user_id_mapping.items():
+                features.append(user_idx, self._user_feature_mapping[user_id], 1.0)
+
         for datum in data:
             for (user_idx, feature_idx, weight) in self._process_user_features(datum):
                 features.append(user_idx, feature_idx, weight)
+
+        return features.tocoo()
+
+    def _process_item_features(self, datum):
+
+        if len(datum) != 2:
+            raise ValueError('Expected tuples of (item_id, features), '
+                             'got {}.'.format(datum))
+
+        item_id, features = datum
+
+        if item_id not in self._item_id_mapping:
+            raise ValueError('Item id {} not in item id mappings.'
+                             .format(item_id))
+
+        item_idx = self._item_id_mapping[item_id]
+
+        for (feature, weight) in self._iter_features(features):
+            if feature not in self._item_feature_mapping:
+                raise ValueError('Feature {} not in item feature mapping. '
+                                 'Call fit first.'.format(feature))
+
+            feature_idx = self._item_feature_mapping[feature]
+
+            yield (item_idx, feature_idx, weight)
+
+    def item_features_shape(self):
+
+        return (len(self._item_id_mapping),
+                len(self._item_feature_mapping))
+
+    def build_item_features(self, data):
+
+        features = IncrementalCOOMatrix(self.item_features_shape(), np.float32)
+
+        if self._item_identity_features:
+            for (item_id, item_idx) in self._item_id_mapping.items():
+                features.append(item_idx, self._item_feature_mapping[item_id], 1.0)
+
+        for datum in data:
+            for (item_idx, feature_idx, weight) in self._process_item_features(datum):
+                features.append(item_idx, feature_idx, weight)
 
         return features.tocoo()
