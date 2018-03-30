@@ -1,5 +1,6 @@
 import array
 
+import numpy as np
 import scipy.sparse as sp
 
 
@@ -59,19 +60,45 @@ class ImplicitInteractions(object):
 
         self._user_id_mapping = {}
         self._item_id_mapping = {}
-
-    def _initialise_features(self):
-
         self._user_feature_mapping = {}
         self._item_feature_mapping = {}
 
-        self._user_features_row = array.array('i')
-        self._user_features_col = array.array('i')
-        self._user_features_value = array.array('f')
+    def _check_fitted(self):
 
-        self._item_features_row = array.array('i')
-        self._item_features_col = array.array('i')
-        self._item_features_value = array.array('f')
+        if not self._user_id_mapping or not self._item_id_mapping:
+            raise ValueError('You must call fit first to build the item and user '
+                             'id mappings.')
+
+    def fit(self, users, items, user_features=None, item_features=None):
+
+        self._user_id_mapping = {}
+        self._item_id_mapping = {}
+        self._user_feature_mapping = {}
+        self._item_feature_mapping = {}
+
+        self.fit_partial(users, items, user_features, item_features)
+
+    def fit_partial(self, users, items, user_features=None, item_features=None):
+
+        for user_id in users:
+            self._user_id_mapping.setdefault(user_id, len(self._user_id_mapping))
+
+            if self._user_identity_features:
+                self._user_feature_mapping.setdefault(user_id, len(self._user_feature_mapping))
+
+        for item_id in items:
+            self._item_id_mapping.setdefault(item_id, len(self._item_id_mapping))
+
+            if self._item_identity_features:
+                self._item_feature_mapping.setdefault(item_id, len(self._item_feature_mapping))
+
+        if user_features is not None:
+            for user_feature in user_features:
+                self._user_feature_mapping.setdefault(user_feature, len(self._user_feature_mapping))
+
+        if item_features is not None:
+            for item_feature in item_features:
+                self._item_feature_mapping.setdefault(item_feature, len(self._item_feature_mapping))
 
     def _unpack_datum(self, datum):
 
@@ -96,74 +123,10 @@ class ImplicitInteractions(object):
 
         return (user_idx, item_idx, weight)
 
-    def _check_fitted(self):
+    def interactions_shape(self):
 
-        if not self._user_id_mapping or not self._item_id_mapping:
-            raise ValueError('You must call fit first to build the item and user '
-                             'id mappings.')
-
-    def fit_user_mapping(self, data):
-
-        self._user_id_mapping = {}
-
-        for user_id in data:
-            self._user_id_mapping.setdefault(user_id, len(self._user_id_mapping))
-
-    def fit_item_mapping(self, data):
-
-        self._item_id_mapping = {}
-
-        for item_id in data:
-            self._item_id_mapping.setdefault(item_id, len(self._item_id_mapping))
-
-    def _unpack_feature(self, datum):
-
-        if len(datum) != 2:
-            raise ValueError('Expected tuples of (user_id, features), '
-                             'got {}.'.format(datum))
-
-        return datum
-
-    def _iter_features(self, features):
-
-        if isinstance(features, dict):
-            for entry in dict.items():
-                yield entry
-        else:
-            for feature_name in features:
-                yield (feature_name, 1.0)
-
-    def fit_user_feature_mapping(self, data):
-
-        self._user_feature_mapping = {}
-
-        for datum in data:
-            user_id, features = self._unpack_feature(datum)
-
-            if user_id not in self._user_id_mapping:
-                raise ValueError('User id {} not in user id mapping. '
-                                 'Make sure you call fit_user_id_mapping '
-                                 'first.'.format(user_id))
-
-            for (feature_name, _) in self._iter_features(features):
-                self._user_feature_mapping.setdefault(feature_name,
-                                                      len(self._user_feature_mapping))
-
-    def fit_item_feature_mapping(self, data):
-
-        self._item_feature_mapping = {}
-
-        for datum in data:
-            item_id, features = self._unpack_feature(datum)
-
-            if item_id not in self._item_id_mapping:
-                raise ValueError('Item id {} not in item id mapping. '
-                                 'Make sure you call fit_item_id_mapping '
-                                 'first.'.format(item_id))
-
-            for (feature_name, _) in self._iter_features(features):
-                self._item_feature_mapping.setdefault(feature_name,
-                                                      len(self._item_feature_mapping))
+        return (len(self._user_id_mapping),
+                len(self._item_id_mapping))
 
     def build_interactions_matrix(self, data):
 
@@ -179,14 +142,16 @@ class ImplicitInteractions(object):
         return (interactions.tocoo(),
                 weights.tocoo())
 
-    def interactions_shape(self):
+    def _iter_features(self, features):
 
-        self._check_fitted()
+        if isinstance(features, dict):
+            for entry in dict.items():
+                yield entry
+        else:
+            for feature_name in features:
+                yield (feature_name, 1.0)
 
-        return (len(self._user_id_mapping),
-                len(self._item_id_mapping))
-
-    def _process_features(self, datum):
+    def _process_user_features(self, datum):
 
         if len(datum) != 2:
             raise ValueError('Expected tuples of (user_id, features), '
@@ -200,8 +165,26 @@ class ImplicitInteractions(object):
 
         user_idx = self._user_id_mapping[user_id]
 
+        for (feature, weight) in self._iter_features(features):
+            if feature not in self._user_feature_mapping:
+                raise ValueError('Feature {} not in user feature mapping. '
+                                 'Call fit first.'.format(feature))
+
+            feature_idx = self._user_feature_mapping[feature]
+
+            yield (user_idx, feature_idx, weight)
+
+    def user_features_shape(self):
+
+        return (len(self._user_id_mapping),
+                len(self._user_feature_mapping))
+
     def build_user_features(self, data):
 
-        self._initialise_features()
+        features = IncrementalCOOMatrix(self.user_features_shape(), np.float32)
 
-        for (user_id, features) in data:
+        for datum in data:
+            for (user_idx, feature_idx, weight) in self._process_user_features(datum):
+                features.append(user_idx, feature_idx, weight)
+
+        return features.tocoo()
