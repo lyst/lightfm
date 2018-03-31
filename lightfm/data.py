@@ -4,7 +4,7 @@ import numpy as np
 import scipy.sparse as sp
 
 
-class IncrementalCOOMatrix(object):
+class _IncrementalCOOMatrix(object):
 
     def __init__(self, shape, dtype):
 
@@ -130,13 +130,13 @@ class Dataset(object):
 
     def build_interactions_matrix(self, data):
 
-        interactions = IncrementalCOOMatrix(self.interactions_shape(), np.int32)
-        weights = IncrementalCOOMatrix(self.interactions_shape(), np.float32)
+        interactions = _IncrementalCOOMatrix(self.interactions_shape(), np.int32)
+        weights = _IncrementalCOOMatrix(self.interactions_shape(), np.float32)
 
         for datum in data:
             user_idx, item_idx, weight = self._unpack_datum(datum)
 
-            interactions.append(user_idx, item_idx, 1.0)
+            interactions.append(user_idx, item_idx, 1)
             weights.append(user_idx, item_idx, weight)
 
         return (interactions.tocoo(),
@@ -145,7 +145,7 @@ class Dataset(object):
     def _iter_features(self, features):
 
         if isinstance(features, dict):
-            for entry in dict.items():
+            for entry in features.items():
                 yield entry
         else:
             for feature_name in features:
@@ -181,7 +181,7 @@ class Dataset(object):
 
     def build_user_features(self, data):
 
-        features = IncrementalCOOMatrix(self.user_features_shape(), np.float32)
+        features = _IncrementalCOOMatrix(self.user_features_shape(), np.float32)
 
         if self._user_identity_features:
             for (user_id, user_idx) in self._user_id_mapping.items():
@@ -223,7 +223,7 @@ class Dataset(object):
 
     def build_item_features(self, data):
 
-        features = IncrementalCOOMatrix(self.item_features_shape(), np.float32)
+        features = _IncrementalCOOMatrix(self.item_features_shape(), np.float32)
 
         if self._item_identity_features:
             for (item_id, item_idx) in self._item_id_mapping.items():
