@@ -52,6 +52,37 @@ class _IncrementalCOOMatrix(object):
 
 
 class Dataset(object):
+    """
+    Tool for building interaction and feature matrices, taking care of the
+    mapping between user/item ids and feature names and internal feature indices.
+
+    To create a dataset:
+    - Create an instance of the `Dataset` class.
+    - Call `fit` (or `fit_partial`), supplying user/item ids and feature names
+      that you want to use in your model. This will create internal mappings that
+      translate the ids and feature names to internal indices used by the LightFM
+      model.
+    - Call `build_interactions` with an iterable of (user id, item id) or (user id,
+      item id, weight) to build an interactions and weights matrix.
+    - Call `build_user/item_features` with iterables of (user/item id, [features])
+      or (user/item id, {feature: feature weight}) to build feature matrices.
+    - To add new user/item ids or features, call `fit_partial` again. You will need
+      to resize your LightFM model to be able to use the new features.
+
+    Parameters
+    ----------
+
+    user_identity_features: bool, optional
+        Create a unique feature for every user in addition to other features.
+        If true (default), a latent vector will be allocated for every user. This
+        is a reasonable default for most applications, but should be set to false
+        if there is very little data for every user.
+    item_identity_features: bool, optional
+        Create a unique feature for every item in addition to other features.
+        If true (default), a latent vector will be allocated for every item. This
+        is a reasonable default for most applications, but should be set to false
+        if there is very little data for every item.
+    """
 
     def __init__(self, user_identity_features=True, item_identity_features=True):
 
@@ -70,15 +101,41 @@ class Dataset(object):
                              'id mappings.')
 
     def fit(self, users, items, user_features=None, item_features=None):
+        """
+        Fit the user/item id and feature name mappings.
+
+        Calling fit the second time will reset existing mappings.
+
+        Parameters
+        ----------
+
+        users: iterable of user ids
+        items: iterable of item ids
+        user_features: iterable of user features, optional
+        item_features: iterable of item features, optional
+        """
 
         self._user_id_mapping = {}
         self._item_id_mapping = {}
         self._user_feature_mapping = {}
         self._item_feature_mapping = {}
 
-        self.fit_partial(users, items, user_features, item_features)
+        return self.fit_partial(users, items, user_features, item_features)
 
     def fit_partial(self, users, items, user_features=None, item_features=None):
+        """
+        Fit the user/item id and feature name mappings.
+
+        Calling fit the second time will add new entries to existing mappings.
+
+        Parameters
+        ----------
+
+        users: iterable of user ids
+        items: iterable of item ids
+        user_features: iterable of user features, optional
+        item_features: iterable of item features, optional
+        """
 
         for user_id in users:
             self._user_id_mapping.setdefault(user_id, len(self._user_id_mapping))
@@ -124,11 +181,17 @@ class Dataset(object):
         return (user_idx, item_idx, weight)
 
     def interactions_shape(self):
+        """
+        Return a tuple of (num users, num items).
+        """
 
         return (len(self._user_id_mapping),
                 len(self._item_id_mapping))
 
-    def build_interactions_matrix(self, data):
+    def build_interactions(self, data):
+        """
+        Build an interaction matrix.
+        """
 
         interactions = _IncrementalCOOMatrix(self.interactions_shape(), np.int32)
         weights = _IncrementalCOOMatrix(self.interactions_shape(), np.float32)
@@ -234,3 +297,12 @@ class Dataset(object):
                 features.append(item_idx, feature_idx, weight)
 
         return features.tocoo()
+
+    def model_dimensions(self):
+        """
+        Returns a tuple that characterizes the number of user/item feature
+        embeddings in a LightFM model for this dataset.
+        """
+
+        return (len(self._user_feature_mapping),
+                len(self._item_feature_mapping))

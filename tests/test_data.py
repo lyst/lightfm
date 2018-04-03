@@ -15,7 +15,7 @@ def test_fitting():
     assert dataset.user_features_shape() == (users, users)
     assert dataset.item_features_shape() == (items, items)
 
-    assert dataset.build_interactions_matrix([])[0].shape == (users, items)
+    assert dataset.build_interactions([])[0].shape == (users, items)
     assert dataset.build_user_features([]).getnnz() == users
     assert dataset.build_item_features([]).getnnz() == items
 
@@ -32,7 +32,7 @@ def test_fitting_no_identity():
     assert dataset.user_features_shape() == (users, 0)
     assert dataset.item_features_shape() == (items, 0)
 
-    assert dataset.build_interactions_matrix([])[0].shape == (users, items)
+    assert dataset.build_interactions([])[0].shape == (users, items)
     assert dataset.build_user_features([]).getnnz() == 0
     assert dataset.build_item_features([]).getnnz() == 0
 
@@ -45,14 +45,14 @@ def test_exceptions():
     dataset.fit(range(users), range(items))
 
     with pytest.raises(ValueError):
-        dataset.build_interactions_matrix([(users + 1, 0)])
+        dataset.build_interactions([(users + 1, 0)])
 
     with pytest.raises(ValueError):
-        dataset.build_interactions_matrix([(0, items + 1)])
+        dataset.build_interactions([(0, items + 1)])
 
     dataset.fit_partial([users + 1], [items + 1])
-    dataset.build_interactions_matrix([(users + 1, 0)])
-    dataset.build_interactions_matrix([(0, items + 1)])
+    dataset.build_interactions([(users + 1, 0)])
+    dataset.build_interactions([(0, items + 1)])
 
 
 def test_build_features():
