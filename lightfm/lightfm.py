@@ -78,7 +78,10 @@ class LightFM(object):
     epsilon: float, optional
         conditioning parameter for the adadelta learning schedule.
     item_alpha: float, optional
-        L2 penalty on item features
+        L2 penalty on item features. Tip: setting this number too high can slow
+        down training. One good way to check is if the final weights in the
+        embeddings turned out to be mostly zero. The same idea applies to
+        the user_alpha parameter.
     user_alpha: float, optional
         L2 penalty on user features.
     max_sampled: int, optional
