@@ -191,6 +191,26 @@ class Dataset(object):
     def build_interactions(self, data):
         """
         Build an interaction matrix.
+
+        Two matrices will be returned: a (num_users, num_items)
+        COO matrix with interactions, and a (num_users, num_items)
+        matrix with the corresponding interaction weights.
+
+        Parameters
+        ----------
+
+        data: iterable of (user_id, item_id) or (user_id, item_id, weight)
+            An iterable of interactions. The user and item ids will be
+            translated to internal model indices using the mappings
+            constructed during the fit call. If weights are not provided
+            they will be assumed to be 1.0.
+
+        Returns
+        -------
+
+        (interactions, weights): COO matrix, COO matrix
+            Two COO matrices: the interactions matrix
+            and the corresponding weights matrix.
         """
 
         interactions = _IncrementalCOOMatrix(self.interactions_shape(), np.int32)
@@ -238,11 +258,39 @@ class Dataset(object):
             yield (user_idx, feature_idx, weight)
 
     def user_features_shape(self):
+        """
+        Return the shape of the user features matrix.
+
+        Returns
+        -------
+
+        (num user ids, num user features): tuple of ints
+            The shape.
+        """
 
         return (len(self._user_id_mapping),
                 len(self._user_feature_mapping))
 
     def build_user_features(self, data):
+        """
+        Build a user features matrix out of an iterable of the form
+        (user id, [list of feature names]) or (user id, {feature name: feature weight}).
+
+        Parameters
+        ----------
+
+        data: iterable of the form
+            (user id, [list of feature names]) or (user id,
+            {feature name: feature weight}).
+            User and feature ids will be translated to internal indices
+            constructed during the fit call.
+
+        Returns
+        -------
+
+        feature matrix: COO matrix (num users, num features)
+            Matrix of user features.
+        """
 
         features = _IncrementalCOOMatrix(self.user_features_shape(), np.float32)
 
@@ -280,11 +328,39 @@ class Dataset(object):
             yield (item_idx, feature_idx, weight)
 
     def item_features_shape(self):
+        """
+        Return the shape of the item features matrix.
+
+        Returns
+        -------
+
+        (num item ids, num item features): tuple of ints
+            The shape.
+        """
 
         return (len(self._item_id_mapping),
                 len(self._item_feature_mapping))
 
     def build_item_features(self, data):
+        """
+        Build a item features matrix out of an iterable of the form
+        (item id, [list of feature names]) or (item id, {feature name: feature weight}).
+
+        Parameters
+        ----------
+
+        data: iterable of the form
+            (item id, [list of feature names]) or (item id,
+            {feature name: feature weight}).
+            Item and feature ids will be translated to internal indices
+            constructed during the fit call.
+
+        Returns
+        -------
+
+        feature matrix: COO matrix (num items, num features)
+            Matrix of item features.
+        """
 
         features = _IncrementalCOOMatrix(self.item_features_shape(), np.float32)
 
