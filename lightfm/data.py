@@ -1,6 +1,7 @@
 import array
 
 import numpy as np
+
 import scipy.sparse as sp
 
 
@@ -9,29 +10,29 @@ class _IncrementalCOOMatrix(object):
     def __init__(self, shape, dtype):
 
         if dtype is np.int32:
-            type_flag = 'i'
+            type_flag = "i"
         elif dtype is np.int64:
-            type_flag = 'l'
+            type_flag = "l"
         elif dtype is np.float32:
-            type_flag = 'f'
+            type_flag = "f"
         elif dtype is np.float64:
-            type_flag = 'd'
+            type_flag = "d"
         else:
-            raise Exception('Dtype not supported.')
+            raise Exception("Dtype not supported.")
 
         self.shape = shape
         self.dtype = dtype
 
-        self.rows = array.array('i')
-        self.cols = array.array('i')
+        self.rows = array.array("i")
+        self.cols = array.array("i")
         self.data = array.array(type_flag)
 
     def append(self, i, j, v):
 
         m, n = self.shape
 
-        if (i >= m or j >= n):
-            raise Exception('Index out of bounds')
+        if i >= m or j >= n:
+            raise Exception("Index out of bounds")
 
         self.rows.append(i)
         self.cols.append(j)
@@ -43,8 +44,7 @@ class _IncrementalCOOMatrix(object):
         cols = np.frombuffer(self.cols, dtype=np.int32)
         data = np.frombuffer(self.data, dtype=self.dtype)
 
-        return sp.coo_matrix((data, (rows, cols)),
-                             shape=self.shape)
+        return sp.coo_matrix((data, (rows, cols)), shape=self.shape)
 
     def __len__(self):
 
@@ -97,8 +97,7 @@ class Dataset(object):
     def _check_fitted(self):
 
         if not self._user_id_mapping or not self._item_id_mapping:
-            raise ValueError('You must call fit first to build the item and user '
-                             'id mappings.')
+            raise ValueError("You must call fit first to build the item and user " "id mappings.")
 
     def fit(self, users, items, user_features=None, item_features=None):
         """
@@ -165,18 +164,25 @@ class Dataset(object):
             (user_id, item_id) = datum
             weight = 1.0
         else:
-            raise ValueError('Expecting tuples of (user_id, item_id, weight) '
-                             'or (user_id, item_id). Got {}'.format(datum))
+            raise ValueError(
+                "Expecting tuples of (user_id, item_id, weight) "
+                "or (user_id, item_id). Got {}".format(datum)
+            )
 
         user_idx = self._user_id_mapping.get(user_id)
         item_idx = self._item_id_mapping.get(item_id)
 
         if user_idx is None:
-            raise ValueError('User id {} not in user id mapping. Make sure '
-                             'you call the fit method.'.format(user_id))
+            raise ValueError(
+                "User id {} not in user id mapping. Make sure "
+                "you call the fit method.".format(user_id)
+            )
+
         if item_idx is None:
-            raise ValueError('Item id {} not in item id mapping. Make sure '
-                             'you call the fit method.'.format(item_id))
+            raise ValueError(
+                "Item id {} not in item id mapping. Make sure "
+                "you call the fit method.".format(item_id)
+            )
 
         return (user_idx, item_idx, weight)
 
@@ -185,8 +191,7 @@ class Dataset(object):
         Return a tuple of (num users, num items).
         """
 
-        return (len(self._user_id_mapping),
-                len(self._item_id_mapping))
+        return (len(self._user_id_mapping), len(self._item_id_mapping))
 
     def build_interactions(self, data):
         """
@@ -222,14 +227,14 @@ class Dataset(object):
             interactions.append(user_idx, item_idx, 1)
             weights.append(user_idx, item_idx, weight)
 
-        return (interactions.tocoo(),
-                weights.tocoo())
+        return (interactions.tocoo(), weights.tocoo())
 
     def _iter_features(self, features):
 
         if isinstance(features, dict):
             for entry in features.items():
                 yield entry
+
         else:
             for feature_name in features:
                 yield (feature_name, 1.0)
@@ -237,21 +242,20 @@ class Dataset(object):
     def _process_user_features(self, datum):
 
         if len(datum) != 2:
-            raise ValueError('Expected tuples of (user_id, features), '
-                             'got {}.'.format(datum))
+            raise ValueError("Expected tuples of (user_id, features), " "got {}.".format(datum))
 
         user_id, features = datum
 
         if user_id not in self._user_id_mapping:
-            raise ValueError('User id {} not in user id mappings.'
-                             .format(user_id))
+            raise ValueError("User id {} not in user id mappings.".format(user_id))
 
         user_idx = self._user_id_mapping[user_id]
 
         for (feature, weight) in self._iter_features(features):
             if feature not in self._user_feature_mapping:
-                raise ValueError('Feature {} not in user feature mapping. '
-                                 'Call fit first.'.format(feature))
+                raise ValueError(
+                    "Feature {} not in user feature mapping. " "Call fit first.".format(feature)
+                )
 
             feature_idx = self._user_feature_mapping[feature]
 
@@ -268,8 +272,7 @@ class Dataset(object):
             The shape.
         """
 
-        return (len(self._user_id_mapping),
-                len(self._user_feature_mapping))
+        return (len(self._user_id_mapping), len(self._user_feature_mapping))
 
     def build_user_features(self, data):
         """
@@ -307,21 +310,20 @@ class Dataset(object):
     def _process_item_features(self, datum):
 
         if len(datum) != 2:
-            raise ValueError('Expected tuples of (item_id, features), '
-                             'got {}.'.format(datum))
+            raise ValueError("Expected tuples of (item_id, features), " "got {}.".format(datum))
 
         item_id, features = datum
 
         if item_id not in self._item_id_mapping:
-            raise ValueError('Item id {} not in item id mappings.'
-                             .format(item_id))
+            raise ValueError("Item id {} not in item id mappings.".format(item_id))
 
         item_idx = self._item_id_mapping[item_id]
 
         for (feature, weight) in self._iter_features(features):
             if feature not in self._item_feature_mapping:
-                raise ValueError('Feature {} not in item feature mapping. '
-                                 'Call fit first.'.format(feature))
+                raise ValueError(
+                    "Feature {} not in item feature mapping. " "Call fit first.".format(feature)
+                )
 
             feature_idx = self._item_feature_mapping[feature]
 
@@ -338,8 +340,7 @@ class Dataset(object):
             The shape.
         """
 
-        return (len(self._item_id_mapping),
-                len(self._item_feature_mapping))
+        return (len(self._item_id_mapping), len(self._item_feature_mapping))
 
     def build_item_features(self, data):
         """
@@ -380,5 +381,4 @@ class Dataset(object):
         embeddings in a LightFM model for this dataset.
         """
 
-        return (len(self._user_feature_mapping),
-                len(self._item_feature_mapping))
+        return (len(self._user_feature_mapping), len(self._item_feature_mapping))

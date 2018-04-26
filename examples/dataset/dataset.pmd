@@ -1,0 +1,57 @@
+# Building datasets
+
+In this example, we'll use LightFM's built-in `Dataset` class to build an interaction dataset from raw data.
+
+## Getting the data
+Let's download the data first.
+
+```{python, source="download.py", echo=True}
+```
+
+The data consists of book ratings and book details:
+```python
+import json
+from itertools import islice
+
+ratings, book_features = get_data()
+```
+
+Ratings look like this:
+```python
+for line in islice(ratings, 2):
+    print(json.dumps(line, indent=4))
+```
+and book features look like this:
+```python
+for line in islice(book_features, 2):
+    print(json.dumps(line, indent=4))
+```
+
+## Building the ID mappings
+The first thing we need to do is to create a mapping between the user and item ids from our input data to indices that will be used internally by our model.
+
+We do this because LightFM (and most other machine learning models) work with user and item ids that are consecutive non-negative integers for reasons of efficiency; the `Dataset` class allow us to create a mapping between the IDs we use in our systems and the consecutive indices preferred by the model.
+
+To do this, we create a dataset and call its `fit`.
+```python
+from lightfm.data import Dataset
+
+dataset = Dataset()
+dataset.fit((x['User-ID'] for x in get_ratings()),
+            (x['ISBN'] for x in get_ratings()))
+```
+
+We can check that the mappings have been created by querying the dataset on how many users and books it knows about:
+```python
+print(dataset.interactions_shape())
+```
+
+## Building the interactions matrix
+Having created the mapping, we build the interaction matrix:
+```python
+(interactions, weights) = dataset.build_interactions(((x['User-ID'], x['ISBN'])
+                                                      for x in get_ratings()))
+
+print(repr(interactions))
+```
+
