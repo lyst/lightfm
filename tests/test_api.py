@@ -292,14 +292,14 @@ def test_predict_ranks():
 
     # check error is raised when train and test have interactions in common
     with pytest.raises(ValueError):
-        _ = model.predict_rank(
+        model.predict_rank(
             train, train_interactions=train, check_intersections=True).todense()
 
     # check no errors raised when train and test have no interactions in common
     not_train = sp.rand(no_users, no_items, format='csr', random_state=43) - train
     not_train.data[not_train.data < 0] = 0
     not_train.eliminate_zeros()
-    _ = model.predict_rank(
+    model.predict_rank(
         not_train, train_interactions=train, check_intersections=True).todense()
 
     # Make sure ranks are computed pessimistically when
