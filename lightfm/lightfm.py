@@ -734,8 +734,7 @@ class LightFM(object):
 
     def _check_test_train_intersections(self, test_mat, train_mat):
         if train_mat is not None:
-            bool_intersections_mat = test_mat.astype(bool).multiply(train_mat.astype(bool))
-            n_intersections = np.sum(bool_intersections_mat.tocsr().data)
+            n_intersections = test_mat.multiply(train_mat).nnz
             if n_intersections:
                 raise ValueError(
                     'Test interactions matrix and train interactions '
