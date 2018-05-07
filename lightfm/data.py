@@ -121,7 +121,7 @@ class Dataset(object):
 
         return self.fit_partial(users, items, user_features, item_features)
 
-    def fit_partial(self, users, items, user_features=None, item_features=None):
+    def fit_partial(self, users=None, items=None, user_features=None, item_features=None):
         """
         Fit the user/item id and feature name mappings.
 
@@ -130,23 +130,25 @@ class Dataset(object):
         Parameters
         ----------
 
-        users: iterable of user ids
-        items: iterable of item ids
+        users: iterable of user ids, optional
+        items: iterable of item ids, optional
         user_features: iterable of user features, optional
         item_features: iterable of item features, optional
         """
 
-        for user_id in users:
-            self._user_id_mapping.setdefault(user_id, len(self._user_id_mapping))
+        if users is not None:
+            for user_id in users:
+                self._user_id_mapping.setdefault(user_id, len(self._user_id_mapping))
 
-            if self._user_identity_features:
-                self._user_feature_mapping.setdefault(user_id, len(self._user_feature_mapping))
+                if self._user_identity_features:
+                    self._user_feature_mapping.setdefault(user_id, len(self._user_feature_mapping))
 
-        for item_id in items:
-            self._item_id_mapping.setdefault(item_id, len(self._item_id_mapping))
+        if items is not None:
+            for item_id in items:
+                self._item_id_mapping.setdefault(item_id, len(self._item_id_mapping))
 
-            if self._item_identity_features:
-                self._item_feature_mapping.setdefault(item_id, len(self._item_feature_mapping))
+                if self._item_identity_features:
+                    self._item_feature_mapping.setdefault(item_id, len(self._item_feature_mapping))
 
         if user_features is not None:
             for user_feature in user_features:

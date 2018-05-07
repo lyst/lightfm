@@ -39,3 +39,8 @@ def get_data():
 def get_ratings():
 
     return get_data()[0]
+
+
+def get_book_features():
+
+    return get_data()[1]
