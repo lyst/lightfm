@@ -1,6 +1,8 @@
 # Changelog
 
 ## [unreleased][unreleased]
+### Added
+- Added a check that there is no overlap between test and train in `predict_ranks` (thanks to [@artdgn](https://github.com/artdgn)).
 ### Fixed
 - Fixed error message when item features have the wrong dimensions.
 - Predict now checks for overflow in inputs to predict.
