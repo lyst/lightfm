@@ -1,5 +1,7 @@
 import numpy as np
 
+import pytest
+
 import scipy.sparse as sp
 
 from sklearn.metrics import roc_auc_score
@@ -278,3 +280,38 @@ def test_auc_score():
                                  test,
                                  train))
     assert np.abs(auc.mean() - expected_auc.mean()) < 0.01
+
+
+def test_intersections_check():
+
+    no_users, no_items = (10, 100)
+
+    train, test = _generate_data(no_users, no_items)
+
+    model = LightFM(loss='bpr')
+    model.fit_partial(train)
+
+    # check error is raised when train and test have interactions in common
+    with pytest.raises(ValueError):
+        evaluation.auc_score(model, train, train_interactions=train, check_intersections=True)
+
+    with pytest.raises(ValueError):
+        evaluation.recall_at_k(model, train, train_interactions=train, check_intersections=True)
+
+    with pytest.raises(ValueError):
+        evaluation.precision_at_k(model, train, train_interactions=train, check_intersections=True)
+
+    with pytest.raises(ValueError):
+        evaluation.reciprocal_rank(model, train, train_interactions=train, check_intersections=True)
+
+    # check no errors raised when train and test have no interactions in common
+    evaluation.auc_score(model, test, train_interactions=train, check_intersections=True)
+    evaluation.recall_at_k(model, test, train_interactions=train, check_intersections=True)
+    evaluation.precision_at_k(model, test, train_interactions=train, check_intersections=True)
+    evaluation.reciprocal_rank(model, test, train_interactions=train, check_intersections=True)
+
+    # check no error is raised when there are intersections but flag is False
+    evaluation.auc_score(model, train, train_interactions=train, check_intersections=False)
+    evaluation.recall_at_k(model, train, train_interactions=train, check_intersections=False)
+    evaluation.precision_at_k(model, train, train_interactions=train, check_intersections=False)
+    evaluation.reciprocal_rank(model, train, train_interactions=train, check_intersections=False)

@@ -775,9 +775,10 @@ class LightFM(object):
         num_threads: int, optional
              Number of parallel computation threads to use.
              Should not be higher than the number of physical cores.
-        check_intersections: bool, optional, True by default
-             A flag that signals whether the input matrices should be checked for intersections.
-             This is to prevent optimistic ranks and methodologically wrong evaluation.
+        check_intersections: bool, optional, True by default,
+            Only relevant when train_interactions are supplied.
+            A flag that signals whether the test and train matrices should be checked
+            for intersections to prevent optimistic ranks / wrong evaluation / bad data split.
 
         Returns
         -------
