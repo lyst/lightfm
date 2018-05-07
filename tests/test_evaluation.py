@@ -17,9 +17,7 @@ def _generate_data(num_users, num_items, density=0.1, test_fraction=0.2):
     test = sp.lil_matrix((num_users, num_items), dtype=np.float32)
 
     for user_id in range(num_users):
-        positives = np.random.choice(num_items,
-                                     size=int(density * num_items),
-                                     replace=False)
+        positives = np.random.choice(num_items, size=int(density * num_items), replace=False)
 
         for item_id in positives[:int(test_fraction * len(positives))]:
             test[user_id, item_id] = 1.0
@@ -49,14 +47,16 @@ def _precision_at_k(model, ground_truth, k, train=None, user_features=None, item
     for user_id, row in enumerate(ground_truth):
         uid_array.fill(user_id)
 
-        predictions = model.predict(uid_array, pid_array,
-                                    user_features=user_features,
-                                    item_features=item_features,
-                                    num_threads=4)
+        predictions = model.predict(
+            uid_array,
+            pid_array,
+            user_features=user_features,
+            item_features=item_features,
+            num_threads=4,
+        )
         if train is not None:
             train_items = train[user_id].indices
-            top_k = set([x for x in np.argsort(-predictions)
-                         if x not in train_items][:k])
+            top_k = set([x for x in np.argsort(-predictions) if x not in train_items][:k])
         else:
             top_k = set(np.argsort(-predictions)[:k])
 
@@ -68,8 +68,7 @@ def _precision_at_k(model, ground_truth, k, train=None, user_features=None, item
     return sum(precisions) / len(precisions)
 
 
-def _recall_at_k(model, ground_truth, k, train=None, user_features=None,
-                 item_features=None):
+def _recall_at_k(model, ground_truth, k, train=None, user_features=None, item_features=None):
     # Alternative test implementation
 
     ground_truth = ground_truth.tocsr()
@@ -88,14 +87,16 @@ def _recall_at_k(model, ground_truth, k, train=None, user_features=None,
     for user_id, row in enumerate(ground_truth):
         uid_array.fill(user_id)
 
-        predictions = model.predict(uid_array, pid_array,
-                                    user_features=user_features,
-                                    item_features=item_features,
-                                    num_threads=4)
+        predictions = model.predict(
+            uid_array,
+            pid_array,
+            user_features=user_features,
+            item_features=item_features,
+            num_threads=4,
+        )
         if train is not None:
             train_items = train[user_id].indices
-            top_k = set([x for x in np.argsort(-predictions)
-                         if x not in train_items][:k])
+            top_k = set([x for x in np.argsort(-predictions) if x not in train_items][:k])
         else:
             top_k = set(np.argsort(-predictions)[:k])
 
@@ -123,10 +124,13 @@ def _auc(model, ground_truth, train=None, user_features=None, item_features=None
     for user_id, row in enumerate(ground_truth):
         uid_array = np.empty(no_items, dtype=np.int32)
         uid_array.fill(user_id)
-        predictions = model.predict(uid_array, pid_array,
-                                    user_features=user_features,
-                                    item_features=item_features,
-                                    num_threads=4)
+        predictions = model.predict(
+            uid_array,
+            pid_array,
+            user_features=user_features,
+            item_features=item_features,
+            num_threads=4,
+        )
 
         true_pids = row.indices[row.data == 1]
 
@@ -152,7 +156,7 @@ def test_precision_at_k():
 
     train, test = _generate_data(no_users, no_items)
 
-    model = LightFM(loss='bpr')
+    model = LightFM(loss="bpr")
 
     # We want a high precision to catch the k=1 case
     model.fit_partial(test)
@@ -160,28 +164,16 @@ def test_precision_at_k():
     for k in (10, 5, 1):
 
         # Without omitting train interactions
-        precision = evaluation.precision_at_k(model,
-                                              test,
-                                              k=k)
-        expected_mean_precision = _precision_at_k(model,
-                                                  test,
-                                                  k)
+        precision = evaluation.precision_at_k(model, test, k=k)
+        expected_mean_precision = _precision_at_k(model, test, k)
 
         assert np.allclose(precision.mean(), expected_mean_precision)
         assert len(precision) == (test.getnnz(axis=1) > 0).sum()
-        assert len(evaluation.precision_at_k(model,
-                                             train,
-                                             preserve_rows=True)) == test.shape[0]
+        assert len(evaluation.precision_at_k(model, train, preserve_rows=True)) == test.shape[0]
 
         # With omitting train interactions
-        precision = evaluation.precision_at_k(model,
-                                              test,
-                                              k=k,
-                                              train_interactions=train)
-        expected_mean_precision = _precision_at_k(model,
-                                                  test,
-                                                  k,
-                                                  train=train)
+        precision = evaluation.precision_at_k(model, test, k=k, train_interactions=train)
+        expected_mean_precision = _precision_at_k(model, test, k, train=train)
 
         assert np.allclose(precision.mean(), expected_mean_precision)
 
@@ -192,7 +184,7 @@ def test_precision_at_k_with_ties():
 
     train, test = _generate_data(no_users, no_items)
 
-    model = LightFM(loss='bpr')
+    model = LightFM(loss="bpr")
     model.fit_partial(train)
 
     # Make all predictions zero
@@ -203,9 +195,7 @@ def test_precision_at_k_with_ties():
 
     k = 10
 
-    precision = evaluation.precision_at_k(model,
-                                          test,
-                                          k=k)
+    precision = evaluation.precision_at_k(model, test, k=k)
 
     # Pessimistic precision with all ties
     assert precision.mean() == 0.0
@@ -217,34 +207,22 @@ def test_recall_at_k():
 
     train, test = _generate_data(no_users, no_items)
 
-    model = LightFM(loss='bpr')
+    model = LightFM(loss="bpr")
     model.fit_partial(test)
 
     for k in (10, 5, 1):
 
         # Without omitting train interactions
-        recall = evaluation.recall_at_k(model,
-                                        test,
-                                        k=k)
-        expected_mean_recall = _recall_at_k(model,
-                                            test,
-                                            k)
+        recall = evaluation.recall_at_k(model, test, k=k)
+        expected_mean_recall = _recall_at_k(model, test, k)
 
         assert np.allclose(recall.mean(), expected_mean_recall)
         assert len(recall) == (test.getnnz(axis=1) > 0).sum()
-        assert len(evaluation.recall_at_k(model,
-                                          train,
-                                          preserve_rows=True)) == test.shape[0]
+        assert len(evaluation.recall_at_k(model, train, preserve_rows=True)) == test.shape[0]
 
         # With omitting train interactions
-        recall = evaluation.recall_at_k(model,
-                                        test,
-                                        k=k,
-                                        train_interactions=train)
-        expected_mean_recall = _recall_at_k(model,
-                                            test,
-                                            k,
-                                            train=train)
+        recall = evaluation.recall_at_k(model, test, k=k, train_interactions=train)
+        expected_mean_recall = _recall_at_k(model, test, k, train=train)
 
         assert np.allclose(recall.mean(), expected_mean_recall)
 
@@ -255,30 +233,20 @@ def test_auc_score():
 
     train, test = _generate_data(no_users, no_items)
 
-    model = LightFM(loss='bpr')
+    model = LightFM(loss="bpr")
     model.fit_partial(train)
 
-    auc = evaluation.auc_score(model,
-                               test,
-                               num_threads=2)
-    expected_auc = np.array(_auc(model,
-                                 test))
+    auc = evaluation.auc_score(model, test, num_threads=2)
+    expected_auc = np.array(_auc(model, test))
 
     assert auc.shape == expected_auc.shape
     assert np.abs(auc.mean() - expected_auc.mean()) < 0.01
     assert len(auc) == (test.getnnz(axis=1) > 0).sum()
-    assert len(evaluation.auc_score(model,
-                                    train,
-                                    preserve_rows=True)) == test.shape[0]
+    assert len(evaluation.auc_score(model, train, preserve_rows=True)) == test.shape[0]
 
     # With omitting train interactions
-    auc = evaluation.auc_score(model,
-                               test,
-                               train_interactions=train,
-                               num_threads=2)
-    expected_auc = np.array(_auc(model,
-                                 test,
-                                 train))
+    auc = evaluation.auc_score(model, test, train_interactions=train, num_threads=2)
+    expected_auc = np.array(_auc(model, test, train))
     assert np.abs(auc.mean() - expected_auc.mean()) < 0.01
 
 
@@ -288,7 +256,7 @@ def test_intersections_check():
 
     train, test = _generate_data(no_users, no_items)
 
-    model = LightFM(loss='bpr')
+    model = LightFM(loss="bpr")
     model.fit_partial(train)
 
     # check error is raised when train and test have interactions in common
