@@ -17,7 +17,7 @@ __all__ = ['precision_at_k',
 
 def precision_at_k(model, test_interactions, train_interactions=None,
                    k=10, user_features=None, item_features=None,
-                   preserve_rows=False, num_threads=1):
+                   preserve_rows=False, num_threads=1, check_intersections=True):
     """
     Measure the precision at k metric for a model: the fraction of known
     positives in the first k positions of the ranked list of results.
@@ -48,6 +48,10 @@ def precision_at_k(model, test_interactions, train_interactions=None,
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
+    check_intersections: bool, optional, True by default,
+        Only relevant when train_interactions are supplied.
+        A flag that signals whether the test and train matrices should be checked
+        for intersections to prevent optimistic ranks / wrong evaluation / bad data split.
 
     Returns
     -------
@@ -61,7 +65,9 @@ def precision_at_k(model, test_interactions, train_interactions=None,
                                train_interactions=train_interactions,
                                user_features=user_features,
                                item_features=item_features,
-                               num_threads=num_threads)
+                               num_threads=num_threads,
+                               check_intersections=check_intersections,
+                               )
 
     ranks.data = np.less(ranks.data, k, ranks.data)
 
@@ -75,7 +81,7 @@ def precision_at_k(model, test_interactions, train_interactions=None,
 
 def recall_at_k(model, test_interactions, train_interactions=None,
                 k=10, user_features=None, item_features=None,
-                preserve_rows=False, num_threads=1):
+                preserve_rows=False, num_threads=1, check_intersections=True):
     """
     Measure the recall at k metric for a model: the number of positive items in
     the first k positions of the ranked list of results divided by the number
@@ -106,6 +112,10 @@ def recall_at_k(model, test_interactions, train_interactions=None,
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
+    check_intersections: bool, optional, True by default,
+        Only relevant when train_interactions are supplied.
+        A flag that signals whether the test and train matrices should be checked
+        for intersections to prevent optimistic ranks / wrong evaluation / bad data split.
 
     Returns
     -------
@@ -120,7 +130,9 @@ def recall_at_k(model, test_interactions, train_interactions=None,
                                train_interactions=train_interactions,
                                user_features=user_features,
                                item_features=item_features,
-                               num_threads=num_threads)
+                               num_threads=num_threads,
+                               check_intersections=check_intersections,
+                               )
 
     ranks.data = np.less(ranks.data, k, ranks.data)
 
@@ -136,7 +148,7 @@ def recall_at_k(model, test_interactions, train_interactions=None,
 
 def auc_score(model, test_interactions, train_interactions=None,
               user_features=None, item_features=None,
-              preserve_rows=False, num_threads=1):
+              preserve_rows=False, num_threads=1, check_intersections=True):
     """
     Measure the ROC AUC metric for a model: the probability that a randomly
     chosen positive example has a higher score than a randomly chosen negative
@@ -166,6 +178,10 @@ def auc_score(model, test_interactions, train_interactions=None,
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
+    check_intersections: bool, optional, True by default,
+        Only relevant when train_interactions are supplied.
+        A flag that signals whether the test and train matrices should be checked
+        for intersections to prevent optimistic ranks / wrong evaluation / bad data split.
 
     Returns
     -------
@@ -179,7 +195,9 @@ def auc_score(model, test_interactions, train_interactions=None,
                                train_interactions=train_interactions,
                                user_features=user_features,
                                item_features=item_features,
-                               num_threads=num_threads)
+                               num_threads=num_threads,
+                               check_intersections=check_intersections,
+                               )
 
     assert np.all(ranks.data >= 0)
 
@@ -210,7 +228,7 @@ def auc_score(model, test_interactions, train_interactions=None,
 
 def reciprocal_rank(model, test_interactions, train_interactions=None,
                     user_features=None, item_features=None,
-                    preserve_rows=False, num_threads=1):
+                    preserve_rows=False, num_threads=1, check_intersections=True):
     """
     Measure the reciprocal rank metric for a model: 1 / the rank of the highest
     ranked positive example. A perfect score is 1.0.
@@ -238,6 +256,10 @@ def reciprocal_rank(model, test_interactions, train_interactions=None,
     num_threads: int, optional
          Number of parallel computation threads to use. Should
          not be higher than the number of physical cores.
+    check_intersections: bool, optional, True by default,
+        Only relevant when train_interactions are supplied.
+        A flag that signals whether the test and train matrices should be checked
+        for intersections to prevent optimistic ranks / wrong evaluation / bad data split.
 
     Returns
     -------
@@ -252,7 +274,9 @@ def reciprocal_rank(model, test_interactions, train_interactions=None,
                                train_interactions=train_interactions,
                                user_features=user_features,
                                item_features=item_features,
-                               num_threads=num_threads)
+                               num_threads=num_threads,
+                               check_intersections=check_intersections,
+                               )
 
     ranks.data = 1.0 / (ranks.data + 1.0)
 

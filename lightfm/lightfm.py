@@ -732,8 +732,18 @@ class LightFM(object):
 
         return predictions
 
+    def _check_test_train_intersections(self, test_mat, train_mat):
+        if train_mat is not None:
+            n_intersections = test_mat.multiply(train_mat).nnz
+            if n_intersections:
+                raise ValueError(
+                    'Test interactions matrix and train interactions '
+                    'matrix share %d interactions. This will cause '
+                    'incorrect evaluation, check your data split.' % n_intersections)
+
     def predict_rank(self, test_interactions, train_interactions=None,
-                     item_features=None, user_features=None, num_threads=1):
+                     item_features=None, user_features=None, num_threads=1,
+                     check_intersections=True):
         """
         Predict the rank of selected interactions. Computes recommendation
         rankings across all items for every user in interactions and calculates
@@ -765,6 +775,10 @@ class LightFM(object):
         num_threads: int, optional
              Number of parallel computation threads to use.
              Should not be higher than the number of physical cores.
+        check_intersections: bool, optional, True by default,
+            Only relevant when train_interactions are supplied.
+            A flag that signals whether the test and train matrices should be checked
+            for intersections to prevent optimistic ranks / wrong evaluation / bad data split.
 
         Returns
         -------
@@ -777,6 +791,9 @@ class LightFM(object):
         """
 
         self._check_initialized()
+
+        if check_intersections:
+            self._check_test_train_intersections(test_interactions, train_interactions)
 
         n_users, n_items = test_interactions.shape
 

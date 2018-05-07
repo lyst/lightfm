@@ -279,16 +279,29 @@ def test_predict_ranks():
 
     # Train set exclusions. All ranks should be zero
     # if train interactions is dense.
-    ranks = model.predict_rank(rank_input,
-                               train_interactions=rank_input).todense()
+    ranks = model.predict_rank(
+        rank_input, train_interactions=rank_input, check_intersections=False).todense()
     assert np.all(ranks == 0)
 
     # Max rank should be num_items - 1 - number of positives
     # in train in that row
-    ranks = model.predict_rank(rank_input,
-                               train_interactions=train).todense()
+    ranks = model.predict_rank(
+        rank_input, train_interactions=train, check_intersections=False).todense()
     assert np.all(np.squeeze(np.array(ranks.max(axis=1))) ==
                   no_items - 1 - np.squeeze(np.array(train.getnnz(axis=1))))
+
+    # check error is raised when train and test have interactions in common
+    with pytest.raises(ValueError):
+        model.predict_rank(train, train_interactions=train, check_intersections=True)
+
+    # check error not raised when flag is False
+    model.predict_rank(train, train_interactions=train, check_intersections=False)
+
+    # check no errors raised when train and test have no interactions in common
+    not_train = sp.rand(no_users, no_items, format='csr', random_state=43) - train
+    not_train.data[not_train.data < 0] = 0
+    not_train.eliminate_zeros()
+    model.predict_rank(not_train, train_interactions=train, check_intersections=True)
 
     # Make sure ranks are computed pessimistically when
     # there are ties (that is, equal predictions for every
