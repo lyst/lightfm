@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>lightfm.lightfm &mdash; LightFM 1.14 documentation</title>
+  <title>lightfm.lightfm &mdash; LightFM 1.15 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="LightFM 1.14 documentation" href="../../index.html"/>
+    <link rel="top" title="LightFM 1.15 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                1.14
+                1.15
               </div>
             
           
@@ -95,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../cross_validation.html">Cross validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lightfm.data.html">Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
 </ul>
@@ -241,7 +242,10 @@
 <span class="sd">    epsilon: float, optional</span>
 <span class="sd">        conditioning parameter for the adadelta learning schedule.</span>
 <span class="sd">    item_alpha: float, optional</span>
-<span class="sd">        L2 penalty on item features</span>
+<span class="sd">        L2 penalty on item features. Tip: setting this number too high can slow</span>
+<span class="sd">        down training. One good way to check is if the final weights in the</span>
+<span class="sd">        embeddings turned out to be mostly zero. The same idea applies to</span>
+<span class="sd">        the user_alpha parameter.</span>
 <span class="sd">    user_alpha: float, optional</span>
 <span class="sd">        L2 penalty on user features.</span>
 <span class="sd">    max_sampled: int, optional</span>
@@ -471,7 +475,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">item_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The user feature matrix specifies more &#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The item feature matrix specifies more &#39;</span>
                                  <span class="s1">&#39;features than there are estimated &#39;</span>
                                  <span class="s1">&#39;feature embeddings: </span><span class="si">{}</span><span class="s1"> vs </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                      <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
@@ -703,15 +707,10 @@
                                                            <span class="n">user_features</span><span class="p">,</span>
                                                            <span class="n">item_features</span><span class="p">)</span>
 
-        <span class="n">sample_weight</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_cython_dtype</span><span class="p">(</span><span class="n">sample_weight</span><span class="p">)</span>
-                         <span class="k">if</span> <span class="n">sample_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span>
-                         <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">interactions</span><span class="o">.</span><span class="n">getnnz</span><span class="p">(),</span>
-                                 <span class="n">dtype</span><span class="o">=</span><span class="n">CYTHON_DTYPE</span><span class="p">))</span>
-
         <span class="k">for</span> <span class="n">input_data</span> <span class="ow">in</span> <span class="p">(</span><span class="n">user_features</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
                            <span class="n">item_features</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
                            <span class="n">interactions</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-                           <span class="n">sample_weight</span><span class="p">):</span>
+                           <span class="n">sample_weight_data</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_check_input_finite</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_embeddings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Initialise latent factors only if this is the first call</span>
@@ -859,12 +858,20 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">user_ids</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="n">user_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">user_ids</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">item_ids</span><span class="p">))</span>
 
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item_ids</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">item_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">item_ids</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">item_ids</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">user_ids</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
             <span class="n">user_ids</span> <span class="o">=</span> <span class="n">user_ids</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">item_ids</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
             <span class="n">item_ids</span> <span class="o">=</span> <span class="n">item_ids</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">user_ids</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">item_ids</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;User or item ids cannot be negative. &#39;</span>
+                             <span class="s1">&#39;Check your inputs for negative numbers &#39;</span>
+                             <span class="s1">&#39;or very large numbers that can overflow.&#39;</span><span class="p">)</span>
 
         <span class="n">n_users</span> <span class="o">=</span> <span class="n">user_ids</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">n_items</span> <span class="o">=</span> <span class="n">item_ids</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
@@ -889,8 +896,18 @@
 
         <span class="k">return</span> <span class="n">predictions</span></div>
 
+    <span class="k">def</span> <span class="nf">_check_test_train_intersections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_mat</span><span class="p">,</span> <span class="n">train_mat</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">train_mat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n_intersections</span> <span class="o">=</span> <span class="n">test_mat</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">train_mat</span><span class="p">)</span><span class="o">.</span><span class="n">nnz</span>
+            <span class="k">if</span> <span class="n">n_intersections</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;Test interactions matrix and train interactions &#39;</span>
+                    <span class="s1">&#39;matrix share </span><span class="si">%d</span><span class="s1"> interactions. This will cause &#39;</span>
+                    <span class="s1">&#39;incorrect evaluation, check your data split.&#39;</span> <span class="o">%</span> <span class="n">n_intersections</span><span class="p">)</span>
+
 <div class="viewcode-block" id="LightFM.predict_rank"><a class="viewcode-back" href="../../lightfm.html#lightfm.LightFM.predict_rank">[docs]</a>    <span class="k">def</span> <span class="nf">predict_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_interactions</span><span class="p">,</span> <span class="n">train_interactions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">item_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+                     <span class="n">item_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="n">check_intersections</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Predict the rank of selected interactions. Computes recommendation</span>
 <span class="sd">        rankings across all items for every user in interactions and calculates</span>
@@ -922,6 +939,10 @@
 <span class="sd">        num_threads: int, optional</span>
 <span class="sd">             Number of parallel computation threads to use.</span>
 <span class="sd">             Should not be higher than the number of physical cores.</span>
+<span class="sd">        check_intersections: bool, optional, True by default,</span>
+<span class="sd">            Only relevant when train_interactions are supplied.</span>
+<span class="sd">            A flag that signals whether the test and train matrices should be checked</span>
+<span class="sd">            for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -934,6 +955,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_initialized</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">check_intersections</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_test_train_intersections</span><span class="p">(</span><span class="n">test_interactions</span><span class="p">,</span> <span class="n">train_interactions</span><span class="p">)</span>
 
         <span class="n">n_users</span><span class="p">,</span> <span class="n">n_items</span> <span class="o">=</span> <span class="n">test_interactions</span><span class="o">.</span><span class="n">shape</span>
 
@@ -1125,7 +1149,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.14',
+            VERSION:'1.15',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

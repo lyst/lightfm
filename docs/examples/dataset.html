@@ -1,0 +1,442 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building datasets &mdash; LightFM 1.15 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="LightFM 1.15 documentation" href="../index.html"/>
+        <link rel="up" title="Examples" href="../examples.html"/>
+        <link rel="prev" title="Learning-to-rank using the WARP loss" href="warp_loss.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> LightFM
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.15
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../home.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lightfm.evaluation.html">Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cross_validation.html">Cross validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lightfm.data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="learning_schedules.html">Learning rate schedules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid_crossvalidated.html">Cold-start hybrid recommender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="warp_loss.html">Learning-to-rank using WARP loss</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Building datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#getting-the-data">Getting the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-the-id-mappings">Building the ID mappings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-the-interactions-matrix">Building the interactions matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-a-model">Building a model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">LightFM</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../examples.html">Examples</a> &raquo;</li>
+        
+      <li>Building datasets</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/examples/dataset.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-datasets">
+<h1>Building datasets<a class="headerlink" href="#building-datasets" title="Permalink to this headline">¶</a></h1>
+<p>In this example, we’ll use LightFM’s built-in <code class="docutils literal"><span class="pre">Dataset</span></code> class to build
+an interaction dataset from raw data. The goal is to demonstrate how to
+go from raw data (lists of interactions and perhaps item and user
+features) to <code class="docutils literal"><span class="pre">scipy.sparse</span></code> matrices that can be used to fit a LightFM
+model.</p>
+<div class="section" id="getting-the-data">
+<h2>Getting the data<a class="headerlink" href="#getting-the-data" title="Permalink to this headline">¶</a></h2>
+<p>We’re going to use a sample from
+<a class="reference external" href="https://github.com/zygmuntz/goodbooks-10k">Goodbooks-10k</a> as our
+example dataset. Let’s download the data first.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+
+<span class="k">def</span> <span class="nf">_download</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dest_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+    <span class="n">req</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">20</span><span class="p">):</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_data</span><span class="p">():</span>
+
+    <span class="n">ratings_url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;http://www2.informatik.uni-freiburg.de/&quot;</span> <span class="s2">&quot;~cziegler/BX/BX-CSV-Dump.zip&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+
+        <span class="n">_download</span><span class="p">(</span><span class="n">ratings_url</span><span class="p">,</span> <span class="s2">&quot;data/data.zip&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="s2">&quot;data/data.zip&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">archive</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">archive</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;BX-Book-Ratings.csv&quot;</span><span class="p">)),</span>
+                <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">archive</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;BX-Books.csv&quot;</span><span class="p">)),</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_ratings</span><span class="p">():</span>
+
+    <span class="k">return</span> <span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">get_book_features</span><span class="p">():</span>
+
+    <span class="k">return</span> <span class="n">get_data</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The data consists of book ratings and book details:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">islice</span>
+
+<span class="n">ratings</span><span class="p">,</span> <span class="n">book_features</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Ratings look like this:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">islice</span><span class="p">(</span><span class="n">ratings</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;User-ID&quot;</span><span class="p">:</span> <span class="s2">&quot;276725&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ISBN&quot;</span><span class="p">:</span> <span class="s2">&quot;034545104X&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Book-Rating&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span>
+<span class="p">}</span>
+<span class="p">{</span>
+    <span class="s2">&quot;User-ID&quot;</span><span class="p">:</span> <span class="s2">&quot;276726&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ISBN&quot;</span><span class="p">:</span> <span class="s2">&quot;0155061224&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Book-Rating&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>and book features look like this:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">islice</span><span class="p">(</span><span class="n">book_features</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;ISBN&quot;</span><span class="p">:</span> <span class="s2">&quot;0195153448&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Book-Title&quot;</span><span class="p">:</span> <span class="s2">&quot;Classical Mythology&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Book-Author&quot;</span><span class="p">:</span> <span class="s2">&quot;Mark P. O. Morford&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Year-Of-Publication&quot;</span><span class="p">:</span> <span class="s2">&quot;2002&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Publisher&quot;</span><span class="p">:</span> <span class="s2">&quot;Oxford University Press&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Image-URL-S&quot;</span><span class="p">:</span>
+<span class="s2">&quot;http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Image-URL-M&quot;</span><span class="p">:</span>
+<span class="s2">&quot;http://images.amazon.com/images/P/0195153448.01.MZZZZZZZ.jpg&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Image-URL-L&quot;</span><span class="p">:</span>
+<span class="s2">&quot;http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="building-the-id-mappings">
+<h2>Building the ID mappings<a class="headerlink" href="#building-the-id-mappings" title="Permalink to this headline">¶</a></h2>
+<p>The first thing we need to do is to create a mapping between the user
+and item ids from our input data to indices that will be used internally
+by our model.</p>
+<p>We do this because LightFM works with user and item ids that are
+consecutive non-negative integers. The <code class="docutils literal"><span class="pre">Dataset</span></code> class allow us to
+create a mapping between the IDs we use in our systems and the
+consecutive indices preferred by the model.</p>
+<p>To do this, we create a dataset and call its <code class="docutils literal"><span class="pre">fit</span></code> method. The first
+argument is an iterable of all user ids in our data, and the second is
+an iterable of all item ids. In this case, we use generator expressions
+to lazily iterate over our data and yield user and item ids:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lightfm.data</span> <span class="k">import</span> <span class="n">Dataset</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">()</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">fit</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;User-ID&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">get_ratings</span><span class="p">()),</span>
+            <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;ISBN&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">get_ratings</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>This call will assign an internal numerical id to every user and item id
+we pass in. These will be contiguous (from 0 to however many users and
+items we have), and will also determine the dimensions of the resulting
+LightFM model.</p>
+<p>We can check that the mappings have been created by querying the dataset
+on how many users and books it knows about:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">num_users</span><span class="p">,</span> <span class="n">num_items</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">interactions_shape</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Num users: </span><span class="si">{}</span><span class="s1">, num_items </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_users</span><span class="p">,</span> <span class="n">num_items</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Num</span> <span class="n">users</span><span class="p">:</span> <span class="mi">105283</span><span class="p">,</span> <span class="n">num_items</span> <span class="mf">340553.</span>
+</pre></div>
+</div>
+<p>Note that if we don’t have all user and items ids at once, we can
+repeatedly call <code class="docutils literal"><span class="pre">fit_partial</span></code> to supply additional ids. In this case,
+we will use this capability to add some item feature mappings:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">fit_partial</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;ISBN&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">get_book_features</span><span class="p">()),</span>
+                    <span class="n">item_features</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Book-Author&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">get_book_features</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>This will create a feature for every unique author name in the dataset.</p>
+<p>(Note that we fit some more item ids: this is to make sure our mappings
+are complete even if there are items in the features dataset that are
+not in the interactions set.)</p>
+</div>
+<div class="section" id="building-the-interactions-matrix">
+<h2>Building the interactions matrix<a class="headerlink" href="#building-the-interactions-matrix" title="Permalink to this headline">¶</a></h2>
+<p>Having created the mapping, we build the interaction matrix:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">interactions</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">build_interactions</span><span class="p">(((</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;User-ID&#39;</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;ISBN&#39;</span><span class="p">])</span>
+                                                      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">get_ratings</span><span class="p">()))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">interactions</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="mi">105283</span><span class="n">x341762</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="s1">&#39;&gt;&#39;</span>
+        <span class="k">with</span> <span class="mi">1149780</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">COOrdinate</span> <span class="nb">format</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This is main input into a LightFM model: it encodes the interactions
+betwee users and items.</p>
+<p>Since we have item features, we can also create the item features
+matrix:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">item_features</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">build_item_features</span><span class="p">(((</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;ISBN&#39;</span><span class="p">],</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Book-Author&#39;</span><span class="p">]])</span>
+                                              <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">get_book_features</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">item_features</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="mi">341762</span><span class="n">x443805</span> <span class="n">sparse</span> <span class="n">matrix</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;&lt;class &#39;</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;&#39;</span>
+        <span class="k">with</span> <span class="mi">613141</span> <span class="n">stored</span> <span class="n">elements</span> <span class="ow">in</span> <span class="n">Compressed</span> <span class="n">Sparse</span> <span class="n">Row</span> <span class="nb">format</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="building-a-model">
+<h2>Building a model<a class="headerlink" href="#building-a-model" title="Permalink to this headline">¶</a></h2>
+<p>This is all we need to build a LightFM model:</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;bpr&#39;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">interactions</span><span class="p">,</span> <span class="n">item_features</span><span class="o">=</span><span class="n">item_features</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">lightfm</span><span class="o">.</span><span class="n">lightfm</span><span class="o">.</span><span class="n">LightFM</span> <span class="n">at</span> <span class="mh">0x7f5f0e8f7c88</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="warp_loss.html" class="btn btn-neutral" title="Learning-to-rank using the WARP loss" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Lyst (Maciej Kula).
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.15',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Model evaluation &mdash; LightFM 1.14 documentation</title>
+  <title>Model evaluation &mdash; LightFM 1.15 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.14 documentation" href="index.html"/>
+    <link rel="top" title="LightFM 1.15 documentation" href="index.html"/>
         <link rel="next" title="Cross-validation" href="cross_validation.html"/>
         <link rel="prev" title="LightFM" href="lightfm.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.14
+                1.15
               </div>
             
           
@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
@@ -167,7 +168,7 @@
 a fitted LightFM model.</p>
 <dl class="function">
 <dt id="lightfm.evaluation.precision_at_k">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">precision_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#precision_at_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.precision_at_k" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lightfm.evaluation.</code><code class="descname">precision_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#precision_at_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.precision_at_k" title="Permalink to this definition">¶</a></dt>
 <dd><p>Measure the precision at k metric for a model: the fraction of known
 positives in the first k positions of the ranked list of results.
 A perfect score is 1.0.</p>
@@ -190,6 +191,9 @@ When True, the number of rows in the output will be equal to the
 number of users.</li>
 <li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
 not be higher than the number of physical cores.</li>
+<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+A flag that signals whether the test and train matrices should be checked
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
 </ul>
 </td>
 </tr>
@@ -206,7 +210,7 @@ no interactions for a given user the returned precision will be 0.</p>
 
 <dl class="function">
 <dt id="lightfm.evaluation.recall_at_k">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">recall_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#recall_at_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.recall_at_k" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lightfm.evaluation.</code><code class="descname">recall_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#recall_at_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.recall_at_k" title="Permalink to this definition">¶</a></dt>
 <dd><p>Measure the recall at k metric for a model: the number of positive items in
 the first k positions of the ranked list of results divided by the number
 of positive items in the test period. A perfect score is 1.0.</p>
@@ -229,6 +233,9 @@ When True, the number of rows in the output will be equal to the
 number of users.</li>
 <li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
 not be higher than the number of physical cores.</li>
+<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+A flag that signals whether the test and train matrices should be checked
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
 </ul>
 </td>
 </tr>
@@ -246,7 +253,7 @@ returned recall will be 0.</p>
 
 <dl class="function">
 <dt id="lightfm.evaluation.auc_score">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">auc_score</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#auc_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.auc_score" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lightfm.evaluation.</code><code class="descname">auc_score</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#auc_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.auc_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Measure the ROC AUC metric for a model: the probability that a randomly
 chosen positive example has a higher score than a randomly chosen negative
 example.
@@ -269,6 +276,9 @@ When True, the number of rows in the output will be equal to the
 number of users.</li>
 <li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
 not be higher than the number of physical cores.</li>
+<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+A flag that signals whether the test and train matrices should be checked
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
 </ul>
 </td>
 </tr>
@@ -285,7 +295,7 @@ interactions for a given user the returned AUC will be 0.5.</p>
 
 <dl class="function">
 <dt id="lightfm.evaluation.reciprocal_rank">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">reciprocal_rank</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#reciprocal_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.reciprocal_rank" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">lightfm.evaluation.</code><code class="descname">reciprocal_rank</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#reciprocal_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.reciprocal_rank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Measure the reciprocal rank metric for a model: 1 / the rank of the highest
 ranked positive example. A perfect score is 1.0.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -306,6 +316,9 @@ When True, the number of rows in the output will be equal to the
 number of users.</li>
 <li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
 not be higher than the number of physical cores.</li>
+<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+A flag that signals whether the test and train matrices should be checked
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
 </ul>
 </td>
 </tr>
@@ -367,7 +380,7 @@ be 0.0.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.14',
+            VERSION:'1.15',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

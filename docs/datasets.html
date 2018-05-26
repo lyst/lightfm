@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Datasets &mdash; LightFM 1.14 documentation</title>
+  <title>Datasets &mdash; LightFM 1.15 documentation</title>
   
 
   
@@ -35,9 +35,9 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.14 documentation" href="index.html"/>
+    <link rel="top" title="LightFM 1.15 documentation" href="index.html"/>
         <link rel="next" title="Examples" href="examples.html"/>
-        <link rel="prev" title="Cross-validation" href="cross_validation.html"/> 
+        <link rel="prev" title="Dataset construction" href="lightfm.data.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.14
+                1.15
               </div>
             
           
@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Data</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
@@ -177,12 +178,12 @@ and is exhaustively described in its
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>data_home</strong> (<em>path</em><em>, </em><em>optional</em>) – Path to the directory in which the downloaded data should be placed.
 Defaults to <code class="docutils literal"><span class="pre">~/lightfm_data/</span></code>.</li>
-<li><strong>indicator_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use an [n_users, n_users] identity matrix for item features. When True with genre_features,
+<li><strong>indicator_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use an [n_items, n_items] identity matrix for item features. When True with genre_features,
 indicator and genre features are concatenated into a single feature matrix of shape
-[n_users, n_users + n_genres].</li>
-<li><strong>genre_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use a [n_users, n_genres] matrix for item features. When True with item_indicator_features,
+[n_items, n_items + n_genres].</li>
+<li><strong>genre_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use a [n_items, n_genres] matrix for item features. When True with item_indicator_features,
 indicator and genre features are concatenated into a single feature matrix of shape
-[n_users, n_users + n_genres].</li>
+[n_items, n_items + n_genres].</li>
 <li><strong>min_rating</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum rating to include in the interaction matrix.</li>
 <li><strong>download_if_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – Download the data if not present. Raises an IOError if False and data is missing.</li>
 </ul>
@@ -209,6 +210,58 @@ indicator and genre features are concatenated into a single feature matrix of sh
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="lightfm.datasets.stackexchange.fetch_stackexchange">
+<code class="descclassname">lightfm.datasets.stackexchange.</code><code class="descname">fetch_stackexchange</code><span class="sig-paren">(</span><em>dataset</em>, <em>test_set_fraction=0.2</em>, <em>min_training_interactions=1</em>, <em>data_home=None</em>, <em>indicator_features=True</em>, <em>tag_features=False</em>, <em>download_if_missing=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/datasets/stackexchange.html#fetch_stackexchange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.datasets.stackexchange.fetch_stackexchange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch a dataset from the <a class="reference external" href="http://stackexchange.com/">StackExchange network</a>.</p>
+<p>The datasets contain users answering questions: an interaction is defined as a user
+answering a given question.</p>
+<p>The following datasets from the StackExchange network are available:</p>
+<ul class="simple">
+<li>CrossValidated: From stats.stackexchange.com. Approximately 9000 users, 72000 questions,
+and 70000 answers.</li>
+<li>StackOverflow: From stackoverflow.stackexchange.com. Approximately 1.3M users, 11M questions,
+and 18M answers.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dataset</strong> (<em>string</em><em>, </em><em>one of</em><em> (</em><em>'crossvalidated'</em><em>, </em><em>'stackoverflow'</em><em>)</em>) – The part of the StackExchange network for which to fetch the dataset.</li>
+<li><strong>test_set_fraction</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of the dataset used for testing. Splitting into the train and test set is done
+in a time-based fashion: all interactions before a certain time are in the train set and
+all interactions after that time are in the test set.</li>
+<li><strong>min_training_interactions</strong> (<em>int</em><em>, </em><em>optional</em>) – Only include users with this amount of interactions in the training set.</li>
+<li><strong>data_home</strong> (<em>path</em><em>, </em><em>optional</em>) – Path to the directory in which the downloaded data should be placed.
+Defaults to <code class="docutils literal"><span class="pre">~/lightfm_data/</span></code>.</li>
+<li><strong>indicator_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use an [n_users, n_users] identity matrix for item features. When True with genre_features,
+indicator and genre features are concatenated into a single feature matrix of shape
+[n_users, n_users + n_genres].</li>
+<li><strong>download_if_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – Download the data if not present. Raises an IOError if False and data is missing.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The return value is a dictionary containing the following keys:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>train</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains training set interactions.</li>
+<li><strong>test</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains testing set interactions.</li>
+<li><strong>item_features</strong> (<em>sp.csr_matrix of shape [n_items, n_item_features]</em>) – Contains item features.</li>
+<li><strong>item_feature_labels</strong> (<em>np.array of strings of shape [n_item_features,]</em>) – Labels of item features.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -224,7 +277,7 @@ indicator and genre features are concatenated into a single feature matrix of sh
         <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="cross_validation.html" class="btn btn-neutral" title="Cross-validation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lightfm.data.html" class="btn btn-neutral" title="Dataset construction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -255,7 +308,7 @@ indicator and genre features are concatenated into a single feature matrix of sh
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.14',
+            VERSION:'1.15',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

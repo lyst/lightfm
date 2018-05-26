@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>lightfm.datasets.movielens &mdash; LightFM 1.14 documentation</title>
+  <title>lightfm.datasets.movielens &mdash; LightFM 1.15 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="LightFM 1.14 documentation" href="../../../index.html"/>
+    <link rel="top" title="LightFM 1.15 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                1.14
+                1.15
               </div>
             
           
@@ -95,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../lightfm.html">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cross_validation.html">Cross validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lightfm.data.html">Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
 </ul>
@@ -284,13 +285,13 @@
 <span class="sd">        Path to the directory in which the downloaded data should be placed.</span>
 <span class="sd">        Defaults to ``~/lightfm_data/``.</span>
 <span class="sd">    indicator_features: bool, optional</span>
-<span class="sd">        Use an [n_users, n_users] identity matrix for item features. When True with genre_features,</span>
+<span class="sd">        Use an [n_items, n_items] identity matrix for item features. When True with genre_features,</span>
 <span class="sd">        indicator and genre features are concatenated into a single feature matrix of shape</span>
-<span class="sd">        [n_users, n_users + n_genres].</span>
+<span class="sd">        [n_items, n_items + n_genres].</span>
 <span class="sd">    genre_features: bool, optional</span>
-<span class="sd">        Use a [n_users, n_genres] matrix for item features. When True with item_indicator_features,</span>
+<span class="sd">        Use a [n_items, n_genres] matrix for item features. When True with item_indicator_features,</span>
 <span class="sd">        indicator and genre features are concatenated into a single feature matrix of shape</span>
-<span class="sd">        [n_users, n_users + n_genres].</span>
+<span class="sd">        [n_items, n_items + n_genres].</span>
 <span class="sd">    min_rating: float, optional</span>
 <span class="sd">        Minimum rating to include in the interaction matrix.</span>
 <span class="sd">    download_if_missing: bool, optional</span>
@@ -420,7 +421,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.14',
+            VERSION:'1.15',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

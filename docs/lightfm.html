@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>LightFM &mdash; LightFM 1.14 documentation</title>
+  <title>LightFM &mdash; LightFM 1.15 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.14 documentation" href="index.html"/>
+    <link rel="top" title="LightFM 1.15 documentation" href="index.html"/>
         <link rel="next" title="Model evaluation" href="lightfm.evaluation.html"/>
         <link rel="prev" title="Quickstart" href="quickstart.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.14
+                1.15
               </div>
             
           
@@ -96,6 +96,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">LightFM model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
@@ -217,7 +218,10 @@ n positive examples sampled for every user.</li>
 <li><strong>learning_rate</strong> (<em>float</em><em>, </em><em>optional</em>) – initial learning rate for the adagrad learning schedule.</li>
 <li><strong>rho</strong> (<em>float</em><em>, </em><em>optional</em>) – moving average coefficient for the adadelta learning schedule.</li>
 <li><strong>epsilon</strong> (<em>float</em><em>, </em><em>optional</em>) – conditioning parameter for the adadelta learning schedule.</li>
-<li><strong>item_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – L2 penalty on item features</li>
+<li><strong>item_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – L2 penalty on item features. Tip: setting this number too high can slow
+down training. One good way to check is if the final weights in the
+embeddings turned out to be mostly zero. The same idea applies to
+the user_alpha parameter.</li>
 <li><strong>user_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – L2 penalty on user features.</li>
 <li><strong>max_sampled</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum number of negative samples used during WARP fitting.
 It requires a lot of sampling to find negative triplets for users that
@@ -501,7 +505,7 @@ by the inputs.</p>
 
 <dl class="method">
 <dt id="lightfm.LightFM.predict_rank">
-<code class="descname">predict_rank</code><span class="sig-paren">(</span><em>test_interactions</em>, <em>train_interactions=None</em>, <em>item_features=None</em>, <em>user_features=None</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.predict_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.predict_rank" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict_rank</code><span class="sig-paren">(</span><em>test_interactions</em>, <em>train_interactions=None</em>, <em>item_features=None</em>, <em>user_features=None</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.predict_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.predict_rank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict the rank of selected interactions. Computes recommendation
 rankings across all items for every user in interactions and calculates
 the rank of all non-zero entries in the recommendation ranking, with 0
@@ -526,6 +530,9 @@ from being scored and ranked for evaluation.</li>
 <li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
 <li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use.
 Should not be higher than the number of physical cores.</li>
+<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+A flag that signals whether the test and train matrices should be checked
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
 </ul>
 </td>
 </tr>
@@ -606,7 +613,7 @@ input interactions matrix.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.14',
+            VERSION:'1.15',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
