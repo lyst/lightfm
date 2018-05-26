@@ -407,3 +407,23 @@ class Dataset(object):
         """
 
         return (len(self._user_feature_mapping), len(self._item_feature_mapping))
+
+    def mapping(self):
+        """
+        Return the constructed mappings.
+
+        Invert these to map internal indices to external ids.
+
+        Returns
+        -------
+
+        mappings: (user id map, user feature map,
+                   item id map, item id map)
+        """
+
+        return (
+            self._user_id_mapping,
+            self._user_feature_mapping,
+            self._item_id_mapping,
+            self._item_feature_mapping,
+        )
