@@ -1,7 +1,7 @@
 Examples
 =========================
 
-All the examples can be viewed (and run) as Jupyter notebooks in the `examples directory <https://github.com/lyst/lightfm/tree/master/examples>`_ of the LightFM repository.
+Many of the examples can be viewed (and run) as Jupyter notebooks in the `examples directory <https://github.com/lyst/lightfm/tree/master/examples>`_ of the LightFM repository.
 
 .. toctree::
    :maxdepth: 2
@@ -10,3 +10,4 @@ All the examples can be viewed (and run) as Jupyter notebooks in the `examples d
    Learning rate schedules <examples/learning_schedules>
    Cold-start hybrid recommender <examples/hybrid_crossvalidated>
    Learning-to-rank using WARP loss <examples/warp_loss>
+   Building datasets <examples/dataset>
