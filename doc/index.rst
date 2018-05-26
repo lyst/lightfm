@@ -12,6 +12,7 @@ Contents
    LightFM model <lightfm>
    Model evaluation <lightfm.evaluation>
    Cross validation <cross_validation>
+   Data <lightfm.data>
    Datasets <datasets>
    Examples <examples>
 
