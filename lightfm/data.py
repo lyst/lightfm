@@ -4,6 +4,8 @@ import numpy as np
 
 import scipy.sparse as sp
 
+import sklearn.preprocessing
+
 
 class _IncrementalCOOMatrix(object):
 
@@ -49,6 +51,81 @@ class _IncrementalCOOMatrix(object):
     def __len__(self):
 
         return len(self.data)
+
+
+class _FeatureBuilder(object):
+
+    def __init__(self, id_mapping, feature_mapping, identity_features, normalize, entity_type):
+
+        self._id_mapping = id_mapping
+        self._feature_mapping = feature_mapping
+        self._identity_features = identity_features
+        self._normalize = normalize
+        self._entity_type = entity_type
+
+    def features_shape(self):
+
+        return len(self._id_mapping), len(self._feature_mapping)
+
+    def _iter_features(self, features):
+
+        if isinstance(features, dict):
+            for entry in features.items():
+                yield entry
+
+        else:
+            for feature_name in features:
+                yield (feature_name, 1.0)
+
+    def _process_features(self, datum):
+
+        if len(datum) != 2:
+            raise ValueError(
+                "Expected tuples of ({}_id, features), " "got {}.".format(self._entity_type, datum)
+            )
+
+        entity_id, features = datum
+
+        if entity_id not in self._id_mapping:
+            raise ValueError(
+                "{entity_type} id {entity_id} not in {entity_type} id mappings.".format(
+                    entity_type=self._entity_type, entity_id=entity_id
+                )
+            )
+
+        idx = self._id_mapping[entity_id]
+
+        for (feature, weight) in self._iter_features(features):
+            if feature not in self._feature_mapping:
+                raise ValueError(
+                    "Feature {} not in eature mapping. " "Call fit first.".format(feature)
+                )
+
+            feature_idx = self._feature_mapping[feature]
+
+            yield (idx, feature_idx, weight)
+
+    def build(self, data):
+
+        features = _IncrementalCOOMatrix(self.features_shape(), np.float32)
+
+        if self._identity_features:
+            for (_id, idx) in self._id_mapping.items():
+                features.append(idx, self._feature_mapping[_id], 1.0)
+
+        for datum in data:
+            for (entity_idx, feature_idx, weight) in self._process_features(datum):
+                features.append(entity_idx, feature_idx, weight)
+
+        features = features.tocoo().tocsr()
+
+        if self._normalize:
+            if np.any(features.getnnz(1) == 0):
+                raise ValueError("Cannot normalize feature matrix: some rows have zero norm.")
+
+            sklearn.preprocessing.normalize(features, norm="l1", copy=False)
+
+        return features
 
 
 class Dataset(object):
@@ -231,38 +308,6 @@ class Dataset(object):
 
         return (interactions.tocoo(), weights.tocoo())
 
-    def _iter_features(self, features):
-
-        if isinstance(features, dict):
-            for entry in features.items():
-                yield entry
-
-        else:
-            for feature_name in features:
-                yield (feature_name, 1.0)
-
-    def _process_user_features(self, datum):
-
-        if len(datum) != 2:
-            raise ValueError("Expected tuples of (user_id, features), " "got {}.".format(datum))
-
-        user_id, features = datum
-
-        if user_id not in self._user_id_mapping:
-            raise ValueError("User id {} not in user id mappings.".format(user_id))
-
-        user_idx = self._user_id_mapping[user_id]
-
-        for (feature, weight) in self._iter_features(features):
-            if feature not in self._user_feature_mapping:
-                raise ValueError(
-                    "Feature {} not in user feature mapping. " "Call fit first.".format(feature)
-                )
-
-            feature_idx = self._user_feature_mapping[feature]
-
-            yield (user_idx, feature_idx, weight)
-
     def user_features_shape(self):
         """
         Return the shape of the user features matrix.
@@ -276,7 +321,7 @@ class Dataset(object):
 
         return (len(self._user_id_mapping), len(self._user_feature_mapping))
 
-    def build_user_features(self, data):
+    def build_user_features(self, data, normalize=True):
         """
         Build a user features matrix out of an iterable of the form
         (user id, [list of feature names]) or (user id, {feature name: feature weight}).
@@ -289,47 +334,25 @@ class Dataset(object):
             {feature name: feature weight}).
             User and feature ids will be translated to internal indices
             constructed during the fit call.
+        normalize: bool, optional
+            If true, will ensure that feature weights sum to 1 in every row.
 
         Returns
         -------
 
-        feature matrix: COO matrix (num users, num features)
+        feature matrix: CSR matrix (num users, num features)
             Matrix of user features.
         """
 
-        features = _IncrementalCOOMatrix(self.user_features_shape(), np.float32)
+        builder = _FeatureBuilder(
+            self._user_id_mapping,
+            self._user_feature_mapping,
+            self._user_identity_features,
+            normalize,
+            "user",
+        )
 
-        if self._user_identity_features:
-            for (user_id, user_idx) in self._user_id_mapping.items():
-                features.append(user_idx, self._user_feature_mapping[user_id], 1.0)
-
-        for datum in data:
-            for (user_idx, feature_idx, weight) in self._process_user_features(datum):
-                features.append(user_idx, feature_idx, weight)
-
-        return features.tocoo()
-
-    def _process_item_features(self, datum):
-
-        if len(datum) != 2:
-            raise ValueError("Expected tuples of (item_id, features), " "got {}.".format(datum))
-
-        item_id, features = datum
-
-        if item_id not in self._item_id_mapping:
-            raise ValueError("Item id {} not in item id mappings.".format(item_id))
-
-        item_idx = self._item_id_mapping[item_id]
-
-        for (feature, weight) in self._iter_features(features):
-            if feature not in self._item_feature_mapping:
-                raise ValueError(
-                    "Feature {} not in item feature mapping. " "Call fit first.".format(feature)
-                )
-
-            feature_idx = self._item_feature_mapping[feature]
-
-            yield (item_idx, feature_idx, weight)
+        return builder.build(data)
 
     def item_features_shape(self):
         """
@@ -344,7 +367,7 @@ class Dataset(object):
 
         return (len(self._item_id_mapping), len(self._item_feature_mapping))
 
-    def build_item_features(self, data):
+    def build_item_features(self, data, normalize=True):
         """
         Build a item features matrix out of an iterable of the form
         (item id, [list of feature names]) or (item id, {feature name: feature weight}).
@@ -357,25 +380,25 @@ class Dataset(object):
             {feature name: feature weight}).
             Item and feature ids will be translated to internal indices
             constructed during the fit call.
+        normalize: bool, optional
+            If true, will ensure that feature weights sum to 1 in every row.
 
         Returns
         -------
 
-        feature matrix: COO matrix (num items, num features)
+        feature matrix: CSR matrix (num items, num features)
             Matrix of item features.
         """
 
-        features = _IncrementalCOOMatrix(self.item_features_shape(), np.float32)
+        builder = _FeatureBuilder(
+            self._item_id_mapping,
+            self._item_feature_mapping,
+            self._item_identity_features,
+            normalize,
+            "item",
+        )
 
-        if self._item_identity_features:
-            for (item_id, item_idx) in self._item_id_mapping.items():
-                features.append(item_idx, self._item_feature_mapping[item_id], 1.0)
-
-        for datum in data:
-            for (item_idx, feature_idx, weight) in self._process_item_features(datum):
-                features.append(item_idx, feature_idx, weight)
-
-        return features.tocoo()
+        return builder.build(data)
 
     def model_dimensions(self):
         """
