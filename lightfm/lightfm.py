@@ -456,8 +456,10 @@ class LightFM(object):
         num_threads: int, optional
              Number of parallel computation threads to use. Should
              not be higher than the number of physical cores.
-        verbose: bool, optional
-             whether to print progress messages.
+        verbose: bool or function, optional
+             if it's a bool, whether to print progress messages;
+             if it's a function, the print or logging function for printing
+             progress messages.
 
         Returns
         -------
@@ -516,8 +518,10 @@ class LightFM(object):
         num_threads: int, optional
              Number of parallel computation threads to use. Should
              not be higher than the number of physical cores.
-        verbose: bool, optional
-             whether to print progress messages.
+        verbose: bool or function, optional
+             if it's a bool, whether to print progress messages;
+             if it's a function, the print or logging function for printing
+             progress messages.
 
         Returns
         -------
@@ -565,7 +569,9 @@ class LightFM(object):
 
         for epoch in range(epochs):
 
-            if verbose:
+            if hasattr(verbose, '__call__'):
+                verbose('Epoch %s' % epoch)
+            elif verbose:
                 print('Epoch %s' % epoch)
 
             self._run_epoch(item_features,
