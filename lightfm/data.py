@@ -8,7 +8,6 @@ import sklearn.preprocessing
 
 
 class _IncrementalCOOMatrix(object):
-
     def __init__(self, shape, dtype):
 
         if dtype is np.int32:
@@ -54,7 +53,6 @@ class _IncrementalCOOMatrix(object):
 
 
 class _FeatureBuilder(object):
-
     def __init__(self, id_mapping, feature_mapping, identity_features, normalize, entity_type):
 
         self._id_mapping = id_mapping
@@ -81,7 +79,8 @@ class _FeatureBuilder(object):
 
         if len(datum) != 2:
             raise ValueError(
-                "Expected tuples of ({}_id, features), " "got {}.".format(self._entity_type, datum)
+                "Expected tuples of ({}_id, features), "
+                "got {}.".format(self._entity_type, datum)
             )
 
         entity_id, features = datum
@@ -98,7 +97,8 @@ class _FeatureBuilder(object):
         for (feature, weight) in self._iter_features(features):
             if feature not in self._feature_mapping:
                 raise ValueError(
-                    "Feature {} not in eature mapping. " "Call fit first.".format(feature)
+                    "Feature {} not in feature mapping. "
+                    "Call fit first.".format(feature)
                 )
 
             feature_idx = self._feature_mapping[feature]
