@@ -5,6 +5,7 @@ import numpy as np
 
 cimport cython.operator.dereference as deref
 from libc.stdlib cimport free, malloc
+from libc.math cimport sqrt
 
 {openmp_import}
 
@@ -316,10 +317,20 @@ cdef inline void compute_representation(CSRMatrix features,
 
         representation[lightfm.no_components] += feature_weight * feature_biases[feature]
 
+cdef inline flt normalize_repr(flt *v_repr, int no_components) nogil:
+
+    cdef int i
+    cdef flt result
+
+    for i in range(no_components):
+        result += v_repr[i] * v_repr[i]
+    return sqrt(result)
+
 
 cdef inline flt compute_prediction_from_repr(flt *user_repr,
                                              flt *item_repr,
-                                             int no_components) nogil:
+                                             int no_components,
+                                             bint normalize) nogil:
 
     cdef int i
     cdef flt result
@@ -330,6 +341,9 @@ cdef inline flt compute_prediction_from_repr(flt *user_repr,
     # Latent factor dot product
     for i in range(no_components):
         result += user_repr[i] * item_repr[i]
+
+    if normalize:
+        result = result / (normalize_repr(user_repr, no_components) * normalize_repr(item_repr, no_components))
 
     return result
 
@@ -702,7 +716,8 @@ def fit_logistic(CSRMatrix item_features,
                  double learning_rate,
                  double item_alpha,
                  double user_alpha,
-                 int num_threads):
+                 int num_threads,
+                 bint normalize):
     """
     Fit the LightFM model.
     """
@@ -746,7 +761,8 @@ def fit_logistic(CSRMatrix item_features,
 
             prediction = sigmoid(compute_prediction_from_repr(user_repr,
                                                               it_repr,
-                                                              lightfm.no_components))
+                                                              lightfm.no_components,
+                                                              normalize))
 
             # Any value less or equal to zero
             # is a negative interaction.
@@ -794,6 +810,7 @@ def fit_warp(CSRMatrix item_features,
              double item_alpha,
              double user_alpha,
              int num_threads,
+             bint normalize,
              random_state):
     """
     Fit the model using the WARP loss.
@@ -850,7 +867,8 @@ def fit_warp(CSRMatrix item_features,
 
             positive_prediction = compute_prediction_from_repr(user_repr,
                                                                pos_it_repr,
-                                                               lightfm.no_components)
+                                                               lightfm.no_components,
+                                                               normalize)
 
             sampled = 0
 
@@ -870,7 +888,8 @@ def fit_warp(CSRMatrix item_features,
 
                 negative_prediction = compute_prediction_from_repr(user_repr,
                                                                    neg_it_repr,
-                                                                   lightfm.no_components)
+                                                                   lightfm.no_components,
+                                                                   normalize)
 
                 if negative_prediction > positive_prediction - 1:
 
@@ -924,6 +943,7 @@ def fit_warp_kos(CSRMatrix item_features,
                  int k,
                  int n,
                  int num_threads,
+                 bint normalize,
                  random_state):
     """
     Fit the model using the WARP loss.
@@ -989,7 +1009,8 @@ def fit_warp_kos(CSRMatrix item_features,
 
                 sampled_positive_prediction = compute_prediction_from_repr(user_repr,
                                                                            pos_it_repr,
-                                                                           lightfm.no_components)
+                                                                           lightfm.no_components,
+                                                                           normalize)
 
                 pos_pairs[j].idx = sampled_positive_item_id
                 pos_pairs[j].val = sampled_positive_prediction
@@ -1029,7 +1050,8 @@ def fit_warp_kos(CSRMatrix item_features,
 
                 negative_prediction = compute_prediction_from_repr(user_repr,
                                                                    neg_it_repr,
-                                                                   lightfm.no_components)
+                                                                   lightfm.no_components,
+                                                                   normalize)
 
                 if negative_prediction > positive_prediction - 1:
 
@@ -1084,6 +1106,7 @@ def fit_bpr(CSRMatrix item_features,
             double item_alpha,
             double user_alpha,
             int num_threads,
+            bint normalize,
             random_state):
     """
     Fit the model using the BPR loss.
@@ -1150,10 +1173,12 @@ def fit_bpr(CSRMatrix item_features,
 
             positive_prediction = compute_prediction_from_repr(user_repr,
                                                                pos_it_repr,
-                                                               lightfm.no_components)
+                                                               lightfm.no_components,
+                                                               normalize)
             negative_prediction = compute_prediction_from_repr(user_repr,
                                                                neg_it_repr,
-                                                               lightfm.no_components)
+                                                               lightfm.no_components,
+                                                               normalize)
 
             warp_update(weight * (1.0 - sigmoid(positive_prediction - negative_prediction)),
                         item_features,
@@ -1188,7 +1213,8 @@ def predict_lightfm(CSRMatrix item_features,
                     int[::1] item_ids,
                     double[::1] predictions,
                     FastLightFM lightfm,
-                    int num_threads):
+                    int num_threads,
+                    bint normalize):
     """
     Generate predictions.
     """
@@ -1223,7 +1249,8 @@ def predict_lightfm(CSRMatrix item_features,
 
             predictions[i] = compute_prediction_from_repr(user_repr,
                                                           it_repr,
-                                                          lightfm.no_components)
+                                                          lightfm.no_components,
+                                                          normalize)
 
         free(user_repr)
         free(it_repr)
@@ -1235,7 +1262,8 @@ def predict_ranks(CSRMatrix item_features,
                   CSRMatrix train_interactions,
                   flt[::1] ranks,
                   FastLightFM lightfm,
-                  int num_threads):
+                  int num_threads,
+                  bint normalize):
     """
     """
 
@@ -1295,7 +1323,8 @@ def predict_ranks(CSRMatrix item_features,
                 item_ids[i] = item_id
                 predictions[i] = compute_prediction_from_repr(user_repr,
                                                               it_repr,
-                                                              lightfm.no_components)
+                                                              lightfm.no_components,
+                                                              normalize)
 
             # Now we can zip through all the other items and compute ranks
             for item_id in range(test_interactions.cols):
@@ -1312,7 +1341,8 @@ def predict_ranks(CSRMatrix item_features,
                                        it_repr)
                 prediction = compute_prediction_from_repr(user_repr,
                                                           it_repr,
-                                                          lightfm.no_components)
+                                                          lightfm.no_components,
+                                                          normalize)
 
                 for i in range(row_stop - row_start):
                     if item_id != item_ids[i] and prediction >= predictions[i]:
