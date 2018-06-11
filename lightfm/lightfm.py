@@ -94,6 +94,8 @@ class LightFM(object):
     random_state: int seed, RandomState instance, or None
         The seed of the pseudo random number generator to use when shuffling
         the data and initializing the parameters.
+    normalize: bool, optional
+        If `True`, user and item vectors will be rescaled to unit length during training and prediction.
 
     Attributes
     ----------
@@ -167,7 +169,7 @@ class LightFM(object):
                  loss='logistic',
                  learning_rate=0.05, rho=0.95, epsilon=1e-6,
                  item_alpha=0.0, user_alpha=0.0, max_sampled=10,
-                 random_state=None):
+                 random_state=None, normalize=False):
 
         assert item_alpha >= 0.0
         assert user_alpha >= 0.0
@@ -178,6 +180,7 @@ class LightFM(object):
         assert epsilon >= 0
         assert learning_schedule in ('adagrad', 'adadelta')
         assert loss in ('logistic', 'warp', 'bpr', 'warp-kos')
+        assert normalize in [True, False]
 
         if max_sampled < 1:
             raise ValueError('max_sampled must be a positive integer')
@@ -197,6 +200,7 @@ class LightFM(object):
 
         self.item_alpha = item_alpha
         self.user_alpha = user_alpha
+        self.normalize = normalize
 
         if random_state is None:
             self.random_state = np.random.RandomState()
@@ -612,6 +616,7 @@ class LightFM(object):
                      self.item_alpha,
                      self.user_alpha,
                      num_threads,
+                     self.normalize,
                      self.random_state)
         elif loss == 'bpr':
             fit_bpr(CSRMatrix(item_features),
@@ -627,6 +632,7 @@ class LightFM(object):
                     self.item_alpha,
                     self.user_alpha,
                     num_threads,
+                    self.normalize,
                     self.random_state)
         elif loss == 'warp-kos':
             fit_warp_kos(CSRMatrix(item_features),
@@ -641,6 +647,7 @@ class LightFM(object):
                          self.k,
                          self.n,
                          num_threads,
+                         self.normalize,
                          self.random_state)
         else:
             fit_logistic(CSRMatrix(item_features),
@@ -654,7 +661,8 @@ class LightFM(object):
                          self.learning_rate,
                          self.item_alpha,
                          self.user_alpha,
-                         num_threads)
+                         num_threads,
+                         self.normalize)
 
     def predict(self, user_ids, item_ids, item_features=None,
                 user_features=None, num_threads=1):
@@ -728,7 +736,8 @@ class LightFM(object):
                         item_ids,
                         predictions,
                         lightfm_data,
-                        num_threads)
+                        num_threads,
+                        self.normalize)
 
         return predictions
 
@@ -832,7 +841,8 @@ class LightFM(object):
                       CSRMatrix(train_interactions),
                       ranks.data,
                       lightfm_data,
-                      num_threads)
+                      num_threads,
+                      self.normalize)
 
         return ranks
 
