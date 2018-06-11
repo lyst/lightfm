@@ -95,9 +95,7 @@ class LightFM(object):
         The seed of the pseudo random number generator to use when shuffling
         the data and initializing the parameters.
     normalize: bool, optional
-        If normalize is `True`, then the all user - item compatability will be normalized
-        using cosine similarity before being passed to the sigmoid function. If `False`
-        a normal dot-product between the vectors will be executed.
+        If `True`, user and item vectors will be rescaled to unit length during training and prediction.
 
     Attributes
     ----------

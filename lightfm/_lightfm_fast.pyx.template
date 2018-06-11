@@ -317,7 +317,7 @@ cdef inline void compute_representation(CSRMatrix features,
 
         representation[lightfm.no_components] += feature_weight * feature_biases[feature]
 
-cdef inline flt normalize_repr(flt *v_repr, int no_components) nogil:
+cdef inline flt compute_norm(flt *v_repr, int no_components) nogil:
 
     cdef int i
     cdef flt result
@@ -343,7 +343,7 @@ cdef inline flt compute_prediction_from_repr(flt *user_repr,
         result += user_repr[i] * item_repr[i]
 
     if normalize:
-        result = result / (normalize_repr(user_repr, no_components) * normalize_repr(item_repr, no_components))
+        result = result / (compute_norm(user_repr, no_components) * compute_norm(item_repr, no_components))
 
     return result
 
