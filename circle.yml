@@ -1,6 +1,6 @@
 machine:
   python:
-    version: 3.5.1
+    version: 3.6
 
 dependencies:
   pre:
@@ -12,6 +12,8 @@ test:
   pre:
     - pip install pytest
     - pip install flake8
+    - pip install black==18.6b4
   override:
     - flake8 --config .flake8rc
+    - black --check lightfm
     - mv ~/lightfm/lightfm ~/lightfm/_lightfm && py.test -xv ~/lightfm/tests

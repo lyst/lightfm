@@ -7,11 +7,15 @@ import scipy.sparse as sp
 from lightfm.datasets import _common
 
 
-def fetch_stackexchange(dataset, test_set_fraction=0.2,
-                        min_training_interactions=1,
-                        data_home=None,
-                        indicator_features=True, tag_features=False,
-                        download_if_missing=True):
+def fetch_stackexchange(
+    dataset,
+    test_set_fraction=0.2,
+    min_training_interactions=1,
+    data_home=None,
+    indicator_features=True,
+    tag_features=False,
+    download_if_missing=True,
+):
     """
     Fetch a dataset from the `StackExchange network <http://stackexchange.com/>`_.
 
@@ -65,51 +69,69 @@ def fetch_stackexchange(dataset, test_set_fraction=0.2,
     """
 
     if not (indicator_features or tag_features):
-        raise ValueError('At least one of item_indicator_features '
-                         'or tag_features must be True')
+        raise ValueError(
+            "At least one of item_indicator_features " "or tag_features must be True"
+        )
 
-    if dataset not in ('crossvalidated', 'stackoverflow'):
-        raise ValueError('Unknown dataset')
+    if dataset not in ("crossvalidated", "stackoverflow"):
+        raise ValueError("Unknown dataset")
 
     if not (0.0 < test_set_fraction < 1.0):
-        raise ValueError('Test set fraction must be between 0 and 1')
+        raise ValueError("Test set fraction must be between 0 and 1")
 
-    urls = {'crossvalidated': ('https://github.com/maciejkula/lightfm_datasets/releases/'
-                               'download/v0.1.0/stackexchange_crossvalidated.npz'),
-            'stackoverflow': ('https://github.com/maciejkula/lightfm_datasets/releases/'
-                              'download/v0.1.0/stackexchange_stackoverflow.npz')}
+    urls = {
+        "crossvalidated": (
+            "https://github.com/maciejkula/lightfm_datasets/releases/"
+            "download/v0.1.0/stackexchange_crossvalidated.npz"
+        ),
+        "stackoverflow": (
+            "https://github.com/maciejkula/lightfm_datasets/releases/"
+            "download/v0.1.0/stackexchange_stackoverflow.npz"
+        ),
+    }
 
-    path = _common.get_data(data_home,
-                            urls[dataset],
-                            os.path.join('stackexchange', dataset),
-                            'data.npz',
-                            download_if_missing)
+    path = _common.get_data(
+        data_home,
+        urls[dataset],
+        os.path.join("stackexchange", dataset),
+        "data.npz",
+        download_if_missing,
+    )
 
     data = np.load(path)
 
-    interactions = sp.coo_matrix((data['interactions_data'],
-                                  (data['interactions_row'],
-                                   data['interactions_col'])),
-                                 shape=data['interactions_shape'].flatten())
-    tag_features_mat = sp.coo_matrix((data['features_data'],
-                                      (data['features_row'],
-                                       data['features_col'])),
-                                     shape=data['features_shape'].flatten())
-    tag_labels = data['labels']
+    interactions = sp.coo_matrix(
+        (
+            data["interactions_data"],
+            (data["interactions_row"], data["interactions_col"]),
+        ),
+        shape=data["interactions_shape"].flatten(),
+    )
+    tag_features_mat = sp.coo_matrix(
+        (data["features_data"], (data["features_row"], data["features_col"])),
+        shape=data["features_shape"].flatten(),
+    )
+    tag_labels = data["labels"]
 
     test_cutoff_index = int(len(interactions.data) * (1.0 - test_set_fraction))
     test_cutoff_timestamp = np.sort(interactions.data)[test_cutoff_index]
     in_train = interactions.data < test_cutoff_timestamp
     in_test = np.logical_not(in_train)
 
-    train = sp.coo_matrix((np.ones(in_train.sum(), dtype=np.float32),
-                           (interactions.row[in_train],
-                            interactions.col[in_train])),
-                          shape=interactions.shape)
-    test = sp.coo_matrix((np.ones(in_test.sum(), dtype=np.float32),
-                          (interactions.row[in_test],
-                           interactions.col[in_test])),
-                         shape=interactions.shape)
+    train = sp.coo_matrix(
+        (
+            np.ones(in_train.sum(), dtype=np.float32),
+            (interactions.row[in_train], interactions.col[in_train]),
+        ),
+        shape=interactions.shape,
+    )
+    test = sp.coo_matrix(
+        (
+            np.ones(in_test.sum(), dtype=np.float32),
+            (interactions.row[in_test], interactions.col[in_test]),
+        ),
+        shape=interactions.shape,
+    )
 
     if min_training_interactions > 0:
         include = np.squeeze(np.array(train.getnnz(axis=1))) > min_training_interactions
@@ -118,23 +140,24 @@ def fetch_stackexchange(dataset, test_set_fraction=0.2,
         test = test.tocsr()[include].tocoo()
 
     if indicator_features and not tag_features:
-        features = sp.identity(train.shape[1],
-                               format='csr',
-                               dtype=np.float32)
-        labels = np.array(['question_id:{}'.format(x) for x in range(train.shape[1])])
+        features = sp.identity(train.shape[1], format="csr", dtype=np.float32)
+        labels = np.array(["question_id:{}".format(x) for x in range(train.shape[1])])
     elif not indicator_features and tag_features:
         features = tag_features_mat.tocsr()
         labels = tag_labels
     else:
-        id_features = sp.identity(train.shape[1],
-                                  format='csr',
-                                  dtype=np.float32)
+        id_features = sp.identity(train.shape[1], format="csr", dtype=np.float32)
         features = sp.hstack([id_features, tag_features_mat]).tocsr()
-        labels = np.concatenate([np.array(['question_id:{}'.format(x)
-                                           for x in range(train.shape[1])]),
-                                tag_labels])
+        labels = np.concatenate(
+            [
+                np.array(["question_id:{}".format(x) for x in range(train.shape[1])]),
+                tag_labels,
+            ]
+        )
 
-    return {'train': train,
-            'test': test,
-            'item_features': features,
-            'item_feature_labels': labels}
+    return {
+        "train": train,
+        "test": test,
+        "item_features": features,
+        "item_feature_labels": labels,
+    }

@@ -53,7 +53,9 @@ class _IncrementalCOOMatrix(object):
 
 
 class _FeatureBuilder(object):
-    def __init__(self, id_mapping, feature_mapping, identity_features, normalize, entity_type):
+    def __init__(
+        self, id_mapping, feature_mapping, identity_features, normalize, entity_type
+    ):
 
         self._id_mapping = id_mapping
         self._feature_mapping = feature_mapping
@@ -121,7 +123,9 @@ class _FeatureBuilder(object):
 
         if self._normalize:
             if np.any(features.getnnz(1) == 0):
-                raise ValueError("Cannot normalize feature matrix: some rows have zero norm.")
+                raise ValueError(
+                    "Cannot normalize feature matrix: some rows have zero norm."
+                )
 
             sklearn.preprocessing.normalize(features, norm="l1", copy=False)
 
@@ -174,7 +178,9 @@ class Dataset(object):
     def _check_fitted(self):
 
         if not self._user_id_mapping or not self._item_id_mapping:
-            raise ValueError("You must call fit first to build the item and user " "id mappings.")
+            raise ValueError(
+                "You must call fit first to build the item and user " "id mappings."
+            )
 
     def fit(self, users, items, user_features=None, item_features=None):
         """
@@ -198,7 +204,9 @@ class Dataset(object):
 
         return self.fit_partial(users, items, user_features, item_features)
 
-    def fit_partial(self, users=None, items=None, user_features=None, item_features=None):
+    def fit_partial(
+        self, users=None, items=None, user_features=None, item_features=None
+    ):
         """
         Fit the user/item id and feature name mappings.
 
@@ -218,22 +226,30 @@ class Dataset(object):
                 self._user_id_mapping.setdefault(user_id, len(self._user_id_mapping))
 
                 if self._user_identity_features:
-                    self._user_feature_mapping.setdefault(user_id, len(self._user_feature_mapping))
+                    self._user_feature_mapping.setdefault(
+                        user_id, len(self._user_feature_mapping)
+                    )
 
         if items is not None:
             for item_id in items:
                 self._item_id_mapping.setdefault(item_id, len(self._item_id_mapping))
 
                 if self._item_identity_features:
-                    self._item_feature_mapping.setdefault(item_id, len(self._item_feature_mapping))
+                    self._item_feature_mapping.setdefault(
+                        item_id, len(self._item_feature_mapping)
+                    )
 
         if user_features is not None:
             for user_feature in user_features:
-                self._user_feature_mapping.setdefault(user_feature, len(self._user_feature_mapping))
+                self._user_feature_mapping.setdefault(
+                    user_feature, len(self._user_feature_mapping)
+                )
 
         if item_features is not None:
             for item_feature in item_features:
-                self._item_feature_mapping.setdefault(item_feature, len(self._item_feature_mapping))
+                self._item_feature_mapping.setdefault(
+                    item_feature, len(self._item_feature_mapping)
+                )
 
     def _unpack_datum(self, datum):
 

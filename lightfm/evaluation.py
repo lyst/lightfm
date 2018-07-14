@@ -6,18 +6,22 @@ a fitted LightFM model.
 
 import numpy as np
 
-from ._lightfm_fast import (CSRMatrix,
-                            calculate_auc_from_rank)
+from ._lightfm_fast import CSRMatrix, calculate_auc_from_rank
 
-__all__ = ['precision_at_k',
-           'recall_at_k',
-           'auc_score',
-           'reciprocal_rank']
+__all__ = ["precision_at_k", "recall_at_k", "auc_score", "reciprocal_rank"]
 
 
-def precision_at_k(model, test_interactions, train_interactions=None,
-                   k=10, user_features=None, item_features=None,
-                   preserve_rows=False, num_threads=1, check_intersections=True):
+def precision_at_k(
+    model,
+    test_interactions,
+    train_interactions=None,
+    k=10,
+    user_features=None,
+    item_features=None,
+    preserve_rows=False,
+    num_threads=1,
+    check_intersections=True,
+):
     """
     Measure the precision at k metric for a model: the fraction of known
     positives in the first k positions of the ranked list of results.
@@ -61,13 +65,14 @@ def precision_at_k(model, test_interactions, train_interactions=None,
          no interactions for a given user the returned precision will be 0.
     """
 
-    ranks = model.predict_rank(test_interactions,
-                               train_interactions=train_interactions,
-                               user_features=user_features,
-                               item_features=item_features,
-                               num_threads=num_threads,
-                               check_intersections=check_intersections,
-                               )
+    ranks = model.predict_rank(
+        test_interactions,
+        train_interactions=train_interactions,
+        user_features=user_features,
+        item_features=item_features,
+        num_threads=num_threads,
+        check_intersections=check_intersections,
+    )
 
     ranks.data = np.less(ranks.data, k, ranks.data)
 
@@ -79,9 +84,17 @@ def precision_at_k(model, test_interactions, train_interactions=None,
     return precision
 
 
-def recall_at_k(model, test_interactions, train_interactions=None,
-                k=10, user_features=None, item_features=None,
-                preserve_rows=False, num_threads=1, check_intersections=True):
+def recall_at_k(
+    model,
+    test_interactions,
+    train_interactions=None,
+    k=10,
+    user_features=None,
+    item_features=None,
+    preserve_rows=False,
+    num_threads=1,
+    check_intersections=True,
+):
     """
     Measure the recall at k metric for a model: the number of positive items in
     the first k positions of the ranked list of results divided by the number
@@ -126,13 +139,14 @@ def recall_at_k(model, test_interactions, train_interactions=None,
          returned recall will be 0.
     """
 
-    ranks = model.predict_rank(test_interactions,
-                               train_interactions=train_interactions,
-                               user_features=user_features,
-                               item_features=item_features,
-                               num_threads=num_threads,
-                               check_intersections=check_intersections,
-                               )
+    ranks = model.predict_rank(
+        test_interactions,
+        train_interactions=train_interactions,
+        user_features=user_features,
+        item_features=item_features,
+        num_threads=num_threads,
+        check_intersections=check_intersections,
+    )
 
     ranks.data = np.less(ranks.data, k, ranks.data)
 
@@ -146,9 +160,16 @@ def recall_at_k(model, test_interactions, train_interactions=None,
     return hit / retrieved
 
 
-def auc_score(model, test_interactions, train_interactions=None,
-              user_features=None, item_features=None,
-              preserve_rows=False, num_threads=1, check_intersections=True):
+def auc_score(
+    model,
+    test_interactions,
+    train_interactions=None,
+    user_features=None,
+    item_features=None,
+    preserve_rows=False,
+    num_threads=1,
+    check_intersections=True,
+):
     """
     Measure the ROC AUC metric for a model: the probability that a randomly
     chosen positive example has a higher score than a randomly chosen negative
@@ -191,34 +212,32 @@ def auc_score(model, test_interactions, train_interactions=None,
          interactions for a given user the returned AUC will be 0.5.
     """
 
-    ranks = model.predict_rank(test_interactions,
-                               train_interactions=train_interactions,
-                               user_features=user_features,
-                               item_features=item_features,
-                               num_threads=num_threads,
-                               check_intersections=check_intersections,
-                               )
+    ranks = model.predict_rank(
+        test_interactions,
+        train_interactions=train_interactions,
+        user_features=user_features,
+        item_features=item_features,
+        num_threads=num_threads,
+        check_intersections=check_intersections,
+    )
 
     assert np.all(ranks.data >= 0)
 
     auc = np.zeros(ranks.shape[0], dtype=np.float32)
 
     if train_interactions is not None:
-        num_train_positives = (np.squeeze(np.array(train_interactions
-                                                   .getnnz(axis=1))
-                                          .astype(np.int32)))
+        num_train_positives = np.squeeze(
+            np.array(train_interactions.getnnz(axis=1)).astype(np.int32)
+        )
     else:
-        num_train_positives = np.zeros(test_interactions.shape[0],
-                                       dtype=np.int32)
+        num_train_positives = np.zeros(test_interactions.shape[0], dtype=np.int32)
 
     # The second argument is modified in-place, but
     # here we don't care about the inconsistency
     # introduced into the ranks matrix.
-    calculate_auc_from_rank(CSRMatrix(ranks),
-                            num_train_positives,
-                            ranks.data,
-                            auc,
-                            num_threads)
+    calculate_auc_from_rank(
+        CSRMatrix(ranks), num_train_positives, ranks.data, auc, num_threads
+    )
 
     if not preserve_rows:
         auc = auc[test_interactions.getnnz(axis=1) > 0]
@@ -226,9 +245,16 @@ def auc_score(model, test_interactions, train_interactions=None,
     return auc
 
 
-def reciprocal_rank(model, test_interactions, train_interactions=None,
-                    user_features=None, item_features=None,
-                    preserve_rows=False, num_threads=1, check_intersections=True):
+def reciprocal_rank(
+    model,
+    test_interactions,
+    train_interactions=None,
+    user_features=None,
+    item_features=None,
+    preserve_rows=False,
+    num_threads=1,
+    check_intersections=True,
+):
     """
     Measure the reciprocal rank metric for a model: 1 / the rank of the highest
     ranked positive example. A perfect score is 1.0.
@@ -270,13 +296,14 @@ def reciprocal_rank(model, test_interactions, train_interactions=None,
          be 0.0.
     """
 
-    ranks = model.predict_rank(test_interactions,
-                               train_interactions=train_interactions,
-                               user_features=user_features,
-                               item_features=item_features,
-                               num_threads=num_threads,
-                               check_intersections=check_intersections,
-                               )
+    ranks = model.predict_rank(
+        test_interactions,
+        train_interactions=train_interactions,
+        user_features=user_features,
+        item_features=item_features,
+        num_threads=num_threads,
+        check_intersections=check_intersections,
+    )
 
     ranks.data = 1.0 / (ranks.data + 1.0)
 

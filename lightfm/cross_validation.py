@@ -12,14 +12,10 @@ def _shuffle(uids, iids, data, random_state):
     shuffle_indices = np.arange(len(uids))
     random_state.shuffle(shuffle_indices)
 
-    return (uids[shuffle_indices],
-            iids[shuffle_indices],
-            data[shuffle_indices])
+    return (uids[shuffle_indices], iids[shuffle_indices], data[shuffle_indices])
 
 
-def random_train_test_split(interactions,
-                            test_percentage=0.2,
-                            random_state=None):
+def random_train_test_split(interactions, test_percentage=0.2, random_state=None):
     """
     Randomly split interactions between training and testing.
 
@@ -50,7 +46,7 @@ def random_train_test_split(interactions,
     """
 
     if not sp.issparse(interactions):
-        raise ValueError('Interactions must be a scipy.sparse matrix.')
+        raise ValueError("Interactions must be a scipy.sparse matrix.")
 
     if not isinstance(random_state, np.random.RandomState):
         random_state = np.random.RandomState(seed=random_state)
@@ -58,9 +54,7 @@ def random_train_test_split(interactions,
     interactions = interactions.tocoo()
 
     shape = interactions.shape
-    uids, iids, data = (interactions.row,
-                        interactions.col,
-                        interactions.data)
+    uids, iids, data = (interactions.row, interactions.col, interactions.data)
 
     uids, iids, data = _shuffle(uids, iids, data, random_state)
 
@@ -69,15 +63,15 @@ def random_train_test_split(interactions,
     train_idx = slice(None, cutoff)
     test_idx = slice(cutoff, None)
 
-    train = sp.coo_matrix((data[train_idx],
-                           (uids[train_idx],
-                            iids[train_idx])),
-                          shape=shape,
-                          dtype=interactions.dtype)
-    test = sp.coo_matrix((data[test_idx],
-                          (uids[test_idx],
-                           iids[test_idx])),
-                         shape=shape,
-                         dtype=interactions.dtype)
+    train = sp.coo_matrix(
+        (data[train_idx], (uids[train_idx], iids[train_idx])),
+        shape=shape,
+        dtype=interactions.dtype,
+    )
+    test = sp.coo_matrix(
+        (data[test_idx], (uids[test_idx], iids[test_idx])),
+        shape=shape,
+        dtype=interactions.dtype,
+    )
 
     return train, test

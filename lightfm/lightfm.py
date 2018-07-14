@@ -5,11 +5,18 @@ import numpy as np
 
 import scipy.sparse as sp
 
-from ._lightfm_fast import (CSRMatrix, FastLightFM,
-                            fit_bpr, fit_logistic, fit_warp,
-                            fit_warp_kos, predict_lightfm, predict_ranks)
+from ._lightfm_fast import (
+    CSRMatrix,
+    FastLightFM,
+    fit_bpr,
+    fit_logistic,
+    fit_warp,
+    fit_warp_kos,
+    predict_lightfm,
+    predict_ranks,
+)
 
-__all__ = ['LightFM']
+__all__ = ["LightFM"]
 
 CYTHON_DTYPE = np.float32
 
@@ -162,12 +169,21 @@ class LightFM(object):
            arXiv preprint arXiv:1212.5701 (2012).
     """
 
-    def __init__(self, no_components=10, k=5, n=10,
-                 learning_schedule='adagrad',
-                 loss='logistic',
-                 learning_rate=0.05, rho=0.95, epsilon=1e-6,
-                 item_alpha=0.0, user_alpha=0.0, max_sampled=10,
-                 random_state=None):
+    def __init__(
+        self,
+        no_components=10,
+        k=5,
+        n=10,
+        learning_schedule="adagrad",
+        loss="logistic",
+        learning_rate=0.05,
+        rho=0.95,
+        epsilon=1e-6,
+        item_alpha=0.0,
+        user_alpha=0.0,
+        max_sampled=10,
+        random_state=None,
+    ):
 
         assert item_alpha >= 0.0
         assert user_alpha >= 0.0
@@ -176,11 +192,11 @@ class LightFM(object):
         assert n > 0
         assert 0 < rho < 1
         assert epsilon >= 0
-        assert learning_schedule in ('adagrad', 'adadelta')
-        assert loss in ('logistic', 'warp', 'bpr', 'warp-kos')
+        assert learning_schedule in ("adagrad", "adadelta")
+        assert loss in ("logistic", "warp", "bpr", "warp-kos")
 
         if max_sampled < 1:
-            raise ValueError('max_sampled must be a positive integer')
+            raise ValueError("max_sampled must be a positive integer")
 
         self.loss = loss
         self.learning_schedule = learning_schedule
@@ -225,22 +241,25 @@ class LightFM(object):
 
     def _check_initialized(self):
 
-        for var in (self.item_embeddings,
-                    self.item_embedding_gradients,
-                    self.item_embedding_momentum,
-                    self.item_biases,
-                    self.item_bias_gradients,
-                    self.item_bias_momentum,
-                    self.user_embeddings,
-                    self.user_embedding_gradients,
-                    self.user_embedding_momentum,
-                    self.user_biases,
-                    self.user_bias_gradients,
-                    self.user_bias_momentum):
+        for var in (
+            self.item_embeddings,
+            self.item_embedding_gradients,
+            self.item_embedding_momentum,
+            self.item_biases,
+            self.item_bias_gradients,
+            self.item_bias_momentum,
+            self.user_embeddings,
+            self.user_embedding_gradients,
+            self.user_embedding_momentum,
+            self.user_biases,
+            self.user_bias_gradients,
+            self.user_bias_momentum,
+        ):
 
             if var is None:
-                raise ValueError('You must fit the model before '
-                                 'trying to obtain predictions.')
+                raise ValueError(
+                    "You must fit the model before " "trying to obtain predictions."
+                )
 
     def _initialize(self, no_components, no_item_features, no_user_features):
         """
@@ -249,8 +268,9 @@ class LightFM(object):
 
         # Initialise item features.
         self.item_embeddings = (
-            (self.random_state.rand(no_item_features, no_components) - 0.5) /
-            no_components).astype(np.float32)
+            (self.random_state.rand(no_item_features, no_components) - 0.5)
+            / no_components
+        ).astype(np.float32)
         self.item_embedding_gradients = np.zeros_like(self.item_embeddings)
         self.item_embedding_momentum = np.zeros_like(self.item_embeddings)
         self.item_biases = np.zeros(no_item_features, dtype=np.float32)
@@ -259,64 +279,66 @@ class LightFM(object):
 
         # Initialise user features.
         self.user_embeddings = (
-            (self.random_state.rand(no_user_features, no_components) - 0.5) /
-            no_components).astype(np.float32)
+            (self.random_state.rand(no_user_features, no_components) - 0.5)
+            / no_components
+        ).astype(np.float32)
         self.user_embedding_gradients = np.zeros_like(self.user_embeddings)
         self.user_embedding_momentum = np.zeros_like(self.user_embeddings)
         self.user_biases = np.zeros(no_user_features, dtype=np.float32)
         self.user_bias_gradients = np.zeros_like(self.user_biases)
         self.user_bias_momentum = np.zeros_like(self.user_biases)
 
-        if self.learning_schedule == 'adagrad':
+        if self.learning_schedule == "adagrad":
             self.item_embedding_gradients += 1
             self.item_bias_gradients += 1
             self.user_embedding_gradients += 1
             self.user_bias_gradients += 1
 
-    def _construct_feature_matrices(self, n_users, n_items, user_features,
-                                    item_features):
+    def _construct_feature_matrices(
+        self, n_users, n_items, user_features, item_features
+    ):
 
         if user_features is None:
-            user_features = sp.identity(n_users,
-                                        dtype=CYTHON_DTYPE,
-                                        format='csr')
+            user_features = sp.identity(n_users, dtype=CYTHON_DTYPE, format="csr")
         else:
             user_features = user_features.tocsr()
 
         if item_features is None:
-            item_features = sp.identity(n_items,
-                                        dtype=CYTHON_DTYPE,
-                                        format='csr')
+            item_features = sp.identity(n_items, dtype=CYTHON_DTYPE, format="csr")
         else:
             item_features = item_features.tocsr()
 
         if n_users > user_features.shape[0]:
-            raise Exception('Number of user feature rows does not equal '
-                            'the number of users')
+            raise Exception(
+                "Number of user feature rows does not equal " "the number of users"
+            )
 
         if n_items > item_features.shape[0]:
-            raise Exception('Number of item feature rows does not equal '
-                            'the number of items')
+            raise Exception(
+                "Number of item feature rows does not equal " "the number of items"
+            )
 
         # If we already have embeddings, verify that
         # we have them for all the supplied features
         if self.user_embeddings is not None:
             if not self.user_embeddings.shape[0] >= user_features.shape[1]:
-                raise ValueError('The user feature matrix specifies more '
-                                 'features than there are estimated '
-                                 'feature embeddings: {} vs {}.'.format(
-                                     self.user_embeddings.shape[0],
-                                     user_features.shape[1]
-                                 ))
+                raise ValueError(
+                    "The user feature matrix specifies more "
+                    "features than there are estimated "
+                    "feature embeddings: {} vs {}.".format(
+                        self.user_embeddings.shape[0], user_features.shape[1]
+                    )
+                )
 
         if self.item_embeddings is not None:
             if not self.item_embeddings.shape[0] >= item_features.shape[1]:
-                raise ValueError('The item feature matrix specifies more '
-                                 'features than there are estimated '
-                                 'feature embeddings: {} vs {}.'.format(
-                                     self.item_embeddings.shape[0],
-                                     item_features.shape[1]
-                                 ))
+                raise ValueError(
+                    "The item feature matrix specifies more "
+                    "features than there are estimated "
+                    "feature embeddings: {} vs {}.".format(
+                        self.item_embeddings.shape[0], item_features.shape[1]
+                    )
+                )
 
         user_features = self._to_cython_dtype(user_features)
         item_features = self._to_cython_dtype(item_features)
@@ -343,23 +365,27 @@ class LightFM(object):
 
         if sample_weight is not None:
 
-            if self.loss == 'warp-kos':
-                raise NotImplementedError('k-OS loss with sample weights '
-                                          'not implemented.')
+            if self.loss == "warp-kos":
+                raise NotImplementedError(
+                    "k-OS loss with sample weights " "not implemented."
+                )
 
             if not isinstance(sample_weight, sp.coo_matrix):
-                raise ValueError('Sample_weight must be a COO matrix.')
+                raise ValueError("Sample_weight must be a COO matrix.")
 
             if sample_weight.shape != interactions.shape:
-                raise ValueError('Sample weight and interactions '
-                                 'matrices must be the same shape')
+                raise ValueError(
+                    "Sample weight and interactions " "matrices must be the same shape"
+                )
 
-            if not (np.array_equal(interactions.row,
-                                   sample_weight.row) and
-                    np.array_equal(interactions.col,
-                                   sample_weight.col)):
-                raise ValueError('Sample weight and interaction matrix '
-                                 'entries must be in the same order')
+            if not (
+                np.array_equal(interactions.row, sample_weight.row)
+                and np.array_equal(interactions.col, sample_weight.col)
+            ):
+                raise ValueError(
+                    "Sample weight and interaction matrix "
+                    "entries must be in the same order"
+                )
 
             if sample_weight.data.dtype != CYTHON_DTYPE:
                 sample_weight_data = sample_weight.data.astype(CYTHON_DTYPE)
@@ -372,54 +398,61 @@ class LightFM(object):
                 sample_weight_data = interactions.data
             else:
                 # Otherwise allocate a new array of ones
-                sample_weight_data = np.ones_like(interactions.data,
-                                                  dtype=CYTHON_DTYPE)
+                sample_weight_data = np.ones_like(interactions.data, dtype=CYTHON_DTYPE)
 
         return sample_weight_data
 
     def _get_lightfm_data(self):
 
-        lightfm_data = FastLightFM(self.item_embeddings,
-                                   self.item_embedding_gradients,
-                                   self.item_embedding_momentum,
-                                   self.item_biases,
-                                   self.item_bias_gradients,
-                                   self.item_bias_momentum,
-                                   self.user_embeddings,
-                                   self.user_embedding_gradients,
-                                   self.user_embedding_momentum,
-                                   self.user_biases,
-                                   self.user_bias_gradients,
-                                   self.user_bias_momentum,
-                                   self.no_components,
-                                   int(self.learning_schedule == 'adadelta'),
-                                   self.learning_rate,
-                                   self.rho,
-                                   self.epsilon,
-                                   self.max_sampled)
+        lightfm_data = FastLightFM(
+            self.item_embeddings,
+            self.item_embedding_gradients,
+            self.item_embedding_momentum,
+            self.item_biases,
+            self.item_bias_gradients,
+            self.item_bias_momentum,
+            self.user_embeddings,
+            self.user_embedding_gradients,
+            self.user_embedding_momentum,
+            self.user_biases,
+            self.user_bias_gradients,
+            self.user_bias_momentum,
+            self.no_components,
+            int(self.learning_schedule == "adadelta"),
+            self.learning_rate,
+            self.rho,
+            self.epsilon,
+            self.max_sampled,
+        )
 
         return lightfm_data
 
     def _check_finite(self):
 
-        for parameter in (self.item_embeddings,
-                          self.item_biases,
-                          self.user_embeddings,
-                          self.user_biases):
+        for parameter in (
+            self.item_embeddings,
+            self.item_biases,
+            self.user_embeddings,
+            self.user_biases,
+        ):
             # A sum of an array that contains non-finite values
             # will also be non-finite, and we avoid creating a
             # large boolean temporary.
             if not np.isfinite(np.sum(parameter)):
-                raise ValueError("Not all estimated parameters are finite,"
-                                 " your model may have diverged. Try decreasing"
-                                 " the learning rate or normalising feature values"
-                                 " and sample weights")
+                raise ValueError(
+                    "Not all estimated parameters are finite,"
+                    " your model may have diverged. Try decreasing"
+                    " the learning rate or normalising feature values"
+                    " and sample weights"
+                )
 
     def _check_input_finite(self, data):
 
         if not np.isfinite(np.sum(data)):
-            raise ValueError('Not all input values are finite. '
-                             'Check the input for NaNs and infinite values.')
+            raise ValueError(
+                "Not all input values are finite. "
+                "Check the input for NaNs and infinite values."
+            )
 
     @staticmethod
     def _progress(n, verbose):
@@ -439,10 +472,16 @@ class LightFM(object):
 
             return verbose_range()
 
-    def fit(self, interactions,
-            user_features=None, item_features=None,
-            sample_weight=None,
-            epochs=1, num_threads=1, verbose=False):
+    def fit(
+        self,
+        interactions,
+        user_features=None,
+        item_features=None,
+        sample_weight=None,
+        epochs=1,
+        num_threads=1,
+        verbose=False,
+    ):
         """
         Fit the model.
 
@@ -489,18 +528,26 @@ class LightFM(object):
         # Discard old results, if any
         self._reset_state()
 
-        return self.fit_partial(interactions,
-                                user_features=user_features,
-                                item_features=item_features,
-                                sample_weight=sample_weight,
-                                epochs=epochs,
-                                num_threads=num_threads,
-                                verbose=verbose)
+        return self.fit_partial(
+            interactions,
+            user_features=user_features,
+            item_features=item_features,
+            sample_weight=sample_weight,
+            epochs=epochs,
+            num_threads=num_threads,
+            verbose=verbose,
+        )
 
-    def fit_partial(self, interactions,
-                    user_features=None, item_features=None,
-                    sample_weight=None,
-                    epochs=1, num_threads=1, verbose=False):
+    def fit_partial(
+        self,
+        interactions,
+        user_features=None,
+        item_features=None,
+        sample_weight=None,
+        epochs=1,
+        num_threads=1,
+        verbose=False,
+    ):
         """
         Fit the model.
 
@@ -553,35 +600,34 @@ class LightFM(object):
         if interactions.dtype != CYTHON_DTYPE:
             interactions.data = interactions.data.astype(CYTHON_DTYPE)
 
-        sample_weight_data = self._process_sample_weight(interactions,
-                                                         sample_weight)
+        sample_weight_data = self._process_sample_weight(interactions, sample_weight)
 
         n_users, n_items = interactions.shape
-        (user_features,
-         item_features) = self._construct_feature_matrices(n_users,
-                                                           n_items,
-                                                           user_features,
-                                                           item_features)
+        (user_features, item_features) = self._construct_feature_matrices(
+            n_users, n_items, user_features, item_features
+        )
 
-        for input_data in (user_features.data,
-                           item_features.data,
-                           interactions.data,
-                           sample_weight_data):
+        for input_data in (
+            user_features.data,
+            item_features.data,
+            interactions.data,
+            sample_weight_data,
+        ):
             self._check_input_finite(input_data)
         if self.item_embeddings is None:
             # Initialise latent factors only if this is the first call
             # to fit_partial.
-            self._initialize(self.no_components,
-                             item_features.shape[1],
-                             user_features.shape[1])
+            self._initialize(
+                self.no_components, item_features.shape[1], user_features.shape[1]
+            )
 
         # Check that the dimensionality of the feature matrices has
         # not changed between runs.
         if not item_features.shape[1] == self.item_embeddings.shape[0]:
-            raise ValueError('Incorrect number of features in item_features')
+            raise ValueError("Incorrect number of features in item_features")
 
         if not user_features.shape[1] == self.user_embeddings.shape[0]:
-            raise ValueError('Incorrect number of features in user_features')
+            raise ValueError("Incorrect number of features in user_features")
 
         for _ in self._progress(epochs, verbose=verbose):
             self._run_epoch(item_features,
@@ -595,17 +641,25 @@ class LightFM(object):
 
         return self
 
-    def _run_epoch(self, item_features, user_features, interactions,
-                   sample_weight, num_threads, loss):
+    def _run_epoch(
+        self,
+        item_features,
+        user_features,
+        interactions,
+        sample_weight,
+        num_threads,
+        loss,
+    ):
         """
         Run an individual epoch.
         """
 
-        if loss in ('warp', 'bpr', 'warp-kos'):
+        if loss in ("warp", "bpr", "warp-kos"):
             # The CSR conversion needs to happen before shuffle indices are created.
             # Calling .tocsr may result in a change in the data arrays of the COO matrix,
             positives_lookup = CSRMatrix(
-                self._get_positives_lookup_matrix(interactions))
+                self._get_positives_lookup_matrix(interactions)
+            )
 
         # Create shuffle indexes.
         shuffle_indices = np.arange(len(interactions.data), dtype=np.int32)
@@ -614,66 +668,75 @@ class LightFM(object):
         lightfm_data = self._get_lightfm_data()
 
         # Call the estimation routines.
-        if loss == 'warp':
-            fit_warp(CSRMatrix(item_features),
-                     CSRMatrix(user_features),
-                     positives_lookup,
-                     interactions.row,
-                     interactions.col,
-                     interactions.data,
-                     sample_weight,
-                     shuffle_indices,
-                     lightfm_data,
-                     self.learning_rate,
-                     self.item_alpha,
-                     self.user_alpha,
-                     num_threads,
-                     self.random_state)
-        elif loss == 'bpr':
-            fit_bpr(CSRMatrix(item_features),
-                    CSRMatrix(user_features),
-                    positives_lookup,
-                    interactions.row,
-                    interactions.col,
-                    interactions.data,
-                    sample_weight,
-                    shuffle_indices,
-                    lightfm_data,
-                    self.learning_rate,
-                    self.item_alpha,
-                    self.user_alpha,
-                    num_threads,
-                    self.random_state)
-        elif loss == 'warp-kos':
-            fit_warp_kos(CSRMatrix(item_features),
-                         CSRMatrix(user_features),
-                         positives_lookup,
-                         interactions.row,
-                         shuffle_indices,
-                         lightfm_data,
-                         self.learning_rate,
-                         self.item_alpha,
-                         self.user_alpha,
-                         self.k,
-                         self.n,
-                         num_threads,
-                         self.random_state)
+        if loss == "warp":
+            fit_warp(
+                CSRMatrix(item_features),
+                CSRMatrix(user_features),
+                positives_lookup,
+                interactions.row,
+                interactions.col,
+                interactions.data,
+                sample_weight,
+                shuffle_indices,
+                lightfm_data,
+                self.learning_rate,
+                self.item_alpha,
+                self.user_alpha,
+                num_threads,
+                self.random_state,
+            )
+        elif loss == "bpr":
+            fit_bpr(
+                CSRMatrix(item_features),
+                CSRMatrix(user_features),
+                positives_lookup,
+                interactions.row,
+                interactions.col,
+                interactions.data,
+                sample_weight,
+                shuffle_indices,
+                lightfm_data,
+                self.learning_rate,
+                self.item_alpha,
+                self.user_alpha,
+                num_threads,
+                self.random_state,
+            )
+        elif loss == "warp-kos":
+            fit_warp_kos(
+                CSRMatrix(item_features),
+                CSRMatrix(user_features),
+                positives_lookup,
+                interactions.row,
+                shuffle_indices,
+                lightfm_data,
+                self.learning_rate,
+                self.item_alpha,
+                self.user_alpha,
+                self.k,
+                self.n,
+                num_threads,
+                self.random_state,
+            )
         else:
-            fit_logistic(CSRMatrix(item_features),
-                         CSRMatrix(user_features),
-                         interactions.row,
-                         interactions.col,
-                         interactions.data,
-                         sample_weight,
-                         shuffle_indices,
-                         lightfm_data,
-                         self.learning_rate,
-                         self.item_alpha,
-                         self.user_alpha,
-                         num_threads)
+            fit_logistic(
+                CSRMatrix(item_features),
+                CSRMatrix(user_features),
+                interactions.row,
+                interactions.col,
+                interactions.data,
+                sample_weight,
+                shuffle_indices,
+                lightfm_data,
+                self.learning_rate,
+                self.item_alpha,
+                self.user_alpha,
+                num_threads,
+            )
 
-    def predict(self, user_ids, item_ids, item_features=None,
-                user_features=None, num_threads=1):
+    def predict(
+        self, user_ids, item_ids, item_features=None, user_features=None, num_threads=1
+    ):
         """
         Compute the recommendation score for user-item pairs.
 
@@ -721,30 +784,32 @@ class LightFM(object):
             item_ids = item_ids.astype(np.int32)
 
         if user_ids.min() < 0 or item_ids.min() < 0:
-            raise ValueError('User or item ids cannot be negative. '
-                             'Check your inputs for negative numbers '
-                             'or very large numbers that can overflow.')
+            raise ValueError(
+                "User or item ids cannot be negative. "
+                "Check your inputs for negative numbers "
+                "or very large numbers that can overflow."
+            )
 
         n_users = user_ids.max() + 1
         n_items = item_ids.max() + 1
 
-        (user_features,
-         item_features) = self._construct_feature_matrices(n_users,
-                                                           n_items,
-                                                           user_features,
-                                                           item_features)
+        (user_features, item_features) = self._construct_feature_matrices(
+            n_users, n_items, user_features, item_features
+        )
 
         lightfm_data = self._get_lightfm_data()
 
         predictions = np.empty(len(user_ids), dtype=np.float64)
 
-        predict_lightfm(CSRMatrix(item_features),
-                        CSRMatrix(user_features),
-                        user_ids,
-                        item_ids,
-                        predictions,
-                        lightfm_data,
-                        num_threads)
+        predict_lightfm(
+            CSRMatrix(item_features),
+            CSRMatrix(user_features),
+            user_ids,
+            item_ids,
+            predictions,
+            lightfm_data,
+            num_threads,
+        )
 
         return predictions
 
@@ -753,13 +818,20 @@ class LightFM(object):
             n_intersections = test_mat.multiply(train_mat).nnz
             if n_intersections:
                 raise ValueError(
-                    'Test interactions matrix and train interactions '
-                    'matrix share %d interactions. This will cause '
-                    'incorrect evaluation, check your data split.' % n_intersections)
+                    "Test interactions matrix and train interactions "
+                    "matrix share %d interactions. This will cause "
+                    "incorrect evaluation, check your data split." % n_intersections
+                )
 
-    def predict_rank(self, test_interactions, train_interactions=None,
-                     item_features=None, user_features=None, num_threads=1,
-                     check_intersections=True):
+    def predict_rank(
+        self,
+        test_interactions,
+        train_interactions=None,
+        item_features=None,
+        user_features=None,
+        num_threads=1,
+        check_intersections=True,
+    ):
         """
         Predict the rank of selected interactions. Computes recommendation
         rankings across all items for every user in interactions and calculates
@@ -813,42 +885,45 @@ class LightFM(object):
 
         n_users, n_items = test_interactions.shape
 
-        (user_features,
-         item_features) = self._construct_feature_matrices(n_users,
-                                                           n_items,
-                                                           user_features,
-                                                           item_features)
+        (user_features, item_features) = self._construct_feature_matrices(
+            n_users, n_items, user_features, item_features
+        )
 
         if not item_features.shape[1] == self.item_embeddings.shape[0]:
-            raise ValueError('Incorrect number of features in item_features')
+            raise ValueError("Incorrect number of features in item_features")
 
         if not user_features.shape[1] == self.user_embeddings.shape[0]:
-            raise ValueError('Incorrect number of features in user_features')
+            raise ValueError("Incorrect number of features in user_features")
 
         test_interactions = test_interactions.tocsr()
         test_interactions = self._to_cython_dtype(test_interactions)
 
         if train_interactions is None:
-            train_interactions = sp.csr_matrix((n_users, n_items),
-                                               dtype=CYTHON_DTYPE)
+            train_interactions = sp.csr_matrix((n_users, n_items), dtype=CYTHON_DTYPE)
         else:
             train_interactions = train_interactions.tocsr()
             train_interactions = self._to_cython_dtype(train_interactions)
 
-        ranks = sp.csr_matrix((np.zeros_like(test_interactions.data),
-                               test_interactions.indices,
-                               test_interactions.indptr),
-                              shape=test_interactions.shape)
+        ranks = sp.csr_matrix(
+            (
+                np.zeros_like(test_interactions.data),
+                test_interactions.indices,
+                test_interactions.indptr,
+            ),
+            shape=test_interactions.shape,
+        )
 
         lightfm_data = self._get_lightfm_data()
 
-        predict_ranks(CSRMatrix(item_features),
-                      CSRMatrix(user_features),
-                      CSRMatrix(test_interactions),
-                      CSRMatrix(train_interactions),
-                      ranks.data,
-                      lightfm_data,
-                      num_threads)
+        predict_ranks(
+            CSRMatrix(item_features),
+            CSRMatrix(user_features),
+            CSRMatrix(test_interactions),
+            CSRMatrix(train_interactions),
+            ranks.data,
+            lightfm_data,
+            num_threads,
+        )
 
         return ranks
 
@@ -928,18 +1003,20 @@ class LightFM(object):
             Parameter names mapped to their values.
         """
 
-        params = {'loss': self.loss,
-                  'learning_schedule': self.learning_schedule,
-                  'no_components': self.no_components,
-                  'learning_rate': self.learning_rate,
-                  'k': self.k,
-                  'n': self.n,
-                  'rho': self.rho,
-                  'epsilon': self.epsilon,
-                  'max_sampled': self.max_sampled,
-                  'item_alpha': self.item_alpha,
-                  'user_alpha': self.user_alpha,
-                  'random_state': self.random_state}
+        params = {
+            "loss": self.loss,
+            "learning_schedule": self.learning_schedule,
+            "no_components": self.no_components,
+            "learning_rate": self.learning_rate,
+            "k": self.k,
+            "n": self.n,
+            "rho": self.rho,
+            "epsilon": self.epsilon,
+            "max_sampled": self.max_sampled,
+            "item_alpha": self.item_alpha,
+            "user_alpha": self.user_alpha,
+            "random_state": self.random_state,
+        }
 
         return params
 
@@ -957,10 +1034,12 @@ class LightFM(object):
 
         for key, value in params.items():
             if key not in valid_params:
-                raise ValueError('Invalid parameter %s for estimator %s. '
-                                 'Check the list of available parameters '
-                                 'with `estimator.get_params().keys()`.' %
-                                 (key, self.__class__.__name__))
+                raise ValueError(
+                    "Invalid parameter %s for estimator %s. "
+                    "Check the list of available parameters "
+                    "with `estimator.get_params().keys()`."
+                    % (key, self.__class__.__name__)
+                )
 
             setattr(self, key, value)
 
