@@ -3,3 +3,5 @@ requests
 numpy
 scipy>=0.17.0
 scikit-learn
+sphinx
+sphinx_rtd_theme
