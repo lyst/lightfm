@@ -24,4 +24,5 @@ jobs:
             . venv/bin/activate
             flake8 lightfm
             black --check lightfm
+            black --check tests
             mv lightfm _lightfm && py.test -xv tests
