@@ -421,6 +421,24 @@ class LightFM(object):
             raise ValueError('Not all input values are finite. '
                              'Check the input for NaNs and infinite values.')
 
+    @staticmethod
+    def _progress(n, verbose):
+        # Use `tqdm` if available,
+        # otherwise fallback to `range()`.
+        if not verbose:
+            return range(n)
+
+        try:
+            from tqdm import trange
+            return trange(n, desc="Epoch")
+        except ImportError:
+            def verbose_range():
+                for i in range(n):
+                    print("Epoch {}".format(i))
+                    yield i
+
+            return verbose_range()
+
     def fit(self, interactions,
             user_features=None, item_features=None,
             sample_weight=None,
@@ -563,11 +581,7 @@ class LightFM(object):
         if not user_features.shape[1] == self.user_embeddings.shape[0]:
             raise ValueError('Incorrect number of features in user_features')
 
-        for epoch in range(epochs):
-
-            if verbose:
-                print('Epoch %s' % epoch)
-
+        for _ in self._progress(epochs, verbose=verbose):
             self._run_epoch(item_features,
                             user_features,
                             interactions,
