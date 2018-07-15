@@ -476,6 +476,7 @@ class LightFM(object):
              not be higher than the number of physical cores.
         verbose: bool, optional
              whether to print progress messages.
+             If `tqdm` is installed, a progress bar will be displayed instead.
 
         Returns
         -------
@@ -536,6 +537,7 @@ class LightFM(object):
              not be higher than the number of physical cores.
         verbose: bool, optional
              whether to print progress messages.
+             If `tqdm` is installed, a progress bar will be displayed instead.
 
         Returns
         -------
