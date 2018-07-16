@@ -19,7 +19,7 @@ def _shuffle(uids, iids, data, random_state):
 
 def random_train_test_split(interactions,
                             test_percentage=0.2,
-                            seed=None):
+                            random_state=None):
     """
     Randomly split interactions between training and testing.
 
@@ -37,8 +37,9 @@ def random_train_test_split(interactions,
         The interactions to split.
     test_percentage: float, optional
         The fraction of interactions to place in the test set.
-    seed: int, optional
-        Random seed used to initialize the numpy.RandomState number generator.
+    random_state: int or numpy.random.RandomState, optional
+        Random seed used to initialize the numpy.random.RandomState number generator.
+        Accepts an instance of numpy.random.RandomState for backwards compatibility.
 
     Returns
     -------
@@ -51,7 +52,8 @@ def random_train_test_split(interactions,
     if not sp.issparse(interactions):
         raise ValueError('Interactions must be a scipy.sparse matrix.')
 
-    random_state = np.random.RandomState(seed=seed)
+    if not isinstance(random_state, np.random.RandomState):
+        random_state = np.random.RandomState(seed=random_state)
 
     interactions = interactions.tocoo()
 
