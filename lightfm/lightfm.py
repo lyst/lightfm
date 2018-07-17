@@ -463,8 +463,10 @@ class LightFM(object):
 
         try:
             from tqdm import trange
+
             return trange(n, desc="Epoch")
         except ImportError:
+
             def verbose_range():
                 for i in range(n):
                     print("Epoch {}".format(i))
@@ -630,12 +632,14 @@ class LightFM(object):
             raise ValueError("Incorrect number of features in user_features")
 
         for _ in self._progress(epochs, verbose=verbose):
-            self._run_epoch(item_features,
-                            user_features,
-                            interactions,
-                            sample_weight_data,
-                            num_threads,
-                            self.loss)
+            self._run_epoch(
+                item_features,
+                user_features,
+                interactions,
+                sample_weight_data,
+                num_threads,
+                self.loss,
+            )
 
             self._check_finite()
 
