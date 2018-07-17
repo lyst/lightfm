@@ -6,7 +6,8 @@ import scipy.sparse as sp
 
 from sklearn.metrics import roc_auc_score
 
-from lightfm import LightFM, evaluation
+from lightfm.lightfm import LightFM
+from lightfm import evaluation
 
 
 def _generate_data(num_users, num_items, density=0.1, test_fraction=0.2):

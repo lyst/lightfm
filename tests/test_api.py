@@ -4,7 +4,7 @@ import pytest
 
 import scipy.sparse as sp
 
-from lightfm import LightFM
+from lightfm.lightfm import LightFM
 
 
 def test_empty_matrix():

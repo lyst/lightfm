@@ -9,7 +9,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.grid_search import RandomizedSearchCV
 from sklearn.cross_validation import KFold
 
-from lightfm import LightFM
+from lightfm.lightfm import LightFM
 from lightfm.datasets import fetch_movielens
 from lightfm.evaluation import auc_score, precision_at_k
 
