@@ -5,8 +5,7 @@ import requests
 
 def get_data_dir():
 
-    return os.path.join(os.path.expanduser('~'),
-                        'lightfm_data')
+    return os.path.join(os.path.expanduser("~"), "lightfm_data")
 
 
 def create_data_dir(path):
@@ -20,8 +19,8 @@ def download(url, dest_path):
     req = requests.get(url, stream=True)
     req.raise_for_status()
 
-    with open(dest_path, 'wb') as fd:
-        for chunk in req.iter_content(chunk_size=2**20):
+    with open(dest_path, "wb") as fd:
+        for chunk in req.iter_content(chunk_size=2 ** 20):
             fd.write(chunk)
 
 
@@ -40,6 +39,6 @@ def get_data(data_home, url, dest_subdir, dest_filename, download_if_missing):
         if download_if_missing:
             download(url, dest_path)
         else:
-            raise IOError('Dataset missing.')
+            raise IOError("Dataset missing.")
 
     return dest_path

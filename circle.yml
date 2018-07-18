@@ -1,17 +1,28 @@
-machine:
-  python:
-    version: 3.5.1
+version: 2
 
-dependencies:
-  pre:
-    - pip install numpy
-    - pip install scipy:
-        timeout: 1800
-    - pip install scikit-learn
-test:
-  pre:
-    - pip install pytest
-    - pip install flake8
-  override:
-    - flake8 --config .flake8rc
-    - mv ~/lightfm/lightfm ~/lightfm/_lightfm && py.test -xv ~/lightfm/tests
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6.2-stretch-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "dev-requirements.txt" }}
+      - run:
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install black==18.6b4
+            pip install -r dev-requirements.txt
+            pip install .
+      - save_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "dev-requirements.txt" }}
+          paths:
+            - "venv"
+      - run:
+          command: |
+            . venv/bin/activate
+            flake8 lightfm
+            black --check lightfm
+            black --check tests
+            mv lightfm _lightfm && py.test -xv tests

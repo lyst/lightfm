@@ -68,12 +68,18 @@ def test_build_features():
 
     # Build from lists
     user_features = dataset.build_user_features(
-        [(user_id, ["user:{}".format(x) for x in range(users)]) for user_id in range(users)]
+        [
+            (user_id, ["user:{}".format(x) for x in range(users)])
+            for user_id in range(users)
+        ]
     )
     assert user_features.getnnz() == users ** 2
 
     item_features = dataset.build_item_features(
-        [(item_id, ["item:{}".format(x) for x in range(items)]) for item_id in range(items)]
+        [
+            (item_id, ["item:{}".format(x) for x in range(items)])
+            for item_id in range(items)
+        ]
     )
     assert item_features.getnnz() == items ** 2
 

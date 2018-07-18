@@ -18,18 +18,22 @@ def _generate_data(num_users, num_items, density=0.1, test_fraction=0.2):
     test = sp.lil_matrix((num_users, num_items), dtype=np.float32)
 
     for user_id in range(num_users):
-        positives = np.random.choice(num_items, size=int(density * num_items), replace=False)
+        positives = np.random.choice(
+            num_items, size=int(density * num_items), replace=False
+        )
 
-        for item_id in positives[:int(test_fraction * len(positives))]:
+        for item_id in positives[: int(test_fraction * len(positives))]:
             test[user_id, item_id] = 1.0
 
-        for item_id in positives[int(test_fraction * len(positives)):]:
+        for item_id in positives[int(test_fraction * len(positives)) :]:
             train[user_id, item_id] = 1.0
 
     return train.tocoo(), test.tocoo()
 
 
-def _precision_at_k(model, ground_truth, k, train=None, user_features=None, item_features=None):
+def _precision_at_k(
+    model, ground_truth, k, train=None, user_features=None, item_features=None
+):
     # Alternative test implementation
 
     ground_truth = ground_truth.tocsr()
@@ -57,7 +61,9 @@ def _precision_at_k(model, ground_truth, k, train=None, user_features=None, item
         )
         if train is not None:
             train_items = train[user_id].indices
-            top_k = set([x for x in np.argsort(-predictions) if x not in train_items][:k])
+            top_k = set(
+                [x for x in np.argsort(-predictions) if x not in train_items][:k]
+            )
         else:
             top_k = set(np.argsort(-predictions)[:k])
 
@@ -69,7 +75,9 @@ def _precision_at_k(model, ground_truth, k, train=None, user_features=None, item
     return sum(precisions) / len(precisions)
 
 
-def _recall_at_k(model, ground_truth, k, train=None, user_features=None, item_features=None):
+def _recall_at_k(
+    model, ground_truth, k, train=None, user_features=None, item_features=None
+):
     # Alternative test implementation
 
     ground_truth = ground_truth.tocsr()
@@ -97,7 +105,9 @@ def _recall_at_k(model, ground_truth, k, train=None, user_features=None, item_fe
         )
         if train is not None:
             train_items = train[user_id].indices
-            top_k = set([x for x in np.argsort(-predictions) if x not in train_items][:k])
+            top_k = set(
+                [x for x in np.argsort(-predictions) if x not in train_items][:k]
+            )
         else:
             top_k = set(np.argsort(-predictions)[:k])
 
@@ -170,10 +180,15 @@ def test_precision_at_k():
 
         assert np.allclose(precision.mean(), expected_mean_precision)
         assert len(precision) == (test.getnnz(axis=1) > 0).sum()
-        assert len(evaluation.precision_at_k(model, train, preserve_rows=True)) == test.shape[0]
+        assert (
+            len(evaluation.precision_at_k(model, train, preserve_rows=True))
+            == test.shape[0]
+        )
 
         # With omitting train interactions
-        precision = evaluation.precision_at_k(model, test, k=k, train_interactions=train)
+        precision = evaluation.precision_at_k(
+            model, test, k=k, train_interactions=train
+        )
         expected_mean_precision = _precision_at_k(model, test, k, train=train)
 
         assert np.allclose(precision.mean(), expected_mean_precision)
@@ -219,7 +234,10 @@ def test_recall_at_k():
 
         assert np.allclose(recall.mean(), expected_mean_recall)
         assert len(recall) == (test.getnnz(axis=1) > 0).sum()
-        assert len(evaluation.recall_at_k(model, train, preserve_rows=True)) == test.shape[0]
+        assert (
+            len(evaluation.recall_at_k(model, train, preserve_rows=True))
+            == test.shape[0]
+        )
 
         # With omitting train interactions
         recall = evaluation.recall_at_k(model, test, k=k, train_interactions=train)
@@ -262,25 +280,49 @@ def test_intersections_check():
 
     # check error is raised when train and test have interactions in common
     with pytest.raises(ValueError):
-        evaluation.auc_score(model, train, train_interactions=train, check_intersections=True)
+        evaluation.auc_score(
+            model, train, train_interactions=train, check_intersections=True
+        )
 
     with pytest.raises(ValueError):
-        evaluation.recall_at_k(model, train, train_interactions=train, check_intersections=True)
+        evaluation.recall_at_k(
+            model, train, train_interactions=train, check_intersections=True
+        )
 
     with pytest.raises(ValueError):
-        evaluation.precision_at_k(model, train, train_interactions=train, check_intersections=True)
+        evaluation.precision_at_k(
+            model, train, train_interactions=train, check_intersections=True
+        )
 
     with pytest.raises(ValueError):
-        evaluation.reciprocal_rank(model, train, train_interactions=train, check_intersections=True)
+        evaluation.reciprocal_rank(
+            model, train, train_interactions=train, check_intersections=True
+        )
 
     # check no errors raised when train and test have no interactions in common
-    evaluation.auc_score(model, test, train_interactions=train, check_intersections=True)
-    evaluation.recall_at_k(model, test, train_interactions=train, check_intersections=True)
-    evaluation.precision_at_k(model, test, train_interactions=train, check_intersections=True)
-    evaluation.reciprocal_rank(model, test, train_interactions=train, check_intersections=True)
+    evaluation.auc_score(
+        model, test, train_interactions=train, check_intersections=True
+    )
+    evaluation.recall_at_k(
+        model, test, train_interactions=train, check_intersections=True
+    )
+    evaluation.precision_at_k(
+        model, test, train_interactions=train, check_intersections=True
+    )
+    evaluation.reciprocal_rank(
+        model, test, train_interactions=train, check_intersections=True
+    )
 
     # check no error is raised when there are intersections but flag is False
-    evaluation.auc_score(model, train, train_interactions=train, check_intersections=False)
-    evaluation.recall_at_k(model, train, train_interactions=train, check_intersections=False)
-    evaluation.precision_at_k(model, train, train_interactions=train, check_intersections=False)
-    evaluation.reciprocal_rank(model, train, train_interactions=train, check_intersections=False)
+    evaluation.auc_score(
+        model, train, train_interactions=train, check_intersections=False
+    )
+    evaluation.recall_at_k(
+        model, train, train_interactions=train, check_intersections=False
+    )
+    evaluation.precision_at_k(
+        model, train, train_interactions=train, check_intersections=False
+    )
+    evaluation.reciprocal_rank(
+        model, train, train_interactions=train, check_intersections=False
+    )
