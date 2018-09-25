@@ -20,6 +20,10 @@ __all__ = ["LightFM"]
 
 CYTHON_DTYPE = np.float32
 
+model_weights = {'user_embeddings', 'user_biases', 'item_embeddings', 'item_biases',
+                 'item_bias_momentum', 'item_bias_gradients', 'item_embedding_momentum',
+                 'item_embedding_gradients', 'user_bias_momentum', 'user_bias_gradients',
+                 'user_embedding_momentum', 'user_embedding_gradients'}
 
 class LightFM(object):
     """
@@ -473,6 +477,41 @@ class LightFM(object):
                     yield i
 
             return verbose_range()
+
+    def save(self, path):
+        """
+        Saves a model as a numpy-object, keeping all model weights and hyperparameters
+        for re-initialization.
+        This does not keep track of any mappings of items/users you may have in your dataloaders,
+        so also needs to be stored somewhere for full restoration of the model.
+        Model is persisted as a compressed numpy file, and has the .npz extension appended to the path-parameter.
+
+        Parameters
+        ----------
+
+        path: string
+            string-path of location to save the model.
+        """
+        model_params = {value: getattr(self, value) for value in model_weights}
+        hyperparams = self.get_params()
+        model_params.update(hyperparams)
+        np.savez_compressed(path, **model_params)
+
+    def load(self, path):
+        """
+        Loads a model saved in the format output by LightFM.save()
+
+        Parameters
+        ----------
+
+        path: string
+            string-path of location to load the model from.
+        """
+        numpy_model = np.load(path)
+        for value in [x for x in numpy_model if x in model_weights]:
+            setattr(self, value, numpy_model[value])
+
+        self.set_params(**{k: v for k, v in numpy_model.items() if k not in model_weights})
 
     def fit(
         self,
