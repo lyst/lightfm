@@ -25,6 +25,7 @@ model_weights = {'user_embeddings', 'user_biases', 'item_embeddings', 'item_bias
                  'item_embedding_gradients', 'user_bias_momentum', 'user_bias_gradients',
                  'user_embedding_momentum', 'user_embedding_gradients'}
 
+
 class LightFM(object):
     """
     A hybrid latent representation recommender model.
@@ -484,7 +485,8 @@ class LightFM(object):
         for re-initialization.
         This does not keep track of any mappings of items/users you may have in your dataloaders,
         so also needs to be stored somewhere for full restoration of the model.
-        Model is persisted as a compressed numpy file, and has the .npz extension appended to the path-parameter.
+        Model is persisted as a compressed numpy file, and has the .npz extension
+        appended to the path-parameter.
 
         Parameters
         ----------
