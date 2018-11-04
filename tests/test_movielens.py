@@ -6,8 +6,7 @@ import scipy.sparse as sp
 from scipy import stats
 
 from sklearn.metrics import roc_auc_score
-from sklearn.grid_search import RandomizedSearchCV
-from sklearn.cross_validation import KFold
+from sklearn.model_selection import KFold, RandomizedSearchCV
 
 from lightfm.lightfm import LightFM
 from lightfm.datasets import fetch_movielens
@@ -698,23 +697,21 @@ def test_sklearn_cv():
     def scorer(est, x, y=None):
         return precision_at_k(est, x).mean()
 
-    # Custom CV which sets train_index = test_index
+    # Dummy custom CV to ensure shape preservation.
     class CV(KFold):
-        def __iter__(self):
-            ind = np.arange(self.n)
-            for test_index in self._iter_test_masks():
-                train_index = np.logical_not(test_index)
-                train_index = ind[train_index]
-                yield train_index, train_index
+        def split(self, X, y=None, groups=None):
+            idx = np.arange(X.shape[0])
+            for _ in range(self.n_splits):
+                yield idx, idx
 
-    cv = CV(n=train.shape[0], random_state=42)
+    cv = CV(n_splits=3, random_state=42)
     search = RandomizedSearchCV(
         estimator=model,
         param_distributions=distr,
-        n_iter=10,
+        n_iter=2,
         scoring=scorer,
         random_state=42,
         cv=cv,
     )
     search.fit(train)
-    assert search.best_params_["no_components"] == 52
+    assert search.best_params_["no_components"] == 58

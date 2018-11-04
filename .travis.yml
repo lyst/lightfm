@@ -1,11 +1,7 @@
 os:
   - osx
 before_install:
-  - pip2 install numpy
-  - pip2 install scipy
-  - pip2 install requests
-  - pip2 install scikit-learn
-  - pip2 install pytest
+  - pip2 install -r dev-requirements.txt
 install:
   - pip2 install -e .
 script: py.test tests/
