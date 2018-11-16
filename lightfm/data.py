@@ -124,7 +124,7 @@ class _FeatureBuilder(object):
         if self._normalize:
             if np.any(features.getnnz(1) == 0):
                 raise ValueError(
-                    "Cannot normalize feature matrix: some rows have zero norm."
+                    "Cannot normalize feature matrix: some rows have zero norm. Ensure that features were provided for all entries."
                 )
 
             sklearn.preprocessing.normalize(features, norm="l1", copy=False)

@@ -25,6 +25,9 @@ def random_train_test_split(interactions, test_percentage=0.2, random_state=None
     interactions in the test set also have interactions in the
     training set; this may lead to a partial cold-start problem
     in the test set.
+    To split a sample_weight matrix along the same lines, pass it
+    into this function with the same random_state seed as was used
+    for splitting the interactions.
 
     Parameters
     ----------

@@ -9,11 +9,11 @@ Contents
 
    Home <home>
    Quickstart <quickstart>
-   LightFM model <lightfm>
+   The LightFM model class <lightfm>
    Model evaluation <lightfm.evaluation>
    Cross validation <cross_validation>
-   Data <lightfm.data>
-   Datasets <datasets>
+   Constructing datasets <lightfm.data>
+   Built-in datasets <datasets>
    Examples <examples>
 
 
@@ -23,4 +23,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
