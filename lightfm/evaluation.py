@@ -65,6 +65,9 @@ def precision_at_k(
          no interactions for a given user the returned precision will be 0.
     """
 
+    if num_threads < 1:
+        raise ValueError("Number of threads must be 1 or larger.")
+
     ranks = model.predict_rank(
         test_interactions,
         train_interactions=train_interactions,
@@ -139,6 +142,9 @@ def recall_at_k(
          returned recall will be 0.
     """
 
+    if num_threads < 1:
+        raise ValueError("Number of threads must be 1 or larger.")
+
     ranks = model.predict_rank(
         test_interactions,
         train_interactions=train_interactions,
@@ -211,6 +217,9 @@ def auc_score(
          Numpy array containing AUC scores for each user. If there are no
          interactions for a given user the returned AUC will be 0.5.
     """
+
+    if num_threads < 1:
+        raise ValueError("Number of threads must be 1 or larger.")
 
     ranks = model.predict_rank(
         test_interactions,
@@ -295,6 +304,9 @@ def reciprocal_rank(
          If there are no interactions for a given user the returned value will
          be 0.0.
     """
+
+    if num_threads < 1:
+        raise ValueError("Number of threads must be 1 or larger.")
 
     ranks = model.predict_rank(
         test_interactions,

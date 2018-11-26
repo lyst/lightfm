@@ -631,6 +631,9 @@ class LightFM(object):
         if not user_features.shape[1] == self.user_embeddings.shape[0]:
             raise ValueError("Incorrect number of features in user_features")
 
+        if num_threads < 1:
+            raise ValueError("Number of threads must be 1 or larger.")
+
         for _ in self._progress(epochs, verbose=verbose):
             self._run_epoch(
                 item_features,
@@ -787,6 +790,9 @@ class LightFM(object):
         if item_ids.dtype != np.int32:
             item_ids = item_ids.astype(np.int32)
 
+        if num_threads < 1:
+            raise ValueError("Number of threads must be 1 or larger.")
+
         if user_ids.min() < 0 or item_ids.min() < 0:
             raise ValueError(
                 "User or item ids cannot be negative. "
@@ -883,6 +889,9 @@ class LightFM(object):
         """
 
         self._check_initialized()
+
+        if num_threads < 1:
+            raise ValueError("Number of threads must be 1 or larger.")
 
         if check_intersections:
             self._check_test_train_intersections(test_interactions, train_interactions)
