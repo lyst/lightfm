@@ -31,7 +31,7 @@ def precision_at_k(
     ----------
 
     model: LightFM instance
-         the model to be evaluated
+         the fitted model to be evaluated
     test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
@@ -104,7 +104,7 @@ def recall_at_k(
     ----------
 
     model: LightFM instance
-         the model to be evaluated
+         the fitted model to be evaluated
     test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
@@ -180,7 +180,7 @@ def auc_score(
     ----------
 
     model: LightFM instance
-         the  to be evaluated
+         the fitted model to be evaluated
     test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
@@ -263,7 +263,7 @@ def reciprocal_rank(
     ----------
 
     model: LightFM instance
-         the model to be evaluated
+         the fitted model to be evaluated
     test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
