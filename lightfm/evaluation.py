@@ -35,9 +35,9 @@ def precision_at_k(
     test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
-         Non-zero entries representing known positives in the train set. If this is
-         omitted, the model will be trained on the same entries that are used for
-         evaluation.
+         Non-zero entries representing known positives in the train set. These
+         will be omitted from the score calculations to avoid re-recommending
+         known positives.
     k: integer, optional
          The k parameter.
     user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
@@ -108,9 +108,9 @@ def recall_at_k(
     test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
-         Non-zero entries representing known positives in the train set. If this is
-         omitted, the model will be trained on the same entries that are used for
-         evaluation.
+         Non-zero entries representing known positives in the train set. These
+         will be omitted from the score calculations to avoid re-recommending
+         known positives.
     k: integer, optional
          The k parameter.
     user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
@@ -180,13 +180,13 @@ def auc_score(
     ----------
 
     model: LightFM instance
-         the model to be evaluated
+         the  to be evaluated
     test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
-         Non-zero entries representing known positives in the train set. If this is
-         omitted, the model will be trained on the same entries that are used for
-         evaluation.
+         Non-zero entries representing known positives in the train set. These
+         will be omitted from the score calculations to avoid re-recommending
+         known positives.
     user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
          Each row contains that user's weights over features.
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
@@ -267,9 +267,9 @@ def reciprocal_rank(
     test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
          Non-zero entries representing known positives in the evaluation set.
     train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
-         Non-zero entries representing known positives in the train set. If this is
-         omitted, the model will be trained on the same entries that are used for
-         evaluation.
+         Non-zero entries representing known positives in the train set. These
+         will be omitted from the score calculations to avoid re-recommending
+         known positives.
     user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
          Each row contains that user's weights over features.
     item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
