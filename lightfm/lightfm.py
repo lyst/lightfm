@@ -509,13 +509,12 @@ class LightFM(object):
         model_params.update(hyperparams)
         np.savez_compressed(path, **model_params)
 
-    @classmethod
-    def load(cls, path):
+    @staticmethod
+    def load(path):
         """
         Loads a model saved in the format output by LightFM.save()
         Example usage:
         model = LightFM.load(path_to_saved_model)
-        Trigger rebuild to test.
 
         Parameters
         ----------
@@ -523,7 +522,7 @@ class LightFM(object):
         path: string
             string-path of location to load the model from.
         """
-        new_model = cls()
+        new_model = LightFM()
 
         numpy_model = np.load(path)
         for value in [x for x in numpy_model if x in model_weights]:
