@@ -515,6 +515,7 @@ class LightFM(object):
         Loads a model saved in the format output by LightFM.save()
         Example usage:
         model = LightFM.load(path_to_saved_model)
+        Trigger rebuild to test.
 
         Parameters
         ----------
