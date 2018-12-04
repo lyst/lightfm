@@ -8,8 +8,6 @@ from sklearn.metrics import roc_auc_score
 from lightfm import LightFM
 from lightfm.datasets import fetch_movielens
 
-TEST_FILE_PATH = "./tests/test.npz"
-
 
 def _binarize(dataset):
 
@@ -20,10 +18,11 @@ def _binarize(dataset):
     return dataset
 
 
-def cleanup():
+def _cleanup():
     os.remove(TEST_FILE_PATH)
 
 
+TEST_FILE_PATH = "./tests/test.npz"
 movielens = fetch_movielens()
 train, test = _binarize(movielens["train"]), _binarize(movielens["test"])
 
@@ -41,7 +40,7 @@ def test_all_params_persisted():
         if not callable(ob) and not x.startswith("__"):
             assert x in saved_model_params
 
-    cleanup()
+    _cleanup()
 
 
 def test_model_populated():
@@ -55,7 +54,7 @@ def test_model_populated():
     assert loaded_model.item_embeddings.any()
     assert loaded_model.user_embeddings.any()
 
-    cleanup()
+    _cleanup()
 
 
 def test_model_performance():
@@ -79,4 +78,4 @@ def test_model_performance():
     assert roc_auc_score(train.data, train_predictions) == trn_pred
     assert roc_auc_score(test.data, test_predictions) == tst_pred
 
-    cleanup()
+    _cleanup()
