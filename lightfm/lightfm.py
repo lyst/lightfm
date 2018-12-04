@@ -509,9 +509,12 @@ class LightFM(object):
         model_params.update(hyperparams)
         np.savez_compressed(path, **model_params)
 
-    def load(self, path):
+    @classmethod
+    def load(cls, path):
         """
         Loads a model saved in the format output by LightFM.save()
+        Example usage:
+        model = LightFM.load(path_to_saved_model)
 
         Parameters
         ----------
@@ -519,13 +522,17 @@ class LightFM(object):
         path: string
             string-path of location to load the model from.
         """
+        new_model = cls()
+
         numpy_model = np.load(path)
         for value in [x for x in numpy_model if x in model_weights]:
-            setattr(self, value, numpy_model[value])
+            setattr(new_model, value, numpy_model[value])
 
-        self.set_params(
+        new_model.set_params(
             **{k: v for k, v in numpy_model.items() if k not in model_weights}
         )
+
+        return new_model
 
     def fit(
         self,

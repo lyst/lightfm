@@ -53,15 +53,10 @@ def test_model_populated():
     model.save(TEST_FILE_PATH)
 
     # Load a model onto an uninstanciated object
-    model = LightFM(loss="warp")
+    loaded_model = LightFM.load(TEST_FILE_PATH)
 
-    assert model.item_embeddings == None
-    assert model.user_embeddings == None
-
-    model.load(TEST_FILE_PATH)
-
-    assert model.item_embeddings.any()
-    assert model.user_embeddings.any()
+    assert loaded_model.item_embeddings.any()
+    assert loaded_model.user_embeddings.any()
 
     cleanup()
 
@@ -80,21 +75,11 @@ def test_model_performance():
     assert trn_pred > 0.84
     assert tst_pred > 0.76
 
-    # Performance is worse when trained for 1 epoch
-    model = LightFM()
-    model.fit_partial(train, epochs=1, num_threads=4)
-
-    train_predictions = model.predict(train.row, train.col)
-    test_predictions = model.predict(test.row, test.col)
-
-    assert roc_auc_score(train.data, train_predictions) < 0.84
-    assert roc_auc_score(test.data, test_predictions) < 0.76
-
     # Performance is same as previous when loaded from disk
-    model.load(TEST_FILE_PATH)
+    loaded_model = LightFM.load(TEST_FILE_PATH)
 
-    train_predictions = model.predict(train.row, train.col)
-    test_predictions = model.predict(test.row, test.col)
+    train_predictions = loaded_model.predict(train.row, train.col)
+    test_predictions = loaded_model.predict(test.row, test.col)
 
     assert roc_auc_score(train.data, train_predictions) == trn_pred
     assert roc_auc_score(test.data, test_predictions) == tst_pred
