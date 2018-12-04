@@ -5,7 +5,7 @@ import os
 
 from sklearn.metrics import roc_auc_score
 
-from lightfm import LightFM
+from lightfm.lightfm import LightFM
 from lightfm.datasets import fetch_movielens
 
 
@@ -49,7 +49,7 @@ def test_model_populated():
     model.save(TEST_FILE_PATH)
 
     # Load a model onto an uninstanciated object
-    loaded_model = LightFM.load(TEST_FILE_PATH)
+    loaded_model = LightFM.load_uncached(TEST_FILE_PATH)
 
     assert loaded_model.item_embeddings.any()
     assert loaded_model.user_embeddings.any()
@@ -70,7 +70,7 @@ def test_model_performance():
     tst_pred = roc_auc_score(test.data, test_predictions)
 
     # Performance is same as before when loaded from disk
-    loaded_model = LightFM.load(TEST_FILE_PATH)
+    loaded_model = LightFM.load_uncached(TEST_FILE_PATH)
 
     train_predictions = loaded_model.predict(train.row, train.col)
     test_predictions = loaded_model.predict(test.row, test.col)
