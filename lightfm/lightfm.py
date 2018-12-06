@@ -145,7 +145,7 @@ class LightFM(object):
 
     Note: when supplying feature matrices, an implicit identity feature
     matrix will no longer be used. This may result in a less expressive model:
-    because no per-user features are estiamated, the model may underfit. To
+    because no per-user features are estimated, the model may underfit. To
     combat this, include per-user (per-item) features (that is, an identity
     matrix) as part of the feature matrix you supply.
 
@@ -310,12 +310,12 @@ class LightFM(object):
 
         if n_users > user_features.shape[0]:
             raise Exception(
-                "Number of user feature rows does not equal " "the number of users"
+                "Number of user feature rows does not equal the number of users"
             )
 
         if n_items > item_features.shape[0]:
             raise Exception(
-                "Number of item feature rows does not equal " "the number of items"
+                "Number of item feature rows does not equal the number of items"
             )
 
         # If we already have embeddings, verify that
@@ -755,10 +755,14 @@ class LightFM(object):
 
         user_ids: integer or np.int32 array of shape [n_pairs,]
              single user id or an array containing the user ids for the
-             user-item pairs for which a prediction is to be computed
+             user-item pairs for which a prediction is to be computed. Note
+             that these are LightFM's internal id's, i.e. the index of the
+             user in the interaction matrix used for fitting the model.
         item_ids: np.int32 array of shape [n_pairs,]
              an array containing the item ids for the user-item pairs for which
-             a prediction is to be computed.
+             a prediction is to be computed. Note that these are LightFM's
+             internal id's, i.e. the index of the item in the interaction
+             matrix used for fitting the model.
         user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
              Each row contains that user's weights over features.
         item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional

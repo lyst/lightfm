@@ -14,9 +14,9 @@ obtaining it is quite easy.
 .. code:: python
 
     import numpy as np
-    
+
     from lightfm.datasets import fetch_movielens
-    
+
     data = fetch_movielens(min_rating=5.0)
 
 This downloads the dataset and automatically pre-processes it into
@@ -57,7 +57,7 @@ implicit negatives.
 
 Model training is accomplished via SGD (stochastic gradient descent).
 This means that for every pass through the data --- an epoch --- the
-model learns to fit the data more and more closely. We'll run it for 10
+model learns to fit the data more and more closely. We'll run it for 30
 epochs in this example. We can also run it on multiple cores, so we'll
 set that to 2. (The dataset in this example is too small for that to
 make a difference, but it will matter on bigger datasets.)
@@ -116,28 +116,27 @@ predictions for into the ``predict`` method.
 .. code:: python
 
     def sample_recommendation(model, data, user_ids):
-        
-    
+
         n_users, n_items = data['train'].shape
-    
+
         for user_id in user_ids:
             known_positives = data['item_labels'][data['train'].tocsr()[user_id].indices]
-            
+
             scores = model.predict(user_id, np.arange(n_items))
             top_items = data['item_labels'][np.argsort(-scores)]
-            
+
             print("User %s" % user_id)
             print("     Known positives:")
-            
+
             for x in known_positives[:3]:
                 print("        %s" % x)
-    
+
             print("     Recommended:")
-            
+
             for x in top_items[:3]:
                 print("        %s" % x)
-            
-    sample_recommendation(model, data, [3, 25, 450]) 
+
+    sample_recommendation(model, data, [3, 25, 450])
 
 
 .. parsed-literal::
@@ -169,5 +168,3 @@ predictions for into the ``predict`` method.
             Independence Day (ID4) (1996)
             Scream (1996)
             Ransom (1996)
-
-
