@@ -510,7 +510,7 @@ class LightFM(object):
         np.savez_compressed(path, **model_params)
 
     @staticmethod
-    def load_uncached(path):
+    def load(path):
         """
         Loads a model saved in the format output by LightFM.save()
         Example usage:
