@@ -59,21 +59,13 @@ class Cythonize(Command):
              openmp.omp_init_lock(&THREAD_LOCK)
         """)
 
-        params = (('no_openmp', dict(openmp_import='',
+        params = [('no_openmp', dict(openmp_import='',
                                      nogil_block='with nogil:',
                                      range_block='range',
                                      thread_num='0',
                                      lock_init='',
                                      lock_acquire='',
-                                     lock_release='')),
-                  ('openmp', dict(openmp_import=openmp_import,
-                                  nogil_block='with nogil, parallel(num_threads=num_threads):',
-                                  range_block='prange',
-                                  thread_num='openmp.omp_get_thread_num()',
-                                  lock_init=lock_init,
-                                  lock_acquire='openmp.omp_set_lock(&THREAD_LOCK)',
-                                  lock_release='openmp.omp_unset_lock(&THREAD_LOCK)')))
-
+                                     lock_release=''))]
         file_dir = os.path.join(os.path.dirname(__file__),
                                 'lightfm')
 
@@ -93,10 +85,7 @@ class Cythonize(Command):
         self.generate_pyx()
 
         cythonize([Extension("lightfm._lightfm_fast_no_openmp",
-                             ['lightfm/_lightfm_fast_no_openmp.pyx']),
-                   Extension("lightfm._lightfm_fast_openmp",
-                             ['lightfm/_lightfm_fast_openmp.pyx'],
-                             extra_link_args=['-fopenmp'])])
+                             ['lightfm/_lightfm_fast_no_openmp.pyx'])])
 
 
 class Clean(Command):
