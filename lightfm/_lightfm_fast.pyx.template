@@ -31,8 +31,8 @@ cdef extern from "stdlib.h" nogil:
     ctypedef void const_void "const void"
     void qsort(void *base, int nmemb, int size,
                int(*compar)(const_void *, const_void *)) nogil
-    void qsort_r(void *base, int nmemb, int size, const_void *arg,
-               int(*compar)(const_void *, const_void *, const_void *)) nogil
+    void qsort_r(void *base, int nmemb, int size,
+               int(*compar)(const_void *, const_void *, void *), void *arg) nogil
     void* bsearch(const void *key, void *base, int nmemb, int size,
                   int(*compar)(const_void *, const_void *)) nogil
 
@@ -1201,7 +1201,7 @@ def fit_bpr(CSRMatrix item_features,
                item_alpha,
                user_alpha)
 
-cdef int pred_compar(void *arg, const_void *a, const_void* b) nogil:
+cdef int pred_compar(const_void *a, const_void* b, void* arg) nogil:
     cdef flt x = (<flt*> arg)[(<int*>a)[0]]
     cdef flt y = (<flt*> arg)[(<int*>b)[0]]
 
@@ -1322,7 +1322,7 @@ def predict_lightfm_with_cache(CSRMatrix item_features,
                     continue
 
                 pred_table[top_k] = i
-                qsort_r(pred_table, top_k+1, sizeof(int), <const_void*>pred_value, pred_compar)
+                qsort_r(pred_table, top_k+1, sizeof(int), pred_compar, <void*>pred_value)
                 min_value = pred_value[pred_table[top_k-1]]
 
         for t in range(top_k):

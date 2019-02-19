@@ -13,7 +13,7 @@ from lightfm import __version__ as version  # NOQA
 
 
 def define_extensions(use_openmp):
-    compile_args = ['-ffast-math']
+    compile_args = ['-ffast-math', '-O3']
 
     # There are problems with illegal ASM instructions
     # when using the Anaconda distribution (at least on OSX).
