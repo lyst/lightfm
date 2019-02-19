@@ -2,12 +2,12 @@
 from __future__ import print_function
 
 import numpy as np
-
 import scipy.sparse as sp
 
 from ._lightfm_fast import (
     CSRMatrix,
     FastLightFM,
+    FastLightFMGlobals,
     fit_bpr,
     fit_logistic,
     fit_warp,
@@ -20,6 +20,7 @@ __all__ = ["LightFM"]
 
 CYTHON_DTYPE = np.float32
 
+fg = FastLightFMGlobals()
 
 class LightFM(object):
     """
@@ -742,7 +743,7 @@ class LightFM(object):
             )
 
     def predict(
-        self, user_ids, item_ids, item_features=None, user_features=None, num_threads=1
+        self, user_ids, item_ids, item_features=None, user_features=None, top_k=10, num_threads=1
     ):
         """
         Compute the recommendation score for user-item pairs.
@@ -778,7 +779,6 @@ class LightFM(object):
             Numpy array containing the recommendation scores for pairs defined
             by the inputs.
         """
-
         self._check_initialized()
 
         if not isinstance(user_ids, np.ndarray):
@@ -812,8 +812,10 @@ class LightFM(object):
         )
 
         lightfm_data = self._get_lightfm_data()
+        predictions = np.empty(len(user_ids), dtype=np.float32)
+        top_k_indice = np.zeros(top_k, dtype=int)
 
-        predictions = np.empty(len(user_ids), dtype=np.float64)
+        global fg
 
         predict_lightfm(
             CSRMatrix(item_features),
@@ -821,11 +823,14 @@ class LightFM(object):
             user_ids,
             item_ids,
             predictions,
+            top_k_indice,
             lightfm_data,
+            fg,
+            top_k,
             num_threads,
         )
 
-        return predictions
+        return predictions, top_k_indice
 
     def _check_test_train_intersections(self, test_mat, train_mat):
         if train_mat is not None:
