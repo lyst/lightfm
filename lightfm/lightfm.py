@@ -2,18 +2,19 @@
 from __future__ import print_function
 
 import numpy as np
-
 import scipy.sparse as sp
 
 from ._lightfm_fast import (
     CSRMatrix,
     FastLightFM,
+    FastLightFMCache,
     fit_bpr,
     fit_logistic,
     fit_warp,
     fit_warp_kos,
     predict_lightfm,
     predict_ranks,
+    predict_lightfm_with_cache
 )
 
 __all__ = ["LightFM"]
@@ -222,6 +223,7 @@ class LightFM(object):
             self.random_state = np.random.RandomState(random_state)
 
         self._reset_state()
+        self.cache = None
 
     def _reset_state(self):
 
@@ -740,6 +742,114 @@ class LightFM(object):
                 self.user_alpha,
                 num_threads,
             )
+
+
+    def initialize_cache(self, item_features, user_features):
+        if item_features == None or user_features == None:
+            return
+
+        lightfm_data = self._get_lightfm_data()
+        self.cache = FastLightFMCache(item_features.shape[0],
+                user_features.shape[0],
+                self.no_components + 1)
+
+
+    def predict_top_k_with_cache(
+        self, user_ids, item_ids, item_features=None, user_features=None, top_k=10, num_threads=1
+    ):
+        """
+        Compute the recommendation score for user-item pairs.
+
+        For details on how to use feature matrices, see the documentation
+        on the :class:`lightfm.LightFM` class.
+
+        Arguments
+        ---------
+        user_ids: integer or np.int32 array of shape [n_pairs,]
+             single user id or an array containing the user ids for the
+             user-item pairs for which a prediction is to be computed. Note
+             that these are LightFM's internal id's, i.e. the index of the
+             user in the interaction matrix used for fitting the model.
+        item_ids: np.int32 array of shape [n_pairs,]
+             an array containing the item ids for the user-item pairs for which
+             a prediction is to be computed. Note that these are LightFM's
+             internal id's, i.e. the index of the item in the interaction
+             matrix used for fitting the model.
+        user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+             Each row contains that user's weights over features.
+        item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+             Each row contains that item's weights over features.
+        num_threads: int, optional
+             Number of parallel computation threads to use. Should
+             not be higher than the number of physical cores.
+
+        Returns
+        -------
+
+        np.float32 array of shape [n_pairs,]
+            Numpy array containing the recommendation scores for pairs defined
+            by the inputs.
+        """
+
+        self._check_initialized()
+
+        if not isinstance(user_ids, np.ndarray):
+            user_ids = np.repeat(np.int32(user_ids), len(item_ids))
+
+        if isinstance(item_ids, (list, tuple)):
+            item_ids = np.array(item_ids, dtype=np.int32)
+
+        assert len(user_ids) == len(item_ids)
+
+        if user_ids.dtype != np.int32:
+            user_ids = user_ids.astype(np.int32)
+        if item_ids.dtype != np.int32:
+            item_ids = item_ids.astype(np.int32)
+
+        if num_threads < 1:
+            raise ValueError("Number of threads must be 1 or larger.")
+
+        if user_ids.min() < 0 or item_ids.min() < 0:
+            raise ValueError(
+                "User or item ids cannot be negative. "
+                "Check your inputs for negative numbers "
+                "or very large numbers that can overflow."
+            )
+
+        if self.cache == None:
+            raise ValueError(
+            "Cache is not avalible,"
+            "check if you have user features and item features"
+            "from your model and you called initialize_cache"
+            "when load the model, if they meant to be not avaliable"
+            "use predict instead. ")
+
+        n_users = user_ids.max() + 1
+        n_items = item_ids.max() + 1
+
+        (user_features, item_features) = self._construct_feature_matrices(
+            n_users, n_items, user_features, item_features
+        )
+
+        lightfm_data = self._get_lightfm_data()
+
+        predictions = np.empty(len(user_ids), dtype=np.float64)
+        top_k_indice = np.zeros(top_k, dtype=int)
+
+        predict_lightfm_with_cache(
+            CSRMatrix(item_features),
+            CSRMatrix(user_features),
+            user_ids,
+            item_ids,
+            predictions,
+            top_k_indice,
+            top_k,
+            lightfm_data,
+            self.cache,
+            num_threads,
+        )
+
+        return predictions, top_k_indice
 
     def predict(
         self, user_ids, item_ids, item_features=None, user_features=None, num_threads=1

@@ -5,6 +5,7 @@ import numpy as np
 
 cimport cython.operator.dereference as deref
 from libc.stdlib cimport free, malloc
+from libc.string cimport memset
 
 {openmp_import}
 
@@ -30,6 +31,8 @@ cdef extern from "stdlib.h" nogil:
     ctypedef void const_void "const void"
     void qsort(void *base, int nmemb, int size,
                int(*compar)(const_void *, const_void *)) nogil
+    void qsort_r(void *base, int nmemb, int size, const_void *arg,
+               int(*compar)(const_void *, const_void *, const_void *)) nogil
     void* bsearch(const void *key, void *base, int nmemb, int size,
                   int(*compar)(const_void *, const_void *)) nogil
 
@@ -181,6 +184,23 @@ cdef class CSRMatrix:
 
         return self.indptr[row + 1]
 
+cdef class FastLightFMCache:
+    cdef flt *user_repr
+    cdef int *user_repr_cached
+    cdef flt *item_repr
+    cdef int *item_repr_cached
+    cdef int stride
+
+    def __init__(self, int num_of_items, int num_of_users, int stride):
+        self.user_repr = <flt*>malloc(sizeof(flt) * num_of_users * stride)
+        self.user_repr_cached = <int*>malloc(sizeof(int) * num_of_users)
+        memset(self.user_repr_cached, 0, sizeof(int) * num_of_users)
+
+        self.item_repr = <flt*>malloc(sizeof(flt) * num_of_items * stride)
+        self.item_repr_cached = <int*>malloc(sizeof(int) * num_of_items)
+        memset(self.item_repr_cached, 0, sizeof(int) * num_of_items)
+
+        self.stride = stride
 
 cdef class FastLightFM:
     """
@@ -1181,6 +1201,16 @@ def fit_bpr(CSRMatrix item_features,
                item_alpha,
                user_alpha)
 
+cdef int pred_compar(void *arg, const_void *a, const_void* b) nogil:
+    cdef flt x = (<flt*> arg)[(<int*>a)[0]]
+    cdef flt y = (<flt*> arg)[(<int*>b)[0]]
+
+    if x > y:
+        return -1
+    elif x < y:
+        return 1
+    else:
+        return 0
 
 def predict_lightfm(CSRMatrix item_features,
                     CSRMatrix user_features,
@@ -1227,6 +1257,79 @@ def predict_lightfm(CSRMatrix item_features,
 
         free(user_repr)
         free(it_repr)
+
+
+def predict_lightfm_with_cache(CSRMatrix item_features,
+                    CSRMatrix user_features,
+                    int[::1] user_ids,
+                    int[::1] item_ids,
+                    double[::1] predictions,
+                    long[::1] top_k_indice,
+                    long top_k,
+                    FastLightFM lightfm,
+                    FastLightFMCache lightfm_cache,
+                    int num_threads):
+    """
+    Generate predictions.
+    """
+    cdef int i, no_examples, start_idx
+    cdef flt min_value, pred
+    no_examples = predictions.shape[0]
+
+    with nogil:
+        start_idx = 0
+        min_value = 0
+        pred = 0
+        pred_table = <int *> malloc(sizeof(int) * (top_k + 1))
+        pred_value = <flt *>malloc(sizeof(flt) * no_examples)
+
+        for i in range(no_examples):
+            if lightfm_cache.user_repr_cached[user_ids[i]] == 0:
+                compute_representation(user_features,
+                                       lightfm.user_features,
+                                       lightfm.user_biases,
+                                       lightfm,
+                                       user_ids[i],
+                                       lightfm.user_scale,
+                                       &lightfm_cache.user_repr[lightfm_cache.stride*user_ids[i]])
+                lightfm_cache.user_repr_cached[user_ids[i]] = 1
+
+            if lightfm_cache.item_repr_cached[item_ids[i]] == 0:
+                compute_representation(item_features,
+                                       lightfm.item_features,
+                                       lightfm.item_biases,
+                                       lightfm,
+                                       item_ids[i],
+                                       lightfm.item_scale,
+                                       &lightfm_cache.item_repr[lightfm_cache.stride*item_ids[i]])
+                lightfm_cache.item_repr_cached[item_ids[i]] = 1
+
+            pred = compute_prediction_from_repr(&lightfm_cache.user_repr[lightfm_cache.stride*user_ids[i]],
+                                                &lightfm_cache.item_repr[lightfm_cache.stride*item_ids[i]],
+                                                lightfm.no_components)
+            predictions[i] = pred_value[i] = pred
+
+            if start_idx < top_k:
+                if start_idx == 0:
+                    min_value = pred
+
+                pred_table[start_idx] = i
+                start_idx = start_idx + 1
+                if pred < min_value:
+                    min_value = pred
+            else:
+                if pred <= min_value:
+                    continue
+
+                pred_table[top_k] = i
+                qsort_r(pred_table, top_k+1, sizeof(int), <const_void*>pred_value, pred_compar)
+                min_value = pred_value[pred_table[top_k-1]]
+
+        for t in range(top_k):
+            top_k_indice[t] = pred_table[t]
+
+        free(pred_value)
+        free(pred_table)
 
 
 def predict_ranks(CSRMatrix item_features,
