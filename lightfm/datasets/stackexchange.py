@@ -107,6 +107,8 @@ def fetch_stackexchange(
         ),
         shape=data["interactions_shape"].flatten(),
     )
+    interactions.sum_duplicates()
+
     tag_features_mat = sp.coo_matrix(
         (data["features_data"], (data["features_row"], data["features_col"])),
         shape=data["features_shape"].flatten(),
