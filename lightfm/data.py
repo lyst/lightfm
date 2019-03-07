@@ -434,7 +434,7 @@ class Dataset(object):
         Returns
         -------
 
-        (user id map, user feature map, item id map, item id map): tuple of dictionaries
+        (user id map, user feature map, item id map, item feature map): tuple of dictionaries
         """
 
         return (
