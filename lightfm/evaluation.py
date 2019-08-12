@@ -165,6 +165,86 @@ def recall_at_k(
 
     return hit / retrieved
 
+def average_precision_at_k(
+    model,
+    test_interactions,
+    train_interactions=None,
+    k=10,
+    user_features=None,
+    item_features=None,
+    preserve_rows=False,
+    num_threads=1,
+    check_intersections=True,
+):
+    """
+    Measure the average precision at k metric for a model.
+    A perfect score is 1.0.
+    Parameters
+    ----------
+    model: LightFM instance
+         the fitted model to be evaluated
+    test_interactions: np.float32 csr_matrix of shape [n_users, n_items]
+         Non-zero entries representing known positives in the evaluation set.
+    train_interactions: np.float32 csr_matrix of shape [n_users, n_items], optional
+         Non-zero entries representing known positives in the train set. These
+         will be omitted from the score calculations to avoid re-recommending
+         known positives.
+    k: integer, optional
+         The k parameter.
+    user_features: np.float32 csr_matrix of shape [n_users, n_user_features], optional
+         Each row contains that user's weights over features.
+    item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
+         Each row contains that item's weights over features.
+    preserve_rows: boolean, optional
+         When False (default), the number of rows in the output will be equal
+         to the number of users with interactions in the evaluation set.
+         When True, the number of rows in the output will be equal to the
+         number of users.
+    num_threads: int, optional
+         Number of parallel computation threads to use. Should
+         not be higher than the number of physical cores.
+    check_intersections: bool, optional, True by default,
+        Only relevant when train_interactions are supplied.
+        A flag that signals whether the test and train matrices should be checked
+        for intersections to prevent optimistic ranks / wrong evaluation / bad data split.
+    Returns
+    -------
+    np.array of shape [n_users with interactions or n_users,]
+         Numpy array containing precision@k scores for each user. If there are
+         no interactions for a given user the returned precision will be 0.
+    """
+
+    if num_threads < 1:
+        raise ValueError("Number of threads must be 1 or larger.")
+
+    ranks = model.predict_rank(
+        test_interactions,
+        train_interactions=train_interactions,
+        user_features=user_features,
+        item_features=item_features,
+        num_threads=num_threads,
+        check_intersections=check_intersections,
+    )
+    
+    res = np.zeros(test_interactions.shape[0], dtype=np.float32)
+    
+    for i in range(1, k+1):
+        tmp = ranks.copy()
+        tmp.data = np.less(tmp.data, i, tmp.data)
+        precision_at_i = np.squeeze(np.array(tmp.sum(axis=1))) / i
+        
+        tmp = ranks.copy()
+        tmp.data = np.equal(tmp.data, i - 1, tmp.data)
+        relevant_at_i = np.squeeze(np.array(tmp.sum(axis=1)))
+        
+        res += precision_at_i * relevant_at_i
+        
+    res = res / np.minimum(np.maximum(test_matrix.getnnz(axis=1), 1), k)
+
+    if not preserve_rows:
+        res = res[test_interactions.getnnz(axis=1) > 0]
+
+    return res
 
 def auc_score(
     model,
