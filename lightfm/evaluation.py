@@ -165,6 +165,7 @@ def recall_at_k(
 
     return hit / retrieved
 
+
 def average_precision_at_k(
     model,
     test_interactions,
@@ -225,26 +226,27 @@ def average_precision_at_k(
         num_threads=num_threads,
         check_intersections=check_intersections,
     )
-    
+
     res = np.zeros(test_interactions.shape[0], dtype=np.float32)
-    
-    for i in range(1, k+1):
+
+    for i in range(1, k + 1):
         tmp = ranks.copy()
         tmp.data = np.less(tmp.data, i, tmp.data)
         precision_at_i = np.squeeze(np.array(tmp.sum(axis=1))) / i
-        
+
         tmp = ranks.copy()
         tmp.data = np.equal(tmp.data, i - 1, tmp.data)
         relevant_at_i = np.squeeze(np.array(tmp.sum(axis=1)))
-        
+
         res += precision_at_i * relevant_at_i
-        
-    res = res / np.minimum(np.maximum(test_matrix.getnnz(axis=1), 1), k)
+
+    res = res / np.minimum(np.maximum(train_interactions.getnnz(axis=1), 1), k)
 
     if not preserve_rows:
         res = res[test_interactions.getnnz(axis=1) > 0]
 
     return res
+
 
 def auc_score(
     model,
