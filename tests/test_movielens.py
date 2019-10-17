@@ -54,9 +54,26 @@ def _binarize(dataset):
     return dataset
 
 
+def _get_movielens_groups(dataset):
+    import re
+    n_items = len(dataset)
+    year_rx = re.compile(r"\((\d\d\d)\d\)")
+    release_decade = [year_rx.search(a).group(1)
+                      if a != 'unknown' else 'u' for a in dataset]
+    unique_decades = dict([(r, i) for (i, r) in
+                           enumerate(np.unique(release_decade))])
+    groups = [unique_decades[a] for a in release_decade]
+    data = np.repeat(1.0, n_items).astype(np.float32)
+    rows = groups
+    # rows = np.repeat(1.0, n_items).astype(np.float32)
+    cols = list(range(n_items))
+    return sp.csr_matrix((data, (rows, cols)), shape=(len(unique_decades), n_items))
+
+
 movielens = fetch_movielens()
 train, test = _binarize(movielens["train"]), _binarize(movielens["test"])
 
+item_groups = _get_movielens_groups(movielens['item_feature_labels'])
 
 (train_user_features, train_item_features) = _get_feature_matrices(train)
 (test_user_features, test_item_features) = _get_feature_matrices(test)
@@ -133,12 +150,27 @@ def test_warp_precision():
     (train_precision, test_precision, full_train_auc, full_test_auc) = _get_metrics(
         model, train, test
     )
-
     assert train_precision > 0.45
     assert test_precision > 0.07
 
     assert full_train_auc > 0.94
     assert full_test_auc > 0.9
+
+
+def test_warp_groups():
+
+    model = LightFM(learning_rate=0.05, loss="warp", random_state=SEED)
+
+    model.fit_partial(train, item_groups=item_groups, epochs=10)
+
+    (train_precision, test_precision, full_train_auc, full_test_auc) = _get_metrics(
+        model, train, test
+    )
+    assert train_precision > 0.45
+    assert test_precision > 0.07
+
+    assert full_train_auc > 0.92
+    assert full_test_auc > 0.89
 
 
 def test_warp_precision_high_interaction_values():

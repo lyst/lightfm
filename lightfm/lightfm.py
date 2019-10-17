@@ -479,6 +479,7 @@ class LightFM(object):
         interactions,
         user_features=None,
         item_features=None,
+        item_groups=None,
         sample_weight=None,
         epochs=1,
         num_threads=1,
@@ -501,6 +502,9 @@ class LightFM(object):
              Each row contains that user's weights over features.
         item_features: np.float32 csr_matrix of shape [n_items, n_item_features], optional
              Each row contains that item's weights over features.
+        item_groups: np.float32 csr_matrix of shape [n_groups, n_items], optional
+             Each row contains the items belonging to that group. Only used for
+             WARP loss currently.
         sample_weight: np.float32 coo_matrix of shape [n_users, n_items], optional
              matrix with entries expressing weights of individual
              interactions from the interactions matrix.
@@ -534,6 +538,7 @@ class LightFM(object):
             interactions,
             user_features=user_features,
             item_features=item_features,
+            item_groups=item_groups,
             sample_weight=sample_weight,
             epochs=epochs,
             num_threads=num_threads,
@@ -545,6 +550,7 @@ class LightFM(object):
         interactions,
         user_features=None,
         item_features=None,
+        item_groups=None,
         sample_weight=None,
         epochs=1,
         num_threads=1,
@@ -633,12 +639,15 @@ class LightFM(object):
 
         if num_threads < 1:
             raise ValueError("Number of threads must be 1 or larger.")
+        if item_groups is None:
+            item_groups = sp.csr_matrix([], dtype=CYTHON_DTYPE)
 
         for _ in self._progress(epochs, verbose=verbose):
             self._run_epoch(
                 item_features,
                 user_features,
                 interactions,
+                item_groups,
                 sample_weight_data,
                 num_threads,
                 self.loss,
@@ -653,6 +662,7 @@ class LightFM(object):
         item_features,
         user_features,
         interactions,
+        item_groups,
         sample_weight,
         num_threads,
         loss,
@@ -680,6 +690,7 @@ class LightFM(object):
                 CSRMatrix(item_features),
                 CSRMatrix(user_features),
                 positives_lookup,
+                CSRMatrix(item_groups),
                 interactions.row,
                 interactions.col,
                 interactions.data,

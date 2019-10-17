@@ -8,7 +8,6 @@ from libc.stdlib cimport free, malloc
 
 {openmp_import}
 
-
 ctypedef float flt
 
 # Allow sequential code blocks in a parallel setting.
@@ -109,6 +108,10 @@ cdef int int_max(int x, int y) nogil:
 cdef struct Pair:
     int idx
     flt val
+
+cdef struct GroupData:
+    int size
+    int offset
 
 
 cdef int reverse_pair_compare(const_void *a, const_void *b) nogil:
@@ -282,6 +285,32 @@ cdef inline int in_positives(int item_id, int user_id, CSRMatrix interactions) n
         return 0
     else:
         return 1
+
+
+cdef inline int* gen_item_group_map(CSRMatrix item_groups) nogil:
+    cdef int group_row_start, group_row_end, item_id, r, i
+
+    item_group_map = <int *>malloc(sizeof(int) * item_groups.cols)
+    for r in {range_block}(item_groups.rows):
+        group_row_start = item_groups.get_row_start(r)
+        group_row_end = item_groups.get_row_end(r)
+        for i in {range_block}(group_row_end - group_row_start):
+            item_id = item_groups.indices[group_row_start + i]
+            item_group_map[item_id] = r
+    return item_group_map
+
+
+cdef inline GroupData *get_group_size(int group, CSRMatrix item_groups) nogil:
+     cdef int group_row_start, group_row_end
+     cdef GroupData *g
+     g = <GroupData *>malloc(sizeof(GroupData))
+
+     group_row_start = item_groups.get_row_start(group)
+     group_row_end = item_groups.get_row_end(group)
+     # get size and offset of group
+     g.size = group_row_end - group_row_start
+     g.offset = group_row_start
+     return g
 
 
 cdef inline void compute_representation(CSRMatrix features,
@@ -784,6 +813,7 @@ def fit_logistic(CSRMatrix item_features,
 def fit_warp(CSRMatrix item_features,
              CSRMatrix user_features,
              CSRMatrix interactions,
+             CSRMatrix item_groups,
              int[::1] user_ids,
              int[::1] item_ids,
              flt[::1] Y,
@@ -801,12 +831,16 @@ def fit_warp(CSRMatrix item_features,
 
     cdef int i, no_examples, user_id, positive_item_id, gamma
     cdef int negative_item_id, sampled, row
+    cdef int group, rand_n, item_id, r
+    cdef GroupData *group_data
     cdef double positive_prediction, negative_prediction
     cdef double loss, MAX_LOSS
+    cdef bint use_groups
     cdef flt weight
     cdef flt *user_repr
     cdef flt *pos_it_repr
     cdef flt *neg_it_repr
+    cdef int *item_group_map
     cdef unsigned int[::1] random_states
 
     random_states = random_state.randint(0,
@@ -816,7 +850,13 @@ def fit_warp(CSRMatrix item_features,
     no_examples = Y.shape[0]
     MAX_LOSS = 10.0
 
+    use_groups = item_groups.nnz > 0
+
+
     {nogil_block}
+
+        if use_groups:
+            item_group_map = gen_item_group_map(item_groups)
 
         user_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
         pos_it_repr = <flt *>malloc(sizeof(flt) * (lightfm.no_components + 1))
@@ -828,6 +868,9 @@ def fit_warp(CSRMatrix item_features,
             user_id = user_ids[row]
             positive_item_id = item_ids[row]
 
+            if use_groups:
+                group = item_group_map[positive_item_id]
+                group_data = get_group_size(group, item_groups)
             if not Y[row] > 0:
                 continue
 
@@ -857,8 +900,13 @@ def fit_warp(CSRMatrix item_features,
             while sampled < lightfm.max_sampled:
 
                 sampled = sampled + 1
-                negative_item_id = (rand_r(&random_states[{thread_num}])
-                                    % item_features.rows)
+                if use_groups:
+                    rand_n = (rand_r(&random_states[{thread_num}])
+                              % group_data.size)
+                    negative_item_id = item_groups.indices[group_data.offset + rand_n]
+                else:
+                    negative_item_id = (rand_r(&random_states[{thread_num}])
+                                        % item_features.rows)
 
                 compute_representation(item_features,
                                        lightfm.item_features,
@@ -906,6 +954,8 @@ def fit_warp(CSRMatrix item_features,
         free(user_repr)
         free(pos_it_repr)
         free(neg_it_repr)
+        free(item_group_map)
+        free(group_data)
 
     regularize(lightfm,
                item_alpha,
@@ -1383,3 +1433,10 @@ def __test_in_positives(int row, int col, CSRMatrix mat):
         return True
     else:
         return False
+
+    # Expose test functions
+def test_item_group_map(int n, CSRMatrix mat):
+    cdef int *grp
+    grp = gen_item_group_map(mat)
+    val = grp[n]
+    return val
