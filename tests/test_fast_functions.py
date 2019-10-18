@@ -21,6 +21,7 @@ def test_item_groups():
     data = np.repeat(1.0, 5)
     rows = [0, 1, 3, 2, 1]
     cols = [0, 1, 2, 3, 4]
+    random_state = np.random.RandomState()
     mat = sp.csr_matrix((data, (rows, cols)), shape=(4, 5)).astype(np.float32)
-    res = _lightfm_fast.test_item_group_map(2, _lightfm_fast.CSRMatrix(mat))
+    res = _lightfm_fast.test_item_group_map(2, _lightfm_fast.CSRMatrix(mat), random_state)
     assert res == 3

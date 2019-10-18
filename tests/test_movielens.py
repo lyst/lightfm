@@ -65,7 +65,6 @@ def _get_movielens_groups(dataset):
     groups = [unique_decades[a] for a in release_decade]
     data = np.repeat(1.0, n_items).astype(np.float32)
     rows = groups
-    # rows = np.repeat(1.0, n_items).astype(np.float32)
     cols = list(range(n_items))
     return sp.csr_matrix((data, (rows, cols)), shape=(len(unique_decades), n_items))
 
@@ -154,7 +153,7 @@ def test_warp_precision():
     assert test_precision > 0.07
 
     assert full_train_auc > 0.94
-    assert full_test_auc > 0.9
+    assert full_test_auc > 0.91
 
 
 def test_warp_groups():
@@ -170,7 +169,7 @@ def test_warp_groups():
     assert test_precision > 0.07
 
     assert full_train_auc > 0.92
-    assert full_test_auc > 0.89
+    assert full_test_auc > 0.9
 
 
 def test_warp_precision_high_interaction_values():
