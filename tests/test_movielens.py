@@ -56,12 +56,13 @@ def _binarize(dataset):
 
 def _get_movielens_groups(dataset):
     import re
+
     n_items = len(dataset)
     year_rx = re.compile(r"\((\d\d\d)\d\)")
-    release_decade = [year_rx.search(a).group(1)
-                      if a != 'unknown' else 'u' for a in dataset]
-    unique_decades = dict([(r, i) for (i, r) in
-                           enumerate(np.unique(release_decade))])
+    release_decade = [
+        year_rx.search(a).group(1) if a != "unknown" else "u" for a in dataset
+    ]
+    unique_decades = dict([(r, i) for (i, r) in enumerate(np.unique(release_decade))])
     groups = [unique_decades[a] for a in release_decade]
     data = np.repeat(1.0, n_items).astype(np.float32)
     rows = groups
@@ -72,7 +73,7 @@ def _get_movielens_groups(dataset):
 movielens = fetch_movielens()
 train, test = _binarize(movielens["train"]), _binarize(movielens["test"])
 
-item_groups = _get_movielens_groups(movielens['item_feature_labels'])
+item_groups = _get_movielens_groups(movielens["item_feature_labels"])
 
 (train_user_features, train_item_features) = _get_feature_matrices(train)
 (test_user_features, test_item_features) = _get_feature_matrices(test)
