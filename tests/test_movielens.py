@@ -354,7 +354,7 @@ def test_get_representations():
 def test_movielens_both_accuracy():
     """
     Accuracy with both genre metadata and item-specific
-    features shoul be no worse than with just item-specific
+    features should be no worse than with just item-specific
     features (though more training may be necessary).
     """
 
