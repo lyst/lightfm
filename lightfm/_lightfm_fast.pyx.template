@@ -1186,7 +1186,7 @@ def predict_lightfm(CSRMatrix item_features,
                     CSRMatrix user_features,
                     int[::1] user_ids,
                     int[::1] item_ids,
-                    double[::1] predictions,
+                    flt[::1] predictions,
                     FastLightFM lightfm,
                     int num_threads):
     """
