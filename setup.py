@@ -6,33 +6,65 @@ import textwrap
 
 from setuptools import Command, Extension, setup
 from setuptools.command.test import test as TestCommand
+from setuptools.command.build_ext import build_ext
 
 # Import version even when extensions are not yet built
 __builtins__.__LIGHTFM_SETUP__ = True
 from lightfm import __version__ as version  # NOQA
 
 
+class LightfmBuildExt(build_ext):
+    """
+    Configures compilation options depending on compiler.
+    """
+
+    def make_compiler_args(self):
+        compiler = self.compiler.compiler_type
+        compile_args = []
+        link_args = []
+
+        if compiler == 'msvc':
+            if use_openmp:
+                compile_args.append('-openmp')
+
+        elif compiler in ('gcc', 'unix'):
+            compile_args.append('-ffast-math')
+
+            # There are problems with illegal ASM instructions
+            # when using the Anaconda distribution (at least on OSX).
+            # This could be because Anaconda uses its own assembler?
+            # To work around this we do not add -march=native if we
+            # know we're dealing with Anaconda
+            if 'anaconda' not in sys.version.lower():
+                compile_args.append('-march=native')
+
+            if use_openmp:
+                compile_args.append('-fopenmp')
+                link_args.append('-fopenmp')
+
+        print('Use openmp:', use_openmp)
+        print('Compiler:', compiler)
+        print('Compile args:', compile_args)
+        print('Link args:', link_args)
+
+        return compile_args, link_args
+
+    def build_extensions(self):
+        compile_args, link_args = self.make_compiler_args()
+        for extension in self.extensions:
+            extension.extra_compile_args.extend(compile_args)
+            extension.extra_link_args.extend(link_args)
+        super().build_extensions()
+
+
 def define_extensions(use_openmp):
-    compile_args = ['-ffast-math']
-
-    # There are problems with illegal ASM instructions
-    # when using the Anaconda distribution (at least on OSX).
-    # This could be because Anaconda uses its own assembler?
-    # To work around this we do not add -march=native if we
-    # know we're dealing with Anaconda
-    if 'anaconda' not in sys.version.lower():
-        compile_args.append('-march=native')
-
     if not use_openmp:
         print('Compiling without OpenMP support.')
         return [Extension("lightfm._lightfm_fast_no_openmp",
-                          ['lightfm/_lightfm_fast_no_openmp.c'],
-                          extra_compile_args=compile_args)]
+                          ['lightfm/_lightfm_fast_no_openmp.c'])]
     else:
         return [Extension("lightfm._lightfm_fast_openmp",
-                          ['lightfm/_lightfm_fast_openmp.c'],
-                          extra_link_args=["-fopenmp"],
-                          extra_compile_args=compile_args + ['-fopenmp'])]
+                          ['lightfm/_lightfm_fast_openmp.c'])]
 
 
 class Cythonize(Command):
@@ -95,8 +127,7 @@ class Cythonize(Command):
         cythonize([Extension("lightfm._lightfm_fast_no_openmp",
                              ['lightfm/_lightfm_fast_no_openmp.pyx']),
                    Extension("lightfm._lightfm_fast_openmp",
-                             ['lightfm/_lightfm_fast_openmp.pyx'],
-                             extra_link_args=['-fopenmp'])])
+                             ['lightfm/_lightfm_fast_openmp.pyx'])])
 
 
 class Clean(Command):
@@ -144,7 +175,7 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
-use_openmp = not sys.platform.startswith('darwin') and not sys.platform.startswith('win')
+use_openmp = not sys.platform.startswith('darwin')
 
 setup(
     name='lightfm',
@@ -157,7 +188,7 @@ setup(
     package_data={'': ['*.c']},
     install_requires=['numpy', 'scipy>=0.17.0', 'requests', 'scikit-learn'],
     tests_require=['pytest', 'requests', 'scikit-learn'],
-    cmdclass={'test': PyTest, 'cythonize': Cythonize, 'clean': Clean},
+    cmdclass={'test': PyTest, 'cythonize': Cythonize, 'clean': Clean, 'build_ext': LightfmBuildExt},
     author='Lyst Ltd (Maciej Kula)',
     author_email='data@ly.st',
     license='MIT',
