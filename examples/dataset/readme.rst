@@ -190,7 +190,7 @@ Having created the mapping, we build the interaction matrix:
             with 1149780 stored elements in COOrdinate format>
 
 This is main input into a LightFM model: it encodes the interactions
-betwee users and items.
+between users and items.
 
 Since we have item features, we can also create the item features
 matrix:
