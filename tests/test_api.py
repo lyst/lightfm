@@ -89,7 +89,7 @@ def test_predict():
         assert np.allclose(scores_arr, scores_int)
 
     with pytest.raises(AssertionError):
-        model.predict('foo', np.arange(no_items))
+        model.predict("foo", np.arange(no_items))
 
 
 def test_input_dtypes():
