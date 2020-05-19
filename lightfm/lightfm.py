@@ -781,7 +781,7 @@ class LightFM(object):
 
         self._check_initialized()
 
-        if not isinstance(user_ids, np.ndarray) and isinstance(user_ids, int):
+        if isinstance(user_ids, int):
             user_ids = np.repeat(np.int32(user_ids), len(item_ids))
 
         assert isinstance(user_ids, np.ndarray)
