@@ -88,7 +88,7 @@ def test_predict():
         scores_int = model.predict(uid, np.arange(no_items))
         assert np.allclose(scores_arr, scores_int)
 
-    with pytest.raises(AssertionError):
+    with pytest.raises(TypeError):
         model.predict("foo", np.arange(no_items))
 
 
