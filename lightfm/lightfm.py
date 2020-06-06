@@ -781,8 +781,15 @@ class LightFM(object):
 
         self._check_initialized()
 
-        if not isinstance(user_ids, np.ndarray):
+        if isinstance(user_ids, int):
             user_ids = np.repeat(np.int32(user_ids), len(item_ids))
+
+        if not isinstance(user_ids, np.ndarray):
+            raise TypeError(
+                f"Invalid type passed to user_ids parameter. "
+                f"This must be either int or np.int32 array. "
+                f"Type received: {type(user_ids)}"
+            )
 
         if isinstance(item_ids, (list, tuple)):
             item_ids = np.array(item_ids, dtype=np.int32)
