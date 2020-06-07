@@ -83,3 +83,11 @@ Pull requests are welcome. To install for development:
 4. LightFM uses [black](https://github.com/ambv/black) (version `18.6b4`) to enforce code formatting.
 
 When making changes to the `.pyx` extension files, you'll need to run `python setup.py cythonize` in order to produce the extension `.c` files before running `pip install -e .`.
+
+### Windows specific
+Note for Windows users: to build LightFM from source code,
+[Microsoft Visual C++ build tools](http://go.microsoft.com/fwlink/?LinkId=691126) 
+are required. 
+
+MSVC compiler [supports OpenMP](https://docs.microsoft.com/en-us/cpp/parallel/openmp/openmp-in-visual-cpp?view=vs-2019),
+so this option is turned on by default in Windows.
