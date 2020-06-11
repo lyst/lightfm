@@ -28,7 +28,11 @@ jobs:
             flake8 lightfm
             black --check lightfm
             black --check tests
-            mv lightfm _lightfm && py.test -xv tests
+            mkdir test_results
+            mv lightfm _lightfm
+            py.test -xv --junitxml=test_results/junit.xml tests
+      - store_test_results:
+          path: test_results
 
 workflows:
   version: 2
