@@ -1,0 +1,7 @@
+os:
+  - osx
+before_install:
+  - pip2 install -r dev-requirements.txt
+install:
+  - pip2 install -e .
+script: py.test tests/
