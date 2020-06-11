@@ -56,8 +56,8 @@ jobs:
           name: Lint
           command: |
             . venv/bin/activate
-            flake8 lightfm tests
-            black --check lightfm tests
+            flake8 setup.py lightfm tests
+            black --check setup.py lightfm tests
   test-py36:
     <<: *testjob
     docker:
