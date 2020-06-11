@@ -17,7 +17,7 @@ install:
   - activate lightfm
 
   # Install the build dependencies of the project.
-  - conda install --yes --file dev-requirements.txt
+  - conda install --yes --file test-requirements.txt
 
   # Install lightfm
   - pip install -e .
