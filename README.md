@@ -78,8 +78,9 @@ Please cite LightFM if it helps your research. You can use the following BibTeX 
 Pull requests are welcome. To install for development:
 
 1. Clone the repository: `git clone git@github.com:lyst/lightfm.git`
-2. Install it for development using pip: `cd lightfm && pip install -e .`
-3. You can run tests by running `py.test tests`.
-4. LightFM uses [black](https://github.com/ambv/black) (version `18.6b4`) to enforce code formatting.
+2. Setup a virtual environment: `cd lightfm && python3 -m venv venv && source ./venv/bin/activate`
+3. Install it for development using pip: `pip install -e . && pip install -r test-requirements.txt`
+4. You can run tests by running `./venv/bin/py.test tests`.
+5. LightFM uses [black](https://github.com/ambv/black) (version `18.6b4`) to enforce code formatting.
 
 When making changes to the `.pyx` extension files, you'll need to run `python setup.py cythonize` in order to produce the extension `.c` files before running `pip install -e .`.
