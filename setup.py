@@ -165,6 +165,7 @@ setup(
     version=version,
     description="LightFM recommendation model",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/lyst/lightfm",
     download_url="https://github.com/lyst/lightfm/tarball/{}".format(version),
     packages=["lightfm", "lightfm.datasets"],
