@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+import pathlib
 import subprocess
 import sys
 import textwrap
@@ -157,10 +158,15 @@ use_openmp = not sys.platform.startswith("darwin") and not sys.platform.startswi
     "win"
 )
 
+long_description = (pathlib.Path(__file__).parent
+                    .joinpath("README.md")
+                    .read_text())
+
 setup(
     name="lightfm",
     version=version,
     description="LightFM recommendation model",
+    long_description=long_description,
     url="https://github.com/lyst/lightfm",
     download_url="https://github.com/lyst/lightfm/tarball/{}".format(version),
     packages=["lightfm", "lightfm.datasets"],
@@ -172,7 +178,7 @@ setup(
     author_email="data@ly.st",
     license="MIT",
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
