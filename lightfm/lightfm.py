@@ -820,7 +820,7 @@ class LightFM(object):
 
         lightfm_data = self._get_lightfm_data()
 
-        predictions = np.empty(len(user_ids), dtype=np.float64)
+        predictions = np.empty(len(user_ids), dtype=np.float32)
 
         predict_lightfm(
             CSRMatrix(item_features),
