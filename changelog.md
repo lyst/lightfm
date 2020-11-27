@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.16][2020-11-27]
+
+### Addded
+- Set the `LIGHTFM_NO_CFLAGS` environment variable when building LightFM to prevent it from setting
+  `-ffast-math` or `-march=native` compiler flags.
+
+### Changed
+- `predict` now returns float32 predictions.
+
 ## [1.15][2018-05-26]
 ### Added
 - Added a check that there is no overlap between test and train in `predict_ranks` (thanks to [@artdgn](https://github.com/artdgn)).
