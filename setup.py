@@ -158,9 +158,7 @@ use_openmp = not sys.platform.startswith("darwin") and not sys.platform.startswi
     "win"
 )
 
-long_description = (pathlib.Path(__file__).parent
-                    .joinpath("README.md")
-                    .read_text())
+long_description = pathlib.Path(__file__).parent.joinpath("README.md").read_text()
 
 setup(
     name="lightfm",
