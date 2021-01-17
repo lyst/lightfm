@@ -158,14 +158,15 @@ class Dataset(object):
         Create a unique feature for every user in addition to other features.
         If true (default), a latent vector will be allocated for every user. This
         is a reasonable default for most applications, but should be set to false
-        if there is very little data for every user. For more details see the 
-        :doc:`Notes on the LightFM class <lightfm>`.
+        if there is very little data for every user. For more details see the Notes
+        in :doc:`LightFM<lightfm>`.
+
     item_identity_features: bool, optional
         Create a unique feature for every item in addition to other features.
         If true (default), a latent vector will be allocated for every item. This
         is a reasonable default for most applications, but should be set to false
-        if there is very little data for every item. For more details see the 
-        :doc:`Notes on the LightFM class <lightfm>`.
+        if there is very little data for every item. For more details see the Notes
+        in :doc:`LightFM<lightfm>`.
 
     """
 
