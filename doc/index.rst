@@ -16,7 +16,6 @@ Contents
    Built-in datasets <datasets>
    Examples <examples>
    FAQ <faq>
-   Helpful Discussions <helpful_discussions>
 
 
 Indices and tables

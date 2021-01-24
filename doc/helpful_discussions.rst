@@ -31,7 +31,7 @@ Time Context Information
 
 Memory Limits / Memmapped arrays 
 ================================
-https://github.com/lyst/lightfm/issues/389
+- https://github.com/lyst/lightfm/issues/389
 
 Predict for all users / Batch Prediction / BLAS Predict
 =======================================================
