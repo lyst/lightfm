@@ -4,9 +4,9 @@ FAQ
 
 Does LightFM have a GPU based implementation?
 =============================================
- No, there is no option to run training or inference on the GPU with LightFM. There are
- currently no plans to change this.
-- https://github.com/lyst/lightfm/issues/429
+No, there is no option to run training or inference on the GPU with LightFM. There are
+currently no plans to change this.
+See https://github.com/lyst/lightfm/issues/429
 
 What are the "learning to rank" and "hybrid" aspects of LightFM and how do they relate?
 =======================================================================================
