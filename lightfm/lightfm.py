@@ -792,8 +792,8 @@ class LightFM(object):
 
         if len(user_ids) != len(item_ids):
             raise ValueError(
-                f"Expected length of user IDs ({len(user_ids)}) to equal item IDs "
-                f"({len(item_ids)})"
+                f"Expected the number of user IDs ({len(user_ids)}) to equal the number"
+                f" of item IDs ({len(item_ids)})"
             )
 
         if user_ids.dtype != np.int32:
