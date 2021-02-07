@@ -794,6 +794,26 @@ class LightFM(object):
         np.float32 array of shape [n_pairs,]
             Numpy array containing the recommendation scores for pairs defined
             by the inputs.
+
+        Notes
+        -----
+
+        As indicated above, this method returns an array of scores corresponding to the
+        score assigned by the model to _pairs of inputs_. Importantly, this means the
+        i-th element of the output array corresponds to the score for the i-th user-item
+        pair in the input arrays.
+
+        Concretely, you should expect the `lfm.predict([0, 1], [8, 9])` to return an
+        array of np.float32 that may look something like `[0.42  0.31]`, where `0.42` is
+        the score assigned to the user-item pair `(0, 8)` and `0.31` the score assigned
+        to pair `(1, 9)` respectively.
+
+        In other words, if you wish to generate the score for a few items (e.g.
+        `[7, 8, 9]`) for two users (e.g. `[0, 1]`), a proper way to call this method
+        would be to use `lfm.predict([0, 0, 0, 1, 1, 1], [7, 8, 9, 7, 8, 9])`, and
+        _not_ `lfm.predict([0, 1], [7, 8, 9])` as you may initially expect (this will
+        throw an exception!).
+
         """
 
         self._check_initialized()
@@ -801,17 +821,17 @@ class LightFM(object):
         if isinstance(user_ids, int):
             user_ids = np.repeat(np.int32(user_ids), len(item_ids))
 
-        if not isinstance(user_ids, np.ndarray):
-            raise TypeError(
-                f"Invalid type passed to user_ids parameter. "
-                f"This must be either int or np.int32 array. "
-                f"Type received: {type(user_ids)}"
-            )
+        if isinstance(user_ids, (list, tuple)):
+            user_ids = np.array(user_ids, dtype=np.int32)
 
         if isinstance(item_ids, (list, tuple)):
             item_ids = np.array(item_ids, dtype=np.int32)
 
-        assert len(user_ids) == len(item_ids)
+        if len(user_ids) != len(item_ids):
+            raise ValueError(
+                f"Expected the number of user IDs ({len(user_ids)}) to equal the number"
+                f" of item IDs ({len(item_ids)})"
+            )
 
         if user_ids.dtype != np.int32:
             user_ids = user_ids.astype(np.int32)
