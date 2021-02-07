@@ -131,9 +131,20 @@ class LightFM(object):
     In this case, LightFM reduces to a traditional collaborative filtering
     matrix factorization method.
 
-    When a feature matrix is provided, it should be of shape
-    ``(num_<users/items> x num_features)``. An embedding will then be estimated
-    for every feature: that is, there will be ``num_features`` embeddings.
+    For including features, there are two strategies:
+
+    1. Characterizing each user/item *only* by its features.
+
+    2. Characterizing each user/item by its features *and* an identity matrix
+       that captures interactions between users and items directly.
+
+    1. When using only features, the feature matrix should be of shape
+    ``(num_<users/items> x num_features)``. To build these feature matrices,
+    it is recommended to use the build methods from the class
+    :class:`lightfm.data.Dataset` and setting the ``<user/item>_identity_features``
+    to ``False``.
+    An embedding will then be estimated for every feature: that is, there will be
+    ``num_features`` embeddings.
     To obtain the representation for user i, the model will look up the i-th
     row of the feature matrix to find the features with non-zero weights in
     that row; the embeddings for these features will then be added together
@@ -143,11 +154,17 @@ class LightFM(object):
     the embedding for the 5th and the 20th features (multiplying the latter
     by 3). The same goes for items.
 
-    Note: when supplying feature matrices, an implicit identity feature
-    matrix will no longer be used. This may result in a less expressive model:
-    because no per-user features are estimated, the model may underfit. To
-    combat this, include per-user (per-item) features (that is, an identity
-    matrix) as part of the feature matrix you supply.
+    Note: This strategy may result in a less expressive model because no per-user
+    features are estimated, the model may underfit. To combat this, follow
+    strategy 2. and include per-user (per-item) features (that is, an identity matrix)
+    as part of the feature matrix.
+
+    2. To use features alongside user-item interactions, the feature matrix should
+    include an identity matrix. The resulting feature matrix should be of shape
+    ``(num_<users/items> x (num_<users/items> + num_features))``. This strategy is
+    the default when using the :class:`lightfm.data.Dataset` class. The
+    behavior is controlled by the ``<user/item>_identity_features=True`` default arguments.
+
 
     References
     ----------
