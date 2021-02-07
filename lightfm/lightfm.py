@@ -777,6 +777,26 @@ class LightFM(object):
         np.float32 array of shape [n_pairs,]
             Numpy array containing the recommendation scores for pairs defined
             by the inputs.
+
+        Notes
+        -----
+
+        As indicated above, this method returns an array of scores corresponding to the
+        score assigned by the model to _pairs of inputs_. Importantly, this means the
+        i-th element of the output array corresponds to the score for the i-th user-item
+        pair in the input arrays.
+
+        Concretely, you should expect the `lfm.predict([0, 1], [8, 9])` to return an
+        array of np.float32 that may look something like `[0.42  0.31]`, where `0.42` is
+        the score assigned to the user-item pair `(0, 8)` and `0.31` the score assigned
+        to pair `(1, 9)` respectively.
+
+        In other words, if you wish to generate the score for a few items (e.g.
+        `[7, 8, 9]`) for two users (e.g. `[0, 1]`), a proper way to call this method
+        would be to use `lfm.predict([0, 0, 0, 1, 1, 1], [7, 8, 9, 7, 8, 9])`, and
+        _not_ `lfm.predict([0, 1], [7, 8, 9])` as you may initially expect (this will
+        throw an exception!).
+
         """
 
         self._check_initialized()
