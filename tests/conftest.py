@@ -28,7 +28,7 @@ def array_int32(rng, size=10):
     params=[tuple, list, np.array]
 )
 def user_ids(array_int32, request):
-    """Initialise valid input user_ids for calls to the LightFM.predict method.
+    """Initialise input user_ids valid for calls to the LightFM.predict method.
 
     Notes
     -----
@@ -51,7 +51,7 @@ def user_ids(array_int32, request):
     params=[tuple, list, np.array]
 )
 def item_ids(array_int32, request):
-    """Initialise valid input item_ids for calls to the LightFM.predict method.
+    """Initialise input item_ids valid for calls to the LightFM.predict method.
 
     Notes
     -----
