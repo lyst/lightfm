@@ -382,7 +382,7 @@ def test_warp_few_items():
     model.fit(train)
 
 
-def test_predict_input_arrays_with_valid_types(lfm, user_ids, item_ids):
+def test_predict_user_item_inputs_with_valid_types(lfm, user_ids, item_ids):
     """Test that calls to the predict method with inputs of valid types succeed."""
 
     # GIVEN user_ids of a valid type
