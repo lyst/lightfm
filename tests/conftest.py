@@ -23,9 +23,7 @@ def array_int32(rng, size=10):
 
 
 @pytest.fixture(
-    scope="session",
-    ids=["tuple", "list", "ndarray"],
-    params=[tuple, list, np.array]
+    scope="session", ids=["tuple", "list", "ndarray"], params=[tuple, list, np.array]
 )
 def user_ids(array_int32, request):
     """Initialise input user_ids valid for calls to the LightFM.predict method.
@@ -46,9 +44,7 @@ def user_ids(array_int32, request):
 
 
 @pytest.fixture(
-    scope="session",
-    ids=["tuple", "list", "ndarray"],
-    params=[tuple, list, np.array]
+    scope="session", ids=["tuple", "list", "ndarray"], params=[tuple, list, np.array]
 )
 def item_ids(array_int32, request):
     """Initialise input item_ids valid for calls to the LightFM.predict method.
