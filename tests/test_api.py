@@ -380,3 +380,16 @@ def test_warp_few_items():
     model = LightFM(loss="warp", max_sampled=10)
 
     model.fit(train)
+
+
+def test_predict_input_with_valid_types(lfm, user_ids, item_ids):
+    """Test that calls to the predict method with inputs of valid types succeed."""
+
+    # GIVEN user_ids of a valid type (tuple, list, ndarray)
+    # AND item_ids of a valid type (tuple, list, ndarray)
+    # WHEN trained model provided
+    # THEN calls to LightFM.predict succeed
+
+    h = lfm.predict(user_ids=user_ids, item_ids=item_ids)
+    assert h.dtype == np.float32
+    assert len(h) == len(user_ids)
