@@ -385,8 +385,8 @@ def test_warp_few_items():
 def test_predict_input_with_valid_types(lfm, user_ids, item_ids):
     """Test that calls to the predict method with inputs of valid types succeed."""
 
-    # GIVEN user_ids of a valid type (tuple, list, ndarray)
-    # AND item_ids of a valid type (tuple, list, ndarray)
+    # GIVEN user_ids of a valid type
+    # AND item_ids of a valid type
     # WHEN trained model provided
     # THEN calls to LightFM.predict succeed
 
