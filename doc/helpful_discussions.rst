@@ -2,11 +2,14 @@
 Helpful Discussions
 ===================
 
-Pure CF outperforming Hybrid
-============================
+Adding user/item features makes my model perform worse than without features
+============================================================================
+That's not unusual and might have different reasons. For example, your features
+might be simply uninformative and worsen signal to noise ratio.
+
+- https://github.com/lyst/lightfm/issues/551
 - https://github.com/lyst/lightfm/issues/176
 - https://github.com/lyst/lightfm/issues/430
-- https://github.com/lyst/lightfm/issues/551
 
 Inverse Frequency/Propensity Weighting
 ======================================
