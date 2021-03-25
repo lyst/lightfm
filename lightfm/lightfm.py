@@ -131,9 +131,20 @@ class LightFM(object):
     In this case, LightFM reduces to a traditional collaborative filtering
     matrix factorization method.
 
-    When a feature matrix is provided, it should be of shape
-    ``(num_<users/items> x num_features)``. An embedding will then be estimated
-    for every feature: that is, there will be ``num_features`` embeddings.
+    For including features, there are two strategies:
+
+    1. Characterizing each user/item *only* by its features.
+
+    2. Characterizing each user/item by its features *and* an identity matrix
+       that captures interactions between users and items directly.
+
+    1. When using only features, the feature matrix should be of shape
+    ``(num_<users/items> x num_features)``. To build these feature matrices,
+    it is recommended to use the build methods from the class
+    :class:`lightfm.data.Dataset` and setting the ``<user/item>_identity_features``
+    to ``False``.
+    An embedding will then be estimated for every feature: that is, there will be
+    ``num_features`` embeddings.
     To obtain the representation for user i, the model will look up the i-th
     row of the feature matrix to find the features with non-zero weights in
     that row; the embeddings for these features will then be added together
@@ -143,11 +154,17 @@ class LightFM(object):
     the embedding for the 5th and the 20th features (multiplying the latter
     by 3). The same goes for items.
 
-    Note: when supplying feature matrices, an implicit identity feature
-    matrix will no longer be used. This may result in a less expressive model:
-    because no per-user features are estimated, the model may underfit. To
-    combat this, include per-user (per-item) features (that is, an identity
-    matrix) as part of the feature matrix you supply.
+    Note: This strategy may result in a less expressive model because no per-user
+    features are estimated, the model may underfit. To combat this, follow
+    strategy 2. and include per-user (per-item) features (that is, an identity matrix)
+    as part of the feature matrix.
+
+    2. To use features alongside user-item interactions, the feature matrix should
+    include an identity matrix. The resulting feature matrix should be of shape
+    ``(num_<users/items> x (num_<users/items> + num_features))``. This strategy is
+    the default when using the :class:`lightfm.data.Dataset` class. The
+    behavior is controlled by the ``<user/item>_identity_features=True`` default arguments.
+
 
     References
     ----------
@@ -777,6 +794,26 @@ class LightFM(object):
         np.float32 array of shape [n_pairs,]
             Numpy array containing the recommendation scores for pairs defined
             by the inputs.
+
+        Notes
+        -----
+
+        As indicated above, this method returns an array of scores corresponding to the
+        score assigned by the model to _pairs of inputs_. Importantly, this means the
+        i-th element of the output array corresponds to the score for the i-th user-item
+        pair in the input arrays.
+
+        Concretely, you should expect the `lfm.predict([0, 1], [8, 9])` to return an
+        array of np.float32 that may look something like `[0.42  0.31]`, where `0.42` is
+        the score assigned to the user-item pair `(0, 8)` and `0.31` the score assigned
+        to pair `(1, 9)` respectively.
+
+        In other words, if you wish to generate the score for a few items (e.g.
+        `[7, 8, 9]`) for two users (e.g. `[0, 1]`), a proper way to call this method
+        would be to use `lfm.predict([0, 0, 0, 1, 1, 1], [7, 8, 9, 7, 8, 9])`, and
+        _not_ `lfm.predict([0, 1], [7, 8, 9])` as you may initially expect (this will
+        throw an exception!).
+
         """
 
         self._check_initialized()
@@ -784,17 +821,17 @@ class LightFM(object):
         if isinstance(user_ids, int):
             user_ids = np.repeat(np.int32(user_ids), len(item_ids))
 
-        if not isinstance(user_ids, np.ndarray):
-            raise TypeError(
-                f"Invalid type passed to user_ids parameter. "
-                f"This must be either int or np.int32 array. "
-                f"Type received: {type(user_ids)}"
-            )
+        if isinstance(user_ids, (list, tuple)):
+            user_ids = np.array(user_ids, dtype=np.int32)
 
         if isinstance(item_ids, (list, tuple)):
             item_ids = np.array(item_ids, dtype=np.int32)
 
-        assert len(user_ids) == len(item_ids)
+        if len(user_ids) != len(item_ids):
+            raise ValueError(
+                f"Expected the number of user IDs ({len(user_ids)}) to equal the number"
+                f" of item IDs ({len(item_ids)})"
+            )
 
         if user_ids.dtype != np.int32:
             user_ids = user_ids.astype(np.int32)

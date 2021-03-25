@@ -704,7 +704,7 @@ def test_sklearn_cv():
             for _ in range(self.n_splits):
                 yield idx, idx
 
-    cv = CV(n_splits=3, random_state=42)
+    cv = CV(n_splits=3, shuffle=True, random_state=42)
     search = RandomizedSearchCV(
         estimator=model,
         param_distributions=distr,

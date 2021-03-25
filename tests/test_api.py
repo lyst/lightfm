@@ -70,7 +70,7 @@ def test_coo_with_duplicate_entries():
     mat.col = np.concatenate((mat.col, mat.col[:1000]))
 
     for loss in ("warp", "bpr", "warp-kos"):
-        model = LightFM(loss="warp")
+        model = LightFM(loss=loss)
         model.fit(mat)
 
 
@@ -88,7 +88,7 @@ def test_predict():
         scores_int = model.predict(uid, np.arange(no_items))
         assert np.allclose(scores_arr, scores_int)
 
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         model.predict("foo", np.arange(no_items))
 
 
