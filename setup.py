@@ -3,7 +3,6 @@ import os
 import pathlib
 import subprocess
 import sys
-import platform
 import textwrap
 
 from setuptools import Command, Extension, setup
@@ -18,7 +17,7 @@ def define_extensions(use_openmp):
     if not os.environ.get("LIGHTFM_NO_CFLAGS"):
         compile_args += ["-ffast-math"]
 
-        if platform.system() == "Darwin":
+        if sys.platform.startswith("darwin"):
             compile_args += []
         else:
             compile_args += ["-march=native"]
