@@ -119,6 +119,9 @@ class LightFM(object):
          Contains the biases for item_features.
     user_biases: np.float32 array of shape [n_user_features,]
          Contains the biases for user_features.
+    avg_loss: list
+         Contains the average loss values such that the i-th element is the
+         average of the loss values from the i-th epoch of model-fitting.
 
     Notes
     -----
@@ -256,6 +259,8 @@ class LightFM(object):
         self.user_bias_gradients = None
         self.user_bias_momentum = None
 
+        self.avg_loss = None
+
     def _check_initialized(self):
 
         for var in (
@@ -271,6 +276,7 @@ class LightFM(object):
             self.user_biases,
             self.user_bias_gradients,
             self.user_bias_momentum,
+            self.avg_loss,
         ):
 
             if var is None:
@@ -310,6 +316,8 @@ class LightFM(object):
             self.item_bias_gradients += 1
             self.user_embedding_gradients += 1
             self.user_bias_gradients += 1
+
+        self.avg_loss = []
 
     def _construct_feature_matrices(
         self, n_users, n_items, user_features, item_features
@@ -757,6 +765,8 @@ class LightFM(object):
                 self.user_alpha,
                 num_threads,
             )
+
+        self.avg_loss.append(lightfm_data.avg_loss)
 
     def predict(
         self, user_ids, item_ids, item_features=None, user_features=None, num_threads=1

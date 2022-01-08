@@ -213,6 +213,9 @@ cdef class FastLightFM:
     cdef double item_scale
     cdef double user_scale
 
+    cdef readonly double avg_loss
+    cdef int avg_loss_ctr
+
     def __init__(self,
                  flt[:, ::1] item_features,
                  flt[:, ::1] item_feature_gradients,
@@ -257,6 +260,9 @@ cdef class FastLightFM:
         self.adadelta = adadelta
 
         self.max_sampled = max_sampled
+
+        self.avg_loss = 0.0
+        self.avg_loss_ctr = 0
 
 
 cdef inline flt sigmoid(flt v) nogil:
@@ -533,6 +539,9 @@ cdef inline void update(double loss,
     lightfm.item_scale *= (1.0 + item_alpha * avg_learning_rate)
     lightfm.user_scale *= (1.0 + user_alpha * avg_learning_rate)
 
+    lightfm.avg_loss_ctr += 1
+    lightfm.avg_loss = (lightfm.avg_loss * (lightfm.avg_loss_ctr - 1) + loss) / lightfm.avg_loss_ctr
+
 
 cdef void warp_update(double loss,
                       CSRMatrix item_features,
@@ -647,6 +656,9 @@ cdef void warp_update(double loss,
     # of features updated for this example.
     lightfm.item_scale *= (1.0 + item_alpha * avg_learning_rate)
     lightfm.user_scale *= (1.0 + user_alpha * avg_learning_rate)
+
+    lightfm.avg_loss_ctr += 1
+    lightfm.avg_loss = (lightfm.avg_loss * (lightfm.avg_loss_ctr - 1) + loss) / lightfm.avg_loss_ctr
 
 
 cdef void regularize(FastLightFM lightfm,
