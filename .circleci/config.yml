@@ -1,3 +1,5 @@
+version: 2.1
+
 jobs:
   pytest:
     parameters:
