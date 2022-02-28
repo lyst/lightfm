@@ -1,11 +1,9 @@
-version: 2.1
-
 jobs:
   pytest:
     parameters:
       image:
         description: "Docker image to run tests in"
-        default: "circleci/python:3.8.3-buster-browsers"
+        default: cimg/python:3.8
         type: string
       python_version:
         description: "Python version used to separate cache"
@@ -72,11 +70,14 @@ workflows:
     jobs:
       - lint
       - pytest:
-          image: circleci/python:3.6.10-stretch-browsers
-          python_version: py36
+          image: cimg/python:3.10
+          python_version: py310
       - pytest:
-          image: circleci/python:3.7.7-buster-browsers
-          python_version: py37
+          image: cimg/python:3.9
+          python_version: py39
       - pytest:
-          image: circleci/python:3.8.3-buster-browsers
+          image: cimg/python:3.8
           python_version: py38
+      - pytest:
+          image: cimg/python:3.7
+          python_version: py37
