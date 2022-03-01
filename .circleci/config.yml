@@ -41,7 +41,7 @@ jobs:
           path: test_results
   lint:
     docker:
-      - image: circleci/python:3.8.3-buster
+      - image: cimg/python:3.8
     steps:
       - checkout
       - restore_cache:
