@@ -81,6 +81,11 @@ Pull requests are welcome. To install for development:
 2. Setup a virtual environment: `cd lightfm && python3 -m venv venv && source ./venv/bin/activate`
 3. Install it for development using pip: `pip install -e . && pip install -r test-requirements.txt`
 4. You can run tests by running `./venv/bin/py.test tests`.
-5. LightFM uses [black](https://github.com/ambv/black) to enforce code formatting, see `lint-requirements.txt`.
+5. LightFM uses [black](https://github.com/ambv/black) to enforce code formatting and flake8 for linting, see `lint-requirements.txt`.
+6. [Optional]: You can install pre-commit to locally enfore formatting and linting. Install with:
+    ```bash
+    pip install pre-commit
+    pre-commit install
+    ```
 
 When making changes to the `.pyx` extension files, you'll need to run `python setup.py cythonize` in order to produce the extension `.c` files before running `pip install -e .`.
