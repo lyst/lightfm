@@ -72,9 +72,6 @@ workflows:
     jobs:
       - lint
       - pytest:
-          image: cimg/python:3.10
-          python_version: py310
-      - pytest:
           image: cimg/python:3.9
           python_version: py39
       - pytest:
