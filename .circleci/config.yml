@@ -46,17 +46,17 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-lint-{{ .Branch }}-{{ checksum "lint-requirements.txt"}}
-            - deps-lint-{{ .Branch }}-
-            - deps-lint-
+            - v2-deps-lint-{{ .Branch }}-{{ checksum "lint-requirements.txt"}}
+            - v2-deps-lint-{{ .Branch }}-
+            - v2-deps-lint-
       - run:
           name: Install lint requirements
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r "lint-requirements.txt"
+            pip install -r lint-requirements.txt
       - save_cache:
-          key: deps-lint-{{ .Branch }}-{{ checksum "lint-requirements.txt" }}
+          key: v2-deps-lint-{{ .Branch }}-{{ checksum "lint-requirements.txt" }}
           paths:
             - "venv"
       - run:
