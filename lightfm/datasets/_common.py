@@ -20,7 +20,7 @@ def download(url, dest_path):
     req.raise_for_status()
 
     with open(dest_path, "wb") as fd:
-        for chunk in req.iter_content(chunk_size=2 ** 20):
+        for chunk in req.iter_content(chunk_size=2**20):
             fd.write(chunk)
 
 
