@@ -14,8 +14,7 @@ def _get_movielens_path():
     Get path to the movielens dataset file.
     """
 
-    return os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                        'movielens.zip')
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "movielens.zip")
 
 
 def _download_movielens(dest_path):
@@ -23,10 +22,10 @@ def _download_movielens(dest_path):
     Download the dataset.
     """
 
-    url = 'http://files.grouplens.org/datasets/movielens/ml-100k.zip'
+    url = "http://files.grouplens.org/datasets/movielens/ml-100k.zip"
     req = requests.get(url, stream=True)
 
-    with open(dest_path, 'wb') as fd:
+    with open(dest_path, "wb") as fd:
         for chunk in req.iter_content():
             fd.write(chunk)
 
@@ -42,8 +41,10 @@ def _get_raw_movielens_data():
         _download_movielens(path)
 
     with zipfile.ZipFile(path) as datafile:
-        return (datafile.read('ml-100k/ua.base').decode().split('\n'),
-                datafile.read('ml-100k/ua.test').decode().split('\n'))
+        return (
+            datafile.read("ml-100k/ua.base").decode().split("\n"),
+            datafile.read("ml-100k/ua.test").decode().split("\n"),
+        )
 
 
 def _parse(data):
@@ -56,7 +57,7 @@ def _parse(data):
         if not line:
             continue
 
-        uid, iid, rating, timestamp = [int(x) for x in line.split('\t')]
+        uid, iid, rating, timestamp = [int(x) for x in line.split("\t")]
 
         yield uid, iid, rating, timestamp
 
@@ -90,7 +91,7 @@ def _get_movie_raw_metadata():
         _download_movielens(path)
 
     with zipfile.ZipFile(path) as datafile:
-        return datafile.read('ml-100k/u.item').decode(errors='ignore').split('\n')
+        return datafile.read("ml-100k/u.item").decode(errors="ignore").split("\n")
 
 
 def get_movielens_item_metadata(use_item_ids):
@@ -108,12 +109,12 @@ def get_movielens_item_metadata(use_item_ids):
         if not line:
             continue
 
-        splt = line.split('|')
+        splt = line.split("|")
         item_id = int(splt[0])
 
-        genres = [idx for idx, val in
-                  zip(range(len(splt[5:])), splt[5:])
-                  if int(val) > 0]
+        genres = [
+            idx for idx, val in zip(range(len(splt[5:])), splt[5:]) if int(val) > 0
+        ]
 
         if use_item_ids:
             # Add item-specific features too
@@ -124,9 +125,7 @@ def get_movielens_item_metadata(use_item_ids):
 
         features[item_id] = genres
 
-    mat = sp.lil_matrix((len(features) + 1,
-                         len(genre_set)),
-                        dtype=np.int32)
+    mat = sp.lil_matrix((len(features) + 1, len(genre_set)), dtype=np.int32)
 
     for item_id, genre_ids in features.items():
         for genre_id in genre_ids:
@@ -145,13 +144,16 @@ def get_movielens_data():
     uids = set()
     iids = set()
 
-    for uid, iid, rating, timestamp in itertools.chain(_parse(train_data),
-                                                       _parse(test_data)):
+    for uid, iid, rating, timestamp in itertools.chain(
+        _parse(train_data), _parse(test_data)
+    ):
         uids.add(uid)
         iids.add(iid)
 
     rows = max(uids) + 1
     cols = max(iids) + 1
 
-    return (_build_interaction_matrix(rows, cols, _parse(train_data)),
-            _build_interaction_matrix(rows, cols, _parse(test_data)))
+    return (
+        _build_interaction_matrix(rows, cols, _parse(train_data)),
+        _build_interaction_matrix(rows, cols, _parse(test_data)),
+    )

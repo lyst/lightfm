@@ -5,7 +5,7 @@ jobs:
     parameters:
       image:
         description: "Docker image to run tests in"
-        default: "circleci/python:3.8.3-buster-browsers"
+        default: cimg/python:3.8
         type: string
       python_version:
         description: "Python version used to separate cache"
@@ -41,22 +41,22 @@ jobs:
           path: test_results
   lint:
     docker:
-      - image: circleci/python:3.8.3-buster
+      - image: cimg/python:3.8
     steps:
       - checkout
       - restore_cache:
           keys:
-            - deps-lint-{{ .Branch }}-{{ checksum "lint-requirements.txt"}}
-            - deps-lint-{{ .Branch }}-
-            - deps-lint-
+            - v2-deps-lint-{{ .Branch }}-{{ checksum "lint-requirements.txt"}}
+            - v2-deps-lint-{{ .Branch }}-
+            - v2-deps-lint-
       - run:
           name: Install lint requirements
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r "lint-requirements.txt"
+            pip install -r lint-requirements.txt
       - save_cache:
-          key: deps-lint-{{ .Branch }}-{{ checksum "lint-requirements.txt" }}
+          key: v2-deps-lint-{{ .Branch }}-{{ checksum "lint-requirements.txt" }}
           paths:
             - "venv"
       - run:
@@ -72,11 +72,11 @@ workflows:
     jobs:
       - lint
       - pytest:
-          image: circleci/python:3.6.10-stretch-browsers
-          python_version: py36
+          image: cimg/python:3.9
+          python_version: py39
       - pytest:
-          image: circleci/python:3.7.7-buster-browsers
-          python_version: py37
-      - pytest:
-          image: circleci/python:3.8.3-buster-browsers
+          image: cimg/python:3.8
           python_version: py38
+      - pytest:
+          image: cimg/python:3.7
+          python_version: py37

@@ -73,7 +73,7 @@ def test_build_features():
             for user_id in range(users)
         ]
     )
-    assert user_features.getnnz() == users ** 2
+    assert user_features.getnnz() == users**2
 
     item_features = dataset.build_item_features(
         [
@@ -81,7 +81,7 @@ def test_build_features():
             for item_id in range(items)
         ]
     )
-    assert item_features.getnnz() == items ** 2
+    assert item_features.getnnz() == items**2
 
     # Build from dicts
     user_features = dataset.build_user_features(
