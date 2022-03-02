@@ -1,8 +1,9 @@
-lightfm:
-  build: .
-  # Uncomment this to mount your local version
-  # of the LightFM code.
-  # volumes:
-  #   - .:/home/lightfm/
-  ports:
-  - "8888:8888"
+services:
+  lightfm:
+    build: .
+    # Uncomment this to mount your local version
+    # of the LightFM code.
+    # volumes:
+    #   - .:/home/lightfm/
+    ports:
+    - "8888:8888"
