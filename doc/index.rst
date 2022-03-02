@@ -15,6 +15,7 @@ Contents
    Constructing datasets <lightfm.data>
    Built-in datasets <datasets>
    Examples <examples>
+   FAQ <faq>
 
 
 Indices and tables
