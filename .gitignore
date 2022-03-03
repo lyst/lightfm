@@ -21,3 +21,4 @@ lightfm/_lightfm_fast_no_openmp.pyx
 # Editor specific
 .vscode/
 .idea/
+.devcontainer/
