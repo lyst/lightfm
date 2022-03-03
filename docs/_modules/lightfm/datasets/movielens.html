@@ -1,76 +1,34 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lightfm.datasets.movielens &mdash; LightFM 1.16 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>lightfm.datasets.movielens &mdash; LightFM 1.15 documentation</title>
-  
-
-  
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="LightFM 1.15 documentation" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
-
-  
-  <script src="../../../_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="../../../index.html" class="icon icon-home"> LightFM
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                1.15
+                1.16
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,89 +36,43 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lightfm.html">The LightFM model class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cross_validation.html">Cross validation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../lightfm.data.html">Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lightfm.data.html">Constructing datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Built-in datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq.html">FAQ</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">LightFM</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
       <li>lightfm.datasets.movielens</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for lightfm.datasets.movielens</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -170,7 +82,7 @@
 
 <span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
 
-<span class="kn">from</span> <span class="nn">lightfm.datasets</span> <span class="k">import</span> <span class="n">_common</span>
+<span class="kn">from</span> <span class="nn">lightfm.datasets</span> <span class="kn">import</span> <span class="n">_common</span>
 
 
 <span class="k">def</span> <span class="nf">_read_raw_data</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -179,10 +91,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">datafile</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">datafile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;ml-100k/ua.base&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">),</span>
-                <span class="n">datafile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;ml-100k/ua.test&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">),</span>
-                <span class="n">datafile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;ml-100k/u.item&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">),</span>
-                <span class="n">datafile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;ml-100k/u.genre&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">datafile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;ml-100k/ua.base&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="n">datafile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;ml-100k/ua.test&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="n">datafile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;ml-100k/u.item&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="n">datafile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;ml-100k/u.genre&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -192,7 +106,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
             <span class="k">continue</span>
 
-        <span class="n">uid</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">rating</span><span class="p">,</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)]</span>
+        <span class="n">uid</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">rating</span><span class="p">,</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)]</span>
 
         <span class="c1"># Subtract one from ids to shift</span>
         <span class="c1"># to zero-based indexing</span>
@@ -204,8 +118,7 @@
     <span class="n">uids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">iids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
-    <span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span>
-                                          <span class="n">test_data</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">test_data</span><span class="p">):</span>
         <span class="n">uids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span>
         <span class="n">iids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">iid</span><span class="p">)</span>
 
@@ -226,31 +139,27 @@
     <span class="k">return</span> <span class="n">mat</span><span class="o">.</span><span class="n">tocoo</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">_parse_item_metadata</span><span class="p">(</span><span class="n">num_items</span><span class="p">,</span>
-                         <span class="n">item_metadata_raw</span><span class="p">,</span> <span class="n">genres_raw</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_parse_item_metadata</span><span class="p">(</span><span class="n">num_items</span><span class="p">,</span> <span class="n">item_metadata_raw</span><span class="p">,</span> <span class="n">genres_raw</span><span class="p">):</span>
 
     <span class="n">genres</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">genres_raw</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
-            <span class="n">genre</span><span class="p">,</span> <span class="n">gid</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)</span>
-            <span class="n">genres</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;genre:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">genre</span><span class="p">))</span>
+            <span class="n">genre</span><span class="p">,</span> <span class="n">gid</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span>
+            <span class="n">genres</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;genre:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">genre</span><span class="p">))</span>
 
     <span class="n">id_feature_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">num_items</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
     <span class="n">genre_feature_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">genres</span><span class="p">)</span>
 
-    <span class="n">id_features</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">num_items</span><span class="p">,</span>
-                              <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">,</span>
-                              <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-    <span class="n">genre_features</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">lil_matrix</span><span class="p">((</span><span class="n">num_items</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">genres</span><span class="p">)),</span>
-                                   <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">id_features</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">num_items</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">genre_features</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">lil_matrix</span><span class="p">((</span><span class="n">num_items</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">genres</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">item_metadata_raw</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
             <span class="k">continue</span>
 
-        <span class="n">splt</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)</span>
+        <span class="n">splt</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span>
 
         <span class="c1"># Zero-based indexing</span>
         <span class="n">iid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">splt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
@@ -258,19 +167,26 @@
 
         <span class="n">id_feature_labels</span><span class="p">[</span><span class="n">iid</span><span class="p">]</span> <span class="o">=</span> <span class="n">title</span>
 
-        <span class="n">item_genres</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span>
-                       <span class="nb">enumerate</span><span class="p">(</span><span class="n">splt</span><span class="p">[</span><span class="mi">5</span><span class="p">:])</span>
-                       <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">item_genres</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">splt</span><span class="p">[</span><span class="mi">5</span><span class="p">:])</span> <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">gid</span> <span class="ow">in</span> <span class="n">item_genres</span><span class="p">:</span>
             <span class="n">genre_features</span><span class="p">[</span><span class="n">iid</span><span class="p">,</span> <span class="n">gid</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">id_features</span><span class="p">,</span> <span class="n">id_feature_labels</span><span class="p">,</span>
-            <span class="n">genre_features</span><span class="o">.</span><span class="n">tocsr</span><span class="p">(),</span> <span class="n">genre_feature_labels</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">id_features</span><span class="p">,</span>
+        <span class="n">id_feature_labels</span><span class="p">,</span>
+        <span class="n">genre_features</span><span class="o">.</span><span class="n">tocsr</span><span class="p">(),</span>
+        <span class="n">genre_feature_labels</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
-<div class="viewcode-block" id="fetch_movielens"><a class="viewcode-back" href="../../../datasets.html#lightfm.datasets.movielens.fetch_movielens">[docs]</a><span class="k">def</span> <span class="nf">fetch_movielens</span><span class="p">(</span><span class="n">data_home</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">indicator_features</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">genre_features</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">min_rating</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">download_if_missing</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="fetch_movielens"><a class="viewcode-back" href="../../../datasets.html#lightfm.datasets.movielens.fetch_movielens">[docs]</a><span class="k">def</span> <span class="nf">fetch_movielens</span><span class="p">(</span>
+    <span class="n">data_home</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">indicator_features</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">genre_features</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">min_rating</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">download_if_missing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fetch the `Movielens 100k dataset &lt;http://grouplens.org/datasets/movielens/100k/&gt;`_.</span>
 
@@ -318,51 +234,54 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">indicator_features</span> <span class="ow">or</span> <span class="n">genre_features</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;At least one of item_indicator_features &#39;</span>
-                         <span class="s1">&#39;or genre_features must be True&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;At least one of item_indicator_features &quot;</span> <span class="s2">&quot;or genre_features must be True&quot;</span>
+        <span class="p">)</span>
 
-    <span class="n">zip_path</span> <span class="o">=</span> <span class="n">_common</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">data_home</span><span class="p">,</span>
-                                <span class="p">(</span><span class="s1">&#39;https://github.com/maciejkula/&#39;</span>
-                                 <span class="s1">&#39;lightfm_datasets/releases/&#39;</span>
-                                 <span class="s1">&#39;download/v0.1.0/movielens.zip&#39;</span><span class="p">),</span>
-                                <span class="s1">&#39;movielens100k&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;movielens.zip&#39;</span><span class="p">,</span>
-                                <span class="n">download_if_missing</span><span class="p">)</span>
+    <span class="n">zip_path</span> <span class="o">=</span> <span class="n">_common</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span>
+        <span class="n">data_home</span><span class="p">,</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;https://github.com/maciejkula/&quot;</span>
+            <span class="s2">&quot;lightfm_datasets/releases/&quot;</span>
+            <span class="s2">&quot;download/v0.1.0/movielens.zip&quot;</span>
+        <span class="p">),</span>
+        <span class="s2">&quot;movielens100k&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movielens.zip&quot;</span><span class="p">,</span>
+        <span class="n">download_if_missing</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># Load raw data</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="p">(</span><span class="n">train_raw</span><span class="p">,</span> <span class="n">test_raw</span><span class="p">,</span>
-         <span class="n">item_metadata_raw</span><span class="p">,</span> <span class="n">genres_raw</span><span class="p">)</span> <span class="o">=</span> <span class="n">_read_raw_data</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">train_raw</span><span class="p">,</span> <span class="n">test_raw</span><span class="p">,</span> <span class="n">item_metadata_raw</span><span class="p">,</span> <span class="n">genres_raw</span><span class="p">)</span> <span class="o">=</span> <span class="n">_read_raw_data</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">BadZipFile</span><span class="p">:</span>
         <span class="c1"># Download was corrupted, get rid of the partially</span>
         <span class="c1"># downloaded file so that we re-download on the</span>
         <span class="c1"># next try.</span>
         <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Corrupted Movielens download. Check your &#39;</span>
-                         <span class="s1">&#39;internet connection and try again.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Corrupted Movielens download. Check your &quot;</span>
+            <span class="s2">&quot;internet connection and try again.&quot;</span>
+        <span class="p">)</span>
 
     <span class="c1"># Figure out the dimensions</span>
-    <span class="n">num_users</span><span class="p">,</span> <span class="n">num_items</span> <span class="o">=</span> <span class="n">_get_dimensions</span><span class="p">(</span><span class="n">_parse</span><span class="p">(</span><span class="n">train_raw</span><span class="p">),</span>
-                                           <span class="n">_parse</span><span class="p">(</span><span class="n">test_raw</span><span class="p">))</span>
+    <span class="n">num_users</span><span class="p">,</span> <span class="n">num_items</span> <span class="o">=</span> <span class="n">_get_dimensions</span><span class="p">(</span><span class="n">_parse</span><span class="p">(</span><span class="n">train_raw</span><span class="p">),</span> <span class="n">_parse</span><span class="p">(</span><span class="n">test_raw</span><span class="p">))</span>
 
     <span class="c1"># Load train interactions</span>
-    <span class="n">train</span> <span class="o">=</span> <span class="n">_build_interaction_matrix</span><span class="p">(</span><span class="n">num_users</span><span class="p">,</span>
-                                      <span class="n">num_items</span><span class="p">,</span>
-                                      <span class="n">_parse</span><span class="p">(</span><span class="n">train_raw</span><span class="p">),</span>
-                                      <span class="n">min_rating</span><span class="p">)</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="n">_build_interaction_matrix</span><span class="p">(</span>
+        <span class="n">num_users</span><span class="p">,</span> <span class="n">num_items</span><span class="p">,</span> <span class="n">_parse</span><span class="p">(</span><span class="n">train_raw</span><span class="p">),</span> <span class="n">min_rating</span>
+    <span class="p">)</span>
     <span class="c1"># Load test interactions</span>
-    <span class="n">test</span> <span class="o">=</span> <span class="n">_build_interaction_matrix</span><span class="p">(</span><span class="n">num_users</span><span class="p">,</span>
-                                     <span class="n">num_items</span><span class="p">,</span>
-                                     <span class="n">_parse</span><span class="p">(</span><span class="n">test_raw</span><span class="p">),</span>
-                                     <span class="n">min_rating</span><span class="p">)</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">_build_interaction_matrix</span><span class="p">(</span><span class="n">num_users</span><span class="p">,</span> <span class="n">num_items</span><span class="p">,</span> <span class="n">_parse</span><span class="p">(</span><span class="n">test_raw</span><span class="p">),</span> <span class="n">min_rating</span><span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">train</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">test</span><span class="o">.</span><span class="n">shape</span>
 
     <span class="c1"># Load metadata features</span>
-    <span class="p">(</span><span class="n">id_features</span><span class="p">,</span> <span class="n">id_feature_labels</span><span class="p">,</span>
-     <span class="n">genre_features_matrix</span><span class="p">,</span> <span class="n">genre_feature_labels</span><span class="p">)</span> <span class="o">=</span> <span class="n">_parse_item_metadata</span><span class="p">(</span><span class="n">num_items</span><span class="p">,</span>
-                                                                         <span class="n">item_metadata_raw</span><span class="p">,</span>
-                                                                         <span class="n">genres_raw</span><span class="p">)</span>
+    <span class="p">(</span>
+        <span class="n">id_features</span><span class="p">,</span>
+        <span class="n">id_feature_labels</span><span class="p">,</span>
+        <span class="n">genre_features_matrix</span><span class="p">,</span>
+        <span class="n">genre_feature_labels</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">_parse_item_metadata</span><span class="p">(</span><span class="n">num_items</span><span class="p">,</span> <span class="n">item_metadata_raw</span><span class="p">,</span> <span class="n">genres_raw</span><span class="p">)</span>
 
     <span class="k">assert</span> <span class="n">id_features</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_items</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">id_feature_labels</span><span class="p">))</span>
     <span class="k">assert</span> <span class="n">genre_features_matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_items</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">genre_feature_labels</span><span class="p">))</span>
@@ -375,78 +294,44 @@
         <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">genre_feature_labels</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">features</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">id_features</span><span class="p">,</span> <span class="n">genre_features_matrix</span><span class="p">])</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
-        <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">id_feature_labels</span><span class="p">,</span>
-                                         <span class="n">genre_feature_labels</span><span class="p">))</span>
+        <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">id_feature_labels</span><span class="p">,</span> <span class="n">genre_feature_labels</span><span class="p">))</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="n">train</span><span class="p">,</span>
-            <span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="n">test</span><span class="p">,</span>
-            <span class="s1">&#39;item_features&#39;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span>
-            <span class="s1">&#39;item_feature_labels&#39;</span><span class="p">:</span> <span class="n">feature_labels</span><span class="p">,</span>
-            <span class="s1">&#39;item_labels&#39;</span><span class="p">:</span> <span class="n">id_feature_labels</span><span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">train</span><span class="p">,</span>
+        <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">test</span><span class="p">,</span>
+        <span class="s2">&quot;item_features&quot;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span>
+        <span class="s2">&quot;item_feature_labels&quot;</span><span class="p">:</span> <span class="n">feature_labels</span><span class="p">,</span>
+        <span class="s2">&quot;item_labels&quot;</span><span class="p">:</span> <span class="n">id_feature_labels</span><span class="p">,</span>
+    <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">data</span></div>
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, Lyst (Maciej Kula).
-
-    </p>
+    <p>&#169; Copyright 2016, Lyst (Maciej Kula).</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'1.15',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
