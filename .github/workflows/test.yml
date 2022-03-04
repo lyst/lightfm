@@ -1,49 +1,100 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: tests
+# Adapted from: https://github.com/alan-turing-institute/sktime/blob/main/.github/workflows/test.yml
+name: Lint and Test
 
 on:
   push:
     branches:
+      - main
       - feature/gh-act # Only for testing
   pull_request:
     branches:
       - main
 
 jobs:
-  build:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Setup Requirements
+      run: |
+        python -m pip install -r lint-requirements.txt
+    - name: Run Linting
+      run: |
+        flake8 setup.py lightfm tests
+        black --check setup.py lightfm tests
 
+
+  test-linux:
+    needs: linting
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8"]
-
+        python-version: ["3.7", "3.8", "3.9"]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+    - name: Install test dependencies
       run: |
         python -m pip install --upgrade pip wheel
         python -m pip install -r test-requirements.txt
-        python -m pip install -r lint-requirements.txt
-    - name: Install LightFM and dependencies
+    - name: Install LightFM
       run: |
           python -m pip install .
     - name: Show dependecies
       run: python -m pip list
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
         mv lightfm lightfm_
         python -m pytest
         mv lightfm_ lightfm
+
+
+  test-windows:
+    needs: linting
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8] 
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+          channels: anaconda, conda-forge
+
+      - run: conda --version
+      - run: which python
+
+      - name: Fix windows paths
+        if: ${{ runner.os == 'Windows' }}
+        run: echo "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x64" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Install conda libpython
+        run: conda install -c anaconda libpython
+
+      - name: Install conda dependencies
+        run: |
+          conda install -c conda-forge pip wheel
+          conda install -c conda-forge --file test-requirements.txt
+      - name: Install LightFM
+        run: python -m pip install .
+
+      - name: Show dependecies
+        run: conda list
+
+      - name: Run tests
+        run: |
+          mv lightfm lightfm_
+          python -m pytest
+          mv lightfm_ lightfm
+
+
