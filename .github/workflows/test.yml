@@ -6,7 +6,7 @@ name: tests
 on:
   push:
     branches:
-      - main
+      - gh-act # Only for testing
   pull_request:
     branches:
       - main
