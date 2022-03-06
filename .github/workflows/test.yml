@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-      - feature/gh-act # Only for testing
+      - refactor/setup # Only for testing
   pull_request:
     branches:
       - main
