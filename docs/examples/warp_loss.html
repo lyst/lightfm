@@ -1,78 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Learning-to-rank using the WARP loss &mdash; LightFM 1.15 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learning-to-rank using the WARP loss &mdash; LightFM 1.16 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="LightFM 1.15 documentation" href="../index.html"/>
-        <link rel="up" title="Examples" href="../examples.html"/>
-        <link rel="next" title="Building datasets" href="dataset.html"/>
-        <link rel="prev" title="Item cold-start: recommending StackExchange questions" href="hybrid_crossvalidated.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Building datasets" href="dataset.html" />
+    <link rel="prev" title="Item cold-start: recommending StackExchange questions" href="hybrid_crossvalidated.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="../index.html" class="icon icon-home"> LightFM
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                1.15
+                1.16
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -80,25 +39,15 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lightfm.html">The LightFM model class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cross_validation.html">Cross validation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../lightfm.data.html">Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lightfm.data.html">Constructing datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Built-in datasets</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="movielens_implicit.html">Movielens implicit feedback recommender</a></li>
 <li class="toctree-l2"><a class="reference internal" href="learning_schedules.html">Learning rate schedules</a></li>
@@ -112,73 +61,36 @@
 <li class="toctree-l2"><a class="reference internal" href="dataset.html">Building datasets</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">LightFM</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../examples.html">Examples</a> &raquo;</li>
-        
       <li>Learning-to-rank using the WARP loss</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/examples/warp_loss.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="learning-to-rank-using-the-warp-loss">
-<h1>Learning-to-rank using the WARP loss<a class="headerlink" href="#learning-to-rank-using-the-warp-loss" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="learning-to-rank-using-the-warp-loss">
+<h1>Learning-to-rank using the WARP loss<a class="headerlink" href="#learning-to-rank-using-the-warp-loss" title="Permalink to this headline"></a></h1>
 <p>LightFM is probably the only recommender package implementing the WARP
 (Weighted Approximate-Rank Pairwise) loss for implicit feedback
 learning-to-rank. Generally, it perfoms better than the more popular BPR
@@ -198,20 +110,20 @@ This approximates a form of active learning where the model selects
 those triplets that it cannot currently rank correctly.</p>
 <p>This procedure yields roughly the following algorithm:</p>
 <ol class="arabic simple">
-<li>For a given (user, positive item pair), sample a negative item at
+<li><p>For a given (user, positive item pair), sample a negative item at
 random from all the remaining items. Compute predictions for both
 items; if the negative item’s prediction exceeds that of the positive
 item plus a margin, perform a gradient update to rank the positive
 item higher and the negative item lower. If there is no rank
 violation, continue sampling negative items until a violation is
-found.</li>
-<li>If you found a violating negative example at the first try, make a
+found.</p></li>
+<li><p>If you found a violating negative example at the first try, make a
 large gradient update: this indicates that a lot of negative items
 are ranked higher than positives items given the current state of the
 model, and the model must be updated by a large amount. If it took a
 lot of sampling to find a violating example, perform a small update:
 the model is likely close to the optimum and should be updated at a
-low rate.</li>
+low rate.</p></li>
 </ol>
 <p>While this is fairly hand-wavy, it should give the correct intuition.
 For more details, read the paper itself or a more in-depth blog post
@@ -220,10 +132,10 @@ A similar approach for BPR is described in Rendle’s 2014 <a class="reference e
 paper</a>.</p>
 <p>Having covered the theory, the rest of this example looks at the
 practical implications of using WARP in LightFM.</p>
-<div class="section" id="preliminaries">
-<h2>Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline">¶</a></h2>
+<section id="preliminaries">
+<h2>Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline"></a></h2>
 <p>Let’s first get the data. We’ll use the MovieLens 100K dataset.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -233,23 +145,23 @@ practical implications of using WARP in LightFM.</p>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">lightfm</span> <span class="k">import</span> <span class="n">LightFM</span>
-<span class="kn">from</span> <span class="nn">lightfm.datasets</span> <span class="k">import</span> <span class="n">fetch_movielens</span>
-<span class="kn">from</span> <span class="nn">lightfm.evaluation</span> <span class="k">import</span> <span class="n">auc_score</span>
+<span class="kn">from</span> <span class="nn">lightfm</span> <span class="kn">import</span> <span class="n">LightFM</span>
+<span class="kn">from</span> <span class="nn">lightfm.datasets</span> <span class="kn">import</span> <span class="n">fetch_movielens</span>
+<span class="kn">from</span> <span class="nn">lightfm.evaluation</span> <span class="kn">import</span> <span class="n">auc_score</span>
 
 <span class="n">movielens</span> <span class="o">=</span> <span class="n">fetch_movielens</span><span class="p">()</span>
 
 <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">movielens</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">],</span> <span class="n">movielens</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="accuracy">
-<h2>Accuracy<a class="headerlink" href="#accuracy" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="accuracy">
+<h2>Accuracy<a class="headerlink" href="#accuracy" title="Permalink to this headline"></a></h2>
 <p>The first interesting experiment is to compare the accuracy between the
 WARP and BPR losses. Let’s fit two models with equivalent
 hyperparameters and compare their accuracy across epochs. Whilst we’re
 fitting them, let’s also measure how much time each epoch takes.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1e-05</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1e-05</span>
 <span class="n">epochs</span> <span class="o">=</span> <span class="mi">70</span>
 <span class="n">num_components</span> <span class="o">=</span> <span class="mi">32</span>
 
@@ -289,7 +201,7 @@ results: a smarter way of selecting negative examples leads to higher
 quality rankings. Test accuracy decreases after the first 10 epochs,
 suggesting WARP starts overfitting and would benefit from regularization
 or early stopping.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">warp_auc</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bpr_auc</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;WARP AUC&#39;</span><span class="p">,</span> <span class="s1">&#39;BPR AUC&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
@@ -297,11 +209,11 @@ or early stopping.</p>
 </pre></div>
 </div>
 <img alt="../_images/warp_loss_5_0.png" src="../_images/warp_loss_5_0.png" />
-</div>
-<div class="section" id="fitting-speed">
-<h2>Fitting speed<a class="headerlink" href="#fitting-speed" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="fitting-speed">
+<h2>Fitting speed<a class="headerlink" href="#fitting-speed" title="Permalink to this headline"></a></h2>
 <p>What about model fitting speed?</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">warp_duration</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bpr_duration</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;WARP duration&#39;</span><span class="p">,</span> <span class="s1">&#39;BPR duration&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
@@ -314,13 +226,13 @@ slower with additional epochs; every subsequent epoch takes more time.
 This is because of WARP’s adaptive samling of negatives: the closer the
 model fits the training data, the more times it needs to sample in order
 to find rank-violating examples, leading to longer fitting times.</p>
-<p>For this reason, LightFM exposes the <code class="docutils literal"><span class="pre">max_sampled</span></code> hyperparameter that
+<p>For this reason, LightFM exposes the <code class="docutils literal notranslate"><span class="pre">max_sampled</span></code> hyperparameter that
 limits the number of attemps WARP will carry out to find a negative.
 Setting it to a low value and repeating the run shows that the run time
 actually decreases with every epoch: this is because no updates happen
 when a violating example cannot be found in the specified number of
 attempts.</p>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">warp_model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="n">num_components</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">warp_model</span> <span class="o">=</span> <span class="n">LightFM</span><span class="p">(</span><span class="n">no_components</span><span class="o">=</span><span class="n">num_components</span><span class="p">,</span>
                      <span class="n">max_sampled</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                     <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;warp&#39;</span><span class="p">,</span>
                     <span class="n">learning_schedule</span><span class="o">=</span><span class="s1">&#39;adagrad&#39;</span><span class="p">,</span>
@@ -351,79 +263,38 @@ attempts.</p>
 </div>
 <img alt="../_images/warp_loss_9_0.png" src="../_images/warp_loss_9_0.png" />
 <img alt="../_images/warp_loss_9_1.png" src="../_images/warp_loss_9_1.png" />
-</div>
-</div>
+</section>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="dataset.html" class="btn btn-neutral float-right" title="Building datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="hybrid_crossvalidated.html" class="btn btn-neutral" title="Item cold-start: recommending StackExchange questions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hybrid_crossvalidated.html" class="btn btn-neutral float-left" title="Item cold-start: recommending StackExchange questions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dataset.html" class="btn btn-neutral float-right" title="Building datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, Lyst (Maciej Kula).
-
-    </p>
+    <p>&#169; Copyright 2016, Lyst (Maciej Kula).</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'1.15',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

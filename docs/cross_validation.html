@@ -1,77 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Cross-validation &mdash; LightFM 1.15 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cross-validation &mdash; LightFM 1.16 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.15 documentation" href="index.html"/>
-        <link rel="next" title="Dataset construction" href="lightfm.data.html"/>
-        <link rel="prev" title="Model evaluation" href="lightfm.evaluation.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Dataset construction" href="lightfm.data.html" />
+    <link rel="prev" title="Model evaluation" href="lightfm.evaluation.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> LightFM
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                1.15
+                1.16
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -79,196 +39,109 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.html">The LightFM model class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Cross validation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Constructing datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Built-in datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">LightFM</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Cross-validation</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/cross_validation.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="module-lightfm.cross_validation">
-<span id="cross-validation"></span><h1>Cross-validation<a class="headerlink" href="#module-lightfm.cross_validation" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="module-lightfm.cross_validation">
+<span id="cross-validation"></span><h1>Cross-validation<a class="headerlink" href="#module-lightfm.cross_validation" title="Permalink to this headline"></a></h1>
 <p>Dataset splitting functions.</p>
-<dl class="function">
-<dt id="lightfm.cross_validation.random_train_test_split">
-<code class="descclassname">lightfm.cross_validation.</code><code class="descname">random_train_test_split</code><span class="sig-paren">(</span><em>interactions</em>, <em>test_percentage=0.2</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/cross_validation.html#random_train_test_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.cross_validation.random_train_test_split" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="lightfm.cross_validation.random_train_test_split">
+<span class="sig-prename descclassname"><span class="pre">lightfm.cross_validation.</span></span><span class="sig-name descname"><span class="pre">random_train_test_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_percentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/cross_validation.html#random_train_test_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.cross_validation.random_train_test_split" title="Permalink to this definition"></a></dt>
 <dd><p>Randomly split interactions between training and testing.</p>
 <p>This function takes an interaction set and splits it into
 two disjoint sets, a training set and a test set. Note that
 no effort is made to make sure that all items and users with
 interactions in the test set also have interactions in the
 training set; this may lead to a partial cold-start problem
-in the test set.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>interactions</strong> (<em>a scipy sparse matrix containing interactions</em>) – The interactions to split.</li>
-<li><strong>test_percentage</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of interactions to place in the test set.</li>
-<li><strong>random_state</strong> (<em>np.random.RandomState</em><em>, </em><em>optional</em>) – The random state used for the shuffle.</li>
+in the test set.
+To split a sample_weight matrix along the same lines, pass it
+into this function with the same random_state seed as was used
+for splitting the interactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interactions</strong> (<em>a scipy sparse matrix containing interactions</em>) – The interactions to split.</p></li>
+<li><p><strong>test_percentage</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of interactions to place in the test set.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>numpy.random.RandomState</em><em>, </em><em>optional</em>) – Random seed used to initialize the numpy.random.RandomState number generator.
+Accepts an instance of numpy.random.RandomState for backwards compatibility.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(train, test)</strong> –            scipy.sparse.COOMatrix)
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>(train, test)</strong> –            scipy.sparse.COOMatrix)
 A tuple of (train data, test data)</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(scipy.sparse.COOMatrix,</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(scipy.sparse.COOMatrix,</p>
+</dd>
+</dl>
 </dd></dl>
 
-</div>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="lightfm.data.html" class="btn btn-neutral float-right" title="Dataset construction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="lightfm.evaluation.html" class="btn btn-neutral" title="Model evaluation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lightfm.evaluation.html" class="btn btn-neutral float-left" title="Model evaluation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lightfm.data.html" class="btn btn-neutral float-right" title="Dataset construction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, Lyst (Maciej Kula).
-
-    </p>
+    <p>&#169; Copyright 2016, Lyst (Maciej Kula).</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.15',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

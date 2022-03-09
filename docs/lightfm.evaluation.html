@@ -1,77 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Model evaluation &mdash; LightFM 1.15 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model evaluation &mdash; LightFM 1.16 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.15 documentation" href="index.html"/>
-        <link rel="next" title="Cross-validation" href="cross_validation.html"/>
-        <link rel="prev" title="LightFM" href="lightfm.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Cross-validation" href="cross_validation.html" />
+    <link rel="prev" title="LightFM" href="lightfm.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> LightFM
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                1.15
+                1.16
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -79,333 +39,230 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.html">The LightFM model class</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Constructing datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Built-in datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">LightFM</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Model evaluation</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/lightfm.evaluation.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="module-lightfm.evaluation">
-<span id="model-evaluation"></span><h1>Model evaluation<a class="headerlink" href="#module-lightfm.evaluation" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="module-lightfm.evaluation">
+<span id="model-evaluation"></span><h1>Model evaluation<a class="headerlink" href="#module-lightfm.evaluation" title="Permalink to this headline"></a></h1>
 <p>Module containing evaluation functions suitable for judging the performance of
 a fitted LightFM model.</p>
-<dl class="function">
-<dt id="lightfm.evaluation.precision_at_k">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">precision_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#precision_at_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.precision_at_k" title="Permalink to this definition">¶</a></dt>
-<dd><p>Measure the precision at k metric for a model: the fraction of known
-positives in the first k positions of the ranked list of results.
-A perfect score is 1.0.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>model</strong> (<em>LightFM instance</em>) – the model to be evaluated</li>
-<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</li>
-<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
-will be omitted from the score calculations to avoid re-recommending
-known positives.</li>
-<li><strong>k</strong> (<em>integer</em><em>, </em><em>optional</em>) – The k parameter.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
-<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
-to the number of users with interactions in the evaluation set.
-When True, the number of rows in the output will be equal to the
-number of users.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
-not be higher than the number of physical cores.</li>
-<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
-A flag that signals whether the test and train matrices should be checked
-for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Numpy array containing precision&#64;k scores for each user. If there are
-no interactions for a given user the returned precision will be 0.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array of shape [n_users with interactions or n_users,]</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="lightfm.evaluation.recall_at_k">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">recall_at_k</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>k=10</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#recall_at_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.recall_at_k" title="Permalink to this definition">¶</a></dt>
-<dd><p>Measure the recall at k metric for a model: the number of positive items in
-the first k positions of the ranked list of results divided by the number
-of positive items in the test period. A perfect score is 1.0.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>model</strong> (<em>LightFM instance</em>) – the model to be evaluated</li>
-<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</li>
-<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
-will be omitted from the score calculations to avoid re-recommending
-known positives.</li>
-<li><strong>k</strong> (<em>integer</em><em>, </em><em>optional</em>) – The k parameter.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
-<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
-to the number of users with interactions in the evaluation set.
-When True, the number of rows in the output will be equal to the
-number of users.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
-not be higher than the number of physical cores.</li>
-<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
-A flag that signals whether the test and train matrices should be checked
-for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Numpy array containing recall&#64;k scores for each user. If there are no
-interactions for a given user having items in the test period, the
-returned recall will be 0.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array of shape [n_users with interactions or n_users,]</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="lightfm.evaluation.auc_score">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">auc_score</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#auc_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.auc_score" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="lightfm.evaluation.auc_score">
+<span class="sig-prename descclassname"><span class="pre">lightfm.evaluation.</span></span><span class="sig-name descname"><span class="pre">auc_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_interactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_interactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_intersections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#auc_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.evaluation.auc_score" title="Permalink to this definition"></a></dt>
 <dd><p>Measure the ROC AUC metric for a model: the probability that a randomly
 chosen positive example has a higher score than a randomly chosen negative
 example.
 A perfect score is 1.0.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>model</strong> (<em>LightFM instance</em>) – the model to be evaluated</li>
-<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</li>
-<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>LightFM instance</em>) – the fitted model to be evaluated</p></li>
+<li><p><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</p></li>
+<li><p><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
 will be omitted from the score calculations to avoid re-recommending
-known positives.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
-<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
+known positives.</p></li>
+<li><p><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</p></li>
+<li><p><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</p></li>
+<li><p><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
 to the number of users with interactions in the evaluation set.
 When True, the number of rows in the output will be equal to the
-number of users.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
-not be higher than the number of physical cores.</li>
-<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+number of users.</p></li>
+<li><p><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</p></li>
+<li><p><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
 A flag that signals whether the test and train matrices should be checked
-for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Numpy array containing AUC scores for each user. If there are no
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array containing AUC scores for each user. If there are no
 interactions for a given user the returned AUC will be 0.5.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array of shape [n_users with interactions or n_users,]</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array of shape [n_users with interactions or n_users,]</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="lightfm.evaluation.reciprocal_rank">
-<code class="descclassname">lightfm.evaluation.</code><code class="descname">reciprocal_rank</code><span class="sig-paren">(</span><em>model</em>, <em>test_interactions</em>, <em>train_interactions=None</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>preserve_rows=False</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#reciprocal_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.evaluation.reciprocal_rank" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="lightfm.evaluation.precision_at_k">
+<span class="sig-prename descclassname"><span class="pre">lightfm.evaluation.</span></span><span class="sig-name descname"><span class="pre">precision_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_interactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_interactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_intersections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#precision_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.evaluation.precision_at_k" title="Permalink to this definition"></a></dt>
+<dd><p>Measure the precision at k metric for a model: the fraction of known
+positives in the first k positions of the ranked list of results.
+A perfect score is 1.0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>LightFM instance</em>) – the fitted model to be evaluated</p></li>
+<li><p><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</p></li>
+<li><p><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
+will be omitted from the score calculations to avoid re-recommending
+known positives.</p></li>
+<li><p><strong>k</strong> (<em>integer</em><em>, </em><em>optional</em>) – The k parameter.</p></li>
+<li><p><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</p></li>
+<li><p><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</p></li>
+<li><p><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
+to the number of users with interactions in the evaluation set.
+When True, the number of rows in the output will be equal to the
+number of users.</p></li>
+<li><p><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</p></li>
+<li><p><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+A flag that signals whether the test and train matrices should be checked
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array containing precision&#64;k scores for each user. If there are
+no interactions for a given user the returned precision will be 0.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array of shape [n_users with interactions or n_users,]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lightfm.evaluation.recall_at_k">
+<span class="sig-prename descclassname"><span class="pre">lightfm.evaluation.</span></span><span class="sig-name descname"><span class="pre">recall_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_interactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_interactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_intersections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#recall_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.evaluation.recall_at_k" title="Permalink to this definition"></a></dt>
+<dd><p>Measure the recall at k metric for a model: the number of positive items in
+the first k positions of the ranked list of results divided by the number
+of positive items in the test period. A perfect score is 1.0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>LightFM instance</em>) – the fitted model to be evaluated</p></li>
+<li><p><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</p></li>
+<li><p><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
+will be omitted from the score calculations to avoid re-recommending
+known positives.</p></li>
+<li><p><strong>k</strong> (<em>integer</em><em>, </em><em>optional</em>) – The k parameter.</p></li>
+<li><p><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</p></li>
+<li><p><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</p></li>
+<li><p><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
+to the number of users with interactions in the evaluation set.
+When True, the number of rows in the output will be equal to the
+number of users.</p></li>
+<li><p><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</p></li>
+<li><p><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+A flag that signals whether the test and train matrices should be checked
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array containing recall&#64;k scores for each user. If there are no
+interactions for a given user having items in the test period, the
+returned recall will be 0.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array of shape [n_users with interactions or n_users,]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lightfm.evaluation.reciprocal_rank">
+<span class="sig-prename descclassname"><span class="pre">lightfm.evaluation.</span></span><span class="sig-name descname"><span class="pre">reciprocal_rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_interactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_interactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_intersections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/evaluation.html#reciprocal_rank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.evaluation.reciprocal_rank" title="Permalink to this definition"></a></dt>
 <dd><p>Measure the reciprocal rank metric for a model: 1 / the rank of the highest
 ranked positive example. A perfect score is 1.0.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>model</strong> (<em>LightFM instance</em>) – the model to be evaluated</li>
-<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</li>
-<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>LightFM instance</em>) – the fitted model to be evaluated</p></li>
+<li><p><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries representing known positives in the evaluation set.</p></li>
+<li><p><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries representing known positives in the train set. These
 will be omitted from the score calculations to avoid re-recommending
-known positives.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
-<li><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
+known positives.</p></li>
+<li><p><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</p></li>
+<li><p><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</p></li>
+<li><p><strong>preserve_rows</strong> (<em>boolean</em><em>, </em><em>optional</em>) – When False (default), the number of rows in the output will be equal
 to the number of users with interactions in the evaluation set.
 When True, the number of rows in the output will be equal to the
-number of users.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
-not be higher than the number of physical cores.</li>
-<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+number of users.</p></li>
+<li><p><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</p></li>
+<li><p><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
 A flag that signals whether the test and train matrices should be checked
-for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Numpy array containing reciprocal rank scores for each user.
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array containing reciprocal rank scores for each user.
 If there are no interactions for a given user the returned value will
 be 0.0.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array of shape [n_users with interactions or n_users,]</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array of shape [n_users with interactions or n_users,]</p>
+</dd>
+</dl>
 </dd></dl>
 
-</div>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="cross_validation.html" class="btn btn-neutral float-right" title="Cross-validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="lightfm.html" class="btn btn-neutral" title="LightFM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lightfm.html" class="btn btn-neutral float-left" title="LightFM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cross_validation.html" class="btn btn-neutral float-right" title="Cross-validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, Lyst (Maciej Kula).
-
-    </p>
+    <p>&#169; Copyright 2016, Lyst (Maciej Kula).</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.15',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

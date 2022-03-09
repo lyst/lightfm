@@ -1,77 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Dataset construction &mdash; LightFM 1.15 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dataset construction &mdash; LightFM 1.16 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.15 documentation" href="index.html"/>
-        <link rel="next" title="Datasets" href="datasets.html"/>
-        <link rel="prev" title="Cross-validation" href="cross_validation.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Datasets" href="datasets.html" />
+    <link rel="prev" title="Cross-validation" href="cross_validation.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> LightFM
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                1.15
+                1.16
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -79,389 +39,278 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.html">The LightFM model class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Constructing datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Built-in datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">LightFM</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Dataset construction</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/lightfm.data.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="module-lightfm.data">
-<span id="dataset-construction"></span><h1>Dataset construction<a class="headerlink" href="#module-lightfm.data" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="lightfm.data.Dataset">
-<em class="property">class </em><code class="descclassname">lightfm.data.</code><code class="descname">Dataset</code><span class="sig-paren">(</span><em>user_identity_features=True</em>, <em>item_identity_features=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+             
+  <section id="module-lightfm.data">
+<span id="dataset-construction"></span><h1>Dataset construction<a class="headerlink" href="#module-lightfm.data" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lightfm.data.Dataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lightfm.data.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_identity_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_identity_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Tool for building interaction and feature matrices, taking care of the
 mapping between user/item ids and feature names and internal feature indices.</p>
 <p>To create a dataset:
 - Create an instance of the <cite>Dataset</cite> class.
 - Call <cite>fit</cite> (or <cite>fit_partial</cite>), supplying user/item ids and feature names</p>
 <blockquote>
-<div>that you want to use in your model. This will create internal mappings that
+<div><p>that you want to use in your model. This will create internal mappings that
 translate the ids and feature names to internal indices used by the LightFM
-model.</div></blockquote>
+model.</p>
+</div></blockquote>
 <ul class="simple">
-<li>Call <cite>build_interactions</cite> with an iterable of (user id, item id) or (user id,
-item id, weight) to build an interactions and weights matrix.</li>
-<li>Call <cite>build_user/item_features</cite> with iterables of (user/item id, [features])
-or (user/item id, {feature: feature weight}) to build feature matrices.</li>
-<li>To add new user/item ids or features, call <cite>fit_partial</cite> again. You will need
-to resize your LightFM model to be able to use the new features.</li>
+<li><p>Call <cite>build_interactions</cite> with an iterable of (user id, item id) or (user id,
+item id, weight) to build an interactions and weights matrix.</p></li>
+<li><p>Call <cite>build_user/item_features</cite> with iterables of (user/item id, [features])
+or (user/item id, {feature: feature weight}) to build feature matrices.</p></li>
+<li><p>To add new user/item ids or features, call <cite>fit_partial</cite> again. You will need
+to resize your LightFM model to be able to use the new features.</p></li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>user_identity_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Create a unique feature for every user in addition to other features.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_identity_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Create a unique feature for every user in addition to other features.
 If true (default), a latent vector will be allocated for every user. This
 is a reasonable default for most applications, but should be set to false
-if there is very little data for every user.</li>
-<li><strong>item_identity_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Create a unique feature for every item in addition to other features.
+if there is very little data for every user. For more details see the Notes
+in <a class="reference internal" href="lightfm.html"><span class="doc">LightFM</span></a>.</p></li>
+<li><p><strong>item_identity_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Create a unique feature for every item in addition to other features.
 If true (default), a latent vector will be allocated for every item. This
 is a reasonable default for most applications, but should be set to false
-if there is very little data for every item.</li>
+if there is very little data for every item. For more details see the Notes
+in <a class="reference internal" href="lightfm.html"><span class="doc">LightFM</span></a>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="lightfm.data.Dataset.build_interactions">
-<code class="descname">build_interactions</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.build_interactions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.build_interactions" title="Permalink to this definition">¶</a></dt>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.build_interactions">
+<span class="sig-name descname"><span class="pre">build_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.build_interactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.build_interactions" title="Permalink to this definition"></a></dt>
 <dd><p>Build an interaction matrix.</p>
 <p>Two matrices will be returned: a (num_users, num_items)
 COO matrix with interactions, and a (num_users, num_items)
 matrix with the corresponding interaction weights.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>iterable of</em><em> (</em><em>user_id</em><em>, </em><em>item_id</em><em>) or </em><em>(</em><em>user_id</em><em>, </em><em>item_id</em><em>, </em><em>weight</em><em>)</em>) – An iterable of interactions. The user and item ids will be
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>iterable of</em><em> (</em><em>user_id</em><em>, </em><em>item_id</em><em>) or </em><em>(</em><em>user_id</em><em>, </em><em>item_id</em><em>, </em><em>weight</em><em>)</em>) – An iterable of interactions. The user and item ids will be
 translated to internal model indices using the mappings
 constructed during the fit call. If weights are not provided
-they will be assumed to be 1.0.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>(interactions, weights)</strong> – Two COO matrices: the interactions matrix
-and the corresponding weights matrix.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">COO matrix, COO matrix</td>
-</tr>
-</tbody>
-</table>
+they will be assumed to be 1.0.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>(interactions, weights)</strong> – Two COO matrices: the interactions matrix
+and the corresponding weights matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>COO matrix, COO matrix</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.data.Dataset.build_item_features">
-<code class="descname">build_item_features</code><span class="sig-paren">(</span><em>data</em>, <em>normalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.build_item_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.build_item_features" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.build_item_features">
+<span class="sig-name descname"><span class="pre">build_item_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.build_item_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.build_item_features" title="Permalink to this definition"></a></dt>
 <dd><p>Build a item features matrix out of an iterable of the form
 (item id, [list of feature names]) or (item id, {feature name: feature weight}).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> (<em>iterable of the form</em>) – (item id, [list of feature names]) or (item id,
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>iterable of the form</em>) – (item id, [list of feature names]) or (item id,
 {feature name: feature weight}).
 Item and feature ids will be translated to internal indices
-constructed during the fit call.</li>
-<li><strong>normalize</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, will ensure that feature weights sum to 1 in every row.</li>
+constructed during the fit call.</p></li>
+<li><p><strong>normalize</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, will ensure that feature weights sum to 1 in every row.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>feature matrix</strong> – Matrix of item features.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">CSR matrix (num items, num features)</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>feature matrix</strong> – Matrix of item features.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>CSR matrix (num items, num features)</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.data.Dataset.build_user_features">
-<code class="descname">build_user_features</code><span class="sig-paren">(</span><em>data</em>, <em>normalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.build_user_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.build_user_features" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.build_user_features">
+<span class="sig-name descname"><span class="pre">build_user_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.build_user_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.build_user_features" title="Permalink to this definition"></a></dt>
 <dd><p>Build a user features matrix out of an iterable of the form
 (user id, [list of feature names]) or (user id, {feature name: feature weight}).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> (<em>iterable of the form</em>) – (user id, [list of feature names]) or (user id,
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>iterable of the form</em>) – (user id, [list of feature names]) or (user id,
 {feature name: feature weight}).
 User and feature ids will be translated to internal indices
-constructed during the fit call.</li>
-<li><strong>normalize</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, will ensure that feature weights sum to 1 in every row.</li>
+constructed during the fit call.</p></li>
+<li><p><strong>normalize</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, will ensure that feature weights sum to 1 in every row.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>feature matrix</strong> – Matrix of user features.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">CSR matrix (num users, num features)</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>feature matrix</strong> – Matrix of user features.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>CSR matrix (num users, num features)</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.data.Dataset.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>users</em>, <em>items</em>, <em>user_features=None</em>, <em>item_features=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.fit" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">users</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.fit" title="Permalink to this definition"></a></dt>
 <dd><p>Fit the user/item id and feature name mappings.</p>
 <p>Calling fit the second time will reset existing mappings.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>users</strong> (<em>iterable of user ids</em>) – </li>
-<li><strong>items</strong> (<em>iterable of item ids</em>) – </li>
-<li><strong>user_features</strong> (<em>iterable of user features</em><em>, </em><em>optional</em>) – </li>
-<li><strong>item_features</strong> (<em>iterable of item features</em><em>, </em><em>optional</em>) – </li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>users</strong> (<em>iterable of user ids</em>) – </p></li>
+<li><p><strong>items</strong> (<em>iterable of item ids</em>) – </p></li>
+<li><p><strong>user_features</strong> (<em>iterable of user features</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>item_features</strong> (<em>iterable of item features</em><em>, </em><em>optional</em>) – </p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.data.Dataset.fit_partial">
-<code class="descname">fit_partial</code><span class="sig-paren">(</span><em>users=None</em>, <em>items=None</em>, <em>user_features=None</em>, <em>item_features=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.fit_partial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.fit_partial" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.fit_partial">
+<span class="sig-name descname"><span class="pre">fit_partial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">users</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.fit_partial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.fit_partial" title="Permalink to this definition"></a></dt>
 <dd><p>Fit the user/item id and feature name mappings.</p>
 <p>Calling fit the second time will add new entries to existing mappings.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>users</strong> (<em>iterable of user ids</em><em>, </em><em>optional</em>) – </li>
-<li><strong>items</strong> (<em>iterable of item ids</em><em>, </em><em>optional</em>) – </li>
-<li><strong>user_features</strong> (<em>iterable of user features</em><em>, </em><em>optional</em>) – </li>
-<li><strong>item_features</strong> (<em>iterable of item features</em><em>, </em><em>optional</em>) – </li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>users</strong> (<em>iterable of user ids</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>items</strong> (<em>iterable of item ids</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>user_features</strong> (<em>iterable of user features</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>item_features</strong> (<em>iterable of item features</em><em>, </em><em>optional</em>) – </p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.data.Dataset.interactions_shape">
-<code class="descname">interactions_shape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.interactions_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.interactions_shape" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.interactions_shape">
+<span class="sig-name descname"><span class="pre">interactions_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.interactions_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.interactions_shape" title="Permalink to this definition"></a></dt>
 <dd><p>Return a tuple of (num users, num items).</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.data.Dataset.item_features_shape">
-<code class="descname">item_features_shape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.item_features_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.item_features_shape" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.item_features_shape">
+<span class="sig-name descname"><span class="pre">item_features_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.item_features_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.item_features_shape" title="Permalink to this definition"></a></dt>
 <dd><p>Return the shape of the item features matrix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>(num item ids, num item features)</strong> – The shape.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple of ints</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>(num item ids, num item features)</strong> – The shape.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of ints</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.data.Dataset.mapping">
-<code class="descname">mapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.mapping" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.mapping">
+<span class="sig-name descname"><span class="pre">mapping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.mapping" title="Permalink to this definition"></a></dt>
 <dd><p>Return the constructed mappings.</p>
 <p>Invert these to map internal indices to external ids.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>mappings</strong> – item id map, item id map)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(user id map, user feature map,</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>(user id map, user feature map, item id map, item feature map)</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of dictionaries</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.data.Dataset.model_dimensions">
-<code class="descname">model_dimensions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.model_dimensions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.model_dimensions" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.model_dimensions">
+<span class="sig-name descname"><span class="pre">model_dimensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.model_dimensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.model_dimensions" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a tuple that characterizes the number of user/item feature
 embeddings in a LightFM model for this dataset.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.data.Dataset.user_features_shape">
-<code class="descname">user_features_shape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.user_features_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.data.Dataset.user_features_shape" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.data.Dataset.user_features_shape">
+<span class="sig-name descname"><span class="pre">user_features_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/data.html#Dataset.user_features_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.data.Dataset.user_features_shape" title="Permalink to this definition"></a></dt>
 <dd><p>Return the shape of the user features matrix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>(num user ids, num user features)</strong> – The shape.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple of ints</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>(num user ids, num user features)</strong> – The shape.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of ints</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="datasets.html" class="btn btn-neutral float-right" title="Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="cross_validation.html" class="btn btn-neutral" title="Cross-validation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cross_validation.html" class="btn btn-neutral float-left" title="Cross-validation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="datasets.html" class="btn btn-neutral float-right" title="Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, Lyst (Maciej Kula).
-
-    </p>
+    <p>&#169; Copyright 2016, Lyst (Maciej Kula).</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.15',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

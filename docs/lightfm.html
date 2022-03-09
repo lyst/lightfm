@@ -1,77 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>LightFM &mdash; LightFM 1.15 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LightFM &mdash; LightFM 1.16 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.15 documentation" href="index.html"/>
-        <link rel="next" title="Model evaluation" href="lightfm.evaluation.html"/>
-        <link rel="prev" title="Quickstart" href="quickstart.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Model evaluation" href="lightfm.evaluation.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> LightFM
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                1.15
+                1.16
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -79,94 +39,48 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">LightFM model</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The LightFM model class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Constructing datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Built-in datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">LightFM</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>LightFM</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/lightfm.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="lightfm">
-<h1>LightFM<a class="headerlink" href="#lightfm" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="lightfm.LightFM">
-<em class="property">class </em><code class="descclassname">lightfm.</code><code class="descname">LightFM</code><span class="sig-paren">(</span><em>no_components=10</em>, <em>k=5</em>, <em>n=10</em>, <em>learning_schedule=’adagrad’</em>, <em>loss=’logistic’</em>, <em>learning_rate=0.05</em>, <em>rho=0.95</em>, <em>epsilon=1e-06</em>, <em>item_alpha=0.0</em>, <em>user_alpha=0.0</em>, <em>max_sampled=10</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="lightfm">
+<h1>LightFM<a class="headerlink" href="#lightfm" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lightfm.LightFM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lightfm.</span></span><span class="sig-name descname"><span class="pre">LightFM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_schedule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'adagrad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'logistic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_sampled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.LightFM" title="Permalink to this definition"></a></dt>
 <dd><p>A hybrid latent representation recommender model.</p>
 <p>The model learns embeddings (latent representations in a high-dimensional
 space) for users and items in a way that encodes user preferences over items.
@@ -184,83 +98,89 @@ together. The same applies to user features.</p>
 descent</a> methods.</p>
 <p>Four loss functions are available:</p>
 <ul class="simple">
-<li>logistic: useful when both positive (1) and negative (-1) interactions
-are present.</li>
-<li>BPR: Bayesian Personalised Ranking <a class="footnote-reference" href="#id6" id="id1">[1]</a> pairwise loss. Maximises the
+<li><p>logistic: useful when both positive (1) and negative (-1) interactions
+are present.</p></li>
+<li><p>BPR: Bayesian Personalised Ranking <a class="footnote-reference brackets" href="#id6" id="id1">1</a> pairwise loss. Maximises the
 prediction difference between a positive example and a randomly
 chosen negative example. Useful when only positive interactions
-are present and optimising ROC AUC is desired.</li>
-<li>WARP: Weighted Approximate-Rank Pairwise <a class="footnote-reference" href="#id7" id="id2">[2]</a> loss. Maximises
+are present and optimising ROC AUC is desired.</p></li>
+<li><p>WARP: Weighted Approximate-Rank Pairwise <a class="footnote-reference brackets" href="#id7" id="id2">2</a> loss. Maximises
 the rank of positive examples by repeatedly sampling negative
 examples until rank violating one is found. Useful when only
 positive interactions are present and optimising the top of
-the recommendation list (precision&#64;k) is desired.</li>
-<li>k-OS WARP: k-th order statistic loss <a class="footnote-reference" href="#id8" id="id3">[3]</a>. A modification of WARP that
+the recommendation list (precision&#64;k) is desired.</p></li>
+<li><p>k-OS WARP: k-th order statistic loss <a class="footnote-reference brackets" href="#id8" id="id3">3</a>. A modification of WARP that
 uses the k-th positive example for any given user as a basis for pairwise
-updates.</li>
+updates.</p></li>
 </ul>
 <p>Two learning rate schedules are available:</p>
 <ul class="simple">
-<li>adagrad: <a class="footnote-reference" href="#id9" id="id4">[4]</a></li>
-<li>adadelta: <a class="footnote-reference" href="#id10" id="id5">[5]</a></li>
+<li><p>adagrad: <a class="footnote-reference brackets" href="#id9" id="id4">4</a></p></li>
+<li><p>adadelta: <a class="footnote-reference brackets" href="#id10" id="id5">5</a></p></li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>no_components</strong> (<em>int</em><em>, </em><em>optional</em>) – the dimensionality of the feature latent embeddings.</li>
-<li><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) – for k-OS training, the k-th positive example will be selected from the
-n positive examples sampled for every user.</li>
-<li><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – for k-OS training, maximum number of positives sampled for each update.</li>
-<li><strong>learning_schedule</strong> (<em>string</em><em>, </em><em>optional</em>) – one of (‘adagrad’, ‘adadelta’).</li>
-<li><strong>loss</strong> (<em>string</em><em>, </em><em>optional</em>) – one of  (‘logistic’, ‘bpr’, ‘warp’, ‘warp-kos’): the loss function.</li>
-<li><strong>learning_rate</strong> (<em>float</em><em>, </em><em>optional</em>) – initial learning rate for the adagrad learning schedule.</li>
-<li><strong>rho</strong> (<em>float</em><em>, </em><em>optional</em>) – moving average coefficient for the adadelta learning schedule.</li>
-<li><strong>epsilon</strong> (<em>float</em><em>, </em><em>optional</em>) – conditioning parameter for the adadelta learning schedule.</li>
-<li><strong>item_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – L2 penalty on item features. Tip: setting this number too high can slow
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>no_components</strong> (<em>int</em><em>, </em><em>optional</em>) – the dimensionality of the feature latent embeddings.</p></li>
+<li><p><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) – for k-OS training, the k-th positive example will be selected from the
+n positive examples sampled for every user.</p></li>
+<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – for k-OS training, maximum number of positives sampled for each update.</p></li>
+<li><p><strong>learning_schedule</strong> (<em>string</em><em>, </em><em>optional</em>) – one of (‘adagrad’, ‘adadelta’).</p></li>
+<li><p><strong>loss</strong> (<em>string</em><em>, </em><em>optional</em>) – one of  (‘logistic’, ‘bpr’, ‘warp’, ‘warp-kos’): the loss function.</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em><em>, </em><em>optional</em>) – initial learning rate for the adagrad learning schedule.</p></li>
+<li><p><strong>rho</strong> (<em>float</em><em>, </em><em>optional</em>) – moving average coefficient for the adadelta learning schedule.</p></li>
+<li><p><strong>epsilon</strong> (<em>float</em><em>, </em><em>optional</em>) – conditioning parameter for the adadelta learning schedule.</p></li>
+<li><p><strong>item_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – L2 penalty on item features. Tip: setting this number too high can slow
 down training. One good way to check is if the final weights in the
 embeddings turned out to be mostly zero. The same idea applies to
-the user_alpha parameter.</li>
-<li><strong>user_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – L2 penalty on user features.</li>
-<li><strong>max_sampled</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum number of negative samples used during WARP fitting.
+the user_alpha parameter.</p></li>
+<li><p><strong>user_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – L2 penalty on user features.</p></li>
+<li><p><strong>max_sampled</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum number of negative samples used during WARP fitting.
 It requires a lot of sampling to find negative triplets for users that
 are already well represented by the model; this can lead to very long
 training times and overfitting. Setting this to a higher number will
 generally lead to longer training times, but may in some cases improve
-accuracy.</li>
-<li><strong>random_state</strong> (<em>int seed</em><em>, </em><em>RandomState instance</em><em>, or </em><em>None</em>) – The seed of the pseudo random number generator to use when shuffling
-the data and initializing the parameters.</li>
+accuracy.</p></li>
+<li><p><strong>random_state</strong> (<em>int seed</em><em>, </em><em>RandomState instance</em><em>, or </em><em>None</em>) – The seed of the pseudo random number generator to use when shuffling
+the data and initializing the parameters.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>item_embeddings</strong> (<em>np.float32 array of shape</em><em> [</em><em>n_item_features</em><em>, </em><em>n_components</em><em>]</em>) – Contains the estimated latent vectors for item features. The [i, j]-th
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>~LightFM.item_embeddings</strong> (<em>np.float32 array of shape</em><em> [</em><em>n_item_features</em><em>, </em><em>n_components</em><em>]</em>) – Contains the estimated latent vectors for item features. The [i, j]-th
 entry gives the value of the j-th component for the i-th item feature.
 In the simplest case where the item feature matrix is an identity
-matrix, the i-th row will represent the i-th item latent vector.</li>
-<li><strong>user_embeddings</strong> (<em>np.float32 array of shape</em><em> [</em><em>n_user_features</em><em>, </em><em>n_components</em><em>]</em>) – Contains the estimated latent vectors for user features. The [i, j]-th
+matrix, the i-th row will represent the i-th item latent vector.</p></li>
+<li><p><strong>~LightFM.user_embeddings</strong> (<em>np.float32 array of shape</em><em> [</em><em>n_user_features</em><em>, </em><em>n_components</em><em>]</em>) – Contains the estimated latent vectors for user features. The [i, j]-th
 entry gives the value of the j-th component for the i-th user feature.
 In the simplest case where the user feature matrix is an identity
-matrix, the i-th row will represent the i-th user latent vector.</li>
-<li><strong>item_biases</strong> (<em>np.float32 array of shape</em><em> [</em><em>n_item_features</em><em>,</em><em>]</em>) – Contains the biases for item_features.</li>
-<li><strong>user_biases</strong> (<em>np.float32 array of shape</em><em> [</em><em>n_user_features</em><em>,</em><em>]</em>) – Contains the biases for user_features.</li>
+matrix, the i-th row will represent the i-th user latent vector.</p></li>
+<li><p><strong>~LightFM.item_biases</strong> (<em>np.float32 array of shape</em><em> [</em><em>n_item_features</em><em>,</em><em>]</em>) – Contains the biases for item_features.</p></li>
+<li><p><strong>~LightFM.user_biases</strong> (<em>np.float32 array of shape</em><em> [</em><em>n_user_features</em><em>,</em><em>]</em>) – Contains the biases for user_features.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>Users’ and items’ latent representations are expressed in terms of their
 features’ representations. If no feature matrices are provided to the
-<a class="reference internal" href="#lightfm.LightFM.fit" title="lightfm.LightFM.fit"><code class="xref py py-func docutils literal"><span class="pre">lightfm.LightFM.fit()</span></code></a> or <a class="reference internal" href="#lightfm.LightFM.predict" title="lightfm.LightFM.predict"><code class="xref py py-func docutils literal"><span class="pre">lightfm.LightFM.predict()</span></code></a> methods, they are
+<a class="reference internal" href="#lightfm.LightFM.fit" title="lightfm.LightFM.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">lightfm.LightFM.fit()</span></code></a> or <a class="reference internal" href="#lightfm.LightFM.predict" title="lightfm.LightFM.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">lightfm.LightFM.predict()</span></code></a> methods, they are
 implicitly assumed to be identity matrices: that is, each user and item
 are characterised by one feature that is unique to that user (or item).
 In this case, LightFM reduces to a traditional collaborative filtering
 matrix factorization method.</p>
-<p>When a feature matrix is provided, it should be of shape
-<code class="docutils literal"><span class="pre">(num_&lt;users/items&gt;</span> <span class="pre">x</span> <span class="pre">num_features)</span></code>. An embedding will then be estimated
-for every feature: that is, there will be <code class="docutils literal"><span class="pre">num_features</span></code> embeddings.
+<p>For including features, there are two strategies:</p>
+<ol class="arabic simple">
+<li><p>Characterizing each user/item <em>only</em> by its features.</p></li>
+<li><p>Characterizing each user/item by its features <em>and</em> an identity matrix
+that captures interactions between users and items directly.</p></li>
+</ol>
+<p>1. When using only features, the feature matrix should be of shape
+<code class="docutils literal notranslate"><span class="pre">(num_&lt;users/items&gt;</span> <span class="pre">x</span> <span class="pre">num_features)</span></code>. To build these feature matrices,
+it is recommended to use the build methods from the class
+<a class="reference internal" href="lightfm.data.html#lightfm.data.Dataset" title="lightfm.data.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">lightfm.data.Dataset</span></code></a> and setting the <code class="docutils literal notranslate"><span class="pre">&lt;user/item&gt;_identity_features</span></code>
+to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+An embedding will then be estimated for every feature: that is, there will be
+<code class="docutils literal notranslate"><span class="pre">num_features</span></code> embeddings.
 To obtain the representation for user i, the model will look up the i-th
 row of the feature matrix to find the features with non-zero weights in
 that row; the embeddings for these features will then be added together
@@ -269,243 +189,239 @@ in the 5th column of the user feature matrix, and weight 3 in the 20th
 column, that user’s representation will be found by adding together
 the embedding for the 5th and the 20th features (multiplying the latter
 by 3). The same goes for items.</p>
-<p>Note: when supplying feature matrices, an implicit identity feature
-matrix will no longer be used. This may result in a less expressive model:
-because no per-user features are estiamated, the model may underfit. To
-combat this, include per-user (per-item) features (that is, an identity
-matrix) as part of the feature matrix you supply.</p>
+<p>Note: This strategy may result in a less expressive model because no per-user
+features are estimated, the model may underfit. To combat this, follow
+strategy 2. and include per-user (per-item) features (that is, an identity matrix)
+as part of the feature matrix.</p>
+<p>2. To use features alongside user-item interactions, the feature matrix should
+include an identity matrix. The resulting feature matrix should be of shape
+<code class="docutils literal notranslate"><span class="pre">(num_&lt;users/items&gt;</span> <span class="pre">x</span> <span class="pre">(num_&lt;users/items&gt;</span> <span class="pre">+</span> <span class="pre">num_features))</span></code>. This strategy is
+the default when using the <a class="reference internal" href="lightfm.data.html#lightfm.data.Dataset" title="lightfm.data.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">lightfm.data.Dataset</span></code></a> class. The
+behavior is controlled by the <code class="docutils literal notranslate"><span class="pre">&lt;user/item&gt;_identity_features=True</span></code> default arguments.</p>
 <p class="rubric">References</p>
-<table class="docutils footnote" frame="void" id="id6" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Rendle, Steffen, et al. “BPR: Bayesian personalized ranking from
+<dl class="footnote brackets">
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Rendle, Steffen, et al. “BPR: Bayesian personalized ranking from
 implicit feedback.”
 Proceedings of the Twenty-Fifth Conference on Uncertainty in
-Artificial Intelligence. AUAI Press, 2009.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id7" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Weston, Jason, Samy Bengio, and Nicolas Usunier. “Wsabie: Scaling up
-to large vocabulary image annotation.” IJCAI. Vol. 11. 2011.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id8" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>Weston, Jason, Hector Yee, and Ron J. Weiss. “Learning to rank
+Artificial Intelligence. AUAI Press, 2009.</p>
+</dd>
+<dt class="label" id="id7"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Weston, Jason, Samy Bengio, and Nicolas Usunier. “Wsabie: Scaling up
+to large vocabulary image annotation.” IJCAI. Vol. 11. 2011.</p>
+</dd>
+<dt class="label" id="id8"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>Weston, Jason, Hector Yee, and Ron J. Weiss. “Learning to rank
 recommendations with the k-order statistic loss.”
 Proceedings of the 7th ACM conference on Recommender systems. ACM,
-2013.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id9" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td>Duchi, John, Elad Hazan, and Yoram Singer. “Adaptive subgradient
+2013.</p>
+</dd>
+<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id4">4</a></span></dt>
+<dd><p>Duchi, John, Elad Hazan, and Yoram Singer. “Adaptive subgradient
 methods for online learning and stochastic optimization.”
-The Journal of Machine Learning Research 12 (2011): 2121-2159.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id10" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td>Zeiler, Matthew D. “ADADELTA: An adaptive learning rate method.”
-arXiv preprint arXiv:1212.5701 (2012).</td></tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="lightfm.LightFM.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>interactions</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>sample_weight=None</em>, <em>epochs=1</em>, <em>num_threads=1</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.fit" title="Permalink to this definition">¶</a></dt>
+The Journal of Machine Learning Research 12 (2011): 2121-2159.</p>
+</dd>
+<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id5">5</a></span></dt>
+<dd><p>Zeiler, Matthew D. “ADADELTA: An adaptive learning rate method.”
+arXiv preprint arXiv:1212.5701 (2012).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.LightFM.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.LightFM.fit" title="Permalink to this definition"></a></dt>
 <dd><p>Fit the model.</p>
 <p>For details on how to use feature matrices, see the documentation
-on the <a class="reference internal" href="#lightfm.LightFM" title="lightfm.LightFM"><code class="xref py py-class docutils literal"><span class="pre">lightfm.LightFM</span></code></a> class.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>interactions</strong> (<em>np.float32 coo_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – the matrix containing
+on the <a class="reference internal" href="#lightfm.LightFM" title="lightfm.LightFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">lightfm.LightFM</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interactions</strong> (<em>np.float32 coo_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – the matrix containing
 user-item interactions. Will be converted to
-numpy.float32 dtype if it is not of that type.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
-<li><strong>sample_weight</strong> (<em>np.float32 coo_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – matrix with entries expressing weights of individual
+numpy.float32 dtype if it is not of that type.</p></li>
+<li><p><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</p></li>
+<li><p><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</p></li>
+<li><p><strong>sample_weight</strong> (<em>np.float32 coo_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – matrix with entries expressing weights of individual
 interactions from the interactions matrix.
 Its row and col arrays must be the same as
 those of the interactions matrix. For memory
 efficiency its possible to use the same arrays
 for both weights and interaction matrices.
 Defaults to weight 1.0 for all interactions.
-Not implemented for the k-OS loss.</li>
-<li><strong>epochs</strong> (<em>int</em><em>, </em><em>optional</em>) – number of epochs to run</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
-not be higher than the number of physical cores.</li>
-<li><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to print progress messages.</li>
+Not implemented for the k-OS loss.</p></li>
+<li><p><strong>epochs</strong> (<em>int</em><em>, </em><em>optional</em>) – number of epochs to run</p></li>
+<li><p><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to print progress messages.
+If <cite>tqdm</cite> is installed, a progress bar will be displayed instead.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the fitted model</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">LightFM instance</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the fitted model</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>LightFM instance</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.LightFM.fit_partial">
-<code class="descname">fit_partial</code><span class="sig-paren">(</span><em>interactions</em>, <em>user_features=None</em>, <em>item_features=None</em>, <em>sample_weight=None</em>, <em>epochs=1</em>, <em>num_threads=1</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.fit_partial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.fit_partial" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.LightFM.fit_partial">
+<span class="sig-name descname"><span class="pre">fit_partial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.fit_partial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.LightFM.fit_partial" title="Permalink to this definition"></a></dt>
 <dd><p>Fit the model.</p>
 <p>Fit the model. Unlike fit, repeated calls to this method will
 cause training to resume from the current model state.</p>
 <p>For details on how to use feature matrices, see the documentation
-on the <a class="reference internal" href="#lightfm.LightFM" title="lightfm.LightFM"><code class="xref py py-class docutils literal"><span class="pre">lightfm.LightFM</span></code></a> class.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>interactions</strong> (<em>np.float32 coo_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – the matrix containing
+on the <a class="reference internal" href="#lightfm.LightFM" title="lightfm.LightFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">lightfm.LightFM</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interactions</strong> (<em>np.float32 coo_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – the matrix containing
 user-item interactions. Will be converted to
-numpy.float32 dtype if it is not of that type.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
-<li><strong>sample_weight</strong> (<em>np.float32 coo_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – matrix with entries expressing weights of individual
+numpy.float32 dtype if it is not of that type.</p></li>
+<li><p><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</p></li>
+<li><p><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</p></li>
+<li><p><strong>sample_weight</strong> (<em>np.float32 coo_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – matrix with entries expressing weights of individual
 interactions from the interactions matrix.
 Its row and col arrays must be the same as
 those of the interactions matrix. For memory
 efficiency its possible to use the same arrays
 for both weights and interaction matrices.
 Defaults to weight 1.0 for all interactions.
-Not implemented for the k-OS loss.</li>
-<li><strong>epochs</strong> (<em>int</em><em>, </em><em>optional</em>) – number of epochs to run</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
-not be higher than the number of physical cores.</li>
-<li><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to print progress messages.</li>
+Not implemented for the k-OS loss.</p></li>
+<li><p><strong>epochs</strong> (<em>int</em><em>, </em><em>optional</em>) – number of epochs to run</p></li>
+<li><p><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to print progress messages.
+If <cite>tqdm</cite> is installed, a progress bar will be displayed instead.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the fitted model</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">LightFM instance</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the fitted model</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>LightFM instance</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.LightFM.get_item_representations">
-<code class="descname">get_item_representations</code><span class="sig-paren">(</span><em>features=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.get_item_representations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.get_item_representations" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.LightFM.get_item_representations">
+<span class="sig-name descname"><span class="pre">get_item_representations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.get_item_representations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.LightFM.get_item_representations" title="Permalink to this definition"></a></dt>
 <dd><p>Get the latent representations for items given model and features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.
-An identity matrix will be used if not supplied.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><blockquote>
-<div><dl class="docutils">
-<dt>(np.float32 array of shape n_items,</dt>
-<dd>np.float32 array of shape [n_items, num_components]</dd>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.
+An identity matrix will be used if not supplied.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><blockquote>
+<div><dl class="simple">
+<dt>(np.float32 array of shape n_items,</dt><dd><p>np.float32 array of shape [n_items, num_components]</p>
+</dd>
 </dl>
 </div></blockquote>
 <p>Biases and latent representations for items.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(item_biases, item_embeddings)</td>
-</tr>
-</tbody>
-</table>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(item_biases, item_embeddings)</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.LightFM.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.get_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.get_params" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.LightFM.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.LightFM.get_params" title="Permalink to this definition"></a></dt>
 <dd><p>Get parameters for this estimator.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>deep</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If True, will return the parameters for this estimator and
-contained subobjects that are estimators.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>params</strong> – Parameter names mapped to their values.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">mapping of string to any</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deep</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>params</strong> – Parameter names mapped to their values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mapping of string to any</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.LightFM.get_user_representations">
-<code class="descname">get_user_representations</code><span class="sig-paren">(</span><em>features=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.get_user_representations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.get_user_representations" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.LightFM.get_user_representations">
+<span class="sig-name descname"><span class="pre">get_user_representations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.get_user_representations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.LightFM.get_user_representations" title="Permalink to this definition"></a></dt>
 <dd><p>Get the latent representations for users given model and features.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.
-An identity matrix will be used if not supplied.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><blockquote>
-<div><dl class="docutils">
-<dt>(np.float32 array of shape n_users</dt>
-<dd>np.float32 array of shape [n_users, num_components]</dd>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.
+An identity matrix will be used if not supplied.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><blockquote>
+<div><dl class="simple">
+<dt>(np.float32 array of shape n_users</dt><dd><p>np.float32 array of shape [n_users, num_components]</p>
+</dd>
 </dl>
 </div></blockquote>
 <p>Biases and latent representations for users.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(user_biases, user_embeddings)</td>
-</tr>
-</tbody>
-</table>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(user_biases, user_embeddings)</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.LightFM.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>user_ids</em>, <em>item_ids</em>, <em>item_features=None</em>, <em>user_features=None</em>, <em>num_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.predict" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.LightFM.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.LightFM.predict" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the recommendation score for user-item pairs.</p>
 <p>For details on how to use feature matrices, see the documentation
-on the <a class="reference internal" href="#lightfm.LightFM" title="lightfm.LightFM"><code class="xref py py-class docutils literal"><span class="pre">lightfm.LightFM</span></code></a> class.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>user_ids</strong> (<em>integer</em><em> or </em><em>np.int32 array of shape</em><em> [</em><em>n_pairs</em><em>,</em><em>]</em>) – single user id or an array containing the user ids for the
-user-item pairs for which a prediction is to be computed</li>
-<li><strong>item_ids</strong> (<em>np.int32 array of shape</em><em> [</em><em>n_pairs</em><em>,</em><em>]</em>) – an array containing the item ids for the user-item pairs for which
-a prediction is to be computed.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
-not be higher than the number of physical cores.</li>
+on the <a class="reference internal" href="#lightfm.LightFM" title="lightfm.LightFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">lightfm.LightFM</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_ids</strong> (<em>integer</em><em> or </em><em>np.int32 array of shape</em><em> [</em><em>n_pairs</em><em>,</em><em>]</em>) – single user id or an array containing the user ids for the
+user-item pairs for which a prediction is to be computed. Note
+that these are LightFM’s internal id’s, i.e. the index of the
+user in the interaction matrix used for fitting the model.</p></li>
+<li><p><strong>item_ids</strong> (<em>np.int32 array of shape</em><em> [</em><em>n_pairs</em><em>,</em><em>]</em>) – an array containing the item ids for the user-item pairs for which
+a prediction is to be computed. Note that these are LightFM’s
+internal id’s, i.e. the index of the item in the interaction
+matrix used for fitting the model.</p></li>
+<li><p><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</p></li>
+<li><p><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</p></li>
+<li><p><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use. Should
+not be higher than the number of physical cores.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Numpy array containing the recommendation scores for pairs defined
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array containing the recommendation scores for pairs defined
 by the inputs.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.float32 array of shape [n_pairs,]</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.float32 array of shape [n_pairs,]</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>As indicated above, this method returns an array of scores corresponding to the
+score assigned by the model to _pairs of <a href="#id11"><span class="problematic" id="id12">inputs_</span></a>. Importantly, this means the
+i-th element of the output array corresponds to the score for the i-th user-item
+pair in the input arrays.</p>
+<p>Concretely, you should expect the <cite>lfm.predict([0, 1], [8, 9])</cite> to return an
+array of np.float32 that may look something like <cite>[0.42  0.31]</cite>, where <cite>0.42</cite> is
+the score assigned to the user-item pair <cite>(0, 8)</cite> and <cite>0.31</cite> the score assigned
+to pair <cite>(1, 9)</cite> respectively.</p>
+<p>In other words, if you wish to generate the score for a few items (e.g.
+<cite>[7, 8, 9]</cite>) for two users (e.g. <cite>[0, 1]</cite>), a proper way to call this method
+would be to use <cite>lfm.predict([0, 0, 0, 1, 1, 1], [7, 8, 9, 7, 8, 9])</cite>, and
+_not_ <cite>lfm.predict([0, 1], [7, 8, 9])</cite> as you may initially expect (this will
+throw an exception!).</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.LightFM.predict_rank">
-<code class="descname">predict_rank</code><span class="sig-paren">(</span><em>test_interactions</em>, <em>train_interactions=None</em>, <em>item_features=None</em>, <em>user_features=None</em>, <em>num_threads=1</em>, <em>check_intersections=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.predict_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.predict_rank" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.LightFM.predict_rank">
+<span class="sig-name descname"><span class="pre">predict_rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_interactions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_interactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_intersections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.predict_rank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.LightFM.predict_rank" title="Permalink to this definition"></a></dt>
 <dd><p>Predict the rank of selected interactions. Computes recommendation
 rankings across all items for every user in interactions and calculates
 the rank of all non-zero entries in the recommendation ranking, with 0
@@ -515,130 +431,80 @@ the end of the list (least recommended).</p>
 per user. If you need to compute predictions for many items for every
 user, use the predict method instead.</p>
 <p>For details on how to use feature matrices, see the documentation
-on the <a class="reference internal" href="#lightfm.LightFM" title="lightfm.LightFM"><code class="xref py py-class docutils literal"><span class="pre">lightfm.LightFM</span></code></a> class.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries denote the user-item pairs
-whose rank will be computed.</li>
-<li><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries denote the user-item pairs which will be excluded
+on the <a class="reference internal" href="#lightfm.LightFM" title="lightfm.LightFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">lightfm.LightFM</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em>) – Non-zero entries denote the user-item pairs
+whose rank will be computed.</p></li>
+<li><p><strong>train_interactions</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_items</em><em>]</em><em>, </em><em>optional</em>) – Non-zero entries denote the user-item pairs which will be excluded
 from rank computation. Use to exclude training set interactions
-from being scored and ranked for evaluation.</li>
-<li><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</li>
-<li><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</li>
-<li><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use.
-Should not be higher than the number of physical cores.</li>
-<li><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
+from being scored and ranked for evaluation.</p></li>
+<li><p><strong>user_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_users</em><em>, </em><em>n_user_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that user’s weights over features.</p></li>
+<li><p><strong>item_features</strong> (<em>np.float32 csr_matrix of shape</em><em> [</em><em>n_items</em><em>, </em><em>n_item_features</em><em>]</em><em>, </em><em>optional</em>) – Each row contains that item’s weights over features.</p></li>
+<li><p><strong>num_threads</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel computation threads to use.
+Should not be higher than the number of physical cores.</p></li>
+<li><p><strong>check_intersections</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>True by default</em><em>,</em>) – Only relevant when train_interactions are supplied.
 A flag that signals whether the test and train matrices should be checked
-for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</li>
+for intersections to prevent optimistic ranks / wrong evaluation / bad data split.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the [i, j]-th entry of the matrix will contain the rank of the j-th
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the [i, j]-th entry of the matrix will contain the rank of the j-th
 item in the sorted recommendations list for the i-th user.
 The degree of sparsity of this matrix will be equal to that of the
 input interactions matrix.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.float32 csr_matrix of shape [n_users, n_items]</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.float32 csr_matrix of shape [n_users, n_items]</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="lightfm.LightFM.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.set_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.LightFM.set_params" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightfm.LightFM.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/lightfm.html#LightFM.set_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.LightFM.set_params" title="Permalink to this definition"></a></dt>
 <dd><p>Set the parameters of this estimator.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">self</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="lightfm.evaluation.html" class="btn btn-neutral float-right" title="Model evaluation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="quickstart.html" class="btn btn-neutral" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lightfm.evaluation.html" class="btn btn-neutral float-right" title="Model evaluation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, Lyst (Maciej Kula).
-
-    </p>
+    <p>&#169; Copyright 2016, Lyst (Maciej Kula).</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.15',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

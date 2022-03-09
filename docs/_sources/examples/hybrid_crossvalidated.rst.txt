@@ -134,7 +134,7 @@ zero and re-evaluating the model.
     # Set biases to zero
     model.item_biases *= 0.0
     
-    test_auc = auc_score(model, test, train_interactions=train, num_threads=NUM_THREADS).mean()
+    test_auc = auc_score(model, test, train_interactions=train, num_threads=NUM_THREADS, check_intersections=False).mean()
     print('Collaborative filtering test AUC: %s' % test_auc)
 
 
@@ -213,7 +213,8 @@ Despite this the model does much better on the test set:
                         test,
                         train_interactions=train,
                         item_features=item_features,
-                        num_threads=NUM_THREADS).mean()
+                        num_threads=NUM_THREADS,
+                        check_intersections=False).mean()
     print('Hybrid test set AUC: %s' % test_auc)
 
 

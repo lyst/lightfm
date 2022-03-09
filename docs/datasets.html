@@ -1,77 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Datasets &mdash; LightFM 1.15 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datasets &mdash; LightFM 1.16 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="LightFM 1.15 documentation" href="index.html"/>
-        <link rel="next" title="Examples" href="examples.html"/>
-        <link rel="prev" title="Dataset construction" href="lightfm.data.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Dataset construction" href="lightfm.data.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
+        <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> LightFM
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                1.15
+                1.16
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -79,261 +39,160 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="home.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lightfm.html">LightFM model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.html">The LightFM model class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lightfm.evaluation.html">Model evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Cross validation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Data</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lightfm.data.html">Constructing datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Built-in datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">LightFM</a>
-        
       </nav>
 
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Datasets</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/datasets.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="datasets">
-<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="lightfm.datasets.movielens.fetch_movielens">
-<code class="descclassname">lightfm.datasets.movielens.</code><code class="descname">fetch_movielens</code><span class="sig-paren">(</span><em>data_home=None</em>, <em>indicator_features=True</em>, <em>genre_features=False</em>, <em>min_rating=0.0</em>, <em>download_if_missing=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/datasets/movielens.html#fetch_movielens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.datasets.movielens.fetch_movielens" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="datasets">
+<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="lightfm.datasets.movielens.fetch_movielens">
+<span class="sig-prename descclassname"><span class="pre">lightfm.datasets.movielens.</span></span><span class="sig-name descname"><span class="pre">fetch_movielens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_home</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indicator_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genre_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_rating</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_if_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/datasets/movielens.html#fetch_movielens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.datasets.movielens.fetch_movielens" title="Permalink to this definition"></a></dt>
 <dd><p>Fetch the <a class="reference external" href="http://grouplens.org/datasets/movielens/100k/">Movielens 100k dataset</a>.</p>
 <p>The dataset contains 100,000 interactions from 1000 users on 1700 movies,
 and is exhaustively described in its
 <a class="reference external" href="http://files.grouplens.org/datasets/movielens/ml-100k-README.txt">README</a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>data_home</strong> (<em>path</em><em>, </em><em>optional</em>) – Path to the directory in which the downloaded data should be placed.
-Defaults to <code class="docutils literal"><span class="pre">~/lightfm_data/</span></code>.</li>
-<li><strong>indicator_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use an [n_items, n_items] identity matrix for item features. When True with genre_features,
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_home</strong> (<em>path</em><em>, </em><em>optional</em>) – Path to the directory in which the downloaded data should be placed.
+Defaults to <code class="docutils literal notranslate"><span class="pre">~/lightfm_data/</span></code>.</p></li>
+<li><p><strong>indicator_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use an [n_items, n_items] identity matrix for item features. When True with genre_features,
 indicator and genre features are concatenated into a single feature matrix of shape
-[n_items, n_items + n_genres].</li>
-<li><strong>genre_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use a [n_items, n_genres] matrix for item features. When True with item_indicator_features,
+[n_items, n_items + n_genres].</p></li>
+<li><p><strong>genre_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use a [n_items, n_genres] matrix for item features. When True with item_indicator_features,
 indicator and genre features are concatenated into a single feature matrix of shape
-[n_items, n_items + n_genres].</li>
-<li><strong>min_rating</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum rating to include in the interaction matrix.</li>
-<li><strong>download_if_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – Download the data if not present. Raises an IOError if False and data is missing.</li>
+[n_items, n_items + n_genres].</p></li>
+<li><p><strong>min_rating</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum rating to include in the interaction matrix.</p></li>
+<li><p><strong>download_if_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – Download the data if not present. Raises an IOError if False and data is missing.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>The return value is a dictionary containing the following keys:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><strong>train</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains training set interactions.</li>
-<li><strong>test</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains testing set interactions.</li>
-<li><strong>item_features</strong> (<em>sp.csr_matrix of shape [n_items, n_item_features]</em>) – Contains item features.</li>
-<li><strong>item_feature_labels</strong> (<em>np.array of strings of shape [n_item_features,]</em>) – Labels of item features.</li>
-<li><strong>item_labels</strong> (<em>np.array of strings of shape [n_items,]</em>) – Items’ titles.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>train</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains training set interactions.</p></li>
+<li><p><strong>test</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains testing set interactions.</p></li>
+<li><p><strong>item_features</strong> (<em>sp.csr_matrix of shape [n_items, n_item_features]</em>) – Contains item features.</p></li>
+<li><p><strong>item_feature_labels</strong> (<em>np.array of strings of shape [n_item_features,]</em>) – Labels of item features.</p></li>
+<li><p><strong>item_labels</strong> (<em>np.array of strings of shape [n_items,]</em>) – Items’ titles.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="lightfm.datasets.stackexchange.fetch_stackexchange">
-<code class="descclassname">lightfm.datasets.stackexchange.</code><code class="descname">fetch_stackexchange</code><span class="sig-paren">(</span><em>dataset</em>, <em>test_set_fraction=0.2</em>, <em>min_training_interactions=1</em>, <em>data_home=None</em>, <em>indicator_features=True</em>, <em>tag_features=False</em>, <em>download_if_missing=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/datasets/stackexchange.html#fetch_stackexchange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightfm.datasets.stackexchange.fetch_stackexchange" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="lightfm.datasets.stackexchange.fetch_stackexchange">
+<span class="sig-prename descclassname"><span class="pre">lightfm.datasets.stackexchange.</span></span><span class="sig-name descname"><span class="pre">fetch_stackexchange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_set_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_training_interactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_home</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indicator_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_if_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightfm/datasets/stackexchange.html#fetch_stackexchange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightfm.datasets.stackexchange.fetch_stackexchange" title="Permalink to this definition"></a></dt>
 <dd><p>Fetch a dataset from the <a class="reference external" href="http://stackexchange.com/">StackExchange network</a>.</p>
 <p>The datasets contain users answering questions: an interaction is defined as a user
 answering a given question.</p>
 <p>The following datasets from the StackExchange network are available:</p>
 <ul class="simple">
-<li>CrossValidated: From stats.stackexchange.com. Approximately 9000 users, 72000 questions,
-and 70000 answers.</li>
-<li>StackOverflow: From stackoverflow.stackexchange.com. Approximately 1.3M users, 11M questions,
-and 18M answers.</li>
+<li><p>CrossValidated: From stats.stackexchange.com. Approximately 9000 users, 72000 questions,
+and 70000 answers.</p></li>
+<li><p>StackOverflow: From stackoverflow.stackexchange.com. Approximately 1.3M users, 11M questions,
+and 18M answers.</p></li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>dataset</strong> (<em>string</em><em>, </em><em>one of</em><em> (</em><em>'crossvalidated'</em><em>, </em><em>'stackoverflow'</em><em>)</em>) – The part of the StackExchange network for which to fetch the dataset.</li>
-<li><strong>test_set_fraction</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of the dataset used for testing. Splitting into the train and test set is done
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>string</em><em>, </em><em>one of</em><em> (</em><em>'crossvalidated'</em><em>, </em><em>'stackoverflow'</em><em>)</em>) – The part of the StackExchange network for which to fetch the dataset.</p></li>
+<li><p><strong>test_set_fraction</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of the dataset used for testing. Splitting into the train and test set is done
 in a time-based fashion: all interactions before a certain time are in the train set and
-all interactions after that time are in the test set.</li>
-<li><strong>min_training_interactions</strong> (<em>int</em><em>, </em><em>optional</em>) – Only include users with this amount of interactions in the training set.</li>
-<li><strong>data_home</strong> (<em>path</em><em>, </em><em>optional</em>) – Path to the directory in which the downloaded data should be placed.
-Defaults to <code class="docutils literal"><span class="pre">~/lightfm_data/</span></code>.</li>
-<li><strong>indicator_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use an [n_users, n_users] identity matrix for item features. When True with genre_features,
+all interactions after that time are in the test set.</p></li>
+<li><p><strong>min_training_interactions</strong> (<em>int</em><em>, </em><em>optional</em>) – Only include users with this amount of interactions in the training set.</p></li>
+<li><p><strong>data_home</strong> (<em>path</em><em>, </em><em>optional</em>) – Path to the directory in which the downloaded data should be placed.
+Defaults to <code class="docutils literal notranslate"><span class="pre">~/lightfm_data/</span></code>.</p></li>
+<li><p><strong>indicator_features</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use an [n_users, n_users] identity matrix for item features. When True with genre_features,
 indicator and genre features are concatenated into a single feature matrix of shape
-[n_users, n_users + n_genres].</li>
-<li><strong>download_if_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – Download the data if not present. Raises an IOError if False and data is missing.</li>
+[n_users, n_users + n_genres].</p></li>
+<li><p><strong>download_if_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – Download the data if not present. Raises an IOError if False and data is missing.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>The return value is a dictionary containing the following keys:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><strong>train</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains training set interactions.</li>
-<li><strong>test</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains testing set interactions.</li>
-<li><strong>item_features</strong> (<em>sp.csr_matrix of shape [n_items, n_item_features]</em>) – Contains item features.</li>
-<li><strong>item_feature_labels</strong> (<em>np.array of strings of shape [n_item_features,]</em>) – Labels of item features.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>train</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains training set interactions.</p></li>
+<li><p><strong>test</strong> (<em>sp.coo_matrix of shape [n_users, n_items]</em>) – Contains testing set interactions.</p></li>
+<li><p><strong>item_features</strong> (<em>sp.csr_matrix of shape [n_items, n_item_features]</em>) – Contains item features.</p></li>
+<li><p><strong>item_feature_labels</strong> (<em>np.array of strings of shape [n_item_features,]</em>) – Labels of item features.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
-</div>
+</section>
 
 
-           </div>
-           <div class="articleComments">
-            
            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="lightfm.data.html" class="btn btn-neutral" title="Dataset construction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lightfm.data.html" class="btn btn-neutral float-left" title="Dataset construction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, Lyst (Maciej Kula).
-
-    </p>
+    <p>&#169; Copyright 2016, Lyst (Maciej Kula).</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.15',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
