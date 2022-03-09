@@ -17,14 +17,14 @@ Let's start by loading the data. We'll use the ``datasets`` module.
 .. code:: python
 
     import numpy as np
-    
+
     from lightfm.datasets import fetch_stackexchange
-    
+
     data = fetch_stackexchange('crossvalidated',
                                test_set_fraction=0.1,
                                indicator_features=False,
                                tag_features=True)
-    
+
     train = data['train']
     test = data['test']
 
@@ -60,19 +60,19 @@ if that's the case:
 
     # Import the model
     from lightfm import LightFM
-    
+
     # Set the number of threads; you can increase this
     # if you have more physical cores available.
     NUM_THREADS = 2
     NUM_COMPONENTS = 30
     NUM_EPOCHS = 3
     ITEM_ALPHA = 1e-6
-    
+
     # Let's fit a WARP model: these generally have the best performance.
     model = LightFM(loss='warp',
                     item_alpha=ITEM_ALPHA,
                    no_components=NUM_COMPONENTS)
-    
+
     # Run 3 epochs and time it.
     %time model = model.fit(train, epochs=NUM_EPOCHS, num_threads=NUM_THREADS)
 
@@ -92,7 +92,7 @@ well.
 
     # Import the evaluation routines
     from lightfm.evaluation import auc_score
-    
+
     # Compute and print the AUC score
     train_auc = auc_score(model, train, num_threads=NUM_THREADS).mean()
     print('Collaborative filtering train AUC: %s' % train_auc)
@@ -133,7 +133,7 @@ zero and re-evaluating the model.
 
     # Set biases to zero
     model.item_biases *= 0.0
-    
+
     test_auc = auc_score(model, test, train_interactions=train, num_threads=NUM_THREADS, check_intersections=False).mean()
     print('Collaborative filtering test AUC: %s' % test_auc)
 
@@ -154,7 +154,7 @@ tags users apply to their questions:
 
     item_features = data['item_features']
     tag_labels = data['item_feature_labels']
-    
+
     print('There are %s distinct tags, with values like %s.' % (item_features.shape[1], tag_labels[:3].tolist()))
 
 
@@ -176,7 +176,7 @@ Let's go ahead and fit a model of this type.
     model = LightFM(loss='warp',
                     item_alpha=ITEM_ALPHA,
                     no_components=NUM_COMPONENTS)
-    
+
     # Fit the hybrid model. Note that this time, we pass
     # in the item features matrix.
     model = model.fit(train,
@@ -240,18 +240,18 @@ similarity:
     def get_similar_tags(model, tag_id):
         # Define similarity as the cosine of the angle
         # between the tag latent vectors
-        
+
         # Normalize the vectors to unit length
         tag_embeddings = (model.item_embeddings.T
                           / np.linalg.norm(model.item_embeddings, axis=1)).T
-        
+
         query_embedding = tag_embeddings[tag_id]
         similarity = np.dot(tag_embeddings, query_embedding)
         most_similar = np.argsort(-similarity)[1:4]
-        
+
         return most_similar
-    
-    
+
+
     for tag in (u'bayesian', u'regression', u'survival'):
         tag_id = tag_labels.tolist().index(tag)
         print('Most similar tags for %s: %s' % (tag_labels[tag_id],
@@ -263,4 +263,3 @@ similarity:
     Most similar tags for bayesian: [u'posterior' u'mcmc' u'bayes']
     Most similar tags for regression: [u'multicollinearity' u'stepwise-regression' u'multiple-regression']
     Most similar tags for survival: [u'cox-model' u'kaplan-meier' u'odds-ratio']
-

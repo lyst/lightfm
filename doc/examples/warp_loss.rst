@@ -56,21 +56,21 @@ Let's first get the data. We'll use the MovieLens 100K dataset.
 .. code:: python
 
     import time
-    
+
     import numpy as np
-    
+
     %matplotlib inline
-    
+
     import matplotlib
     import numpy as np
     import matplotlib.pyplot as plt
-    
+
     from lightfm import LightFM
     from lightfm.datasets import fetch_movielens
     from lightfm.evaluation import auc_score
-    
+
     movielens = fetch_movielens()
-    
+
     train, test = movielens['train'], movielens['test']
 
 Accuracy
@@ -86,31 +86,31 @@ fitting them, let's also measure how much time each epoch takes.
     alpha = 1e-05
     epochs = 70
     num_components = 32
-    
+
     warp_model = LightFM(no_components=num_components,
                         loss='warp',
                         learning_schedule='adagrad',
                         max_sampled=100,
                         user_alpha=alpha,
                         item_alpha=alpha)
-    
+
     bpr_model = LightFM(no_components=num_components,
                         loss='bpr',
                         learning_schedule='adagrad',
                         user_alpha=alpha,
                         item_alpha=alpha)
-    
+
     warp_duration = []
     bpr_duration = []
     warp_auc = []
     bpr_auc = []
-    
+
     for epoch in range(epochs):
         start = time.time()
         warp_model.fit_partial(train, epochs=1)
         warp_duration.append(time.time() - start)
         warp_auc.append(auc_score(warp_model, test, train_interactions=train).mean())
-        
+
     for epoch in range(epochs):
         start = time.time()
         bpr_model.fit_partial(train, epochs=1)
@@ -175,22 +175,22 @@ attempts.
                         learning_schedule='adagrad',
                         user_alpha=alpha,
                         item_alpha=alpha)
-    
+
     warp_duration = []
     warp_auc = []
-    
+
     for epoch in range(epochs):
         start = time.time()
         warp_model.fit_partial(train, epochs=1)
         warp_duration.append(time.time() - start)
         warp_auc.append(auc_score(warp_model, test, train_interactions=train).mean())
-    
+
     x = np.arange(epochs)
     plt.plot(x, np.array(warp_duration))
     plt.legend(['WARP duration'], loc='upper right')
     plt.title('Duration')
     plt.show()
-    
+
     x = np.arange(epochs)
     plt.plot(x, np.array(warp_auc))
     plt.legend(['WARP AUC'], loc='upper right')
@@ -204,4 +204,3 @@ attempts.
 
 
 .. image:: warp_loss_files/warp_loss_9_1.png
-
