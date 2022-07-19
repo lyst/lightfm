@@ -1,0 +1,100 @@
+# Adapted from: https://github.com/alan-turing-institute/sktime/blob/main/.github/workflows/test.yml
+name: Lint and Test
+
+on:
+  push:
+    branches:
+      - main
+      - refactor/setup # Only for testing
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Setup Requirements
+      run: |
+        python -m pip install -r lint-requirements.txt
+    - name: Run Linting
+      run: |
+        flake8 setup.py lightfm tests
+        black --check setup.py lightfm tests
+
+
+  test-linux:
+    needs: linting
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.7", "3.8", "3.9"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install test dependencies
+      run: |
+        python -m pip install --upgrade pip wheel
+        python -m pip install -r test-requirements.txt
+    - name: Install LightFM
+      run: |
+          python -m pip install .
+    - name: Show dependecies
+      run: python -m pip list
+    - name: Test with pytest
+      run: |
+        mv lightfm lightfm_
+        python -m pytest
+        mv lightfm_ lightfm
+
+
+  test-windows:
+    needs: linting
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        python-version: [3.7] # , 3.8
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+          channels: anaconda, conda-forge
+
+      - run: conda --version
+      - run: which python
+
+      - name: Fix windows paths
+        if: ${{ runner.os == 'Windows' }}
+        run: echo "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x64" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Install conda libpython
+        run: conda install -c anaconda libpython
+
+      - name: Install conda dependencies
+        run: |
+          conda install -c conda-forge pip wheel
+          conda install -c conda-forge --file test-requirements.txt
+      - name: Install LightFM
+        run: python -m pip install .
+
+      - name: Show dependecies
+        run: conda list
+
+      - name: Run tests
+        run: |
+          mv lightfm lightfm_
+          python -m pytest
+          mv lightfm_ lightfm
+
+

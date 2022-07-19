@@ -2,26 +2,30 @@ build: false
 
 environment:
   matrix:
-    - PYTHON_VERSION: 2.7
-      MINICONDA: C:\Miniconda-x64
+    - PYTHON_VERSION: 3.8
+      MINICONDA: C:\Miniconda38-x64
+    - PYTHON_VERSION: 3.7
+      MINICONDA: C:\Miniconda37-x64
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
 
 install:
-  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  - conda info -a
-  - conda create --name lightfm numpy scipy scikit-learn
-  - activate lightfm
-
+  - cmd: "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - cmd: conda config --set always_yes yes --set changeps1 no
+  - cmd: conda config --add channels conda-forge
+  - cmd: conda update -q conda
+  - cmd: conda info -a
+  - cmd: "conda create -q -n test-environment -c conda-forge python=%PYTHON_VERSION% numpy scipy scikit-learn"
+  - cmd: activate test-environment 
   # Install the build dependencies of the project.
-  - conda install --yes --file test-requirements.txt
-
+  - cmd: conda install -c conda-forge --yes --file test-requirements.txt
   # Install lightfm
-  - pip install -e .
+  - cmd: pip install -e .
+  # List installed environment
+  - cmd: python --version
+  - cmd: conda list
 
 test_script:
   # Run the project tests
-  - py.test tests/ -x
+  - cmd: pytest tests/ 
