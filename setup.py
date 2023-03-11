@@ -124,7 +124,8 @@ class Cythonize(Command):
                     ["lightfm/_lightfm_fast_openmp.pyx"],
                     extra_link_args=["-fopenmp"],
                 ),
-            ]
+            ],
+            compiler_directives={'language_level' : "3"}
         )
 
 
