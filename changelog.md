@@ -1,5 +1,12 @@
 # Changelog
 
+## [unreleased][unreleased]
+
+### Fixed
+
+- Re-Cythonized cython files to fix compilation errors with newer compilers.
+- Fixed `np.object` usage in tests.
+
 ## [1.16][2020-11-27]
 
 ### Addded
