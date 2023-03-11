@@ -34,7 +34,7 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Install
         run: |
-          pip install .
+          pip install -e .
       - name: Test with pytest
         run: |
           pytest
