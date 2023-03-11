@@ -72,7 +72,7 @@ def _parse_item_metadata(num_items, item_metadata_raw, genres_raw):
             genre, gid = line.split("|")
             genres.append("genre:{}".format(genre))
 
-    id_feature_labels = np.empty(num_items, dtype=np.object)
+    id_feature_labels = np.empty(num_items, dtype=str)
     genre_feature_labels = np.array(genres)
 
     id_features = sp.identity(num_items, format="csr", dtype=np.float32)
