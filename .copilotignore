@@ -1,0 +1,12 @@
+examples/**
+changelog.md
+CONTRIBUTORS
+Dockerfile
+docs-requirements.txt
+LICENSE
+Makefile
+*.svg
+*.md
+*.txt
+*.json
+*.yml

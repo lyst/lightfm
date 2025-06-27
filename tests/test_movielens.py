@@ -11,6 +11,7 @@ from sklearn.model_selection import KFold, RandomizedSearchCV
 from lightfm.lightfm import LightFM
 from lightfm.datasets import fetch_movielens
 from lightfm.evaluation import auc_score, precision_at_k
+from lightfm.datasets import movielens as movielens_dataset
 
 
 SEED = 10
@@ -715,3 +716,28 @@ def test_sklearn_cv():
     )
     search.fit(train)
     assert search.best_params_["no_components"] == 58
+
+def test_build_interaction_matrix():
+    rows, cols = 3, 3
+    data = [(0, 0, 5, 0), (1, 1, 3, 0), (2, 2, 4, 0)]
+    mat = movielens_dataset._build_interaction_matrix(rows, cols, data, min_rating=4)
+    expected = np.array([[5,0,0],[0,0,0],[0,0,4]])
+    assert np.array_equal(mat, expected)
+
+def test_parse_item_metadata():
+    num_items = 2
+    item_metadata_raw = ["1|ItemA|...|0|1", "2|ItemB|...|1|0"]
+    genres_raw = ["GenreA|0", "GenreB|1"]
+    id_features, id_labels, genre_features, genre_labels = movielens_dataset._parse_item_metadata(
+        num_items, item_metadata_raw, genres_raw
+    )
+    assert id_features.shape == (2,2)
+    assert genre_features.shape == (2,2)
+    assert len(id_labels) == 2
+    assert len(genre_labels) == 2
+
+def test_fetch_movielens():
+    data = movielens_dataset.fetch_movielens(download_if_missing=False)
+    assert "train" in data and "test" in data
+    assert isinstance(data["train"], np.ndarray)
+    assert isinstance(data["item_features"], np.ndarray)
