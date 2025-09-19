@@ -111,7 +111,7 @@ cdef struct Pair:
     flt val
 
 
-cdef int reverse_pair_compare(const_void *a, const_void *b) nogil:
+cdef int reverse_pair_compare(const_void *a, const_void *b) noexcept nogil:
 
     cdef flt diff
 
@@ -122,7 +122,7 @@ cdef int reverse_pair_compare(const_void *a, const_void *b) nogil:
         return -1
 
 
-cdef int int_compare(const_void *a, const_void *b) nogil:
+cdef int int_compare(const_void *a, const_void *b) noexcept nogil:
 
     if deref(<int*>a) - deref(<int*>b) > 0:
         return 1
@@ -132,7 +132,7 @@ cdef int int_compare(const_void *a, const_void *b) nogil:
         return 0
 
 
-cdef int flt_compare(const_void *a, const_void *b) nogil:
+cdef int flt_compare(const_void *a, const_void *b) noexcept nogil:
 
     if deref(<flt*>a) - deref(<flt*>b) > 0:
         return 1
