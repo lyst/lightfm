@@ -13,11 +13,13 @@ mod optim;
 mod predict;
 mod repr;
 mod utils;
+mod gpu;
 
 use csr_matrix::{test_in_positives, CSRMatrix};
 use loss::{fit_bpr, fit_logistic, fit_warp, fit_warp_kos};
 use model::FastLightFM;
 use predict::{calculate_auc_from_rank, predict_lightfm, predict_ranks};
+use gpu::LightFMwgpu;
 
 /// Test helper function exposed to Python
 #[pyfunction]
@@ -32,6 +34,7 @@ fn _lightfm_fast_rust(m: &Bound<'_, PyModule>) -> PyResult<()> {
     // Add classes
     m.add_class::<CSRMatrix>()?;
     m.add_class::<FastLightFM>()?;
+    m.add_class::<LightFMwgpu>()?;
 
     // Add training functions
     m.add_function(wrap_pyfunction!(fit_logistic, m)?)?;
