@@ -1,0 +1,56 @@
+[build-system]
+requires = ["maturin>=1.4,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "lightfm"
+version = "1.17"
+description = "LightFM recommendation model"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Lyst Ltd (Maciej Kula)", email = "data@ly.st" }
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.9,<3.12"
+dependencies = [
+    "numpy>=1.26.0",
+    "scipy>=1.11.0",
+    "requests",
+    "scikit-learn",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+docs = [
+    "sphinx>=4.0",
+    "sphinx_rtd_theme>=1.0",
+]
+lint = [
+    "pre-commit==2.17.0",
+    "black==22.1.0",
+    "flake8==4.0.1",
+]
+dev = [
+    "lightfm[test,docs,lint]",
+    "maturin",
+]
+
+[project.urls]
+Homepage = "https://github.com/lyst/lightfm"
+Repository = "https://github.com/lyst/lightfm"
+Download = "https://github.com/lyst/lightfm/tarball/1.17"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+python-source = "."
+module-name = "lightfm._lightfm_fast_rust"
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311"]
