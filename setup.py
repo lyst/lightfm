@@ -1,6 +1,9 @@
 # coding=utf-8
+"""
+Setup script for building C extensions.
+Project metadata is defined in pyproject.toml.
+"""
 import os
-import pathlib
 import subprocess
 import sys
 import textwrap
@@ -121,7 +124,7 @@ class Cythonize(Command):
                     extra_link_args=["-fopenmp"],
                 ),
             ],
-            compiler_directives={'language_level' : "3"}
+            compiler_directives={"language_level": "3"},
         )
 
 
@@ -147,44 +150,11 @@ class Clean(Command):
         subprocess.call(["rm", os.path.join(pth, "lightfm", "_lightfm_fast.so")])
 
 
-def read_version():
-    mod = {}
-    path = os.path.join(
-        os.path.dirname(__file__),
-        "lightfm",
-        "version.py",
-    )
-    with open(path) as fd:
-        exec(fd.read(), mod)
-    return mod["__version__"]
-
-
 use_openmp = not sys.platform.startswith("darwin") and not sys.platform.startswith(
     "win"
 )
 
-long_description = pathlib.Path(__file__).parent.joinpath("README.md").read_text()
-
 setup(
-    name="lightfm",
-    version=read_version(),
-    description="LightFM recommendation model",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/lyst/lightfm",
-    download_url="https://github.com/lyst/lightfm/tarball/{}".format(read_version()),
-    packages=["lightfm", "lightfm.datasets"],
-    package_data={"": ["*.c"]},
-    install_requires=["numpy", "scipy>=0.17.0", "requests", "scikit-learn"],
-    tests_require=["pytest", "requests", "scikit-learn"],
     cmdclass={"cythonize": Cythonize, "clean": Clean},
-    author="Lyst Ltd (Maciej Kula)",
-    author_email="data@ly.st",
-    license="MIT",
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "License :: OSI Approved :: MIT License",
-        "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    ],
     ext_modules=define_extensions(use_openmp),
 )

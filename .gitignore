@@ -1,4 +1,6 @@
 venv/
+.venv/
+.python-version
 *.pyc
 *.egg*
 *~
