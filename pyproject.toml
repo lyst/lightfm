@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0", "numpy"]
-build-backend = "setuptools.build_meta"
+requires = ["maturin>=1.4,<2.0"]
+build-backend = "maturin"
 
 [project]
 name = "lightfm"
@@ -38,7 +38,7 @@ lint = [
 ]
 dev = [
     "lightfm[test,docs,lint]",
-    "cython",
+    "maturin",
 ]
 
 [project.urls]
@@ -46,11 +46,10 @@ Homepage = "https://github.com/lyst/lightfm"
 Repository = "https://github.com/lyst/lightfm"
 Download = "https://github.com/lyst/lightfm/tarball/1.17"
 
-[tool.setuptools.packages.find]
-include = ["lightfm", "lightfm.datasets"]
-
-[tool.setuptools.package-data]
-"*" = ["*.c"]
+[tool.maturin]
+features = ["pyo3/extension-module"]
+python-source = "."
+module-name = "lightfm._lightfm_fast_rust"
 
 [tool.black]
 line-length = 100

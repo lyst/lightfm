@@ -1,8 +1,8 @@
 //! FastLightFM model state container
 
 use numpy::{PyReadwriteArray1, PyReadwriteArray2, PyUntypedArrayMethods};
-use parking_lot::RwLock;
 use pyo3::prelude::*;
+use std::sync::atomic::{AtomicU64, Ordering};
 
 /// View of model arrays with raw mutable pointers for parallel computation.
 /// This struct is created from FastLightFM for use in training loops.
@@ -35,13 +35,13 @@ pub struct FastLightFMView {
     pub eps: f32,
     pub max_sampled: i32,
 
-    // Regularization scales (thread-safe)
-    pub item_scale: RwLock<f64>,
-    pub user_scale: RwLock<f64>,
+    // Regularization scales (thread-safe via atomics)
+    pub item_scale: AtomicU64,
+    pub user_scale: AtomicU64,
 }
 
 // Safety: Raw pointers are only used within parallel regions where
-// we ensure non-overlapping access patterns. The RwLock protects scales.
+// we ensure non-overlapping access patterns. Atomics handle scales.
 unsafe impl Send for FastLightFMView {}
 unsafe impl Sync for FastLightFMView {}
 
@@ -214,44 +214,68 @@ impl FastLightFMView {
         unsafe { *self.user_bias_momentum.offset(feature as isize) = value }
     }
 
-    /// Get item scale (thread-safe read)
+    /// Get item scale (atomic load)
     #[inline]
     pub fn get_item_scale(&self) -> f64 {
-        *self.item_scale.read()
+        f64::from_bits(self.item_scale.load(Ordering::Relaxed))
     }
 
-    /// Get user scale (thread-safe read)
+    /// Get user scale (atomic load)
     #[inline]
     pub fn get_user_scale(&self) -> f64 {
-        *self.user_scale.read()
+        f64::from_bits(self.user_scale.load(Ordering::Relaxed))
     }
 
-    /// Multiply item scale (thread-safe)
+    /// Multiply item scale (atomic compare_exchange loop)
     #[inline]
     pub fn multiply_item_scale(&self, factor: f64) {
-        let mut scale = self.item_scale.write();
-        *scale *= factor;
+        let mut current = self.item_scale.load(Ordering::Relaxed);
+        loop {
+            let val = f64::from_bits(current);
+            let new_val = val * factor;
+            let new_bits = new_val.to_bits();
+            match self.item_scale.compare_exchange_weak(
+                current,
+                new_bits,
+                Ordering::Relaxed,
+                Ordering::Relaxed,
+            ) {
+                Ok(_) => break,
+                Err(x) => current = x,
+            }
+        }
     }
 
-    /// Multiply user scale (thread-safe)
+    /// Multiply user scale (atomic compare_exchange loop)
     #[inline]
     pub fn multiply_user_scale(&self, factor: f64) {
-        let mut scale = self.user_scale.write();
-        *scale *= factor;
+        let mut current = self.user_scale.load(Ordering::Relaxed);
+        loop {
+            let val = f64::from_bits(current);
+            let new_val = val * factor;
+            let new_bits = new_val.to_bits();
+            match self.user_scale.compare_exchange_weak(
+                current,
+                new_bits,
+                Ordering::Relaxed,
+                Ordering::Relaxed,
+            ) {
+                Ok(_) => break,
+                Err(x) => current = x,
+            }
+        }
     }
 
-    /// Reset item scale to 1.0 (thread-safe)
+    /// Reset item scale to 1.0 (atomic store)
     #[inline]
     pub fn reset_item_scale(&self) {
-        let mut scale = self.item_scale.write();
-        *scale = 1.0;
+        self.item_scale.store(1.0f64.to_bits(), Ordering::Relaxed);
     }
 
-    /// Reset user scale to 1.0 (thread-safe)
+    /// Reset user scale to 1.0 (atomic store)
     #[inline]
     pub fn reset_user_scale(&self) {
-        let mut scale = self.user_scale.write();
-        *scale = 1.0;
+        self.user_scale.store(1.0f64.to_bits(), Ordering::Relaxed);
     }
 }
 
@@ -292,12 +316,12 @@ pub struct FastLightFM {
     max_sampled: i32,
 
     // Regularization scales
-    item_scale: RwLock<f64>,
-    user_scale: RwLock<f64>,
+    item_scale: AtomicU64,
+    user_scale: AtomicU64,
 }
 
 // Safety: The pointers reference numpy arrays managed by Python.
-// Thread safety is ensured by the RwLock on scales.
+// Thread safety is ensured by atomics.
 unsafe impl Send for FastLightFM {}
 unsafe impl Sync for FastLightFM {}
 
@@ -353,8 +377,8 @@ impl FastLightFM {
             eps: epsilon,
             max_sampled,
 
-            item_scale: RwLock::new(1.0),
-            user_scale: RwLock::new(1.0),
+            item_scale: AtomicU64::new(1.0f64.to_bits()),
+            user_scale: AtomicU64::new(1.0f64.to_bits()),
         }
     }
 }
@@ -387,17 +411,14 @@ impl FastLightFM {
             eps: self.eps,
             max_sampled: self.max_sampled,
 
-            item_scale: RwLock::new(*self.item_scale.read()),
-            user_scale: RwLock::new(*self.user_scale.read()),
+            item_scale: AtomicU64::new(self.item_scale.load(Ordering::Relaxed)),
+            user_scale: AtomicU64::new(self.user_scale.load(Ordering::Relaxed)),
         }
     }
 
     /// Sync scales back from view after training
     pub fn sync_scales(&self, view: &FastLightFMView) {
-        let mut item_scale = self.item_scale.write();
-        *item_scale = view.get_item_scale();
-
-        let mut user_scale = self.user_scale.write();
-        *user_scale = view.get_user_scale();
+        self.item_scale.store(view.item_scale.load(Ordering::Relaxed), Ordering::Relaxed);
+        self.user_scale.store(view.user_scale.load(Ordering::Relaxed), Ordering::Relaxed);
     }
 }

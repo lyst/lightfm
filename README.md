@@ -88,4 +88,6 @@ Pull requests are welcome. To install for development:
     pre-commit install
     ```
 
+For details on working with the optimized Rust backend (building, testing, benchmarking), please see [README_RUST.md](README_RUST.md).
+
 When making changes to the `.pyx` extension files, you'll need to run `python setup.py cythonize` in order to produce the extension `.c` files before running `pip install -e .`.

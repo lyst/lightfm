@@ -61,46 +61,51 @@ pub fn fit_logistic(
                 let mut user_repr = new_repr(lightfm_view.no_components);
                 let mut item_repr = new_repr(lightfm_view.no_components);
 
-                // Compute representations
-                compute_user_representation(
-                    &user_features_view,
-                    &lightfm_view,
-                    user_id,
-                    &mut user_repr,
-                );
-                compute_item_representation(
-                    &item_features_view,
-                    &lightfm_view,
-                    item_id,
-                    &mut item_repr,
-                );
+                {
+                    // Compute representations
+                    compute_user_representation(
+                        &user_features_view,
+                        &lightfm_view,
+                        user_id,
+                        &mut user_repr,
+                    );
+                    compute_item_representation(
+                        &item_features_view,
+                        &lightfm_view,
+                        item_id,
+                        &mut item_repr,
+                    );
 
-                // Compute prediction
-                let prediction = sigmoid(compute_prediction_from_repr(
-                    &user_repr,
-                    &item_repr,
-                    lightfm_view.no_components,
-                ));
+                    // Compute prediction
+                    let prediction = sigmoid(compute_prediction_from_repr(
+                        &user_repr,
+                        &item_repr,
+                        lightfm_view.no_components,
+                    ));
 
-                // Compute target (any value <= 0 is negative)
-                let target = if y[row] <= 0.0 { 0.0 } else { 1.0 };
+                    // Compute target (any value <= 0 is negative)
+                    let target = if y[row] <= 0.0 { 0.0 } else { 1.0 };
 
-                // Compute loss
-                let loss = weight * (prediction - target);
+                    // Compute loss
+                    let loss = weight * (prediction - target);
 
-                // Apply gradient update
-                update(
-                    loss,
-                    &item_features_view,
-                    &user_features_view,
-                    user_id,
-                    item_id,
-                    &user_repr,
-                    &item_repr,
-                    &lightfm_view,
-                    item_alpha,
-                    user_alpha,
-                );
+                    // Apply gradient update
+                    let (item_scale_update, user_scale_update) = update(
+                        loss,
+                        &item_features_view,
+                        &user_features_view,
+                        user_id,
+                        item_id,
+                        &user_repr,
+                        &item_repr,
+                        &lightfm_view,
+                        item_alpha,
+                        user_alpha,
+                    );
+                    
+                    lightfm_view.multiply_item_scale(item_scale_update);
+                    lightfm_view.multiply_user_scale(user_scale_update);
+                } // Read lock dropped here
 
                 // Check for regularization
                 check_and_regularize(&lightfm_view);

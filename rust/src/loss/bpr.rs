@@ -98,56 +98,61 @@ pub fn fit_bpr(
                 let mut pos_item_repr = new_repr(lightfm_view.no_components);
                 let mut neg_item_repr = new_repr(lightfm_view.no_components);
 
-                // Compute representations
-                compute_user_representation(
-                    &user_features_view,
-                    &lightfm_view,
-                    user_id,
-                    &mut user_repr,
-                );
-                compute_item_representation(
-                    &item_features_view,
-                    &lightfm_view,
-                    positive_item_id,
-                    &mut pos_item_repr,
-                );
-                compute_item_representation(
-                    &item_features_view,
-                    &lightfm_view,
-                    negative_item_id,
-                    &mut neg_item_repr,
-                );
+                {
+                    // Compute representations
+                    compute_user_representation(
+                        &user_features_view,
+                        &lightfm_view,
+                        user_id,
+                        &mut user_repr,
+                    );
+                    compute_item_representation(
+                        &item_features_view,
+                        &lightfm_view,
+                        positive_item_id,
+                        &mut pos_item_repr,
+                    );
+                    compute_item_representation(
+                        &item_features_view,
+                        &lightfm_view,
+                        negative_item_id,
+                        &mut neg_item_repr,
+                    );
 
-                // Compute predictions
-                let positive_prediction = compute_prediction_from_repr(
-                    &user_repr,
-                    &pos_item_repr,
-                    lightfm_view.no_components,
-                );
-                let negative_prediction = compute_prediction_from_repr(
-                    &user_repr,
-                    &neg_item_repr,
-                    lightfm_view.no_components,
-                );
+                    // Compute predictions
+                    let positive_prediction = compute_prediction_from_repr(
+                        &user_repr,
+                        &pos_item_repr,
+                        lightfm_view.no_components,
+                    );
+                    let negative_prediction = compute_prediction_from_repr(
+                        &user_repr,
+                        &neg_item_repr,
+                        lightfm_view.no_components,
+                    );
 
-                // BPR loss: weight * (1 - sigmoid(pos - neg))
-                let loss = weight * (1.0 - sigmoid(positive_prediction - negative_prediction));
+                    // BPR loss: weight * (1 - sigmoid(pos - neg))
+                    let loss = weight * (1.0 - sigmoid(positive_prediction - negative_prediction));
 
-                // Apply gradient update
-                warp_update(
-                    loss,
-                    &item_features_view,
-                    &user_features_view,
-                    user_id,
-                    positive_item_id,
-                    negative_item_id,
-                    &user_repr,
-                    &pos_item_repr,
-                    &neg_item_repr,
-                    &lightfm_view,
-                    item_alpha,
-                    user_alpha,
-                );
+                    // Apply gradient update
+                    let (item_scale_update, user_scale_update) = warp_update(
+                        loss,
+                        &item_features_view,
+                        &user_features_view,
+                        user_id,
+                        positive_item_id,
+                        negative_item_id,
+                        &user_repr,
+                        &pos_item_repr,
+                        &neg_item_repr,
+                        &lightfm_view,
+                        item_alpha,
+                        user_alpha,
+                    );
+                    
+                    lightfm_view.multiply_item_scale(item_scale_update);
+                    lightfm_view.multiply_user_scale(user_scale_update);
+                } // Read lock dropped here
 
                 // Check for regularization
                 check_and_regularize(&lightfm_view);

@@ -92,115 +92,120 @@ pub fn fit_warp_kos(
                 let mut pos_item_repr = new_repr(lightfm_view.no_components);
                 let mut neg_item_repr = new_repr(lightfm_view.no_components);
 
-                // Compute user representation
-                compute_user_representation(
-                    &user_features_view,
-                    &lightfm_view,
-                    user_id,
-                    &mut user_repr,
-                );
-
-                // Sample n positive items and compute their predictions
-                let no_positives = n.min(user_pids_stop - user_pids_start);
-                let mut pos_pairs: Vec<Pair> = Vec::with_capacity(no_positives as usize);
-
-                for _ in 0..no_positives {
-                    let sampled_positive_item_id = data_view.index(
-                        rng.sample_range(user_pids_start, user_pids_stop),
+                {
+                    // Compute user representation
+                    compute_user_representation(
+                        &user_features_view,
+                        &lightfm_view,
+                        user_id,
+                        &mut user_repr,
                     );
 
+                    // Sample n positive items and compute their predictions
+                    let no_positives = n.min(user_pids_stop - user_pids_start);
+                    let mut pos_pairs: Vec<Pair> = Vec::with_capacity(no_positives as usize);
+
+                    for _ in 0..no_positives {
+                        let sampled_positive_item_id = data_view.index(
+                            rng.sample_range(user_pids_start, user_pids_stop),
+                        );
+
+                        compute_item_representation(
+                            &item_features_view,
+                            &lightfm_view,
+                            sampled_positive_item_id,
+                            &mut pos_item_repr,
+                        );
+
+                        let sampled_positive_prediction = compute_prediction_from_repr(
+                            &user_repr,
+                            &pos_item_repr,
+                            lightfm_view.no_components,
+                        );
+
+                        pos_pairs.push(Pair {
+                            idx: sampled_positive_item_id,
+                            val: sampled_positive_prediction,
+                        });
+                    }
+
+                    // Sort by prediction (descending - highest first)
+                    pos_pairs.sort_by(|a, b| {
+                        b.val.partial_cmp(&a.val).unwrap_or(std::cmp::Ordering::Equal)
+                    });
+
+                    // Get the k-th order statistic (1-indexed, so k-1 for 0-indexed)
+                    let k_idx = (k.min(no_positives) - 1) as usize;
+                    let positive_item_id = pos_pairs[k_idx].idx;
+                    let positive_prediction = pos_pairs[k_idx].val;
+
+                    // Compute the positive item representation again (since we may have overwritten it)
                     compute_item_representation(
                         &item_features_view,
                         &lightfm_view,
-                        sampled_positive_item_id,
+                        positive_item_id,
                         &mut pos_item_repr,
                     );
 
-                    let sampled_positive_prediction = compute_prediction_from_repr(
-                        &user_repr,
-                        &pos_item_repr,
-                        lightfm_view.no_components,
-                    );
+                    // Sample negatives until we find a violating one (WARP step)
+                    let mut sampled = 0;
 
-                    pos_pairs.push(Pair {
-                        idx: sampled_positive_item_id,
-                        val: sampled_positive_prediction,
-                    });
-                }
+                    while sampled < max_sampled {
+                        sampled += 1;
+                        let negative_item_id = rng.randint(num_items);
 
-                // Sort by prediction (descending - highest first)
-                pos_pairs.sort_by(|a, b| {
-                    b.val.partial_cmp(&a.val).unwrap_or(std::cmp::Ordering::Equal)
-                });
-
-                // Get the k-th order statistic (1-indexed, so k-1 for 0-indexed)
-                let k_idx = (k.min(no_positives) - 1) as usize;
-                let positive_item_id = pos_pairs[k_idx].idx;
-                let positive_prediction = pos_pairs[k_idx].val;
-
-                // Compute the positive item representation again (since we may have overwritten it)
-                compute_item_representation(
-                    &item_features_view,
-                    &lightfm_view,
-                    positive_item_id,
-                    &mut pos_item_repr,
-                );
-
-                // Sample negatives until we find a violating one (WARP step)
-                let mut sampled = 0;
-
-                while sampled < max_sampled {
-                    sampled += 1;
-                    let negative_item_id = rng.randint(num_items);
-
-                    // Compute negative item representation
-                    compute_item_representation(
-                        &item_features_view,
-                        &lightfm_view,
-                        negative_item_id,
-                        &mut neg_item_repr,
-                    );
-
-                    let negative_prediction = compute_prediction_from_repr(
-                        &user_repr,
-                        &neg_item_repr,
-                        lightfm_view.no_components,
-                    );
-
-                    // Check for margin violation
-                    if negative_prediction > positive_prediction - 1.0 {
-                        // Skip if the negative is actually a positive
-                        if data_view.in_positives(negative_item_id, user_id) {
-                            continue;
-                        }
-
-                        // Compute WARP loss: log(floor((num_items - 1) / sampled))
-                        let mut loss = ((num_items - 1) as f64 / sampled as f64).floor().ln();
-
-                        // Clip gradients for numerical stability
-                        if loss > MAX_LOSS {
-                            loss = MAX_LOSS;
-                        }
-
-                        // Apply gradient update
-                        warp_update(
-                            loss,
+                        // Compute negative item representation
+                        compute_item_representation(
                             &item_features_view,
-                            &user_features_view,
-                            user_id,
-                            positive_item_id,
-                            negative_item_id,
-                            &user_repr,
-                            &pos_item_repr,
-                            &neg_item_repr,
                             &lightfm_view,
-                            item_alpha,
-                            user_alpha,
+                            negative_item_id,
+                            &mut neg_item_repr,
                         );
 
-                        break;
+                        let negative_prediction = compute_prediction_from_repr(
+                            &user_repr,
+                            &neg_item_repr,
+                            lightfm_view.no_components,
+                        );
+
+                        // Check for margin violation
+                        if negative_prediction > positive_prediction - 1.0 {
+                            // Skip if the negative is actually a positive
+                            if data_view.in_positives(negative_item_id, user_id) {
+                                continue;
+                            }
+
+                            // Compute WARP loss: log(floor((num_items - 1) / sampled))
+                            let mut loss = ((num_items - 1) as f64 / sampled as f64).floor().ln();
+
+                            // Clip gradients for numerical stability
+                            if loss > MAX_LOSS {
+                                loss = MAX_LOSS;
+                            }
+
+                            // Apply gradient update
+                            let (item_scale_update, user_scale_update) = warp_update(
+                                loss,
+                                &item_features_view,
+                                &user_features_view,
+                                user_id,
+                                positive_item_id,
+                                negative_item_id,
+                                &user_repr,
+                                &pos_item_repr,
+                                &neg_item_repr,
+                                &lightfm_view,
+                                item_alpha,
+                                user_alpha,
+                            );
+
+                            lightfm_view.multiply_item_scale(item_scale_update);
+                            lightfm_view.multiply_user_scale(user_scale_update);
+
+                            break;
+                        }
                     }
-                }
+                } // Read lock dropped here
 
                 // Check for regularization
                 check_and_regularize(&lightfm_view);
