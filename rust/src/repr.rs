@@ -21,7 +21,7 @@ pub fn compute_representation(
     features: &CSRMatrixView,
     lightfm: &FastLightFMView,
     row_id: i32,
-    scale: f64,
+    scale: f32,
     is_user: bool,
     repr: &mut Repr,
 ) {
@@ -35,7 +35,7 @@ pub fn compute_representation(
 
     for i in start_index..stop_index {
         let feature = features.index(i);
-        let feature_weight = (features.value(i) as f64 * scale) as f32;
+        let feature_weight = features.value(i) * scale;
 
         // Add weighted feature embeddings
         for j in 0..lightfm.no_components {
@@ -69,7 +69,7 @@ pub fn compute_user_representation(
         user_features,
         lightfm,
         user_id,
-        lightfm.get_user_scale(),
+        lightfm.get_user_scale() as f32,
         true,
         repr,
     );
@@ -87,7 +87,7 @@ pub fn compute_item_representation(
         item_features,
         lightfm,
         item_id,
-        lightfm.get_item_scale(),
+        lightfm.get_item_scale() as f32,
         false,
         repr,
     );
@@ -100,15 +100,18 @@ pub fn compute_prediction_from_repr(
     user_repr: &Repr,
     item_repr: &Repr,
     no_components: i32,
-) -> f64 {
+) -> f32 {
+    let n = no_components as usize;
     // Add biases
-    let mut result = user_repr[no_components as usize] as f64
-        + item_repr[no_components as usize] as f64;
+    let mut result = user_repr[n] + item_repr[n];
 
     // Dot product of latent factors
-    for i in 0..no_components as usize {
-        result += user_repr[i] as f64 * item_repr[i] as f64;
-    }
+    // Using iterators allows the compiler to optimize out bounds checks and auto-vectorize
+    result += user_repr[0..n]
+        .iter()
+        .zip(item_repr[0..n].iter())
+        .map(|(u, i)| u * i)
+        .sum::<f32>();
 
     result
 }
@@ -125,6 +128,6 @@ mod tests {
         let prediction = compute_prediction_from_repr(&user_repr, &item_repr, 2);
 
         // Expected: biases (0.5 + 0.3) + dot product (1*2 + 2*1) = 0.8 + 4.0 = 4.8
-        assert!((prediction - 4.8).abs() < 1e-6);
+        assert!((prediction - 4.8).abs() < 1e-5);
     }
 }

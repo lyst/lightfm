@@ -38,7 +38,7 @@ pub fn binary_search(arr: &[i32], target: i32) -> bool {
 
 /// Compute sigmoid function
 #[inline]
-pub fn sigmoid(x: f64) -> f64 {
+pub fn sigmoid(x: f32) -> f32 {
     1.0 / (1.0 + (-x).exp())
 }
 
@@ -46,7 +46,7 @@ pub fn sigmoid(x: f64) -> f64 {
 pub const MAX_REG_SCALE: f64 = 1_000_000.0;
 
 /// Maximum loss value for gradient clipping
-pub const MAX_LOSS: f64 = 10.0;
+pub const MAX_LOSS: f32 = 10.0;
 
 #[cfg(test)]
 mod tests {
@@ -54,7 +54,7 @@ mod tests {
 
     #[test]
     fn test_sigmoid() {
-        assert!((sigmoid(0.0) - 0.5).abs() < 1e-10);
+        assert!((sigmoid(0.0) - 0.5).abs() < 1e-5);
         assert!(sigmoid(10.0) > 0.99);
         assert!(sigmoid(-10.0) < 0.01);
     }

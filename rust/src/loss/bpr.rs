@@ -74,7 +74,7 @@ pub fn fit_bpr(
                     return;
                 }
 
-                let weight = sample_weight[row] as f64;
+                let weight = sample_weight[row] as f32;
                 let user_id = user_ids[row];
                 let positive_item_id = item_ids[row];
 
@@ -146,8 +146,8 @@ pub fn fit_bpr(
                         &pos_item_repr,
                         &neg_item_repr,
                         &lightfm_view,
-                        item_alpha,
-                        user_alpha,
+                        item_alpha as f32,
+                        user_alpha as f32,
                     );
                     
                     lightfm_view.multiply_item_scale(item_scale_update);

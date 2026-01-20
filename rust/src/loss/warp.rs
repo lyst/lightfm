@@ -191,8 +191,8 @@ pub fn fit_warp(
                             }
 
                             // Compute WARP loss: log(floor((num_items - 1) / sampled))
-                            let mut loss = weight
-                                * ((num_items - 1) as f64 / sampled as f64).floor().ln().max(1.0);
+                            let mut loss = weight as f32
+                                * ((num_items - 1) as f32 / sampled as f32).floor().ln().max(1.0);
 
                             // Clip gradients for numerical stability
                             if loss > MAX_LOSS {
@@ -211,8 +211,8 @@ pub fn fit_warp(
                                 &pos_item_repr,
                                 &neg_item_repr,
                                 &lightfm_view,
-                                item_alpha,
-                                user_alpha,
+                                item_alpha as f32,
+                                user_alpha as f32,
                             );
                             
                             guard.update(item_scale_update, user_scale_update);

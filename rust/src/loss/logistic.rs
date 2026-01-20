@@ -55,7 +55,7 @@ pub fn fit_logistic(
                 let row = shuffle_indices[i] as usize;
                 let user_id = user_ids[row];
                 let item_id = item_ids[row];
-                let weight = sample_weight[row] as f64;
+                let weight = sample_weight[row] as f32;
 
                 // Allocate thread-local representations
                 let mut user_repr = new_repr(lightfm_view.no_components);
@@ -99,8 +99,8 @@ pub fn fit_logistic(
                         &user_repr,
                         &item_repr,
                         &lightfm_view,
-                        item_alpha,
-                        user_alpha,
+                        item_alpha as f32,
+                        user_alpha as f32,
                     );
                     
                     lightfm_view.multiply_item_scale(item_scale_update);

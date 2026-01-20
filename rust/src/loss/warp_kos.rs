@@ -17,7 +17,7 @@ use crate::utils::{ThreadRng, MAX_LOSS};
 #[derive(Clone, Copy)]
 struct Pair {
     idx: i32,
-    val: f64,
+    val: f32,
 }
 
 /// Fit the LightFM model using WARP k-OS loss.
@@ -176,7 +176,7 @@ pub fn fit_warp_kos(
                             }
 
                             // Compute WARP loss: log(floor((num_items - 1) / sampled))
-                            let mut loss = ((num_items - 1) as f64 / sampled as f64).floor().ln();
+                            let mut loss = ((num_items - 1) as f32 / sampled as f32).floor().ln();
 
                             // Clip gradients for numerical stability
                             if loss > MAX_LOSS {
@@ -195,8 +195,8 @@ pub fn fit_warp_kos(
                                 &pos_item_repr,
                                 &neg_item_repr,
                                 &lightfm_view,
-                                item_alpha,
-                                user_alpha,
+                                item_alpha as f32,
+                                user_alpha as f32,
                             );
 
                             lightfm_view.multiply_item_scale(item_scale_update);
