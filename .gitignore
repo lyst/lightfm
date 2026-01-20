@@ -11,6 +11,7 @@ examples/quickstart/.ipynb_checkpoints/
 examples/stackexchange/.ipynb_checkpoints/
 build/
 dist/
+target/
 bench/
 *#*
 *.7z
