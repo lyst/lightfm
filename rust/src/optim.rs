@@ -4,6 +4,7 @@ use crate::csr_matrix::CSRMatrixView;
 use crate::model::FastLightFMView;
 use crate::repr::Repr;
 use crate::utils::MAX_REG_SCALE;
+use wide::f32x4;
 
 /// Update biases with Adagrad or Adadelta
 #[inline]
@@ -109,27 +110,28 @@ pub fn update_features_all(
     is_user: bool,
 ) -> f32 {
     let mut sum_learning_rate = 0.0;
-    let no_components = lightfm.no_components;
+    let no_components = lightfm.no_components as usize;
 
     if lightfm.adadelta {
+        // Not optimized for SIMD yet as Adadelta is more complex and less common
         for i in start..stop {
             let feature = feature_indices.index(i);
             let feature_weight = feature_indices.value(i);
 
             for c in 0..no_components {
-                let gradient = loss * multipliers[c as usize];
+                let gradient = loss * multipliers[c];
                 
                 let (grad, mom, feat) = if is_user {
                     (
-                        lightfm.get_user_feature_gradient(feature, c),
-                        lightfm.get_user_feature_momentum(feature, c),
-                        lightfm.get_user_feature(feature, c),
+                        lightfm.get_user_feature_gradient(feature, c as i32),
+                        lightfm.get_user_feature_momentum(feature, c as i32),
+                        lightfm.get_user_feature(feature, c as i32),
                     )
                 } else {
                     (
-                        lightfm.get_item_feature_gradient(feature, c),
-                        lightfm.get_item_feature_momentum(feature, c),
-                        lightfm.get_item_feature(feature, c),
+                        lightfm.get_item_feature_gradient(feature, c as i32),
+                        lightfm.get_item_feature_momentum(feature, c as i32),
+                        lightfm.get_item_feature(feature, c as i32),
                     )
                 };
 
@@ -143,53 +145,154 @@ pub fn update_features_all(
                 let new_feat = (feat - update) * (1.0 + alpha * local_learning_rate);
 
                 if is_user {
-                    lightfm.set_user_feature_gradient(feature, c, new_grad);
-                    lightfm.set_user_feature_momentum(feature, c, new_mom);
-                    lightfm.set_user_feature(feature, c, new_feat);
+                    lightfm.set_user_feature_gradient(feature, c as i32, new_grad);
+                    lightfm.set_user_feature_momentum(feature, c as i32, new_mom);
+                    lightfm.set_user_feature(feature, c as i32, new_feat);
                 } else {
-                    lightfm.set_item_feature_gradient(feature, c, new_grad);
-                    lightfm.set_item_feature_momentum(feature, c, new_mom);
-                    lightfm.set_item_feature(feature, c, new_feat);
+                    lightfm.set_item_feature_gradient(feature, c as i32, new_grad);
+                    lightfm.set_item_feature_momentum(feature, c as i32, new_mom);
+                    lightfm.set_item_feature(feature, c as i32, new_feat);
                 }
 
                 sum_learning_rate += local_learning_rate;
             }
         }
     } else {
-        // Adagrad
+        // Adagrad - SIMD Optimized
+        let learning_rate = lightfm.learning_rate as f32;
+        let lr_vec = f32x4::splat(learning_rate);
+        let alpha_vec = f32x4::splat(alpha);
+        let one_vec = f32x4::splat(1.0);
+        let loss_vec = f32x4::splat(loss);
+
         for i in start..stop {
             let feature = feature_indices.index(i);
             let feature_weight = feature_indices.value(i);
+            let weight_vec = f32x4::splat(feature_weight);
 
-            for c in 0..no_components {
-                let gradient = loss * multipliers[c as usize];
-
-                let (grad, feat) = if is_user {
+            // Get pointers to start of feature rows
+            let (grad_ptr, feat_ptr) = if is_user {
+                unsafe {
                     (
-                        lightfm.get_user_feature_gradient(feature, c),
-                        lightfm.get_user_feature(feature, c),
+                        lightfm.user_feature_gradients.offset((feature * lightfm.no_components) as isize),
+                        lightfm.user_features.offset((feature * lightfm.no_components) as isize),
                     )
-                } else {
-                    (
-                        lightfm.get_item_feature_gradient(feature, c),
-                        lightfm.get_item_feature(feature, c),
-                    )
-                };
-
-                let local_learning_rate = lightfm.learning_rate as f32 / grad.sqrt();
-                let new_feat = (feat - local_learning_rate * feature_weight * gradient)
-                    * (1.0 + alpha * local_learning_rate);
-                let new_grad = grad + (gradient * feature_weight).powi(2);
-
-                if is_user {
-                    lightfm.set_user_feature_gradient(feature, c, new_grad);
-                    lightfm.set_user_feature(feature, c, new_feat);
-                } else {
-                    lightfm.set_item_feature_gradient(feature, c, new_grad);
-                    lightfm.set_item_feature(feature, c, new_feat);
                 }
+            } else {
+                unsafe {
+                    (
+                        lightfm.item_feature_gradients.offset((feature * lightfm.no_components) as isize),
+                        lightfm.item_features.offset((feature * lightfm.no_components) as isize),
+                    )
+                }
+            };
 
-                sum_learning_rate += local_learning_rate;
+            let mut c = 0;
+            if no_components % 8 == 0 {
+                while c < no_components {
+                    unsafe {
+                        // Load 8 multipliers (from user_repr/item_repr)
+                        let mult0 = f32x4::from(*(multipliers.as_ptr().add(c) as *const [f32; 4]));
+                        let mult1 = f32x4::from(*(multipliers.as_ptr().add(c + 4) as *const [f32; 4]));
+
+                        let grad0 = f32x4::from(*(grad_ptr.add(c) as *const [f32; 4]));
+                        let grad1 = f32x4::from(*(grad_ptr.add(c + 4) as *const [f32; 4]));
+                        
+                        let feat0 = f32x4::from(*(feat_ptr.add(c) as *const [f32; 4]));
+                        let feat1 = f32x4::from(*(feat_ptr.add(c + 4) as *const [f32; 4]));
+
+                        // gradient = loss * multipliers
+                        let gradient0 = loss_vec * mult0;
+                        let gradient1 = loss_vec * mult1;
+
+                        // local_learning_rate = learning_rate / sqrt(grad)
+                        let local_lr0 = lr_vec * grad0.sqrt().recip();
+                        let local_lr1 = lr_vec * grad1.sqrt().recip();
+                        
+                        // sum_learning_rate += local_learning_rate
+                        sum_learning_rate += local_lr0.reduce_add();
+                        sum_learning_rate += local_lr1.reduce_add();
+
+                        // new_feat = (feat - local_lr * weight * gradient) * (1 + alpha * local_lr)
+                        let update0 = local_lr0 * weight_vec * gradient0;
+                        let update1 = local_lr1 * weight_vec * gradient1;
+                        
+                        let scale0 = one_vec + (alpha_vec * local_lr0);
+                        let scale1 = one_vec + (alpha_vec * local_lr1);
+
+                        let new_feat0 = (feat0 - update0) * scale0;
+                        let new_feat1 = (feat1 - update1) * scale1;
+
+                        // new_grad = grad + (gradient * weight)^2
+                        let gw0 = gradient0 * weight_vec;
+                        let gw1 = gradient1 * weight_vec;
+                        let new_grad0 = grad0 + (gw0 * gw0);
+                        let new_grad1 = grad1 + (gw1 * gw1);
+
+                        // Store back
+                        *(feat_ptr.add(c) as *mut [f32; 4]) = new_feat0.to_array();
+                        *(feat_ptr.add(c + 4) as *mut [f32; 4]) = new_feat1.to_array();
+                        *(grad_ptr.add(c) as *mut [f32; 4]) = new_grad0.to_array();
+                        *(grad_ptr.add(c + 4) as *mut [f32; 4]) = new_grad1.to_array();
+                    }
+                    c += 8;
+                }
+            } else if no_components % 4 == 0 {
+                while c < no_components {
+                    unsafe {
+                        let mult = f32x4::from(*(multipliers.as_ptr().add(c) as *const [f32; 4]));
+                        let grad = f32x4::from(*(grad_ptr.add(c) as *const [f32; 4]));
+                        let feat = f32x4::from(*(feat_ptr.add(c) as *const [f32; 4]));
+
+                        let gradient = loss_vec * mult;
+                        let local_lr = lr_vec * grad.sqrt().recip();
+                        
+                        sum_learning_rate += local_lr.reduce_add();
+
+                        let update = local_lr * weight_vec * gradient;
+                        let scale = one_vec + (alpha_vec * local_lr);
+                        let new_feat = (feat - update) * scale;
+
+                        let gw = gradient * weight_vec;
+                        let new_grad = grad + (gw * gw);
+
+                        *(feat_ptr.add(c) as *mut [f32; 4]) = new_feat.to_array();
+                        *(grad_ptr.add(c) as *mut [f32; 4]) = new_grad.to_array();
+                    }
+                    c += 4;
+                }
+            } else {
+                // Fallback
+                for k in 0..no_components {
+                    let gradient = loss * multipliers[k];
+
+                    let (grad, feat) = if is_user {
+                        (
+                            lightfm.get_user_feature_gradient(feature, k as i32),
+                            lightfm.get_user_feature(feature, k as i32),
+                        )
+                    } else {
+                        (
+                            lightfm.get_item_feature_gradient(feature, k as i32),
+                            lightfm.get_item_feature(feature, k as i32),
+                        )
+                    };
+
+                    let local_learning_rate = lightfm.learning_rate as f32 / grad.sqrt();
+                    let new_feat = (feat - local_learning_rate * feature_weight * gradient)
+                        * (1.0 + alpha * local_learning_rate);
+                    let new_grad = grad + (gradient * feature_weight).powi(2);
+
+                    if is_user {
+                        lightfm.set_user_feature_gradient(feature, k as i32, new_grad);
+                        lightfm.set_user_feature(feature, k as i32, new_feat);
+                    } else {
+                        lightfm.set_item_feature_gradient(feature, k as i32, new_grad);
+                        lightfm.set_item_feature(feature, k as i32, new_feat);
+                    }
+
+                    sum_learning_rate += local_learning_rate;
+                }
             }
         }
     }

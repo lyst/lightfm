@@ -2,6 +2,7 @@
 
 use crate::csr_matrix::CSRMatrixView;
 use crate::model::FastLightFMView;
+use wide::f32x4;
 
 /// Representation vector: [latent_factors..., bias]
 /// Size is no_components + 1
@@ -27,24 +28,63 @@ pub fn compute_representation(
 ) {
     let start_index = features.get_row_start(row_id);
     let stop_index = features.get_row_end(row_id);
+    let n = lightfm.no_components as usize;
 
     // Zero out the representation
-    for i in 0..=lightfm.no_components {
-        repr[i as usize] = 0.0;
-    }
+    // Using fill is often optimized by memset
+    repr.fill(0.0);
 
     for i in start_index..stop_index {
         let feature = features.index(i);
         let feature_weight = features.value(i) * scale;
+        
+        let embedding_ptr = if is_user {
+            unsafe { lightfm.user_features.offset((feature * lightfm.no_components) as isize) }
+        } else {
+            unsafe { lightfm.item_features.offset((feature * lightfm.no_components) as isize) }
+        };
 
-        // Add weighted feature embeddings
-        for j in 0..lightfm.no_components {
-            let embedding = if is_user {
-                lightfm.get_user_feature(feature, j)
-            } else {
-                lightfm.get_item_feature(feature, j)
-            };
-            repr[j as usize] += feature_weight * embedding;
+        // SIMD-optimized accumulation
+        // Check if no_components is a multiple of 8 for unrolled loop
+        let mut j = 0;
+        if n % 8 == 0 {
+            while j < n {
+                unsafe {
+                    // Load 8 values (2 x f32x4)
+                    let feat_vals0 = f32x4::from(*(embedding_ptr.add(j) as *const [f32; 4]));
+                    let feat_vals1 = f32x4::from(*(embedding_ptr.add(j + 4) as *const [f32; 4]));
+                    
+                    let curr0 = f32x4::from(*(repr.as_ptr().add(j) as *const [f32; 4]));
+                    let curr1 = f32x4::from(*(repr.as_ptr().add(j + 4) as *const [f32; 4]));
+                    
+                    let weight_vec = f32x4::splat(feature_weight);
+                    
+                    let next0 = curr0 + (feat_vals0 * weight_vec);
+                    let next1 = curr1 + (feat_vals1 * weight_vec);
+                    
+                    // Store back
+                    *(repr.as_mut_ptr().add(j) as *mut [f32; 4]) = next0.to_array();
+                    *(repr.as_mut_ptr().add(j + 4) as *mut [f32; 4]) = next1.to_array();
+                }
+                j += 8;
+            }
+        } else if n % 4 == 0 {
+            while j < n {
+                unsafe {
+                    let feat_vals = f32x4::from(*(embedding_ptr.add(j) as *const [f32; 4]));
+                    let curr = f32x4::from(*(repr.as_ptr().add(j) as *const [f32; 4]));
+                    let weight_vec = f32x4::splat(feature_weight);
+                    let next = curr + (feat_vals * weight_vec);
+                    *(repr.as_mut_ptr().add(j) as *mut [f32; 4]) = next.to_array();
+                }
+                j += 4;
+            }
+        } else {
+            // Fallback for non-divisible sizes
+            for k in 0..lightfm.no_components {
+                let embedding = unsafe { *embedding_ptr.offset(k as isize) };
+                repr[k as usize] += feature_weight * embedding;
+            }
         }
 
         // Add weighted bias
@@ -53,7 +93,7 @@ pub fn compute_representation(
         } else {
             lightfm.get_item_bias(feature)
         };
-        repr[lightfm.no_components as usize] += feature_weight * bias;
+        repr[n] += feature_weight * bias;
     }
 }
 
@@ -106,12 +146,48 @@ pub fn compute_prediction_from_repr(
     let mut result = user_repr[n] + item_repr[n];
 
     // Dot product of latent factors
-    // Using iterators allows the compiler to optimize out bounds checks and auto-vectorize
-    result += user_repr[0..n]
-        .iter()
-        .zip(item_repr[0..n].iter())
-        .map(|(u, i)| u * i)
-        .sum::<f32>();
+    let mut i = 0;
+    if n % 8 == 0 {
+        let mut sum0 = f32x4::splat(0.0);
+        let mut sum1 = f32x4::splat(0.0);
+        
+        unsafe {
+            let u_ptr = user_repr.as_ptr();
+            let i_ptr = item_repr.as_ptr();
+            
+            while i < n {
+                let u0 = f32x4::from(*(u_ptr.add(i) as *const [f32; 4]));
+                let u1 = f32x4::from(*(u_ptr.add(i + 4) as *const [f32; 4]));
+                let v0 = f32x4::from(*(i_ptr.add(i) as *const [f32; 4]));
+                let v1 = f32x4::from(*(i_ptr.add(i + 4) as *const [f32; 4]));
+                
+                sum0 += u0 * v0;
+                sum1 += u1 * v1;
+                i += 8;
+            }
+        }
+        result += sum0.reduce_add() + sum1.reduce_add();
+    } else if n % 4 == 0 {
+        let mut sum = f32x4::splat(0.0);
+        unsafe {
+            let u_ptr = user_repr.as_ptr();
+            let i_ptr = item_repr.as_ptr();
+            while i < n {
+                let u = f32x4::from(*(u_ptr.add(i) as *const [f32; 4]));
+                let v = f32x4::from(*(i_ptr.add(i) as *const [f32; 4]));
+                sum += u * v;
+                i += 4;
+            }
+        }
+        result += sum.reduce_add();
+    } else {
+        // Fallback
+        result += user_repr[0..n]
+            .iter()
+            .zip(item_repr[0..n].iter())
+            .map(|(u, i)| u * i)
+            .sum::<f32>();
+    }
 
     result
 }

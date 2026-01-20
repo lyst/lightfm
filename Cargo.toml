@@ -15,6 +15,7 @@ rayon = "1.10"
 parking_lot = "0.12"
 rand = "0.8"
 rand_xoshiro = "0.6"
+wide = "0.7.33"
 
 [profile.release]
 lto = "fat"
