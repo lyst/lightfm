@@ -4,11 +4,13 @@ import numpy as np
 import scipy.sparse as sp
 from lightfm import LightFM
 from lightfm.datasets import fetch_movielens
+from lightfm.evaluation import precision_at_k
 
 def run_large_benchmark(multiplier=10, epochs=10, num_components=30, threads=8):
     print(f"Fetching MovieLens 100k dataset...")
     data = fetch_movielens()
     train_orig = data['train']
+    test_data = data['test']
     
     print(f"Original dataset shape: {train_orig.shape} with {train_orig.nnz} interactions.")
     
@@ -17,12 +19,18 @@ def run_large_benchmark(multiplier=10, epochs=10, num_components=30, threads=8):
     blocks = [train_orig] * multiplier
     train_large = sp.vstack(blocks).tocsr()
     
+    # Pad test data to match model dimensions (so lightfm accepts it)
+    # The model expects N * 943 users. We only test on the first 943.
+    extra_rows = train_large.shape[0] - test_data.shape[0]
+    empty_block = sp.csr_matrix((extra_rows, test_data.shape[1]), dtype=test_data.dtype)
+    test_large = sp.vstack([test_data, empty_block]).tocsr()
+    
     print(f"Large dataset shape: {train_large.shape} with {train_large.nnz} interactions.")
     
     print(f"\nBenchmarking LightFM on {multiplier}x Dataset (Loss: WARP, Epochs: {epochs}, Components: {num_components})")
-    print("-" * 65)
-    print(f"{ 'Threads':<10} | {'Total Time (s)':<15} | {'Interactions/s':<15}")
-    print("-" * 65)
+    print("-" * 80)
+    print(f"{ 'Threads':<10} | {'Total Time (s)':<15} | {'Interactions/s':<15} | {'Precision@10':<15}")
+    print("-" * 80)
 
     # Benchmark with 1 thread for baseline
     print("Running with 1 thread (Baseline)...")
@@ -32,7 +40,12 @@ def run_large_benchmark(multiplier=10, epochs=10, num_components=30, threads=8):
     time_single = time.time() - start_time_single
     
     ips_single = (train_large.nnz * epochs) / time_single
-    print(f"{1:<10} | {time_single:<15.4f} | {ips_single:,.0f}")
+    
+    # Evaluate accuracy on original test set (first block of users)
+    # We slice [:test_data.shape[0]] to ignore the empty padding rows
+    p_at_k_single = precision_at_k(model_single, test_large, k=10, num_threads=1)[:test_data.shape[0]].mean()
+    
+    print(f"{1:<10} | {time_single:<15.4f} | {ips_single:<15,.0f} | {p_at_k_single:<15.4f}")
 
     # Benchmark with N threads
     print(f"Running with {threads} threads...")
@@ -42,9 +55,13 @@ def run_large_benchmark(multiplier=10, epochs=10, num_components=30, threads=8):
     time_multi = time.time() - start_time_multi
     
     ips_multi = (train_large.nnz * epochs) / time_multi
-    print(f"{threads:<10} | {time_multi:<15.4f} | {ips_multi:,.0f}")
     
-    print("-" * 65)
+    # Evaluate accuracy
+    p_at_k_multi = precision_at_k(model_multi, test_large, k=10, num_threads=threads)[:test_data.shape[0]].mean()
+    
+    print(f"{threads:<10} | {time_multi:<15.4f} | {ips_multi:<15,.0f} | {p_at_k_multi:<15.4f}")
+    
+    print("-" * 80)
     print(f"Speedup: {time_single / time_multi:.2f}x")
 
 if __name__ == "__main__":
