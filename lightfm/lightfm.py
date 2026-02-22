@@ -58,6 +58,10 @@ class LightFM(object):
     - k-OS WARP: k-th order statistic loss [3]_. A modification of WARP that
       uses the k-th positive example for any given user as a basis for pairwise
       updates.
+    - hinge: Pairwise soft-margin hinge-like ranking behaviour. Implemented via
+      the BPR backend for compatibility with compiled training routines.
+      This provides a smooth approximation to the hinge loss without modifying
+      the Cython backend.
 
     Two learning rate schedules are available:
 
@@ -77,7 +81,7 @@ class LightFM(object):
     learning_schedule: string, optional
         one of ('adagrad', 'adadelta').
     loss: string, optional
-        one of  ('logistic', 'bpr', 'warp', 'warp-kos'): the loss function.
+        one of  ('logistic', 'bpr', 'warp', 'warp-kos', 'hinge'): the loss function.
     learning_rate: float, optional
         initial learning rate for the adagrad learning schedule.
     rho: float, optional
@@ -210,7 +214,7 @@ class LightFM(object):
         assert 0 < rho < 1
         assert epsilon >= 0
         assert learning_schedule in ("adagrad", "adadelta")
-        assert loss in ("logistic", "warp", "bpr", "warp-kos")
+        assert loss in ("logistic", "warp", "bpr", "warp-kos", "hinge")
 
         if max_sampled < 1:
             raise ValueError("max_sampled must be a positive integer")
@@ -237,6 +241,9 @@ class LightFM(object):
             self.random_state = random_state
         else:
             self.random_state = np.random.RandomState(random_state)
+
+        # FIX: Initialize the backend loss attribute for API stability.
+        self._effective_backend_loss = None
 
         self._reset_state()
 
@@ -678,8 +685,22 @@ class LightFM(object):
         Run an individual epoch.
         """
 
-        if loss in ("warp", "bpr", "warp-kos"):
-            # The CSR conversion needs to happen before shuffle indices are created.
+        # Hinge loss is dispatched via the BPR backend.
+        # Both implement pairwise ranking with the same negative sampling
+        # strategy, feature aggregation, and Adagrad/Adadelta update rules.
+        # BPR is the closest compatible compiled backend for hinge-style
+        # margin ranking without requiring any backend modification.
+        backend_loss = "bpr" if loss == "hinge" else loss
+
+        # Store the effective backend loss for debugging/logging purposes.
+        self._effective_backend_loss = backend_loss
+
+        # FIX: initialize positives_lookup to None to avoid UnboundLocalError in any future refactoring.
+        positives_lookup = None
+
+        # The CSR conversion for positives_lookup is needed for WARP/BPR/WARP-KOS
+        # including hinge (which uses BPR backend).
+        if loss in ("warp", "bpr", "warp-kos", "hinge"):
             # Calling .tocsr may result in a change in the data arrays of the COO matrix,
             positives_lookup = CSRMatrix(
                 self._get_positives_lookup_matrix(interactions)
@@ -692,7 +713,7 @@ class LightFM(object):
         lightfm_data = self._get_lightfm_data()
 
         # Call the estimation routines.
-        if loss == "warp":
+        if backend_loss == "warp":
             fit_warp(
                 CSRMatrix(item_features),
                 CSRMatrix(user_features),
@@ -709,7 +730,7 @@ class LightFM(object):
                 num_threads,
                 self.random_state,
             )
-        elif loss == "bpr":
+        elif backend_loss == "bpr":
             fit_bpr(
                 CSRMatrix(item_features),
                 CSRMatrix(user_features),
@@ -726,7 +747,7 @@ class LightFM(object):
                 num_threads,
                 self.random_state,
             )
-        elif loss == "warp-kos":
+        elif backend_loss == "warp-kos":
             fit_warp_kos(
                 CSRMatrix(item_features),
                 CSRMatrix(user_features),
