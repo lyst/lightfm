@@ -13,9 +13,7 @@ def define_extensions(use_openmp):
     if not os.environ.get("LIGHTFM_NO_CFLAGS"):
         compile_args += ["-ffast-math"]
 
-        if sys.platform.startswith("darwin"):
-            compile_args += []
-        else:
+        if os.environ.get("LIGHTFM_MARCH_NATIVE"):
             compile_args += ["-march=native"]
 
     if not use_openmp:
@@ -175,7 +173,8 @@ setup(
     download_url="https://github.com/lyst/lightfm/tarball/{}".format(read_version()),
     packages=["lightfm", "lightfm.datasets"],
     package_data={"": ["*.c"]},
-    install_requires=["numpy", "scipy>=0.17.0", "requests", "scikit-learn"],
+    python_requires=">=3.9",
+    install_requires=["numpy>=1.24.0", "scipy>=1.7.0", "requests", "scikit-learn"],
     tests_require=["pytest", "requests", "scikit-learn"],
     cmdclass={"cythonize": Cythonize, "clean": Clean},
     author="Lyst Ltd (Maciej Kula)",

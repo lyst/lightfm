@@ -111,7 +111,7 @@ cdef struct Pair:
     flt val
 
 
-cdef int reverse_pair_compare(const_void *a, const_void *b) nogil:
+cdef int reverse_pair_compare(const_void *a, const_void *b) noexcept nogil:
 
     cdef flt diff
 
@@ -122,7 +122,7 @@ cdef int reverse_pair_compare(const_void *a, const_void *b) nogil:
         return -1
 
 
-cdef int int_compare(const_void *a, const_void *b) nogil:
+cdef int int_compare(const_void *a, const_void *b) noexcept nogil:
 
     if deref(<int*>a) - deref(<int*>b) > 0:
         return 1
@@ -132,7 +132,7 @@ cdef int int_compare(const_void *a, const_void *b) nogil:
         return 0
 
 
-cdef int flt_compare(const_void *a, const_void *b) nogil:
+cdef int flt_compare(const_void *a, const_void *b) noexcept nogil:
 
     if deref(<flt*>a) - deref(<flt*>b) > 0:
         return 1
@@ -165,7 +165,7 @@ cdef class CSRMatrix:
         self.rows, self.cols = csr_matrix.shape
         self.nnz = len(self.data)
 
-    cdef int get_row_start(self, int row) nogil:
+    cdef int get_row_start(self, int row) noexcept nogil:
         """
         Return the pointer to the start of the
         data for row.
@@ -173,7 +173,7 @@ cdef class CSRMatrix:
 
         return self.indptr[row]
 
-    cdef int get_row_end(self, int row) nogil:
+    cdef int get_row_end(self, int row) noexcept nogil:
         """
         Return the pointer to the end of the
         data for row.
@@ -290,7 +290,7 @@ cdef inline void compute_representation(CSRMatrix features,
                                         FastLightFM lightfm,
                                         int row_id,
                                         double scale,
-                                        flt *representation) nogil:
+                                        flt *representation) noexcept nogil:
     """
     Compute latent representation for row_id.
     The last element of the representation is the bias.
@@ -460,7 +460,7 @@ cdef inline void update(double loss,
                         flt *it_repr,
                         FastLightFM lightfm,
                         double item_alpha,
-                        double user_alpha) nogil:
+                        double user_alpha) noexcept nogil:
     """
     Apply the gradient step.
     """
@@ -545,7 +545,7 @@ cdef void warp_update(double loss,
                       flt *neg_it_repr,
                       FastLightFM lightfm,
                       double item_alpha,
-                      double user_alpha) nogil:
+                      double user_alpha) noexcept nogil:
     """
     Apply the gradient step.
     """
@@ -651,7 +651,7 @@ cdef void warp_update(double loss,
 
 cdef void regularize(FastLightFM lightfm,
                      double item_alpha,
-                     double user_alpha) nogil:
+                     double user_alpha) noexcept nogil:
     """
     Apply accumulated L2 regularization to all features.
     """
@@ -677,7 +677,7 @@ cdef void regularize(FastLightFM lightfm,
 
 cdef void locked_regularize(FastLightFM lightfm,
                             double item_alpha,
-                            double user_alpha) nogil:
+                            double user_alpha) noexcept nogil:
     """
     Apply accumulated L2 regularization to all features. Acquire a lock
     to prevent multiple threads from performing this operation.
